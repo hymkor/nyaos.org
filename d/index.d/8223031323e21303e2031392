@@ -1,0 +1,45 @@
+<<[Perl] ライブラリ無し縛り - CSVパース>>
+
+* ダブルクォーテーションに囲まれた文字列中の改行、カンマを区切り文字として扱わない
+* ライブラリは使わない。インタプリタの機能のみを使う
+
+OK～
+
+8<
+&csvparse( sub{ <DATA> } , sub{ print map("[$_]",@{$_[0]}),"\n"; } );
+
+sub csvparse{
+    my ($read,$callback)=@_;
+    while( defined(my $line=$read->()) ){
+        for(;;){
+            $line =~ s/"([^"]+)"/"\a".unpack('h*',$1)."\a"/ge;
+            last unless $line =~ /"/ && defined(my $next = $read->());
+            $line .= $next;
+        }
+        chomp $line;
+        my @csv = split(/,/,$line);
+        s/\a([^\a]+)\a/pack('h*',$1)/ge foreach( @csv );
+        $callback->( \@csv );
+    }
+}
+__END__
+nihon,go ahaha,ihihi
+ahaha,"ihihi , ufufu","ohoho
+mumumu
+ahaha
+gahaha"
+XXXXX,"YYYYY","DDDDD,XXXXXX"
+>8
+
+* CSV解析関数 csvparse の第一引数は、1行を取得するクロージャを渡す。
+* 第二引数は分解した CSV を引き渡すクロージャーを渡す。
+
+8<
+$ perl csv.pl
+[nihon][go ahaha][ihihi]
+[ahaha][ihihi , ufufu][ohoho
+mumumu
+ahaha
+gahaha]
+[XXXXX][YYYYY][DDDDD,XXXXXX]
+>8

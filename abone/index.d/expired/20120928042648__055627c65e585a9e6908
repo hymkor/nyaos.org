@@ -1,0 +1,183 @@
+!!! 目的
+
+* OTRS のソースを編集するのに、支障のない程度に文法を学ぶ。
+* IMonitor.pl を読むのに、支障のない程度に文法を学ぶ。
+
+!!! 変数
+
+!! 変数は3種類
+
+* $xxxxx … スカラー型。文字列・数値・アドレス(参照)が入る
+* @yyyyy … 配列型。各要素は $yyyyy[0] みたいに参照する。
+* %zzzzz … ハッシュ型(連想配列)。各要素は $zzzzzz{"ahaha"} みたいに参照する。
+
+頭についているマーク($、@、%)をシギルと呼ぶ。
+
+    my $xxxxx="あはは";
+    my @yyyyy=(1,2,"ahaha","いひひ");
+    my %zzzzz=("ahaha"=>"ihihi","ufufuf"=>"ohoho");
+
+みたいに宣言し、
+
+    print $xxxxx,"\n";
+    print $yyyyy[0],$yyyyy[1],$yyyy[2];
+    print $zzzzz{"ahaha"},$zzzzz{"ufufuf"};
+
+のように使う。
+
+!! 配列、ハッシュの各要素にはスカラーしか入らない。
+    my @hoge=(1,2,3,4,5);
+    my %foo=("ahaha"=>"ihihi","ufufu"=>"ohoho");
+
+でも、アドレス(参照)なら入る。「\」でアドレス(参照)を取得できる。
+    my %bar=("hoge"=>\@hoge , "foo"=>\%foo );
+
+アドレス経由でアクセスする時は、シギルを頭に二重につける。
+
+    print ${$bar{"hoge"}}[0] ,"\t",${$bar{"foo"}}{"ahaha"} , "\n";
+
+これだと分かりにくいので、簡易記法も用意されている。
+
+    print $bar{"hoge"}->[0] , "\t" , $bar{"foo"}->{"ahaha"} , "\n";
+
+!! 無名配列、無名ハッシュ(構造体)
+
+    my @foo=(1,2,3,4,5);
+    my %bar=("ahaha"=>1 , "ihihi"=>2 , "ufufu"=>3 );
+    
+    my @foo_ptr=\@foo;
+    my @bar_ptr=\%bar;
+は
+    my $foo_ptr=[1,2,3,4,5];
+    my $bar_ptr={"ahaha"=>1 , "ihihi"=>2 , "ufufu"=>3};
+と書ける(無名配列、無名ハッシュ)
+
+さらに => の左辺が、英数字だけの場合は
+    my $bar_ptr={ahaha=>1 , ihihi=>2 , ufufu=>3};
+と引用符が省略できる。
+(これを利用して、ハッシュを構造体的に使うことも多い)
+
+!!! 入出力
+
+!!標準出力への表示
+   print "ahaha";
+   print STDOUT "ahaha";   # STDOUT はファイルハンドル
+!!標準エラー出力への表示
+   print STDERR "ahaha";
+!!ファイルへの入出力(古典的な書き方)
+!入力
+   open(FP,"<$filename") or die("File open error");
+   while( <FP> ){
+      print $_;
+   }
+   close(FP);
+ちゃんと書くと
+   open(FP,"<$filename") or die("File open error");
+   while( defined( my $line=<FP> ) ){
+       print $line;
+   }
+   close(FP);
+* open の第二引数の先頭文字で < (INPUT) か > (OUTPUT) か区別する。
+* <ファイルハンドル> で1行取り出すことができる
+* Perl では省略すると、代入先は $_ という変数になる。
+* EOF を検出すると、undef という無効値が入る。
+* while は値が真(0,"",undef以外の値)の時、内部をループする。今回は undef の時だけループして欲しいので、defined という組込関数を入れている
+* my はローカル変数宣言。ここに入れると、ループの中だけしか $line を直接参照できない。
+
+!出力
+   open(FP,">$filename") or die("File open error");
+   print FP "ahaha";
+   close(FP);
+* open はファイルにオープンすると真を返す
+* die は標準エラーにメッセージを表示してエラー終了する関数
+** ここでは open が失敗した時だけ die が実行される。
+
+!ファイルへの入出力(モダンな書き方)
+   open(my $fp,">",$filename) or die
+   print{$fp} "ahaha";
+   close($fp);
+* FP だとグローバルシンボルなので、関数ローカルに閉じない
+* 入出力のマーク(< >)とファイル名を別に書くことで、インジェクション的動作を防止できる。
+* 読み出す時は、<$fp>と書く。
+
+! 他のコマンドとの連携
+
+    open(FP,"df |");
+とすると、<FP> で df の出力結果を取り出せる
+    open(FP,"| sqlplus");
+で、逆に sqlplus の入力に、コマンドを流し込める。
+両者ともモダンな書き方は
+    open(FP,"-|","df);
+    open(FP,"|-","sqlplus");
+となる。
+
+!!! 分岐とか
+
+!! if
+    if( … ){
+        ;
+    }elsif( … ){
+        ;
+    }else{
+        ;
+    }
+if の逆
+    unless( … ){
+        ;
+    }
+
+!! ループ
+
+    while( … ){
+        ；
+    }
+
+    do{
+        ;
+    }while( … );
+
+    foreach my $e (@array){
+        # @array の中の全要素を順に取り出す
+    }
+
+    foreach my $e (keys @hash){
+        # %hash の全てのキーを順に取り出す
+    }
+
+    while( my ($key,$val)=each %hash){
+        # %hash のキーと値を同時に取り出せますが、
+        # 最近「実は遅くて使うメリットなし」ということが
+        # 暴露されました。
+    }
+
+!!! 関数
+
+関数定義
+    sub foo{
+        my ($a,$b,$c,$d)=@_;
+        print $a,$b,$c,$d;
+    }
+
+関数呼び出し
+    &foo(1,2,3,4);
+    foo(1,2,3,4);
+
+* 関数は sub で定義する
+* パラメータは @_ という配列に入るので、それを別の変数にコピーするのが定跡
+* 呼び出しは & というシギルを付けるが、直後に丸括弧があれば省略可能
+* 関数のアドレスが取れるし、無名化もできる。
+
+    my $foo_ptr = \&foo;
+    &{$foo_ptr}(1,2,3,4);
+    $foo_ptr->(1,2,3,4);
+
+!!! ライブラリ
+
+use というプラグマを使って、ライブラリを呼び出せる。
+
+    use Digest::MD5;
+    print Digest::MD5::md5_hex("hogehoge"),"\n";
+
+⇒ hogehoge という文字列の MD5 文字列を取り出す。
+(:: は名前空間を区切る記号)
+

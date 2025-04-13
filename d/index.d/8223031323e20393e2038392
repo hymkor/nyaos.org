@@ -1,0 +1,117 @@
+<<[C++][例外] これはどういうことだ？例外がキャッチできないぞ>>
+
+いやね、自前の cp とかを作ろうとして C++ のコードを久しぶりに書いてるんですが、
+なぜか例外をキャッチできないんですよー。
+
+8<
+[C:ex]
+$ cat foo.cpp
+#include <iostream>
+
+using namespace std;
+
+class MyException {};
+
+void subsub(const string &foo) throw(MyException)
+{
+    cout << foo << endl;
+    throw MyException();
+}
+
+void sub() throw(MyException)
+{
+    string foo("ahaha");
+    subsub(foo);
+}
+
+int main()
+{
+    try{
+        sub();
+    }catch( const MyException &e ){
+        cerr << "Catched MyException." << endl;
+        return 1;
+    }
+    cerr << "No Error." << endl;
+    return 0;
+}
+[C:ex]
+$ gcc foo.cpp -lstdc++
+[C:ex]
+$ ./a.exe
+ahaha
+
+This application has requested the Runtime to terminate it in an unusual way.
+Please contact the application's support team for more information.
+[C:ex]
+>8
+
+本当だったら「``Catched MyException.``」って表示されるのを期待してるんですが、
+あたかも「どの例外にもヒットしなかった」かのようにおっしゃる。
+
+ちなみに、次のようにちょっと修正するとうまく動くようになる。
+違いは、途中で経由する関数(``sub``)内で、デストラクタが呼ばれる機会があるかどうかだけ。
+
+8<
+[C:ex]
+$ cat bar.cpp
+#include <iostream>
+
+using namespace std;
+
+class MyException {};
+
+void subsub() throw(MyException)
+{
+    throw MyException();
+}
+
+void sub() throw(MyException)
+{
+    subsub();
+}
+
+int main()
+{
+    try{
+        sub();
+    }catch( const MyException &e ){
+        cerr << "Catched MyException." << endl;
+        return 1;
+    }
+    cerr << "No Error." << endl;
+    return 0;
+}
+[C:ex]
+$ gcc bar.cpp -lstdc++
+[C:ex]
+$ ./a.exe
+Catched MyException.
+[C:ex]
+$
+>8
+
+いったい何が悪いんでしょうかねぇ。
+ちなみに、環境は WindowsXP で、
+コンパイラは MinGW gcc 4.5.2 でございます。
+
+8<
+[C:ex]
+$ gcc --version
+gcc (GCC) 4.5.2
+Copyright (C) 2010 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+[C:ex]
+>8
+
+一番てっとり早いのは「例外使うのやめる」ってことなんですが、それもまた負けた感が。
+
+他の対応としては、
+* gcc のバージョンを上げる(現行バージョンは最新ではないので)
+** 最新バージョンの gcc は Lua との相性が悪くて、今度は NYAOS をビルドできなくなるという問題をかかえてしまうんですよねぇ
+* Visual C++ などで、コンパイルしてみる
+** Express Edition のダウンロードしなきゃねぇ(回線が細いので、時間かかるな…)
+
+まぁ、ぼちぼちがんばりますか

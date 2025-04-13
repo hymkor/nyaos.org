@@ -1,0 +1,69 @@
+<<[NYAOS-3000] 昨日見つけた不具合>>
+
+昨日のトラブル対応ヘルプの際に、NYAOS 3000 の不具合を見付けてしまった。
+
+8<
+[C:hayama]
+$ start hogehoge.csv
+[C:hayama]
+$ echo ahaha,ihihi > hogehoge.csv
+hogehoge.csv: can't open temporary file.
+hogehoge.csv: can't open.
+ahaha,ihihi
+>8
+
+出力先が排他OPENされているなど、リダイレクトに失敗すると、
+そこで処理を中断しなくちゃいけないのに、
+そのまま(リダイレクトせずに)処理を継続させてしまっている。
+
+これから直します。
+
+<<[Python] CSV を標準出力に吐く>>
+
+<<<問題>>>
+
+* csv モジュール
+** CRLF を出力する
+** バイナリ出力を前提にしている
+* sys.stdout はテキストモードでオープンされている
+* RFC上、CSVファイルの改行コードは CRLF でよろしい
+
+というわけで、普通に 
+
+8<
+out = csv.writer( sys.stdout )
+out.writerows( rows )
+>8
+
+とかやってしまうと:
+
+>> 見事に CRCRLF になってしまう <<
+
+<<<解決への試み-1>>>
+
+まぁ、普通に考えると、標準出力をバイナリモードにすればいいんだけど:
+
+>> 方法が分からない <<
+
+実はググってみて、方法の載ってるページは2,3見付けたんだけれども、
+そのうちの一つで試してみても、何故か CRCRLF 現象は直らなかったので、
+紹介は控えることにする。''(環境問題かもしれないからね)''
+
+<<<解決への試み-2>>>
+
+* csv モジュールの吐く改行コードを LF にしてもらう。
+* LF→CRLF 変換はファイルオブジェクトにしてもらう。
+
+結論から言うと:
+
+8<
+out = csv.writer( sys.stdout , lineterminator='\n' )
+>8
+
+でいいらしい。csv モジュールの挙動を定義するというクラス：
+
+>> csv.Dialects なんて、ややこしいもんがあるから <<
+
+最初、こういうシンプルな書き方が出来るとなかなか気付かんかったよ。
+
+Python 2.6 の英文リファレンス「http://docs.python.org/library/csv.html{13.1. csv ― CSV File Reading and Writing ― Python v2.6.5 documentation}」の方にサンプルがあったので、最終的に見付けることができたけど、2.5 の和文の方にはそこまでなかったから…(多分、翻訳当時の原文にもなかったんでしょうなぁ)

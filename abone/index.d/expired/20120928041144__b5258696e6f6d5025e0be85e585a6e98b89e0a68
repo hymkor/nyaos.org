@@ -1,0 +1,8 @@
+!!! ツールのダウンロード
+
+* http://www.mozilla.org/rhino/download.html{Rhino Downloads}
+
+8<
+$ unzip rhino1_7R2.zip
+$ export CLASSPATH=$CLASSPATH:PATH/TO/rhino1_7R2/js.jar
+>8

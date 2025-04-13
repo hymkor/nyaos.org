@@ -1,0 +1,351 @@
+<HTML>
+<HEAD><TITLE>HAYAMA review</TITLE></HEAD>
+<BODY>
+<H1 ALIGN=CENTER>高分子樹脂内での物理的微小発泡現象のモデリング</H1>
+
+<H2>目的</H2>
+	ポリマー発泡は産業的に非常に重要な材料である。
+	低い密度にあっては、ガラスファイバーのようなよく知られた絶縁体と比較して、
+	よい熱的絶縁特性を持っている。
+	また、硬さが要求されるような高い密度にあっても、場合の材料節約となる。
+<P>
+	マイクロセルラーは、10μmオーダーのポリマー発泡体と定義されている。
+	その発泡工程は、主に二つのプロセスからなる。
+<UL>
+<LI>	加圧容器(<A HREF="#RAMESH94-2">RAMESHらは35MPa</A>)の中に原料ポリマーを置き、
+	窒素などの非反応性ガスで飽和させる。
+	この段階で、温度はガラス転位点(ポリスチレン:373K)以下となっている。
+<LI>	加圧容器から、常圧の高温バスの中へ移動する(ここでは減圧と加熱をほぼ同時に行っているが、
+	<A HREF="#KUMAR90">KUMARら</A>は、
+	加熱のタイミングを適当に遅らせることによって、素材表面での発泡を押えられると報告している)。
+	ガスは過飽和状態となり、非常に不安定になる。
+	液体となって、やわらかくなったポリマー中に、
+	無数の気泡の「核」が生れ、成長が始る。
+</UL>
+	この発泡のプロセスは、さらに核生成過程と発泡過程にわけられる。
+	本レビューでは、古典的な相転位モデルを拡張した<A HREF="#SUH87-1">ColtonとSuh</A>のモデルと、
+	<A HREF="#RAMESH94-1">Rameshら</A>による、
+	材料中に始めから存在しているmicrovoidを考慮した核生成モデルを
+	比較・検討してみたい。
+<HR>
+<P>
+<H2>相転位でモデル化した気泡核生成過程</H2>
+
+	Suhらは、気泡の核生成には、ポリマーの状態によって、3種類のメカニズムを
+	提示している。それらは、ポリマーの主相に解けにくい添加物の量によって、
+	均質系核生成,不均質系核生成,混合系核生成と場合分けされる。
+<BR>	
+	　均質系核生成(Homogeneous Nucleation)は、添加物の量が、
+	主成分、添加物が共になって一つの均一な相を形成しているような場合に
+	起きるとされる。
+<BR>	
+	　不均質系核生成(Heterogeneous Nucleation)は、二つの成分間の界面上に
+	新たな相として形成する場合に生じる。
+<BR>
+	　混合系発泡(Mixed mode Nucleation)は、第二成分の量が、均質/不均質を分ける
+	臨界量前後で、両発泡が競合して起きるような場合に起きるとしたモデルである。
+
+<H3>均質相発泡</H3>
+	気泡を球と扱い、ポリマーと気泡間の界面エネルギーγ<SUB>bp</SUB>の
+	等方性を仮定すると、発泡においての、自由エネルギー変化は次のように表せる。
+	<CENTER>
+	<TABLE>
+	<TR><TD>ΔG<SUB>hom</SUB></TD>
+		<TD> = -V<SUB>b</SUB>ΔP + A<SUB>bp</SUB>γ<SUB>bp</SUB> </TD>
+	<TR><TD></TD>
+		<TD> = -(4πr<SUP>3</SUP>/3)ΔP + (4πr<SUP>2</SUP>)γ<SUB>bp</SUB></TD>
+	</TABLE>
+	</CENTER><BR>
+	ここで、ΔPは気泡内ガスの圧力を示しているが、
+	ガスが理想気体であると仮定すると、飽和圧力で代用できる。
+<BR>
+	　これを微分すると、自由エネルギー変化が極大値をとる
+	臨界半径r<SUP>*</SUP>が次のように得られる。
+<BR>
+	<CENTER>
+		r<SUP>*</SUP> = 2γ<SUB>bp</SUB> / ΔP
+	</CENTER>
+<BR>
+	より、この時の自由エネルギー(臨界自由エネルギー)は
+<BR>	<CENTER>
+		ΔG<SUP>G</SUP><SUB>hom</SUB> = 16γ<SUP>3</SUP> / (3ΔP<SUP>2</SUP>)
+	</CENTER>
+<BR>
+	と表せる。ここでガスの濃度 :C<SUB>0</SUB>,頻度因子 :f<SUB>0</SUB>とおくと、
+	均質核生成速度N<SUB>0</SUB>は
+<BR>	<CENTER>
+		N<SUB>hom</SUB> =
+		C<SUB>0</SUB>f<SUB>0</SUB>exp( -ΔG<SUP>*</SUP><SUB>hom</SUB>/kt )
+	</CENTER>
+<BR>
+	となる。
+
+<H3>不均質相発泡</H3>
+
+	今、表面エネルギーのバランスをとると、<BR>
+	<CENTER>
+	γ<SUB>ap</SUB> = γ<SUB>bp</SUB> + γ<SUB>ab</SUB>cosθ<BR>
+	</CENTER>
+	が成り立つ。aは固体微粒子pはポリマー,bは気泡で、
+	γは、添え字が表す二相間の表面エネルギーを表す。
+	また、θは濡れ角度を表す。
+	<P>
+	これより、自由エネルギー変化は<BR>
+	<CENTER>
+	<TABLE>
+	<TR><TD>ΔG<SUB>het</SUB></TD>
+		<TD>= -V<SUB>b</SUB> + A<SUB>bp</SUB>γ<SUB>bp</SUB> - A<SUB>ap</SUB>γ<SUB>ap</SUB></TD>
+	<TR><TD></TD>
+		<TD>= ( -(3π/4)r<SUP>3</SUP>ΔP + 4πr<SUP>2</SUP>γ<SUB>bp</SUB> )S(θ)</TD>
+	</TABLE>
+	</CENTER>
+	ただし,θのみの関数Sは、<BR>
+	<CENTER>
+		S(θ) = (1/4)(2+cosθ)(1-cosθ)<SUP>2</SUP><BR>
+	</CENTER>
+	であり、常に1以下の値しか取らない。
+	rで微分すると、先と同様に臨界半径と
+	臨界ギップス自由エネルギーが次のように得られる。<BR>
+	<CENTER>
+		ΔG<SUP>*</SUP><SUB>het</SUB> = ΔG<SUP>*</SUP><SUB>hom</SUB>S(θ)<BR>
+	</CENTER>
+	が成り立つ。平均的な濡れ角度はθ=20°で、S(θ)は
+	10<SUP>-3</SUP>オーダーとなる。つまり、非均質系核生成のエネルギー障壁は
+	界面の存在によってはるかに縮められる。
+<P>	
+	なお、非均質核生成速度 : N<SUB>het</SUB>は、N<SUB>hom</SUB>同様、<BR>
+	<CENTER>
+		N<SUB>het</SUB> = f<SUB>1</SUB>C<SUB>1</SUB>exp( -ΔG<SUP>*</SUP><SUB>het</SUB> / kt ) <BR>
+	</CENTER>
+	と表せる。
+
+<H3>混合系核生成</H3>
+	均質系核生成と非均質系核生成は互いに排他的な関係ではなく、双方が
+	同時に発生する場合も当然存在する。この場合、均質系核生成は、
+	先行して起る非均質系核生成によってガスが奪われると考えられるので、
+	次のように生成速度式は修正される。<BR>
+	<CENTER>
+		N'<SUB>hom</SUB> = f<SUB>0</SUB>C'<SUB>0</SUB>(-ΔG<SUP>*</SUP><SUB>hom</SUB>/kT) <BR>
+	</CENTER>
+	ただし、<BR>
+	<CENTER>
+		C'<SUB>0</SUB> = C<SUB>0</SUB> - N<SUB>het</SUB>tn<SUB>b</SUB> <BR>
+	</CENTER>
+	であり、tは最初の不均質系核生成が始まってからの時間、
+	nは気泡核中の分子数を示す。
+<HR>
+<P>
+<H2>Microvoidの存在を考慮した非均質核生成モデル</H2><BR>
+
+	<A HREF="#RAMESH94-1">Kweeder,Rameshら</A>は相転位を基礎とした
+	古典的な核生成モデルが熱プラスチックの
+	微小規模の発泡(Microcellular Foams)を---特に非均質核生成において---
+	十分に説明できない場合があるとして、
+	ポリマー材料の熱加工時に発生する微小空洞(Microvoid)を
+	考慮してモデルを考えた。
+<BR>	
+	　彼らは例としてポリスチレン(PS)をベースとしたポリマーに
+	添加物としてポリスチレンとポリブタジエン(PB)からなるゴム微粒子
+	(Rubber Particle)を加えた場合の非均質系をとりあげた。
+<BR>
+	　ポリブタジエンとポリスチレンのガラス転位点はそれぞれ181K,373Kであるので、
+	ポリマー熱処理後の冷却において、ポリスチレン相が先に固化する。
+	一方、ポリブタジエン相はそのまま室温に至るまで熱収縮をつづけるため、
+	ここに、熱膨張係数の違いから、微小な亀裂(cavitation)が発生する。
+	このうち、弾性抗力に打ち勝つだけの十分な半径を持ったmicrovoidだけが、
+	発泡の核として残ることができる。
+
+<h3>物質収支</h3>
+
+	ポリマー中の飽和ガスの物質収支を考えると、<BR>
+	<CENTER>
+		発泡後のガス量 = 発泡前のガス量
+			−(発泡後の気泡ガス−microvoid中のガス)<BR>
+	</CENTER>
+	が成り立つ。ポリマー中に含まれるガス量をヘンリー定数を用いると、
+	次のように式を変形できる。<BR>
+	<CENTER>
+		k<SUB>1</SUB>P = k<SUB>0</SUB>P<SUB>s</SUB> - 4πT<SUB>r</SUB>/3V<SUB>p</SUB>P<SUB>r</SUB>
+			[ R<SUP>3</SUP>P/T<SUB>f</SUB> - R<SUB>0</SUB><SUP>3</SUP>P<SUB>s</SUB>/T<SUB>s</SUB> ]<BR>
+	<!--\label{eq:ramesh-4}-->
+	</CENTER>
+	T<SUB>r</SUB>,P<SUB>r</SUB>は参照温度と圧力,T<SUB>s</SUB>,P<SUB>s</SUB>は飽和温度と圧力を表す。
+	V<SUB>p</SUB>は気泡を取り囲むポリマーの圧力をしめしている。
+	ヘンリー定数k<SUB>0</SUB>,k<SUB>1</SUB>は<BR>
+	<CENTER>
+	<TABLE>
+		<TR><TD>k<SUB>0</SUB>=</TD>	<TD>m'P<SUB>s</SUB> + c<SUB>0</SUB></TD>
+		<TR><TD>k<SUB>1</SUB>=</TD>	<TD>m'P(R)+ c<SUB>1</SUB></TD>
+	</TABLE>
+	</CENTER><BR>
+	と表せるので、式(\ref{eq:ramesh-7})は、圧力Pの二次方程式になる。
+	これを解くと、<BR>
+<CENTER>
+<TABLE>
+	<TR><TD>P(R)</TD><TD>=-B+[B<SUP>2</SUP>+4m'(k<SUB>0</SUB>+k<SUB>3</SUB>)P<SUB>s</SUB>]
+			<SUP>1/2</SUP> / 2m'</TD><!-- \label{eq:ramesh-7} -->
+	<TR><TD>B</TD>	 <TD>=c<SUB>1</SUB>+k<SUB>2</SUB>R<SUP>3</SUP></TD>
+	<TR><TD>k<SUB>2</SUB></TD><TD>=4πT<SUB>r</SUB>/3V<SUB>p</SUB>P<SUB>r</SUB>T<SUB>f</SUB></TD>
+	<TR><TD>k<SUB>3</SUB></TD><TD>=4πR<SUB>0</SUB><SUP>3</SUP>T<SUB>r</SUB>/3V<SUB>p</SUB>P<SUB>r</SUB>T<SUB>s</SUB></TD>
+</TABLE>
+</CENTER>
+
+<H3>表面張力と弾性効力</H3>
+	
+	弾性応力を考えるにあたり、無限のポリマーの海の中に一つの気泡を考える
+	モデルと、一つの気泡を有限量で球殻(Envelop,Shell)状で
+	取り囲むポリマーだけを考えるセルモデルの二種類がある。
+	前者は、後者のポリマー殻の量を無限大とおけばよい。
+<BR>
+	応力の半径方向のつりあいを考えると<BR>
+	<CENTER>
+	<TABLE>
+	<TR><TD>ΔP</TD><TD> = P<SUB>g</SUB>-P<SUB>f</SUB></TD>
+	<TR><TD></TD><TD>=2σ(T)/R - 2∫<SUP>S</SUP><SUB>R</SUB>(τ<SUB>rr</SUB>-τ<SUB>θθ</SUB>)(dr/r)
+	</TABLE>
+	</CENTER><BR>
+	ただし、境界条件<BR>
+	<CENTER>
+	<TABLE>
+		<TR><TD>r=R :</TD><TD>σ<SUB>rr</SUB></TD><TD>= -P<SUB>g</SUB>+2τ/R</TD>
+		<TR><TD>r=S :</TD><TD>σ<SUB>rr</SUB></TD><TD>= P<SUB>f</SUB></TD>
+	</TABLE><BR>
+	</CENTER>
+	ここで、Rは気泡半径を表す。Sは単位セルの半径である。
+	σ(T)は表面張力の大きさで、質量密度ρ(T)を使って、<BR>
+	<CENTER>
+		σ(T) = σ(298)(ρ(T)/ρ(298))<SUP>4</SUP><BR>
+	</CENTER>
+	と表せる。フックモデルを用いると、ΔPは次のように導き出される。<BR>
+	<CENTER>
+	<TABLE>
+	<TR><TD>ΔP</TD><TD>= 2σ(T)/R
+			+ 2G<SUB>c</SUB>[ (1/4){(y+R<SUP>3</SUP>)/(y+R<SUP>3</SUP><SUB>0</SUB>)}<SUP>-4/3</SUP></TD>
+	<TR><TD></TD><TD>+ {(y+R<SUP>3</SUP>)/(y+R<SUP>3</SUP><SUB>0</SUB>)}<SUP>-1/3</SUP></TD>
+	<TR><TD></TD><TD>- (1/4){R<SUP>3</SUP>/R<SUB>0</SUB><SUP>3</SUP>}<SUP>-4/3</SUP>
+			- (R<SUP>3</SUP>/R<SUB>0</SUB><SUP>3</SUP>)<SUP>-1/3</SUP>]</TD>	<BR>
+	</TABLE>
+	</CENTER>
+	ただし、yはy=S<SUP>3</SUP>-R<SUP>3</SUP>を表し、4πy/3が一気泡あたりのポリマー量を示す。
+	
+	式(\ref{eq:ramesh-7})から計算された圧力が、表面弾性力を超過すれば、
+	空洞は気泡の核となりえる。その境界となる(臨界)半径は計算機などで
+	求めることができる。
+<BR>
+	その半径分布は対数正規分布となっているので、
+	半径Rより大きい空洞の数は、単位体積あたりの空洞の数:N<SUB>0</SUB>を使って<BR>
+	<CENTER>
+	<TABLE>
+	<TR><TD>N</TD><TD>= N<SUB>0</SUB>[ 1 - 1/(σ(sπ)<SUP>1/2</SUP>)
+			∫<SUP>R</SUP><SUB>-∞</SUB> {-(log R/ξ)<SUP>2</SUP>/2σ<SUP>2</SUP> }d log R ] </TD>
+	<TR><TD></TD><TD> = N<SUB>0</SUB>/2 erfc(log R/ξ)/σ√2)</TD>
+	</TABLE><BR>
+	</CENTER>
+	とあらわせる。
+<BR>
+	実験によると、発泡数とゴム微粒子の数は非常に相関関係があるので、
+	総数をゴム微粒子の数から見積ることができる。
+	これはゴム微粒子が多数のvoidを持っていても、もっとも大きいものだけが残り、
+	他のより小さいmicrovoidはガスを奪われて消えてしまうからである。
+<HR>
+<P>
+<H2>考察</H2>
+	古典的な相転位理論を拡張したColton,Suhらのモデルでは、ステアリン酸亜鉛
+	添加物の量に対する核生成密度の変化を定性的にはうまく表しているものの、
+	実測値と理論値との間のずれが大きい。
+<BR>
+	また、非均質系核生成に関して、
+	古典的な核生成理論では臨界核のサイズが小さく、
+	5--20 Aオーダーになってしまう場合もある。
+<BR>
+	一方、Rameshらのモデルは、飽和圧力,発泡温度の変化に対して、
+	定量的にもよく合致しているが、特に一気泡あたりのポリマー量を有限と
+	置いたほうがよくあっている。
+<P>
+<HR>
+<H2>参考文献</H2>
+<OL>
+<LI><A NAME="SUH87-1">	<!-- エネルギーの面から発泡をモデリング-->
+	Colton,J.S and N.P.Suh,
+	``The Nucleation of Microcellular Foam With Additives:Part I:
+	Theoretical Considerations'',
+	<I>Poly.Eng.Sci.</I>,<B>27</B>,485--492,(1987).
+</A><P>
+<LI><A NAME="SUH87-2">	<!-- エネルギーの面から発泡をモデリング。あまり読んでいない -->
+	Colton,J.S and N.P.Sue,
+	``Nucleation of Microcellular Foam:Theory and Practice''
+	``The Nucleation of Microcellular Foam With Additives:
+	Part II: Experimental Result and Discussion''
+	<I>Polym.Eng.Sci.</I>,<B>27</B>,493--499,(1987).
+</A><P>
+<LI><A NAME="SUH87-3">	<!-- エネルギーの面から発泡をモデリング。小林君が読んだ。-->
+	Colton,J.S and N.P.Sue,
+	``Nucleation of Microcellular Foam:Theory and Practice''
+	<I>Polym.Eng.Sci.</I>,<B>27</B>,500--503,(1987).
+</A><P>
+<LI><A NAME="GENT69">	<!-- 古い論文。-->
+	Gent,A.N. and D.A.Tompkins,
+	``Nucleation and Growth of Gas Bubbles in Elastomers'',
+	<I>J.Appl.Phys.</I>,<B>40</B>,2520--2525,(1969).
+</A><P>
+<LI><A NAME="KUMAR90">	<!-- 発泡ポリマーの変形関係の話 -->
+	Kumar,V.,and N.P.Sue,
+	``A Process for Making Microcellular Thermoplastic Parts''
+	<I>Polym.Eng.Sci.</I>,<B>30</B>,1323--1329,(1990).
+</A><P>
+<LI><A NAME="UNFOAMSKIN"><!-- 非発泡皮膜の作り方。-->
+	Kumer,V.and J.E.Weller,
+	``A Model for the Unfoamed Skin on Microcellular Foams'',
+	<I>Polym.Eng.Sci.</I>,<B>34</B>,169--173,(1994).
+</A><P>
+<LI><A NAME="RAMESH94-1"><!-- 最初に読んだ文献のPart-Iの方。rubber particleを含んだ発泡 -->
+	Ramesh,N.S.,Don H.Ramussen,and G.A.Campbell,
+	``The Heterogeneous Nucleation of Microcellular Foams
+	Assisted by the Survival of Microvoids 
+	in Polymers Containing Low Glass Transition Particles.
+	Part I:Mathematical Modeling and Numerical Simulation.''
+	<I>Polym.Eng.Sci.</I>,<B>34</B>,1685--1697,(1994).
+</A><P>
+<LI><A NAME="RAMESH94-2"><!-- 最初に読んだ文献のPart-IIの方。rubber particleを含んだ発泡-->
+	Ramesh,N.S.,Don H.Ramussen,and G.A.Campbell,
+	``The Heterogeneous Nucleation of Microcellular Foams
+	Assisted by the Survival of Microvoids 
+	in Polymers Containing Low Glass Transition Particles.
+	Part II:Experimental Result and Discussion'',
+	<I>Polym.Eng.Sci.</I>,<B>34</B>,1698--1706,(1994).
+</A><P>
+<LI><A NAME="RAMESH91"><!-- まだよく読んでいない論文。-->
+	Ramesh,N.S.,D.H.Rasmussen,and G.A.Campbell,
+	``Numerical and Expeimental Studies of Bubble Growth
+	During the Microcellular Foaming Process'',
+	<I>Polym.Eng.Sci.</I>,<B>31</B>,1657--1664,(1657).
+</A><P>
+<LI><A NAME="SCHMITT68"><!-- 古い論文、rubber particleによる強化 -->
+	Schmitt,J.A.,
+	``Mechanism of Reinforcement in Rubber-Modified Polystyrene System
+	Studied by Use of a Miniature Dart Drop Test''
+	<I>J.Appl.Phys.</I>,<B>12</B>,533--546,(1968).
+</A>
+</OL>
+<HR />
+<H2>あとがき</H2>
+
+<P>以上がレビューのレジュメです。<!--
+-->これの元原稿はLaTeXでして、<!--
+-->HTMLへ直す作業は<B>式以外</B>は楽でした。<!--
+-->LaTeX2HTMLちゅうスクリプトもあるそうですが、<!--
+-->今回は使いませんでした。
+</P>
+<P>現在のHTMLは TeXに比べると機能がヒンジャクですね。<!--
+-->NetscapeもMicrosoftも派手な拡張ばかりではなく、<!--
+-->数式くらいは一人前に書けるようなタグをつけてほしいですね。
+</P>
+<P>僕個人としては、レビューは小失敗だったなぁというところです。<!--
+-->幸いにして本番で恥を書くようなことはなかったものの、<!--
+-->それも先生方が手加減してくれたからではないかなぁという気がします。<!--
+-->これ以上書くと墓穴を掘りそうなので、これぐらいにしておきます。<!--
+-->（だったら、はじめから書くな、こんなページ）
+</P>
+
+</BODY>
+</HEAD>

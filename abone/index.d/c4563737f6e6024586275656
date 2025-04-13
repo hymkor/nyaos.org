@@ -1,0 +1,164 @@
+http://www.mulesoft.org/documentation/display/MULE3INTRO/Lesson+Three
+
+!!! Lesson 3: Application の全貌
+
+Mule ESB アプリの作成は、設計ファイルと、やってくるメッセージにおいて要求されるカスタムロジックを評価する Java クラスを示すくらいの単純なものである。
+Mule設計ファイルを作成する最も簡単な方法は [[Lesson One]]で記した Mule IDE を使うことである。Lesson Three では XML エディタや IDE で手作業でファイルを作成するのに必要な情報を提供し、全ての要素を理解する手助けをする。 Hello World アプリケーションの設計ファイルをなぞっていこう。そうすれば、このファイルと、コンパイルされた Java のクラスを使って、Mule を走らせることができる。
+
+
+!! Add the XML Declaretion and Namespaces(XML宣言と名前空間の追加)
+
+まず、ファイルの先頭に XML 宣言がゆく。
+
+8<
+<?xml version="1.0" encoding="UTF-8"?>
+>8
+
+次に、<mule>要素の中で、使いたい、Mule の中核のスキーマと XSI、Spring、トランスポートとモジュールの名前空間を宣言する。例えば、HTTP と VM のトランスポートを使いたいとする。その場合、スキーマの位置ヲ宣言スル XSI名前空間を使う。例：
+
+8<
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:http="http://www.mulesoft.org/schema/mule/http"
+      xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+        xsi:schemaLocation="
+       http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
+       http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd
+       http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.0/mule-vm.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+>8
+
+HTTP トランスポートは、ウェブブラウザを含む http クライアントを用いたアプリケーションとやりとりすることを可能にする。
+
+!! Add The Description (説明を加える)
+
+必須ではないが、<description>要素に、設計の説明を加えることができる。
+(省略)
+
+!! Configure Global Connectors
+
+Mule でトランスポートを設計する方法が幾つかあるが、
+ベストプラクティスは、<connector>要素をグローバルコンフィギュレーションを定義するために使うことだ。グローバルコンフィギュレーションは複数の場所から参照することができる。<connector>要素は、そのトランスポートの名前空間が接頭語につかなくてはならない。例えば、次のコネクタは、[[STDIO transport]]を用いる終点(endpoints)で利用できる。
+    
+8<
+<stdio:connector name="SystemStreamConnector"
+        promptMessageCode="3"
+        resourceBundle="messages.hello-example-messages"
+        messageDelayTime="1000"/>
+>8
+
+STDIO transport を定義するコネクターは一つであるので、
+このコネクタは、STDIO トランスポートを作る時、デフォルトで常に使用される。
+多数の STDIO コネクタを定義すると、使いたいコネクタを特定するために、
+終点で connector-ref属性を使うことになる。
+
+!! Configure Global Custom Transformers
+
+次の設計すべき要素が[[component]]だ。component は、
+プレーンな Java クラス、 Spring Bean、JSR223-script、ウェブサービス他、
+メッセージでロジックを評価できるものがありえる。
+コンポーネントを作る上での情報については、
+[[Developing Service Components]]を参照のこと
+
+
+例えば、コンポーネントが POJO の時、<component>タグでクラスを指定する。
+
+8<
+<custom-transformer name="HttpRequestToNameString class="org.mule.example.myhelloapp.HttpRequestToNameString"/>
+>8
+
+デフォルトでは、Mule は
+トランスフォーマーの戻り値の型にマッチする、
+コンポーネント中のメソッドへのエントリポイントを実行する
+Java Class の正しいメソッドを自動的に発見します。
+
+エントリポイントを解決する他の方法についての情報については、
+[[Entry Point]]参照のこと。
+
+Greeter component のコードは次の通り：
+
+8<
+package org.mule.example.myhelloapp;
+ 
+/**
+ * <code>Greeter</code> expects a valid <code>NameString</code> object. If invalid,
+ * an exception is created and returned. The outbound router will filter exceptions
+ * as user errors and return the messages to the original requester accordingly.
+ *
+ * Greeter は正しい NameString オブジェクトを期待している。
+ * もし、そうでなければ、例外を生成して戻す。
+ * outbound router は、ユーザエラーとして例外をフィルターし、
+ * 元のリクエスターへメッセージを戻す。
+ */
+public class Greeter
+{
+    private String greeting = "";
+ 
+    public Greeter()
+    {
+        greeting = LocaleMessage.getGreetingPart1();
+    }
+ 
+    public Object greet(NameString person)
+    {
+        Object payload = person;
+        if (person.isValid())
+        {
+            person.setGreeting(greeting);
+        }
+        else
+        {
+            payload = new Exception(LocaleMessage.getInvalidUserNameError());
+        }
+        return payload;
+    }
+}
+>8
+
+
+!!  Configure Models and Services
+
+8<
+<model name="myHelloApp">
+    ...services will go here
+>8
+
+! Configure the Inbound Section
+
+8<
+<service name="GreeterUMO">
+    <inbound>
+        <inbound-endpoint address="…" >
+            <not-filter>
+                <wildcard-filter pattern="/favicon.ico"/>
+            </not-filter>
+        </inbound-endpoint>
+>8
+
+! Configure the Component
+
+8<
+<component class="org.mule.example.myhelloapp.Greeter"/>
+>8
+
+! Configure the Outbound Section
+
+* NameString が出力の場合は、chitchatter を経路にする。
+
+8<
+<outbound>
+    <filtering-router>
+        <vm:outbound-endpoint path="chitchatter"
+         exchange-pattern="request-response"/>
+        <payload-type-filter 
+         expectedType="org.mule.example.myhelloapp.NameString"/>
+    </filtering-router>
+    <filtering-router>
+        <vm:outbound-endpoint path="userErrorHandler"
+         exchange-pattern="request-response"/>
+        <payload-type-filter
+         expectedType="java.lang.Exception"/>
+    </filtering-router>
+</outbound>
+>8

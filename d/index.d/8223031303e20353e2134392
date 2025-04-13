@@ -1,0 +1,72 @@
+<<[Lua] Lua 5.2 のメタメソッド ```__pairs``` を、5.1.4 で自前で作る>>
+
+Lua は大抵の演算をメタテーブルに関数を定義することでオーバーロードできる。
+が、テーブルの全ての要素を操作する pairs関数だけは 5.1.4 では、
+メタテーブルで置き換えできなかった。
+
+その点は認識されていたのか、まだ work2 だが Lua 5.2 では ```__pairs```
+という関数をメタテーブルに登録すれば、pairs の動作を置き換えることが
+できるようになったらしい。(詳細は >>{(2010.01.04)#p2} にて)
+
+が、5.1.4 でも使いたいと思うのが人情。そこで一工夫してみたら、意外と簡単だった。
+
+8<
+pairs = function(t)
+    local m=getmetatable(t)
+    if m and m.__pairs then
+        return m.__pairs(t)
+    else
+        return next,t,nil
+    end
+end
+>8
+
+NYAOS の場合だと _nya の中に、さらに
+
+8<
+local a=getmetatable(nyaos.alias)
+a.__pairs = a.__call
+>8
+
+という2行を入れておけば、
+
+8<
+$ lua_e "for key,val in pairs(nyaos.alias) do print(key,val) end"
+>8
+
+なんてこともできるわけだ。
+これで何が嬉しいかというと、nyaos.alias は本当はテーブルじゃないんだけれども、
+これで見かけ上テーブルと区別がなくなるってことなんだよね。
+
+とはいえ、実際に嬉しいのは、例外的な扱いについて説明を書かなくて済む自分だけなんだけどね。
+
+C言語のソースだと次のようになる
+
+8<
+static int extended_pairs(lua_State *L)
+{
+    if( lua_getmetatable(L,-1) ){
+        lua_getfield(L,-1,"__pairs");
+        if( lua_isfunction(L,-1) ){
+            /* stack: TABLE,METATABLE,FUNCTION */
+            lua_pushvalue(L,-3);
+            lua_call(L,1,3);
+            return 3;
+        }else{
+            lua_pop(L,2); /* drop METATABLE,!FUNCTION */
+        }
+    }
+
+    /* normal pairs behavior */
+    luaL_checktype(L,1,LUA_TTABLE);
+    lua_getglobal(L,"next");
+    lua_insert(L,-2);
+    lua_pushnil(L);
+    return 3;
+}
+
+/* 中略 */
+
+   lua_pushcfunction(L,extended_pairs);
+   lua_setglobal(L,"pairs");
+>8

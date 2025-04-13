@@ -1,0 +1,68 @@
+<<[wifky] AmazonのOSSに対する挑戦で、最初に滅ぼされるのはwifky/amazon.plっぽいな>>
+
+* http://sho.tdiary.net/20090512.html#p01{
+  AmazonのAPI認証導入はOSSに対する挑戦だよなぁ - ただのにっき(2009-05-12)}
+
+まったくもって同感。
+
+しかも、wifky の場合、Perl の標準ライブラリしか使わないという縛りがあり、
+どちらかというと、SHA256 などを取り扱うライブラリを使わないといけない
+という点の方が致命的。
+
++ Pure Perl でないライブラリは、
+  シェルアカウントの無いホスティングサービスではビルドできない。
++ Pure Perl なライブラリは大丈夫だが、それでもなお導入手順が繁雑。
++ 自分でやる分にはがんばればいいだけだが、
+   ユーザに繁雑な作業を強いるのは困難。
+  ((br))(wifky は Perl製だけど、Perl Hacker が使うようなツールではないため、
+    tDiary みたいにユーザが自分の力で乗り越えるのを期待してはいけない)
+
+今までは何とか手組みで逃げてきたんですけどね。
+
+まぁ、まだ何ら手を動かしてないので、結論を出すのは早いかもしれませんけどね。
+(意外と簡単かも)
+
+<<[Lua][Oracle] oluacle だいたいでけた>>
+
+oluacle とは、Oracle にアクセスできる Lua 処理系を作ろうという
+一人プロジェクトである。
+
+Oracle 用のライブラリはいろいろあるが、
+Oracle の API(OCI) とメソッドが 1:1 の対応になっていて、
+今一使い辛いものが多い。
+例外は http://ruby-oci8.rubyforge.org/ja/index.html{Ruby/OCI8}で、こちらは
+
+8<
+ruby -r oci8 -e "OCI8.new('scott', 'tiger').exec('select * from emp') do |r| puts r.join(','); end"
+>8
+
+という 1-linear で書ける手軽さ。
+イタレータをうまく使い、接続とSQL発行の2アクションで済むようになっているわけだ。
+(3アクションくらいは他にもあるが、ここまで手数を減らせているのは稀だ)
+
+Lua でも、この水準の手軽さで SQL を発行できないものかと、
+この一週間ほど、奮闘してみた。
+結果、なんとか SELECT 文だけでも、動くもんがでけた
+
+8<
+$ cat test1.lua
+conn,err=olua.connect("HR","HR","XE");
+
+for rownum,tname,tabtype in conn:query(
+    "select rownum,tname,tabtype from tab where tname <= :j ","JOBS")
+do
+    print(("<%d>[%s][%s]"):format(rownum,tname,tabtype))
+end
+
+$ ./olua test1.lua
+<1>[COUNTRIES][TABLE]
+<2>[DEPARTMENTS][TABLE]
+<3>[JOBS][TABLE]
+<4>[EMPLOYEES][TABLE]
+<5>[EMP_DETAILS_VIEW][VIEW]
+<6>[CDEMO81_EMP][TABLE]
+>8
+
+まだ、エラー処理が全然でけてないし、たまに挙動があやしい(だめじゃん)。
+LuaとOracle 、双方のAPIの挟み撃ちにあって、非常にめんどくさいが、
+あともう少しだ。がんばろう。

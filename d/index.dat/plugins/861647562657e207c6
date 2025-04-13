@@ -1,0 +1,225 @@
+package hatebu2wifky;
+
+# use strict;
+# use warnings;
+use IO::Socket;
+use Encode;
+
+my $version='0.9';
+
+$::inline_plugin{'hatebu'} = \&hatebu2wifky::hatebu;
+$::inline_plugin{'fotolife'} = \&hatebu2wifky::fotolife;
+$::preferences{"hatena bookmark/fotolife $version"} = [
+    { desc => 'account'       , name=>'hatebu_account'  , size=>15 },
+    { desc => 'max bookmarks' , name=>'hatebu_items'    , size=>1  },
+    { desc => 'max pictures'  , name=>'hatebu_pictures' , size=>1  },
+];
+
+sub hatebu{
+    my $account = $::config{'hatebu_account'} 
+        or return '(not set account)';
+    my $session=shift;
+
+    my @entries;
+    my $mtime;
+    &rss( &::title2fname( $session->{title} , 'hatebu.txt' ) ,
+          &::title2fname( $session->{title} , 'hatebu.stamp' ) ,
+          'b.hatena.ne.jp' ,
+          "/$account/rss" , 
+          ($::config{'hatebu_items'} || 5 ,
+          \@entries ,
+          \$mtime )
+    );
+
+    qq(<dl class="hatebu">\n) . join('',
+            map( sprintf(qq(<dt><a href="%s">%s</a></dt><dd>%s</dd>\n) ,
+                    $_->[0] ,
+                    $_->[1] ,
+                    &set_class_category($_->[2]) ) , @entries )
+    ) . '</dl><!-- ' . 
+        ( defined($mtime) ? ('Update on '.localtime($mtime))
+                          : 'New created' ) . '-->';
+};
+sub set_class_category{
+    my ($desc)=@_;
+    $desc =~ s|^(\[.*?\])+|<span class="hatebu_subject">$&</span>|;
+    $desc;
+}
+
+sub fotolife{
+    my $account = $::config{'hatebu_account'} 
+        or return '(not set account)';
+    my $session=shift;
+
+    my @entries;
+    my $mtime;
+    &rss( &::title2fname( $session->{title} , 'fotolife.txt' ) ,
+          &::title2fname( $session->{title} , 'fotolife.stamp' ) ,
+          'f.hatena.ne.jp' ,
+          "/$account/rss" , 
+          ($::config{'hatebu_pictures'} || 5 ,
+          \@entries ,
+          \$mtime )
+    );
+
+    qq(<div class="fotolife">\n) .
+    join('', map($_->[2]."\n",@entries) ) .
+    '</div><!-- ' . 
+        ( defined($mtime) ? ('Update on '.localtime($mtime))
+                          : 'New created' ) . '-->';
+}
+
+sub rss{
+    my ($fname , $stampfn , $host , $uri , $max_entries , $entries , $mtime_ref) = @_;
+
+    my @oldentries;
+    my $cache=&::read_file($fname);
+    foreach my $line ( split("\n",$cache) ){
+        push( @oldentries , [ map(&::deyen($_),split(/\t/,$line,3)) ] ); 
+        last unless scalar(@oldentries) < $max_entries ;
+    }
+    
+    $$mtime_ref=$#oldentries >=0 ? (stat($fname))[9] : undef;
+    my $xml;
+    if( $cache eq '' || ! -f $stampfn || ( -M $stampfn ) > 1.0/(24*6) ){
+        &::write_file( $stampfn , scalar(localtime) );
+        eval{
+            local $SIG{ALRM} = sub { die('Timeout to read RSS'); };
+            alarm(30);
+                $xml = &http( $host , $uri , $$mtime_ref );
+            alarm(0);
+        };
+        if( $@ ){
+            alarm(0);
+            if( $@ =~ /Timeout to read RSS/ ||
+                $@ =~ /.hatena.ne.jp not found/ ){ 
+                undef $xml;
+            }else{
+                die($@);
+            }
+        }
+    }
+
+    my @newentries;
+    if( defined($xml) ){
+        Encode::from_to($xml,'utf8','euc-jp',Encode::XMLCREF);
+        &parse_rss($xml,
+            ($::config{'hatebu_length' } || 80 ),
+            sub{
+                my ($url,$title,$desc)=@_;
+                if( $oldentries[0]->[1] eq $title ){
+                    0;
+                }else{
+                    push(@newentries,[ $url , $title , $desc ]);
+                    (scalar(@newentries) < $max_entries ) ? 1 : 0;
+                }
+            }
+        );
+    }
+    @{$entries}=(@newentries,@oldentries);
+    splice(@{$entries}, $max_entries );
+
+    if( defined($xml) ){
+        &::write_file( $fname , join('',map(
+                    &::yen($_->[0])."\t".
+                    &::yen($_->[1])."\t".
+                    &::yen($_->[2])."\n", @{$entries})) );
+        $::version le '1.0.2.3' and &::directory();
+    }
+}
+
+# If $since has TIME and the page not modified, &http returns undef;
+sub http{
+    my ($host,$path,$since)=@_;
+
+    my $http = IO::Socket::INET->new(PeerAddr=>$host,PeerPort=>80,Proto=>'tcp')
+        or die("socket error.\n");
+    $http->print("GET $path HTTP/1.1\r\n");
+    if( defined($since) ){
+        my @tm=split(/\s+/,''.gmtime($since));
+        printf HTTP "If-Modified-Since: %s, %02d %s %d %s GMT\n" ,
+            $tm[0],$tm[2],$tm[1],$tm[4],$tm[3] ;
+    }
+    $http->print("Host: $host\r\n");
+    $http->print("Connection: close\r\n");
+    $http->print("\r\n");
+
+    my $flag=0;
+    my $body='';
+    if( ( split(/\s+/,<$http>) )[1] eq '304' ){
+        $body = undef;
+    }else{
+        while( defined(my $line=<$http>) ){
+            if( $line =~ /^\r?\n?$/ ){
+                while( defined(my $line=<$http>) ){
+                    $body .= $line;
+                }
+                last;
+            }
+        }
+    }
+    $http->close();
+    $body;
+}
+
+sub parse_xml{
+    my ($xml,$start,$end,$text)=@_;
+    $xml =~ s/\<\!\[CDATA\[(.*?)\]\]\>/"\a".unpack('h*',$1)."\a"/ges;
+    while( length($xml) > 0 ){
+        if( $xml =~ m|\A\</([^\<\>]+)\>|s ){
+            $xml = $'; 
+            $end->(split(/\s+/,$1)) or return;
+        }elsif( $xml =~ m|\A\<([^\<\>]+)\>|s ){
+            $xml = $'; 
+            $start->( split(/\s+/,$1) ) or return;
+        }elsif( $xml =~ m|\A[^\<\>]+|s ){
+            $xml = $';
+            my $body = $&; $body =~ s/\a(.*?)\a/pack('h*',$1)/ges;
+            $text->( $body ) or return;
+        }else{
+            return;
+        }
+    }
+}
+
+sub parse_rss{
+    my ($xml,$max_length,$get_entry)=@_;
+    my $item=undef;
+    my $text=undef;
+    &parse_xml( $xml ,
+        sub { ### Start ###
+            my $tag=shift;
+            my @elements = @_;
+            if( $tag eq 'item' ){
+                my %hash;
+                grep( (/^([^\=]+)\=\"?(.*?)\"?$/ and $hash{$1}=$2,0),@elements);
+                $item = { url=>$hash{'rdf:about'} , 'dc:subject'=>[] };
+            }elsif( defined($item) && $tag =~ /title|description|dc\:subject/){
+                $text = '';
+            }
+            1;
+        } ,
+        sub { ### End ###
+            my ($tag)=@_;
+            defined($text) or next;
+            if( $tag =~ /^(title|description)/ ){
+                $item->{ $tag } = $text;
+            }elsif( $tag eq 'dc:subject' ){
+                push(@{$item->{'dc:subject'}},$text);
+            }elsif( $tag eq 'item' ){
+                my $rv=$get_entry->( $item->{url},
+                    $item->{title}, 
+                    join('',map("[${_}]",@{$item->{'dc:subject'}}))
+                    .  $item->{description} ) or return 0;
+                undef $item;
+            }
+            1;
+        } ,
+        sub { ### Text ###
+            defined($text) and $text .= $_[0];
+            1;
+        }
+    );
+}
+
+1;

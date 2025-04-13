@@ -1,0 +1,92 @@
+<<[Lua] 簡単なクラス構文を作ってみた>>
+
+かの、まつもとゆきひろ氏は「Lua のオブジェクト指向は内臓が見えちゃってる感じがする」
+とかおっしゃったそうですが、隠すのは別に難しくありません。
+
+Pure Lua のみで、簡単な class 構文を作ってみました。
+こんな感じで使えます。
+
+8<
+require 'class'
+
+String = class{
+    new=function(self,str)
+        self.str = str
+    end,
+    puts=function(self)
+        print(self.str)
+    end,
+    __add=function(self,another)
+        return String(self.str .. another.str)
+    end,
+}
+
+local a = String("ahaha")
+local b = String("ihihi")
+local c = a + b
+c:puts()
+>8
+
+実行結果:
+8<
+$ lua t_class.lua
+ahahaihihi
+>8
+
+class{～} という書き方が見慣れないかもしれませんが、
+Lua では func( {～} ) を func{ ～ } と書ける機能を使っています。
+つまり、キーワード class は関数です。
+この class という名前の関数の中で、Lua 特有のメタテーブル操作を隠蔽化しています。
+
+ちなみに、class 関数の戻り値はコンストラクタの役割を果す関数です。
+
+class 関数を定義している「class.lua」の実装は次の通りです。
+
+8<
+function class(def)
+    local prototype={}
+    local metatable={}
+    for key,val in pairs(def) do
+        if string.sub(key,1,2)=='__' then
+            metatable[key]=val
+        else
+            prototype[key]=val
+        end
+    end
+    metatable.__index = prototype
+
+    -- return constructor
+    return function(...)
+        local self={}
+        setmetatable(self,metatable)
+        if prototype.new then
+            prototype.new(self,...)
+        end
+        return self
+    end
+end
+>8
+
+与えられたテーブルの中のメンバーが```__```で始まっているか否かで、
+プロトタイプのテーブルとメタテーブルに寄り分けてています。
+プロトタイプのテーブルは、メタテーブルの ```__index``` に割り合てられます。
+
+あとは、このままでは簡単に継承できませんので、もう少し class 関数の改良が必要ですね。
+
+<<[nyaos] cd したら自動的にls -a を実行する>>
+
+某所で質問があったので。
+
+8<
+cd{
+    __cd__ $*
+    ls -a
+}
+>8
+
+以上を _nya に記述するといいです。
+
+* foo という内臓コマンドに対して、```__foo__``` という別名が定義されています。
+* foo{ … } は関数定義です。
+* 改行を外すと「$*」の評価のタイミングがおかしくなるので、
+  セミコロンでマルチステートメントにはせず、必ず改行を入れてください。

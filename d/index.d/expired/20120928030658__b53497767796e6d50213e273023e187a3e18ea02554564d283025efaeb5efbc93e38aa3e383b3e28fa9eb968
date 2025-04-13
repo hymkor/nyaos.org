@@ -1,0 +1,11 @@
+* w3m でズレまくる件
+** >>{(2010.04.10)#p1}{せっかく、Cygwin が 1.7 で UTF8 対応したのに w3m が}utf8 運用で、罫線や項目記号で化けたりズレる
+*** ソース側で UTF8 向けの記号部分を、ASCII向けのものに差し替えることで対応
+* vim でズレまくる件 (特に skk.vim )
+** >>{(2010.04.13)#p2}{[vim][Cygwin] skk.vim の変換記号の件}
+*** encoding が utf-8 の時は、``set ambiwidth=double`` を指定する
+* Mercurial
+** >>{(2010.04.14)#p2}{[Cygwin] 逆襲の Cygwin 1.7 [Mercurial]}
+*** Mercurial では何もしなくても日本語対応できているが、 
+   ネイティブ版 Mercurial(+win32mbcs拡張)と
+   互換性のないレポジトリが出来てしまう

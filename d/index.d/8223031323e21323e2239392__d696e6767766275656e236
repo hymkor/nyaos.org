@@ -1,0 +1,6 @@
+#include <stdlib.h>
+
+void mingwfree(void *p)
+{
+	free(p);
+}

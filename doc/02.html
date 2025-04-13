@@ -1,0 +1,216 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="robots" contents="noindex, nofollow" />
+<link rel="PREV" href="01.html" />
+<link rel="HOME" href="../index.html" />
+    <style type="text/css">
+    <!--
+	SPAN.FIRSTLETTER{ font-size:xx-large; width:1em; float:left }
+	P.SAY1{color:#FF00FF;font-size:x-large;text-align:center}
+	P.SAY2{color:#FFFF00;font-size:x-large;text-align:center}
+        P.SEP{text-align:center;color:silver;font-weight:bold}
+	DIV.FOOTNOTE{font-size:x-small}
+	DIV.COMMENT{text-indent:12pt}
+	.H{font-weight:bold;font-size:large}
+.H{
+  font-size:large;font-weight:bold
+}
+H1{
+  text-align:right;
+  border-style:solid;border-width:0px 0px 4px 0px;border-color:white;
+  color:snow;
+  font-size:large;
+  clear: both;
+  width: auto;
+}
+H2{
+  border:none;
+  background-color:#444444;
+  font-size:large;
+  width:auto;
+}
+H2 SMALL{
+  font-size:small;
+  line-height:large;
+}
+H3{
+  border-style:solid;border-width:0px 0px 0px 20px;border-color:silver;
+  font-size:medium;
+  text-indent:5pt
+}
+.BOX{
+  border-style:solid;border-color:white;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  text-decoration:underbar;white-space:pre
+}
+.XOB{
+  border-style:solid;border-color:gray;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  background-color:white;color:black;white-space:pre
+}
+DT{ color:silver;font-weight:bold; }
+UL LH{ color:silver;font-weight:bold; }
+EM{ color:gray;font-weight:bold;font-style:normal }
+STRONG{ color:red }
+B.PLASMA{
+    color:red;background-color:#440000;font-size:xx-small;font-weight:bold;
+}
+B.DOKEN{
+    color:#FFFF00;background-color:#444400;font-size:xx-small;font-weight:bold;
+}
+DIV.D{
+    text-indent:12pt
+}
+A:hover{
+  background-color:#440000
+}
+
+    -->
+    </style>
+</head>
+<body text="white" bgcolor="black" link="silver" vlink="gray">
+<a href="#bottom" name="top">▼</a><br>
+<!--start-->
+<DIV ALIGN=RIGHT><TABLE><TR><TD><DIV CLASS="BOX"><A HREF="http://hp.vector.co.jp/authors/VA009797/">筆者ホーム</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="../index.html">NYA☆Sホーム</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="01.html">prev</A></DIV></TD></TR></TABLE></DIV>
+
+
+<h1>Ghost in the Commandline Shell</h1>
+
+
+<p><span class="FIRSTLETTER"><a name="default.1" 
+ href="#default.1">続</a></span>
+き！ 前回は、共通ライブラリ部分を取り上げた。Nihongo Nano Library は奥が浅い割に、まだ紹介していないクラスがあるのだが、全部解説していると、キリがないし、第一、読んでる方が飽きてくる可能性が高いため、一旦終わりとする。</p>
+<p>今まではボトムアップで話を進めてきたので、今度はトップダウンで NYAxS の構造を説明したいと思う。ということで、テーマは「愛」…もとい「貝(シェル)」自体だ。</p>
+<h2>主に main の話</h2>
+
+
+<p>トップダウンに話をするとなると、避けて通れないのは main 関数である。NYAxS では、ずばり、nyados.cpp に存在する。NYAxS なのに nyados.cpp なのは、NYAxS 0.01 は NYADOS しか存在しなかったからだ。</p>
+<p>main 関数をつらつらと見ていると、いろいろごちゃごちゃと、やれ</p>
+<ul>
+<li>オプション処理</li>
+<li>ヒストリ処理</li>
+<li>_nya 読み取り処理</li>
+</ul>
+
+<p>などが書いてあるが、そんなものを見るのは後回しでよい。実のところ、<STRIKE>キモッ</STRIKE>肝なのは<em>(それはいいから)</em>
+次の２行である。</p>
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />    InteractiveShell intShell;<br />    /* 数行おいてから */<br />　<br />    intShell.mainloop();<br /></pre>
+</td></tr></table>
+
+
+
+<p>最初の行は変数宣言である。このオブジェクトは、対話型シェルを意味するクラスオブジェクトである。</p>
+<p>そして、次の行の mainloop は、１行１行読みこんで、EOF まで逐次処理するというメソッド呼び出しである。が、このメソッド自体は InteractiveShell の親クラスNyadosShell で定義されている。</p>
+<p align="center" class="SAY1"> どうやら、本当のメインルーチンは .mainloop() のようだな！ </p>
+
+
+<h2>シェル関係のクラス</h2>
+
+
+<p>またかと言われそうだが、ここでシェル周りのクラスの継承図を書いてみる。だいたいのクラス宣言は shell.h に記述されている。</p>
+<pre>
+<a href="01.html#nnobject">NnObject</a>
+    ┗ NyadosShell (シェル)
+	┣ ScriptShell (ファイル読みこみのシェル)
+	┣ IntractiveShell (対話型シェル)
+	┣ OneLineShell (引数の１行だけ実行するシェル)
+	┗ BufferedShell (メモリバッファ上に蓄えられた文を実行するシェル)
+</pre>
+
+
+<p>要は、実行文の取り先ごとに派生クラスを用意しているということである。逆にシェルとして共通どころは全て NyadosShell に集約している。</p>
+<p>OneLineShell , BufferedShell はちょっと何コレかもしれないが、要は if 構文とか foreach とかを実現する際に、IntractiveShell にしてもScriptShell にしても、読みこんだ文をすぐ実行せず、後から任意回実行ということがよくある。OneLineShell は１行こっきり。BufferedShell は n 行に対応したもんだ。</p>
+<p>では、まずは、NyadosShell のクラス宣言(shell.h)を見てもらおうか。多分、重要どころは 2,3 のはず</p>
+<h2>NyadosShell のクラス宣言</h2>
+
+
+<p>注目すべきは、次のメソッドかな。</p>
+<ul>
+<li>mainloop
+    <div class="COMMENT"> まさしく、これがメインルーチン。といっても、実は次の interpret と readcommand を交互に呼び出すだけ。</div>
+</li>
+<li>interpret
+    <div class="COMMENT"> セミコロン・改行で区切られた「１文」を実行するメソッド</div>
+</li>
+<li>readcommand
+    <div class="COMMENT"> セミコロン・改行で区切られた「１文」を読みこむメソッド</div>
+</li>
+<li>readline
+    <div class="COMMENT"> 改行で区切られた「１行」を読みこむメソッド(仮想関数)。readcommand より呼び出される。</div>
+</li>
+</ul>
+
+<p>注意すべきは、readcommand は仮想関数では「ない」ということであろうか。シェルコマンドというのは、読みこみの単位は１行ずつであるが、実行の単位はセミコロン・改行で区切られた１文ずつなのである。readcommand は、各クラスの readline で１行を先読みして、それを文に区切って呼び出し元に最初のものから順に返すのである。行継続なども、readcommand が適当に相手をする<em>(てきとうかよ！)</em>
+
+</p>
+<p>mainloop 関数周りについては、shell.cpp を参照くださいませ。</p>
+<p>ここからは、readline の方向<em>(コマンドを取得する方向)</em>を上流、interpret の方向<em>(コマンドを解釈する方向)</em>を下流と呼ぶことにする。</p>
+<p align="center" class="SAY2"> ってことは１行入力ルーチンは「源流」か!? </p>
+
+
+<p>まぁ、入力コマンドは上流から下流に流れるという意味合いですが、どっちにしても、サブルーチンが深くなってゆくんですけどね。では、どんどんシェルの奥地へ参りますぞ。といっても、いきなり下流の方に下るんだけど<sup style="font-size:x-small"><a href="#default.1" title="上流はすぐ仮想関数で行き止まりだし。源流には一行入力部の解説で詳しく説明する" name="default.1.">*1</a></sup>
+
+</p>
+<h2>一文とは！</h2>
+
+
+<p>ちょっと用語を整理する。</p>
+<ul>
+<li>一文 … 改行/セミコロンで区切られた１文<em>(==１行とは限らない)</em></li>
+<li>個命令 … 一文を「|」で分割したもの</li>
+</ul>
+
+<p>下流は次のように処理が流れてゆく。実のところ、これまでのところと違い、かなり“いびつ”になっているので、注意が必要だ。</p>
+<ul>
+<li>interpret
+    <div class="COMMENT"> セミコロン・改行で区切られた１文を「|」(パイプ文字)で分割し、各々の個命令について<ul>
+	    <li>&amp;追加処理</li>
+	    <li>インタープリタ名挿入処理</li>
+	</ul>
+	などを行ったのち、全文をまた連結して、次の interpret9 を呼び出す。何故また連結するかは後述する。</div>
+</li>
+<li>interpret9
+    <div class="COMMENT"> パイプに区切られた「先頭の」コマンドが内蔵コマンドか否かを判断して、処理を分岐させる。<ol>
+	<li>内蔵コマンドの場合<br />　内蔵コマンド用のプリプロセッサ関数(explode4internal)を呼び出してから、各コマンドを実行する。(<code>NyadosCommand:<!-- -->:run</code>)
+	</li>
+	<li>関数<em>(subコマンドの方ね)</em>の場合<br />　関数の定義内容を BufferedShell オブジェクトに展開して、mainloopメソッドを実行する<em>(再帰コール)</em>
+	</li>
+	<li>外部コマンドの場合<br />　外部コマンド用のプリプロセッサ関数(explode4external)を呼び出してから、独自 system 関数(mySystem)を呼び出す</li>
+	</ul>
+
+</div>
+</li>
+</ul>
+
+<p>“いびつさ”には理由がある。NYAxS は、Ｃマガジンにも書いたように、COMMAND.COM / CMD.EXE を部分的に利用するためだ。その結果</p>
+<ul>
+<li>COMMAND.COM / CMD.EXE との互換性を維持する。</li>
+<li>パイプ処理など、難しい処理を回避し、初期バージョンを素早く立ち上げる</li>
+</ul>
+
+<p>などの恩恵を得ることができた。で、COMMAND.COM / CMD.EXE との処理の切り分けだが、</p>
+<ul>
+<li>パイプ処理以下は COMMAND.COM / CMD.EXE</li>
+<li>それ以前のプリプロセス処理は NYAxS 
+
+</li>
+</ul>
+
+<p>となっている。しかしながら、これできっちりと分けられるかというとそうではなく、個命令単位でするプリプロセス処理などもあり、そのために、一度分割して、またくっつけるという処理をしていたりするのである。いやはや“いびつ”だ。</p>
+<p>さらに！ NYAxS 後期バージョンになると、COMMAND.COM / CMD.EXE なしで動作する、Standalone モードが登場する。この Standalone モードの処理は、mysystem.cpp に記述されている。要は system関数と互換な関数を用意しているわけであるが…結局この中で、パイプ以下を分割して字句解析しなおしてということをもう一度やってしまっているのである。何て二度手間だ！</p>
+<p align="center" class="SAY1"> うぅ、だんだん、書くのが辛くなってきた </p>
+
+
+<p>最初から COMMAND.COM / CMD.EXE なしで作ればよかったんですが…ね。でも、多分、それでは完成しなかったでしょうね。また、今から切り離すにしても、互換性の維持が困難ですから、無理っぽいです。とほほ。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="default.1" href="#default.1.">*1</a></sup>上流はすぐ仮想関数で行き止まりだし。
+    源流には一行入力部の解説で詳しく説明する</div>
+
+</div>
+
+<!--section-->
+<br><a href="#top" name="bottom">▲</a>
+</body>
+</HTML>

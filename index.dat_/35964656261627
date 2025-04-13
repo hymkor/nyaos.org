@@ -1,0 +1,15 @@
+!!! Index
+
+* >>{FrontPage}{FrontPage(E)}
+* >>{FrontPage.ja}{FrontPage(J)}
+* >>{DOWNLOAD}
+* >>{manual.en}{Manual (E)}
+
+* [Mercurial Repository|http://nyaos.org/repository/]
+
+(E) means a document written with English.
+(J) means one with Japanese.
+
+!!! Recent Updates
+
+((ls -t -r))

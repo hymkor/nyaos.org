@@ -1,0 +1,39 @@
+<<何か、毎日リリースしてるみたいだけど… NYAOS-3000 2.91_1 です>>
+
+getch のためにコンソールのモードを変えたのはいいけれど、
+子プロセスのコマンド実行前に戻してなかったために：
+
+* Python のインタラクティブモード
+* Lua のインタラクティブモード
+* hg push http://… のパスワード入力
+
+など、諸々のコンソール入力が出来なくなるという問題が出てしまっていました。
+誠に申しわけありません。正直に言うと、
+
+>> ckw とか xkeymacs とかの問題と思ってました。<<
+
+ほんと、ごめんなさい。修正版は以下より、ダウンロードくださいませ。
+(今回、OS/2 は関係ないです。一応、ビルドし直してはいますが)
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{
+     Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.91_1-win.zip{
+     nyaos3k-2.91_1-win.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.91_1-os2.zip{nyaos3k-2.91_1-os2.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.91_1-src.zip{nyaos3k-2.91_1-src.zip}
+
+NYAOS 2.31_0 にも同様の問題があるので、こちらも近日中に対応します。
+いや、昨日の要領で、3000で作った差分をこっちへ適用するだけなんだけど、
+ちとエネルギーが…ね
+
+''(しかし、5種類ものバージョンを用意するのは、ほんとキツい。おいらも、よくやるよ)''
+
+<<で、今日はやらないと見せかけて、敢えてやるね NYAOS 2.31_1 公開>>
+
+NYAOS-3000 2.91_1 で行った不具合修正を、NYAOS(NYACUS) 2.31 にも適用しました。
+
+* http://nyaos.org/index.cgi?p=FrontPage.ja{Nihongo Yet Another OSes Shell / support page - FrontPage.ja}
+** http://nyaos.org/index.cgi?p=DOWNLOAD{Nihongo Yet Another OSes Shell / support page - DOWNLOAD}
+
+この辺で、こっちは最終版にしたいねぇ…。
+これで、特に問題なければ、ベクターの方へも Up しようかと思います。

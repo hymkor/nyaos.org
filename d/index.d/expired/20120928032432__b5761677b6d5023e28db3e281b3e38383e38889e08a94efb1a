@@ -1,0 +1,11 @@
+ソケット通信できる gawk って、xgawk 以降の話かと思ってたら、
+手元にもある gawk 3.1.5 でも使えるのですねぇ。すごいや。
+
+ということで、http://gauc.no-ip.org/wiki.cgi?page=%A5%C0%A5%A6%A5%F3%A5%ED%A1%BC%A5%C9%2F%A5%C9%A5%AD%A5%E5%A5%E1%A5%F3%A5%C8{ JGAUCのドキュメント}
+を見ながら、一行 wget を書いてみる。
+
+8<
+$ gawk 'BEGIN{ http="/inet/tcp/0/nyaos.org/http"; print "GET /d/ HTTP/1.1" |& http ; print "Host: nyaos.org" |& http ; print "Connection: close" |& http; print "" |& http ;  while( (http |& getline) > 0 ){ print $0 } }'
+>8
+
+たいしたもんですねー。

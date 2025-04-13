@@ -1,0 +1,275 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="robots" contents="noindex, nofollow" />
+<link rel="HOME" href="./index.html" />
+    <style type="text/css">
+    <!--
+	SPAN.FIRSTLETTER{ font-size:xx-large; width:1em; float:left }
+	P.SAY1{color:#FF00FF;font-size:x-large;text-align:center}
+	P.SAY2{color:#FFFF00;font-size:x-large;text-align:center}
+        P.SEP{text-align:center;color:silver;font-weight:bold}
+	DIV.FOOTNOTE{font-size:x-small}
+	DIV.COMMENT{text-indent:12pt}
+	.H{font-weight:bold;font-size:large}
+.H{
+  font-size:large;font-weight:bold
+}
+H1{
+  text-align:right;
+  border-style:solid;border-width:0px 0px 4px 0px;border-color:white;
+  color:snow;
+  font-size:large;
+  clear: both;
+  width: auto;
+}
+H2{
+  border:none;
+  background-color:#444444;
+  font-size:large;
+  width:auto;
+}
+H2 SMALL{
+  font-size:small;
+  line-height:large;
+}
+H3{
+  border-style:solid;border-width:0px 0px 0px 20px;border-color:silver;
+  font-size:medium;
+  text-indent:5pt
+}
+.BOX{
+  border-style:solid;border-color:white;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  text-decoration:underbar;white-space:pre
+}
+.XOB{
+  border-style:solid;border-color:gray;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  background-color:white;color:black;white-space:pre
+}
+DT{ color:silver;font-weight:bold; }
+UL LH{ color:silver;font-weight:bold; }
+EM{ color:gray;font-weight:bold;font-style:normal }
+STRONG{ color:red }
+STRIKE{ color:red }
+B.PLASMA{
+    color:red;background-color:#440000;font-size:xx-small;font-weight:bold;
+}
+B.DOKEN{
+    color:#FFFF00;background-color:#444400;font-size:xx-small;font-weight:bold;
+}
+DIV.D{
+    text-indent:12pt
+}
+A:hover{
+  background-color:#440000
+}
+
+    -->
+    </style>
+</head>
+<body text="white" bgcolor="black" link="silver" vlink="gray">
+<a href="#bottom" name="top">▼</a><br>
+<!--start-->
+<h1>Windows 用日本語拡張コマンドラインシェル<br>NYADOS/NYACUS の紹介</h1>
+
+
+<!--section-->
+<H2><A NAME="1">1.  NYADOS/NYACUS とは </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="1.1" 
+ href="#1.1">N</a></span>
+YADOS/NYACUS は Windows 用の簡易コマンドラインシェルです。Windows 環境に最適化された補完機能、C-Shell ライクな編集機能が特徴です。ソースは公開しており、GNU General Public License のを守る限り、自由に配布・改変ができます。</p>
+<p>Windowsで CUI といえば、Cygwin で bash を使うのが定番でありますが、Cygwin を導入するとなると、大掛かりで、プログラミングを始めたばかりの人にはややハードルが高いのも事実です。また Windows95/98/Me では、DOS窓でうまく日本語を入力できないという問題もあり、これを解消するとなると、telnetd を立てるとか、cygterm を導入するとかの方法がありますが、何だかんだ、いろいろ手間がかかります(それを乗り越えるのも勉強ではありますが)。</p>
+<p>本格的な UNIX 環境を体験したいケースについては、Linux や Cygwin に任せるとして、単に Borland-C++ や LSI-C などを利用するのにコマンドラインを使うといった方には、一つの EXE ファイルだけで利用できるNYADOS/NYACUS は最適な環境ではないでしょうか。</p>
+<!--section-->
+<H2><A NAME="2">2.  NYADOS/NYACUS を使ってみよう。 </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="2.1" 
+ href="#2.1">ウ</a></span>
+ェブからでは<a href="http://homepage2.nifty.com/hayamatta/windows/nya.html" target="_blank">http://homepage2.nifty.com/hayamatta/windows/nya.html</A>
+より入手できます、使用の OS に対応したものをダウンロードしてください。DOS/Windows95/98/Me の方は NYADOSxxx.ZIP 、WindowsNT/2000/XP はNYACUSxxx.ZIP 、OS/2 Warp の方は NYAOS2xx.ZIP という名前のアーカイブとなります。</p>
+<p>別段インストーラはないので、ZIPファイルを展開して、EXEファイルを実行すれば、ファイル名補完機能(TABキー)やヒストリ機能(上下キー)が利用できます。また、設定ファイル _nya にコマンドを書いておくことにエイリアス機能や拡張子に対するコマンド(Perl/Rubyなど)割り当てもできます。詳しくはアーカイブ添付のドキュメントをご覧ください。</p>
+<!--section-->
+<H2><A NAME="3">3.  誕生経緯 </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="3.1" 
+ href="#3.1">さ</a></span>
+て、NYADOS/NYACUS の機能はマニュアルに任せるとして、ここではNYACUS の誕生までの経緯などをご説明したいと思います。といいますのも、私もいくつかフリーソフトウェアを公開し、ソフトウェア開発も生業としていますが、後からソースを見ると後悔だらけで、次に組む時はこうしよう、ああしようばかりです。NYA シリーズもその例外ではなく、これに至るまではひどいものでした。ですが、その後悔を活かして次の作品でいかした結果、NYACUS に至っては、十分マシなソースになったのではないか(よいとは言いません;-)と認識しています。そのあたりが、本文章を読む方にとってお役に立つのではないかと思います。</p>
+<!--section-->
+<H2><A NAME="4">4.  初めに OS/2 版ありき </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="4.1" 
+ href="#4.1">さ</a></span>
+て、そもそも、私がコマンドラインシェルを作ろうとしたきっかけですが、舞台は 1996年の OS/2 の世界へ移ります。</p>
+<p>当時、OS/2 を使っていたものの、もっぱら利用しているのは DOS Prompt で、Vz エディタを常駐させたコマンドラインを利用していました。それ自体は一つの完成された世界で使い勝手は抜群だったのですが、OS/2 の HPFS のロングネームが直接使えないのが、不満でした。無論、bash などもありますが、こちらはこちらで、GUI のアプリが直接起動できないとか、ドライブレターの取扱いがない！などもあり、ちょっと…といった状況でした。</p>
+<!--section-->
+<H2><A NAME="5">5.  YAOS 発見！ </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="5.1" 
+ href="#5.1">そ</a></span>
+んなところで見つけたのが YAOS --- Yet Another OS/2 Shell という米国製シェルでした。</p>
+<ul>
+<li>日本語文字1文字が2文字扱いされてしまうという</li>
+<li>補完が tcsh/bash っぽくなく、文字化けしたCUI窓がでてみっともない</li>
+</ul>
+
+<p>という問題はあるものの、</p>
+<ul>
+<li>CMD.EXE の内蔵コマンドがそのまま使える</li>
+<li>GUI アプリが普通に起動する</li>
+</ul>
+
+<p>という長所があり、かなり使えます。でも、やはり、短所は気に仕出すと、無茶苦茶気になります。何とかしたいなーと思いました。</p>
+<!--section-->
+<H2><A NAME="6">6.  YAOS の秘密と NYAOS の誕生 </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="6.1" 
+ href="#6.1">Y</a></span>
+AOS のソースは入手していなかった(多分公開されていない)ものの、使っていると、何となく、その仕組みが見えてきました。着目したのはCMD.EXE の内蔵コマンドがそのまま使える、だけど、若干起動が遅い点です。</p>
+<p>これはすなわち<div align="center">
+    １行入力ルーチン＋system関数</div>
+が基本骨格だということです。もろもろの機能は結局のところ、この二つの間に入っているフィルターにすぎないわけです。極端にいえば、gets() + system() でもコマンドラインシェルです。</p>
+<p>これは！と思いました。というのも、一行入力については前々から興味があり、拙作のソフトでいろいろ実装していたので、これはもう出来たも同然です。</p>
+<p>この CMD.EXE に乗っかって動くという方法は、CMD.EXE を何回も起動しなおすため、とても効率が悪いという欠点があります。また、CMD.EXE に“おんぶにだっこ”であるわけで、プログラマとして、こうした形で実装するのは何となく面白くありません。</p>
+<p>しかしながら、とりあえずでもこの形にしたのはよかったと思います。結局は最後までその形を維持しつづけてしまってますが、まずは、自分の能力の範囲で出来そうな形で手をつけないと、できるものもできません。そういった意味で、最初のアプローチは正しかったと思います。</p>
+<p>こうして出来あがったシェル NYAOS --- Nihongo Yet Another Os/2 Shell はOS/2 ユーザの方々の支持を受け、今日まで使っていただいています。なお、名前については YAOS と混同されそうで心配ではありましたが、「にゃおす」という語感が気に入り、誤解をおそれず、YAOS にNihongo の N を付けた名前で公開しました。1996年の冬の話です。(ちなみに NYADOS は、にゃあどす、NYACUS は、にゃ〜かすです。にゃあにゃあ煩いですね)
+
+</p>
+<!--section-->
+<H2><A NAME="7">7.  冬の時代 </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="7.1" 
+ href="#7.1">さ</a></span>
+て、1998年に大学を出て、会社に就職すると、使用環境を必然的にWindows へ移さざるを得ません。そうすると、CUI 環境の不備がまた気になってきました。で、意を決して Visual-C++ を買って、簡単なプロトタイプを作ろうとしましたが…、そこにはとんでもない壁が待っていました。</p>
+<p>なぜか、DOS窓で日本語が入力できないのです。IME 経由で日本語を入力しようとすると、なぜか変換前のキーの文字が IME を通りすぎて、取得されてしまい、肝心の変換後のコードが得られないのです。どうも、これは Windows95シリーズの仕様らしく、DOS窓で32bitアプリはIME変換後の文字が取得できないようです。これは Cygwin においても同様でした。</p>
+<p>当時は日本語入力が必須だと考えていたため、何とか、これをクリアするのが最大の命題になりました。考えた末、次のような方法を思いつきました。</p>
+<ol>
+    <li> 16ビットアプリで作ってしまう。</li>
+    <li> GUI 部分まで含めて作成する。</li>
+    <li> ネットワーク経由で自分自身へ telnet するようにする</li>
+    <li> WindowsNT へ主プラットフォームを移す。</li>
+</ol>
+
+
+<p>(4) は論外。(2),(3)は作り方が分かりません(勉強しろよ！)。となると、あとは (1) ですが、これは結構お手軽な解決案で、いいかもしれません。</p>
+<p>ところが…、ワタシは 16bit の C++ コンパイラを持っていないのです。LSI C-86 がフリーなコンパイラとしてありましたが、お気に入り言語がC++ な私はＣ言語でNYAOS同様のシェルを作るのは苦痛です。仕事で晴らせぬストレスを、フリーソフトウェア作りで解消しようとしているのに、無理にC言語で作ってストレスをためるのは本末転倒です(ぉ-ぃ)。かといって、今更、DOS 用コンパイラを購入するのもためらわれました。</p>
+<p>結局、八方塞のまま、年月が流れます。</p>
+<!--section-->
+<H2><A NAME="8">8.  NYADOS の誕生 </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="8.1" 
+ href="#8.1">仕</a></span>
+事にもなれ、マウス操作のGUIだけでやってゆくのにも慣れたころになって、衝撃的なニュースが舞い込みます。Turbo-C++ がフリーで公開されたのです。</p>
+<p align="center" class="SAY2"> 「やった。もう障害はない！時間以外は(笑)」 </p>
+
+
+<p>ぼちぼち SE として忙しくなってきていたため、なかなかゆったりと時間がとれず、そのまましばらくは放置でしたが、野望の炎はチロチロと燃えています。で、ようやく１週間の休みがとれ、作成にとりかかりました。</p>
+<p>とはいえ、いきなり作り出すと、スパゲッティーになってしまいますので、ある程度の指針を作っておきたいものです。特に 16bit コンパイラで作るわけですから、環境は DOS と同じです。メモリのことを念頭に置いて作る必要があります。方針として、以下を立てました。</p>
+<ul>
+<li>STL の使用は断念する。<div class="COMMENT"> とりあえずは、Turbo-C++ のクラスライブラリを使う。ただし、文字列クラスが気に入らないので、それは自分で作る。</div>
+</li>
+<li>何でもかんでも実装するのはやめる<div class="COMMENT"> NYAOS の時は、ユーザは基本的に正しいという信念のもと、リクエストのあるものは、何でもかんでも無秩序に実装してしまったため、ポリシーが一貫せず、仕様・ソースともに見苦しいものになりました。今回は特にサイズのこともあるので、シェルとして本当に必要なものだけに機能を絞ります。</div>
+</li>
+<li>マルチプラットフォームを目指す。<div class="COMMENT"> 将来的に OS/2 への逆移植も念頭に入れ、処理系や OS に依存する箇所はできるだけ少数のライブラリ内に集約して、移植性を高めます。</div>
+</li>
+<li>転用して、素早く作ろう<div class="COMMENT"> またまたOS/2用ですが、eff というファイラーで NYAOS のものを改良した一行入力エディターを実装していました。そいつをベースにします。</div>
+</li>
+</ul>
+
+<p>無事 NYADOS が産声を上げたのは、2001年のお正月です。NYADOS はその後、Turbo-C++ のライブラリを自前のものに置き換え、処理系依存性を下げました。その結果、対応コンパイラに Borland C++ , OS/2 の emx/gcc を加え、32bit版の NYACUS , OS/2版の NYAOS2 とバリエーションを増やし、現在に至っています。NYADOS 自身も、その後、コンパイラをTurbo-C++ から、速度が速い Digitalmars C++ 
+(<a href="http://www.digitalmars.com/" target="_blank">http://www.digitalmars.com/</A> から入手できます)
+へ変更しています。</p>
+<p align="center" class="SAY1"> 「いやぁ、CUI って本当にいいものですねぇ」 </p>
+
+
+<!--section-->
+<H2><A NAME="9">9.  本題の反省です </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="9.1" 
+ href="#9.1">さ</a></span>
+て、以上は自慢も含めた長い前置きでした。本題の反省編へ移ります。これらのフリーソフトウェアの開発を経る間に私の中ではいろいろなプログラミングスタイルの変化がありました。</p>
+<p>まず、NYAOS 時代ですが、このころは C++ を使い、オブジェクト指向を一応理解していたといえ、NYAOS のソースは非常に冗長で見難いものでした。理由は簡単で、当時、過剰なまでにヒープの断片化を嫌っていたためです。</p>
+<p>Windows をご利用の方だと、デフラグというソフトをご存知だと思います。通常、FAT系ディスクシステムでハードディスクを利用してゆくと、ディスク内に使用部分の断片がどんどんばらまかれてゆき、結果として、ディスクアクセスが落ちてゆきます。デフラグはそれを解消して、ブロックを綺麗にするソフトです。</p>
+<p>実はメモリも同様で、malloc/free を繰り返し使ってゆくと、ヒープ領域というプログラムでいつでも使用を開始/終了できるメモリ領域が断片化してしまいます。</p>
+<p>速度は気にしていなかったのですが、そういった断片化が非常に気持ち悪く感じたのか、過剰なまでに malloc や new の使用を手控えるようになってしまいました。別に長時間、常駐するプログラムでもないのに</p>
+<p>その結果、Java だったら Vector 一つで実現できる可変長配列一つもクラス一つ一つごとにリスト構造を手組みして実現していたのです。何と愚かな！ そんなことができたのは、きっと若かったからでしょう。三十路に入ってしまった今ではとても真似できません。いわゆる「若さ故の過ち」という奴ですね(笑)。</p>
+<p>これが矯正できたのは、仕事で Java を使う機会があったからです。おかげで、いわゆる標準クラスライブラリのありがたさが非常によく分かりました。</p>
+<p>いらぬ苦労をしても何の益もありません。少々のパフォーマンス低下よりも、利用者は動くプログラムを求めているのです。それには「信頼性あるライブラリ」の導入により、プログラムをコンパクトにまとめ、ソースにバグが入りこむ余地を少なくするのは一番の近道です。(逆に信頼性ないライブラリを導入してしまうと地獄のデスマーチです。巡礼者はご愁傷様です)
+
+</p>
+<p>NYADOS では STL を使わず、独自ライブラリを使用しましたが、これは DOS で動作させるためのやむをえない処置です。それでも一から作らず、最初は Turbo-C++ の付属ライブラリをゆりかごとしました。Linux の母体が Minix であるのに似てますね（似てないって）</p>
+<!--section-->
+<H2><A NAME="10">10.  も一つ反省です </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="10.1" 
+ href="#10.1">あ</a></span>
+ともう一つは「安易な道を進むのは慎むべき」です(ただし、時と場合による)。</p>
+<p>コマンドラインシェルの構造は大きくわけると</p>
+<ul>
+<li>一行入力エディター</li>
+<li>インタープリタ</li>
+</ul>
+
+<p>に分かれます。NYAOS を作ったとき、一行入力エディターは汎用化して、他のソフトへ簡単に転用しようという意図がありました。ですが、ちょっと考えると分かるように、双方は実はヒストリ機能を通じて密接に繋がっています。csh ライクな「!」を使ったヒストリ(インタープリタ部に所属)と上下キーや Ctrl-P/N で現れるヒストリ(一行入力エディター部に所属)は同一の内容を共有しているのです。</p>
+<p>この場合、正しいアプローチは、無理に共有しない(ユーザの依頼を断る)
+か、あるいは、ヒストリ機能をさらに分離して、一行入力・インタープリタ双方にインターフェイスを提供し、クラスの独立性を維持するというものでした。</p>
+<p>が、結局は安易に双方のクラスは相互参照する形になり、切っても切れない関係になってしまいました。見事なライブラリ構築の失敗例です。ライブラリは手軽に使えるものでなくてはなりません。使う際に、必要でもないモジュールがダラダラとつながってくるのはいろいろとよくありません。結局は使用条件が複雑になって、使いづらくなってしまいます。</p>
+<p>思うに、求められたからといって、慌てて実装せず、ちょっとくらい悩むべきでした。どうせ納期などなかったのですから。逆に納期のある場合は、悩み続けるのは破滅への道しるべです。迅速な判断をして、特にはライブラリの使い勝手を捨てるのも時にはヨシとせねばなりません。物事には優先順位がありますからね。</p>
+<!--section-->
+<H2><A NAME="11">11.  まとめ </A></H2>
+
+
+
+<p><span class="FIRSTLETTER"><a name="11.1" 
+ href="#11.1">ま</a></span>
+とめますと、私が一連のソフト作りで学んだのは</p>
+<ul>
+<li>自分のできる範囲で実現することを考えよう。(もちろん、出来る範囲を広げる努力も大切ですよ)</li>
+<li>前作の反省を元に、新作についてポリシーを作っておこう</li>
+<li>ライブラリはシンプルに。環境やモジュール同志の依存性はなくそう。できれば、STLなど標準ライブラリを利用しよう</li>
+<li>楽するためには努力を惜しまない。</li>
+</ul>
+
+<p>といったことです。考えてみれば当たり前ですね。</p>
+<p>以上、自慢話なのか、苦労話だか、分からない話を展開してしまいましたが、幾らかでも、日曜プログラマーの方に参考になることがあれば幸いです。</p>
+<div align="right">
+	      -- フリーソフトウェア作者にして、擬似システムエンジニア</div>
+
+
+<!--section-->
+<!--index:1: NYADOS/NYACUS とは -->
+<!--index:2: NYADOS/NYACUS を使ってみよう。 -->
+<!--index:3: 誕生経緯 -->
+<!--index:4: 初めに OS/2 版ありき -->
+<!--index:5: YAOS 発見！ -->
+<!--index:6: YAOS の秘密と NYAOS の誕生 -->
+<!--index:7: 冬の時代 -->
+<!--index:8: NYADOS の誕生 -->
+<!--index:9: 本題の反省です -->
+<!--index:10: も一つ反省です -->
+<!--index:11: まとめ -->
+<br><a href="#top" name="bottom">▲</a>
+</body>
+</HTML>

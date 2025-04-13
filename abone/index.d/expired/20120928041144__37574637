@@ -1,0 +1,36 @@
+suds で、Mule の echo に対して SOAP アクセスを行う
+
+!!! サーバ側
+
+http://www.mulesoft.org/documentation/display/MULE3INTRO/Echo+Example{Echo Example - Mule 3.x Getting Started Guide - mulesoft.org} で解説されている Echo サーバを起動する。ベースアドレスは http://localhost:65082/services/EchoUMO となる。
+
+:WSDL の取得
+:: http://localhost:65082/services/EchoUMO?wsdl
+:メソッドのコール
+:: http://localhost:65082/services/EchoUMO/echo/text/hello
+:: (ベースアドレス)/メソッド名(/引数名/引数値)*
+
+!!! クライアント側
+
+!! 準備
+
+* http://d.hatena.ne.jp/hirokinko/20100131{PythonでSOAPクライアント} (紹介記事)
+* https://fedorahosted.org/suds/{suds - Trac} (本家)
+* http://python.matrix.jp/modules/setuptools.html{EasyInstallを使えるようにする}
+  (導入に必要な setuptools を同梱している)
+
+!! 手順
+
++ ``$ python <<{ez_setup.py}``
++ 環境変数 PATH に C:\Python25;C:\Python25\Scripts を追加 (Windowsの場合)
++ ``$ easy_install suds`` (Network install される)
+
+
+!! テストソース
+
+8<
+import suds.client
+
+client=suds.client.Client("http://localhost:65082/services/EchoUMO?wsdl")
+print client.service.echo("ahaha")
+>8

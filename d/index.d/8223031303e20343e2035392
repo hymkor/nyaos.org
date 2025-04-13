@@ -1,0 +1,32 @@
+<<[Python] iCalendar 形式を使ってみた>>
+
+Google Calendar の予定を某スケジューラーに読み込みたいので、
+http://pypi.python.org/pypi/icalendar/2.1{icalendar}
+という Python ライブラリを使ってみた。
+
+とりあえず、読み込むんで表示するだけのところは出来た。
+
+8<
+from datetime import datetime,timedelta
+import icalendar
+import sys
+
+cal = icalendar.Calendar.from_string( sys.stdin.read() )
+
+jst = timedelta(hours=+9)
+
+for e in cal.walk():
+    if e.name == 'VEVENT' :
+        start_dt = e.decoded("dtstart")
+        end_dt   = e.decoded("dtend")
+        print "%s - %s : %s" % (
+                start_dt.strftime("%Y/%m%d %H:%M") ,
+                end_dt.strftime("%Y/%m/%d %H:%M") ,
+                e["summary"].strip().encode('cp932')
+                )
+        desc = e["description"].strip()
+        if desc:
+            print "\t"+desc.replace("\n","\n\t").encode('cp932')
+>8
+
+えーと、細かい話は、'''あとで書く'''

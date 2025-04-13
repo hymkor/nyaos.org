@@ -1,0 +1,72 @@
+<!-- This HTML file is made with RLP -->
+<HTML>
+<HEAD>
+<TITLE>The EMX MEMO</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP">
+</HEAD>
+<BODY>
+<H1 FACE="helv" ALIGN=RIGHT>The EMX MEMO</H1>
+<HR>
+<P>emx/gcc 0.9d FIX 03 で STL (Standard Template Library) を使っていて<!--
+-->気がついたことや、注意すべき点など、これまで、<!--
+--><A HREF="index.html">葉山文書</A>の方に書いてきたことをまとめました。<!--
+--></P>
+<UL>
+<LI><A HREF="#unsupport">未サポートのC++機能</A>
+<LI><A HREF="#forbid">やってはいけないこと</A>
+<LI><A HREF="#footnote">脚注</A>
+<LI><A HREF="emx-strt-fix.html">超訳：<!--
+-->差換版emxシングルスレッド C ランタイム</A>(別ページ)
+<LI><A HREF="emxfix03.html">超訳：emxfix03.doc</A>(別ページ)
+</UL>
+<H2><A NAME="unsupport">未サポートのC++機能</A></H2>
+<P>特にバージョン記述が無いものは、emx 0.9d FIX 03 の話です。</P>
+<DL>
+<DT><B>auto_ptr</B>(テンプレート)
+<DD>&lt;memory&gt;に記述はあるが、#if 0 〜 #endif で無効にされている。<!--
+--><DT><B>wstring</B>(クラス)
+<DD>&lt;string&gt;に記述はあるが、「//」で無効にされている。<!--
+--><DT><B>_nls_is_dbcs_leadマクロ と -Zcrtdll オプション</B>
+<DD><A HREF="#crtdll">-Zcrtdll オプション</A>を使うと、<!--
+-->リンクエラーが起きる。まだ、解消されていない。<!--
+--><DT><B>STL と -Zcrtdll オプション</B>(0.9d FIX 02 まで)
+<DD>0.9d FIX 02 までは、<A HREF="#crtdll">-Zcrtdll オプション</A>を<!--
+-->使うと、STL が利用できなかった(リンクエラーが起きる)。<!--
+-->FIX 03 にて解消された。<!--
+--><DT><B>stringstream</B>(クラス)
+<DD>古い仕様である strstream しかない<!--
+--><EM>(「ing」が無いのに注意)</EM>。<!--
+-->strstream は stringstream と違って、<!--
+-->使用する文字列は char * をベースとしているので、<!--
+-->若干不便なのである。<!--
+--></DL>
+<H2><A NAME="forbid">やってはいけないこと</A></H2>
+<P>そんなことするの、俺だけ？</P>
+<DL>
+<DT><B>string をメンバに持つクラスのコンストラクタで<!--
+-->例外を出してはいけない。</B>
+<DD> 実行時にセグメンテーションフォールトを起こしてしまう。<!--
+--><DT><B>string のコンストラクタに 0 or NULL を渡してはいけない。</B>
+<DD> 元々、const char * を使っているような箇所を string に置き換える<!--
+-->とよくあるので、注意。<!--
+--></DL>
+<P>コンストラクタが原因のセグメンテーションフォールトは、<!--
+-->gdb でも発生箇所の特定がしにくいので、注意が必要です。<!--
+--></P>
+<HR>
+<H2><A NAME="footnote">脚注</A></H2>
+<DL>
+<DT><A NAME="nls">_nls_is_dbcs_lead</A>
+<DD>2バイト文字の先頭文字かどうかを判別するために用意されている、<!--
+-->emx 標準マクロ。これを利用すると、DBCS 対応と唄える。<!--
+-->ただし、上記のように emxlibc?.dll とまだ共存できない(バグだろ)。<!--
+--><DT><A NAME="crtdll">-Zcrtdll オプション</A>
+<DD>標準Ｃライブラリをスタティックリンクせず、ダイナミックリンク<!--
+-->ライブラリ emxlibc?.dll を使用するよう指定するオプション。<!--
+-->実行ファイルのサイズが小さくなるので、葉山は愛用している。<!--
+--></DL>
+<HR>
+<A HREF="../wwww/index.html" STYLE="text-align:right"
+>World Wide Warp Web</A>
+</BODY>
+</HTML>

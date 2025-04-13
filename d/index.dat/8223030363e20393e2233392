@@ -1,0 +1,85 @@
+* Y!BB 、もとい、SoftbankBB から、通信障害について、回答がくる。
+  モデムを交換してもらうことになりそうだ。
+
+* 普段、時間に終われてる仕事をしてるから、
+  反動で週末は時間にルーズになって当然…なのかな。
+
+* wifky-ML を読むと、わたしの性格の悪さが浮き彫りになる。
+
+* はてブが JSON で参照できるようになるなんて…
+  『なんで今頃になって出来るようになったんだよ。
+  もうちょっと待ってたら、こんなに苦労しなかったのに』と思うか、
+  『スキルがついたから、まぁヨシ』と前向きにとらえるか。
+  俺は断固、後ろ向きだ！
+
+* サーバが負荷でひぃひぃ言っている。期末だからね。
+
+* 心臓がストレスでひぃひぃ言っている。末世だからね。
+
+* 引き継ぎ資料をちまちま作るが、なかなか進まんね。
+
+<<http://www.ideaxidea.com/archives/2006/09/unix.html{UNIX使いのパフォーマンスをあげる小技コマンド}>>
+
+IBM のサイトから、Tips がいろいろと紹介されている。
+
+8<
+history|awk '{print $2}'|awk 'BEGIN {FS="|"} {print $1}'|sort|uniq -c|sort -r
+>8
+
+>> awk の使い方がぬる〜い <<
+
+awk を二回もパイプの中で呼び出すなんて、パフォーマンス悪ろし。
+BEGIN の中で FS="|" を使うなら、-F"|" でいいような気もするし。
+というわけで、チューニング。まずは、二つの awk を統合。
+
+8<
+history|awk '{split($2,n,"|");print n[1]}' |sort|uniq -c|sort -r
+>8
+
+awk の split コマンドは意外と知られていない。さらに偏執的に awk を使うと、
+sort 一つと uniq -c を削減できる。
+
+8<
+history|awk '{split($2,n,"|");++c[n[1]]}END{for(i in c){ printf "%5d,%s\n",c[i],i}}'|sort -r
+>8
+
+かえって、タイプ文字数が増える本末転倒ぶりを見よ！
+
+ちなみに結果は次のとおり：
+8<
+  122,ji
+   92,ls
+   80,cd
+   41,w3m
+   39,QUERY_STRING=a=rss
+   27,rcsdiff
+   19,perl
+    8,unzip
+    8,ll
+    6,history
+    5,zip
+    5,rcsdiff.exe
+    5,mv
+    5,/cygdrive/c/Perl/bin/Perl
+    4,tar
+    4,find
+    4,co
+    4,ci
+    4,cat
+    3,pushd
+    2,scp
+    2,rlog
+    2,Perl
+    1,which
+    1,wc
+    1,w
+    1,rm
+    1,perl5
+    1,nkf32
+    1,nkf
+    1,cp
+    1,
+>8
+
+ji は jvim のエイリアス。あと rcs やら w3m やら使っているのは特徴的。
+QUERY_STRING=a=rss に至っては…

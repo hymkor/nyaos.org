@@ -1,0 +1,1 @@
+2013/01/07 19:47:49	nocd5	freeだけエクスポートするDEFを書いて、^r^n/WINDOWS/system32/msvcrt.dllからインポートライブラリを作成。^r^nそのlibをリンクすると、^r^n依存関係を見るとfreeだけmsvcrt.dllのを使うようなバイナリが出来上がるようですが、環境によりますかね。^r^nやっぱLoadLibrary("msvcrt.dll")してfreeをGetProcAddressが確実でしょうか。

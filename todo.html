@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+    <TITLE>NYA*S TO DO</TITLE>
+    <STYLE type="text/css">
+    <!--
+	TH{ color:white ; background:black }
+	TR.YET{ background:white }
+	TR.DONE{ background:gray }
+    -->
+    </STYLE>
+</HEAD>
+<BODY>
+<H1 ALIGN="CENTER">NYA*S 要望/バグ一覧</H1>
+<DIV ALIGN=RIGHT>
+    <A HREF="index.html">戻る</A>
+</DIV>
+<UL>
+    <LI>白地の行は未対応・灰色の行は対応済みを示します。
+    </LI>
+    <LI>ドキュメントの記述修正・OS/2 でコンパイルできないなどは、
+	頻繁に起きるので、ここには記していません。<TT>m(__)m</TT>
+    </LI>
+</UL>
+<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0>
+<TR><TD BGCOLOR="black">
+<TABLE CELLSPACING=1 BORDER=0>
+<TR><TH><I>No.</I></TH>
+    <TH><NOBR>分類</NOBR></TH>
+    <TH>依頼日</TH>
+    <TH>内容(依頼内容→対応内容)</TH>
+<TR CLASS=DONE><TD>00053</TD><TD>バグ</TD><TD>2002/10/03</TD><TD>長いパスだと画面が乱れることがある→ 2.13c</TD></TR>
+<TR CLASS=DONE><TD>00052</TD><TD>要望</TD><TD>2002/09/19</TD><TD>|&amp; (標準エラー出力もパイプへ接続する機能)</TD></TR>
+<TR CLASS=DONE><TD>00051</TD><TD>バグ</TD><TD>2002/09/19</TD><TD>set foo-= , set foo= が動作しない</TD></TR>
+<TR CLASS=DONE><TD>00050</TD><TD>要望</TD><TD>2002/09/13</TD><TD>2&gt;&amp;1 (標準エラー出力を標準出力へ合成する機能)</TD></TR>
+<TR CLASS=DONE><TD>00049</TD><TD>要望</TD><TD>2002/09/13</TD><TD>...(複数ピリオド)の ..\.. の置換</TD></TR>
+<TR CLASS=DONE><TD>00048</TD><TD>バグ</TD><TD>2002/09/07</TD><TD>エイリアスと &amp;(別窓実行) に関する諸バグ → 2.10e</TD></TR>
+<TR CLASS=DONE><TD>00047</TD><TD>要望</TD><TD>2002/09/03</TD><TD>standalone モード復活 → 2.12</TD></TR>
+<TR CLASS=DONE><TD>00046</TD><TD>要望</TD><TD>2002/09/02</TD><TD>xscript パッチの取込み → 2.11</TD></TR>
+<TR CLASS=DONE><TD>00045</TD><TD>バグ</TD><TD>2002/08/30</TD><TD>「# 〜」が start # に置換されてしまう → 2.10b</TD></TR>
+<TR CLASS=DONE><TD>00044</TD><TD>バグ</TD><TD>2002/08/30</TD><TD>suffix で、空白付きのスクリプト名を認識しない → 2.10</TD></TR>
+<TR CLASS=DONE><TD>00043</TD><TD>バグ</TD><TD>2002/08/30</TD><TD>suffix で、空白入りの %PATH% を認識しない → 2.10</TD></TR>
+<TR CLASS=DONE><TD>00042</TD><TD>バグ</TD><TD>2002/08/17</TD><TD>source の引数が、&quot; を認識しない → 2.09</TD></TR>
+<TR CLASS=YET><TD>00041</TD><TD>要望</TD><TD>2002/08/17</TD><TD>foreach のセパレータを空白以外に… → 別仕様で検討中</TD></TR>
+<TR CLASS=DONE><TD>00040</TD><TD>バグ</TD><TD>2002/08/17</TD><TD>%PATH% に &quot; が入っているとコマンド名補完が効かない → 2.09 で set foo+= で二重引用符を自動で除くようにした。</TD></TR>
+<TR CLASS=DONE><TD>00039</TD><TD>要望</TD><TD>2002/08/17</TD><TD>引数省略時の pushd を「pushd .」相当に → 2.09(-H オプション)</TD></TR>
+<TR CLASS=DONE><TD>00038</TD><TD>要望</TD><TD>2002/08/17</TD><TD>cd - (直前にいたディレクトリへ戻る) → 2.09</TD></TR>
+<TR CLASS=YET><TD>00037</TD><TD>要望</TD><TD>2002/08/17</TD><TD>zsh 型ファイル補完機能</TD></TR>
+<TR CLASS=YET><TD>00036</TD><TD>バグ</TD><TD>2002/08/17</TD><TD>最初に実行した「cd c:」が「cd c:\」と等価になってしまう。</TD></TR>
+<TR CLASS=DONE><TD>00035</TD><TD>自覚</TD><TD>2002/03/29</TD><TD>標準エラー出力のリダイレクト</TD></TR>
+<TR CLASS=DONE><TD>00034</TD><TD>自覚</TD><TD>2002/03/27</TD><TD>! を含むパス名の補完は、&quot;〜&quot; で囲むべき。</TD></TR>
+<TR CLASS=DONE><TD>00033</TD><TD>要望</TD><TD>2002/03/05</TD><TD>パイプ後の alias の適用→ 2.07 にて対応</TD></TR>
+<TR CLASS=DONE><TD>00032</TD><TD>バグ</TD><TD>2002/03/04</TD><TD>NYACUS で Ctrl-C で終了すると、その直後の入力で、再表示の際、残像が残ってしまう。</TD></TR>
+<TR CLASS=DONE><TD>00031</TD><TD>要望</TD><TD>2002/02/24</TD><TD>引用符を忘れて Enter 入力した際の対策→ option multilinequote を用意</TD></TR>
+<TR CLASS=DONE><TD>00030</TD><TD>バグ</TD><TD>2002/02/24</TD><TD>候補の長さが１行を越える時、補完で落ちる→ 2.06b にて対応</TD></TR>
+<TR CLASS=YET><TD>00029</TD><TD>要望</TD><TD>2002/02/20</TD><TD>エスケープシーケンスの導入</TD></TR>
+<TR CLASS=DONE><TD>00028</TD><TD>バグ</TD><TD>2002/02/18</TD><TD>エイリアスの展開結果がヒストリに入ってしまう→ 2.06b にて対応</TD></TR>
+<TR CLASS=DONE><TD>00027</TD><TD>仕様</TD><TD>2002/02/20</TD><TD>プロンプトの末尾に空白を設定することができない→ 2.06b にて空白を表すマクロ $S を設置</TD></TR>
+<TR CLASS=DONE><TD>00026</TD><TD>バグ</TD><TD>2002/02/13</TD><TD>NYACUS,NYAOS2 で、空入力を繰り返すと落ちる→ 2.06a にて修正</TD></TR>
+<TR CLASS=DONE><TD>00025</TD><TD>バグ</TD><TD>2002/01/20</TD><TD>エイリアス定義したものに補完が効かなくなる。→ 2.04a にて修正(エイリアス名の末尾に空白がついてしまっていた)。</TD></TR>
+<TR CLASS=DONE><TD>00024</TD><TD>バグ</TD><TD>2002/01/08</TD><TD>Vz型の単語単位のヒストリが効かない(2.03) → 2.04 にて修正</TD></TR>
+<TR CLASS=YET><TD>00023</TD><TD>バグ</TD><TD>2001/12/05</TD><TD>OS/2 にて「set | more」が効かない→ 作者環境にて再現できず。原因不明</TD></TR>
+<TR CLASS=DONE><TD>00022</TD><TD>バグ</TD><TD>2001/12/05</TD><TD>「nyaos2 /?」で落ちてしまう→「cd --basedir /? 」で落ちてしまっていた。2.03 にて修正。</TD></TR>
+<TR CLASS=DONE><TD>00021</TD><TD>バグ</TD><TD>2001/12/02</TD><TD>ヒストリ参照の際、前に表示していた文字列の末尾が残ってしまう。→ 2.02 にて修正</TD></TR>
+<TR CLASS=DONE><TD>00020</TD><TD>バグ</TD><TD>2001/10/18</TD><TD>OS/2 でコンパイルできない。→ 2.01 にて修正</TD></TR>
+<TR CLASS=DONE><TD>00019</TD><TD>バグ</TD><TD>2001/09/09</TD><TD>NYADOS 0.27 が OS/2 VDM にて動作しない。0.26 は大丈夫。→ 0.28 にて修正(再コンパイルだけ直った。</TD></TR>
+<TR CLASS=DONE><TD>00018</TD><TD>バグ</TD><TD>2001/09/09</TD><TD>引数なし pushd にて、カレントディレクトリを足してしまう。 (スタックトップと交換するのが正しい動作) → 0.27 にて修正</TD></TR>
+<TR CLASS=DONE><TD>00017</TD><TD>バグ</TD><TD>2001/09/07</TD><TD>0.25 にて savehist オプションがおかしい→ 0.26 にて修正</TD></TR>
+<TR CLASS=DONE><TD>00016</TD><TD>バグ</TD><TD>2001/09/03</TD><TD>0.24 にて、終了時のヒストリ保存が出来ていない。→ 0.26 にて修正</TD></TR>
+<TR CLASS=DONE><TD>00015</TD><TD>要望</TD><TD>2001/08/31</TD><TD>pushd,popd,dirs あるいは 子プロセスからのディレクトリ変更機能→ 0.26 にて pushd,popd,dirs を追加</TD></TR>
+<TR CLASS=DONE><TD>00014</TD><TD>バグ</TD><TD>2001/08/31</TD><TD>OS/2 版にて、\ の入力で文字化けが発生することがある。→ 最近のバージョンでは余り見られなくなった？</TD></TR>
+<TR CLASS=DONE><TD>00013</TD><TD>要望</TD><TD>2001/08/30</TD><TD>変換型ファイル補完機能→ 2.15 でサポート</TD></TR>
+<TR CLASS=DONE><TD>00012</TD><TD>バグ</TD><TD>2001/08/27</TD><TD>2000にて、プロンプトが化ける(0.18:ベクター投稿版) → デフォルトの_nyagos 記述ミス。0.2x にて修正。</TD></TR>
+<TR CLASS=DONE><TD>00011</TD><TD>バグ</TD><TD>2001/08/27</TD><TD>if で、== の前後に空白を入れないと正しく動作しない。→ 2.00 にて修正</TD></TR>
+<TR CLASS=DONE><TD>00010</TD><TD>バグ</TD><TD>2001/08/27</TD><TD>「set 環境変数名」が「set」と同じ挙動しかしない。→ 0.26 にて修正</TD></TR>
+<TR CLASS=DONE><TD>00009</TD><TD>バグ</TD><TD>2001/07/28</TD><TD>0.23 にて OS/2 にてコンパイルできない。→ 0.24 にて修正.</TD></TR>
+<TR CLASS=DONE><TD>00008</TD><TD>バグ</TD><TD>2001/07/26</TD><TD>alias の置き返る文中に「;」「&amp;&amp;」などが入れられない。→ 2.04 にて実現。</TD></TR>
+<TR CLASS=DONE><TD>00007</TD><TD>要望</TD><TD>2001/07/21</TD><TD>８文字単位(くらいの)の高速のカーソル移動 → 2.13 にて ALT-F,ALT-B を実装</TD></TR>
+<TR CLASS=DONE><TD>00006</TD><TD>要望</TD><TD>2001/07/16</TD><TD>「set +=」「set -=」→ 0.23 にて対応</TD></TR>
+<TR CLASS=DONE><TD>00005</TD><TD>要望</TD><TD>2001/07/12</TD><TD>Vz 型ヒストリ→ 0.25 にて実現.</TD></TR>
+<TR CLASS=YET><TD>00004</TD><TD>要望</TD><TD>2001/07/16</TD><TD>標準出力の内容をヒストリーへ→ 2.07 現在でも、ファイルからの読み取りのみ</TD></TR>
+<TR CLASS=DONE><TD>00003</TD><TD>要望</TD><TD>2001/07/16</TD><TD>foreach → 0.23 にて実現。</TD></TR>
+<TR CLASS=DONE><TD>00002</TD><TD>バグ</TD><TD>2001/06/28</TD><TD>delete キーがおかしい。(0.28) → いつ直したか不明。</TD></TR>
+<TR CLASS=DONE><TD>00001</TD><TD>バグ</TD><TD>2001/06/28</TD><TD>_nyagos での bindkey が効かない。(0.28) → 0.24 にて修正</TD></TR>
+</TABLE>
+</TD></TR></TABLE>
+</BODY>
+</HTML>

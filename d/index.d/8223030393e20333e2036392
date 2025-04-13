@@ -1,0 +1,57 @@
+<<[Lua] Lua に足りないもの>>
+
+スタンドアローンの Lua は、下手をすると、AWK にも及ばなかったりするところがある。
+気になったところで言うと
+
+* ビット演算がない (AWK はある)
+* opendir/stat など、ファイルシステムへのアクセス関数がない
+* (これは贅沢だけど)iconv
+* (これも贅沢だけど)DB操作
+
+で、それをカバーするかのように、Windows 用のフルセット的なパッケージがある。
+それが Lua for Windows だ。
+
+* [Lua for Windows - A batteries included Lua installation on Windows.|http://luaforwindows.luaforge.net/]
+
+含まれるライブラリは以下のとおり
+
+|| Alien | 未知、あるいは新しい DLL へのアクセス手段を提供する。
+|| IUP | 軽くて移植性のある GUI ライブラリ
+|| CD | プラットフォーム被依存グラフィックライブラリ
+|| IM | 電子画像操作用ツールキット
+|| Ex | 環境・ファイルシステム・I/O・プロセス制御
+|| LPeg | PEGs 準拠のパターンマッチ
+|| Lua-GD | Thomas Boutell’s GD ライブラリベースの画像操作ライブラリ
+|| LuaCOM | '''Microsoft の COM の利用/操作を有効にする'''
+|| LuaCURL | cURL ライブラリベースのインターネットブラウズインターフェイス
+|| Date | '''日付・時刻ライブラリ'''
+|| LuaDoc | ソースコードのドキュメント化のツール
+|| LuaExpat | XML解析ライブラリインターフェイス
+|| LuaFileSystem | '''ファイル・ディレクトリ構造へのアクセス'''
+|| LuaLogging | log4j ベースのログイング
+|| LuaProfiler | Luaでのボトルネックを見付けるためのプロファイラ
+|| LuaSocket | '''HTTP,FTP,SMTP, MIME, URL & LTN12 をサポートするソケットライブラリ'''
+|| LuaSQL | '''PostgreSQL, ODBC, MySQL, SQLite, Oracle, and ADO などの DBMS 向けライブラリ'''
+|| LuaUnit  | Lua のテストフレームワーク
+|| LuaZip  | ZIPファイルを読む
+|| stdlib |'''リスト・テーブル・関数操作・正規表現・オブジェクト・Pretty Print・getopt などを含む共通モジュール集'''
+|| lrexlib | Lua の正規表現ライブラリ
+|| MD5 | 符号化機能
+|| Copas | Dispatcher based on coroutines that can be used by TCP/IP servers.
+|| Coxpcall | Encapsulates the protected calls with a coroutine based loop,
+    so errors can be dealed without the usual pcall/xpcall issues with coroutines.
+|| Rings | 主従間の簡単な通信手段を提供する
+|| LOOP | Lua Object-Oriented Programming: 言語内蔵のものとは別のオブジェクト指向モデルを提供する
+|| LuaTask | Implements a concurrent and independent Lua execution environment model.
+|| LuaInterface | Microsoft .NET platform's Common Language Runtime (CLR) 向けの Lua インターフェイス
+|| wxLua | wxWidgets ライブラリへの Lua バインディング
+|| lpack | バイナリデータのパック/アンパックライブラリ
+|| VStruct | バイナリデータの操作機能を提供
+|| LuaBitOps | '''Lua 5.1 にビット操作を拡張する'''
+|| LuaXML | 多くの ado なしに、Lua と XML 間をマッピングする
+|| Lanes | 並列な状態で多数の Lua を走らせる
+|| MetaLua | キレイでエレガントで…(略)な Lua 5.1 のソース・バイトコードとフル互換な完全なマクロシステム
+
+>> 意外と要らんもん多いな！ <<
+
+俺的にはボールドつけた奴だけで十分だす。

@@ -1,0 +1,6 @@
+訳の中には
+ /opt/otrs/Kernel/Config/Files/ZZZAAuto.pm
+に属するものがある。
+例：
+http://10.128.1.29/otrs/index.pl?Action=AgentITSMChange の CHANGE# 
+

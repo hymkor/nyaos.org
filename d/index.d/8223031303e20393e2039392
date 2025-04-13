@@ -1,0 +1,18 @@
+* http://sourceforge.jp/magazine/10/09/09/0717220{米Microsoft、バージョン管理システムMercurial開発プロジェクトに25,000ドル寄贈 - SourceForge.JP Magazine : オープンソースの話題満載}
+
+こういう記事を見ると、MS も変わったなぁと思う。
+Windows が天下を取るか否か微妙だった頃のガツガツさはなくなり、
+天下人らしく、世を治めるというか。例えるなら徳川？
+
+一方、今やhttp://www.itmedia.co.jp/news/articles/1008/25/news088.html{悪の枢軸は Oracle }となった。Java と OpenOffice.org も手に入れ、MySQL を闇に葬るつもりか？
+
+----
+
+BOSS との相談で、今後の仕事の方向性が決まって、かなり精神的に安定した。
+来期は Mule をテーマとする。さて、Mule とは何でしょうか？
+
++ http://ja.wikipedia.org/wiki/Mule{GNU Emacs のMULtilingual Enhancement、すなわち 多言語 拡張である}
++ http://ja.wikipedia.org/wiki/ESB_Mule{米MuleSource社が開発・サポートしている、Javaで開発されたオープンソースのアプリケーション統合／連携用のフレームワークである}
++ http://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A1%E3%82%A6%E3%83%B3%E3%83%87%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E5%AF%BE%E5%B8%9D%E5%9B%BD{突然変異体（ミュータント）。無名から数年で勢力を広げ、ファウンデーションをも占領し、セルダン計画を潰す}
+
+Java はなー。わしの知識は「1.2」の頃で終わってるので困ったもんだ。Eclipse とか使い方もよく分からん。

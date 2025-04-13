@@ -1,0 +1,7 @@
+Java2 SDK をインストールした上で
+
+8<
+jrunscript ahaha.js
+>8
+
+だけでよい。

@@ -1,0 +1,24 @@
+<<[最近の活動] 茂木さんのツイートの togetter 化をやるようになった>>
+
+だいたい、朝の6時～8時くらいに tweet されているようで、
+その時間帯はだいたい起きてるもんだから。
+
+* 9/09 http://togetter.com/li/48980{Togetter - 「茂木先生の連続ツイート「坊っちゃん」」}
+* 9/10 http://togetter.com/li/49112{Togetter - 「茂木先生の連続ツイート「判断」」}
+* 9/11 http://togetter.com/li/49418{Togetter - 「茂木先生による、就活での黒髪についてのツッコミから連続ツイート「典型」まで」}
+* 9/12 http://togetter.com/li/49768{Togetter - 「茂木先生による「めちゃ×2イケてるッ!」についての連続ツイート」}
+* 9/13 http://togetter.com/li/50015{Togetter - 「茂木先生の連続ツイート「福沢」」}
+* 9/14 http://togetter.com/li/50324{Togetter - 「茂木先生の連続ツイート「軽蔑」」}
+* 9/15 http://togetter.com/li/50631{Togetter - 「茂木先生の連続ツイート「自己変容」」}
+* 9/16 http://togetter.com/li/50938{Togetter - 「茂木先生の連続ツイート「無記」」}
+
+まぁ、自分がやらなくても、誰かがまとめるんですけどね
+(→ http://togetter.com/t/%E8%8C%82%E6%9C%A8%E5%81%A5%E4%B8%80%E9%83%8E{タグ「茂木健一郎」}。9/17分は先を越されてしまいました。
+
+<<vim 7.3 + skk.vim で、単語登録をキャンセルするとクラッシュするという不具合を報告>>
+
+メンテナの @tyru さんが経緯を togetter にまとめてくださいました。
+
+* http://togetter.com/li/51431{Togetter - 「Vim 7.3ではskk.vimの辞書登録画面でC-gを押すとVimがSEGVる」}
+
+Cygwin も一時 vim 7.3 になってたんですが、アップデートしたら 7.3 → 7.2 に勝手にダウングレードしたという。まぁ、Cygwin での Python がなかなか 2.5 にならなかったことを考えると、時期尚早でしたね。

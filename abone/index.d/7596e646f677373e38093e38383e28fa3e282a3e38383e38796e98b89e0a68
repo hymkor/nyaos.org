@@ -1,0 +1,12 @@
+!!! バックアップ
+
+* ``cp -rv c:\usr z:.``
+
+* ``cp -rv ~mydocuments z:.``
+* ``cp -rv c:\cygwin\home\hayama z:cygwin``
+* Thunderbird のプロファイル(メール)のバックアップ
+
+!!! リストア
+
+* 無線LAN接続
+* WindowsUpdate

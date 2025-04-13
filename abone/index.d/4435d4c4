@@ -1,0 +1,33 @@
+http://www.atmarkit.co.jp/aig/01xml/dsml.html{XML用語事典 [DSML (Directory Service Markup Language)]}
+
+6<
+　XMLを用いて、ディレクトリサービスの情報を記述する言語である。ディレクトリサービスのプロトコルとしてはLDAP(Light Weight Directory Access Protocol)が有名であるが、LDAPによって受け渡される内容を記述する言語としてDSMLは位置付けられる。
+>9
+
+ひたすら、属性：名前の連続みたいですね
+
+8<
+<dsml:entry dn="uid=prabbit,ou=development,o=bowstreet,c=us">
+<dsml:objectclass>
+  <dsml:oc-value>top</dsml:oc-value>
+    <dsml:oc-value>person</dsml:oc-value>
+    <dsml:oc-value>organizationalPerson</dsml:oc-value>
+    <dsml:oc-value>inetOrgPerson</dsml:oc-value>
+  </dsml:objectclass>
+  <dsml:attr name="sn">
+     <dsml:value>Rabbit</dsml:value>
+   </dsml:attr>
+  <dsml:attr name="uid">
+    <dsml:value>prabbit</dsml:value>
+   </dsml:attr>
+  <dsml:attr name="mail">
+    <dsml:value>prabbit@dsml.org</dsml:value>
+  </dsml:attr>
+  <dsml:attr name="givenname">
+    <dsml:value>Peter</dsml:value>
+   </dsml:attr>
+  <dsml:attr name="cn">
+    <dsml:value>Peter Rabbit</dsml:value>
+   </dsml:attr>
+</dsml:entry>
+>8

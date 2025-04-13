@@ -1,0 +1,24 @@
+* XP祭関西の参加費を振込みに、りそな銀行へ行ってきた。
+    が、振り込もうとすると、ATM にカードを要求される。
+
+>> 何故？ <<
+
+この銀行に自分が口座持ってなきゃいかんの？
+
+* Perl のライブラリの使い方を伝授するには、
+    「参照」について、きっちりと説明せねばならぬ。
+    めんどい。
+
+* UTF8 Teraterm のデフォルトが telnet から ssh になっていたことで、
+    ルータの設定を変更するマクロがうまく動作せず、
+    ハマってしまうという痛ましい事故が、夜勤中の友人の身に置きた。
+
+* 列方向につながっているデータ(P_DATA,M_DATA)を、強引に行方向へ展開：
+8<
+    SELECT R.SERIAL_NO , K.KBN , DECODE(K.KBN,'P',R.P_DATA,'M',R.M_DATA)
+      FROM T_RECORDS R, 
+           ( SELECT 'P' AS KBN FROM DUAL
+              UNION ALL
+             SELECt 'M' AS KBN FROM DUAL ) K ;
+>8
+これは、ひどい。我ながら。

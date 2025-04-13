@@ -1,0 +1,75 @@
+
+<<[雑誌をめぐる冒険|http://d.hatena.ne.jp/ayakomiyamoto/20040422#p1] >>
+
+(http://capsctrl.que.jp/kdmsnr/diary/20040511.html#p04{capsctrldays}より)
+
+とりあえず、思い出せる分だけ。。。
+
+:小学生時代
+:: ◎h!FM , ベーマガ
+:中学校
+:: ◎h!FM , ベーマガ
+:高校
+:: ◎h!FM? , C magazine
+:予備校
+:: サンデー , ジャンプ , アフタヌーン
+:大学
+:: サンデー , ジャンプ , アフタヌーン
+:社会人
+:: サンデー , ジャンプ , モーニング
+
+そういえば、大学に入ってから、
+急に<big>馬鹿</big>になったような気がする。
+いったい何があったんだ…
+あ、そういえb
+
+<<うろうろ>>
+
+* http://pc.watch.impress.co.jp/docs/2004/0511/sony.htm{
+    写真で見る「VAIO type U」}
+	(http://www.henjinkutsu.net/{Hjk/変人窟}より)
+    :: キーボードだけ欲しい。。
+* http://www.z-gundam.net/{劇場版 Zガンダム 星を継ぐ者}
+	(http://www.henjinkutsu.net/{Hjk/変人窟}より)
+    :: すげぇー格好いいよー。フラッシュまで入って。
+	正直、Zガンダムのメカニックデザインは伊達ぢゃない。
+	(3人もデザイナー入ってたからなー)
+* http://www.itmedia.co.jp/news/articles/0405/10/news008.html{
+    ITmediaニュース：Winny開発者、逮捕}
+    :: 悪事とは思えないことを例に上げて、
+	「これをやったら逮捕されるんでしょうかねぇ」
+	みたいなことを嬉しそうにコメントしてる人が多いなぁ。
+* http://www108.sakura.ne.jp/~fun_bolt/bbsnote.cgi?fc=repost&l=1512{
+    キン肉ザク vs ロビンガンダム}、そして、
+    http://www108.sakura.ne.jp/~fun_bolt/bbsnote.cgi?fc=repost&l=1507{
+    アイアン=ミラージュ}
+    :: こんな傑作が登場するから、
+	http://www108.sakura.ne.jp/~fun_bolt/{糞ボルト＠落描道場}
+	の巡回はやめられん。
+* http://blog.livedoor.jp/koro_/archives/542289.html{
+    今日のオススメネタ:ＷｉｎＸＰ 使えるコマンドメモ}
+(http://papalagi.org/diary/200405.html#20040511{hard で loxse な 日々}より)
+    :: φ(。。)
+
+ゴールデンウィークで十分休養を取ったせいか、
+今週は、それなりに頭がまわるぞ。いい感じだ。
+
+しかし、上に仕事の優先順位を<strike>かきまわさると</strike>
+指示されますと、考えていた計画がいろいろ狂い出しますなぁ。
+
+北朝鮮では、これが国家規模で発生している。間違いない。
+
+<<jvim2gvim>>
+
+バージョンアップ
+
+<pre>
+    set winaltkeys=no
+    map <M-x> "+d
+    map <M-c> "+y
+    map <M-v> "+P
+    imap <M-v> ^((lb))"+P
+</pre>
+
+入力モードでもペーストできるようにした。
+次は Ctrl-N (新規ウィンドウ作成)だな。

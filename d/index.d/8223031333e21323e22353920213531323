@@ -1,0 +1,36 @@
+リハビリ
+
+8<
+[Z:tmp]
+$ type foo.go
+package main
+import "os"
+import "fmt"
+
+func main() {
+    dir,err := os.Open("..")
+    if err != nil {
+        fmt.Printf("%s\n",err)
+        return
+    }
+    defer dir.Close()
+
+    files,_ := dir.Readdir(-1)
+    for i,finfo := range(files) {
+        fmt.Printf("[%d] %s\n",i,finfo.Name())
+    }
+}
+[Z:tmp]
+$ go run foo.go
+[0] conio
+[1] pkg
+[2] src
+[3] tmp
+[4] tstConio
+[Z:tmp]
+$
+>8
+
+go言語では、ディレクトリ一覧見るのも、
+ファイルの中身を読むのも、
+同じ os.Open で開くのですか。

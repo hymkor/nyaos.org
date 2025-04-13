@@ -1,0 +1,76 @@
+<<Oracle データファイルひっこし>>
+
+Oracle のデータファイルを移動後に、
+Oracle 上のひもつけ状態をチェックするスクリプトを Perl/DBI で書き、
+
+>> やたー、わし、えらい、さすがだ <<
+
+と自己満足に思いっきり浸っていた。が…
+そもそも、Perl/DBI って、Oracle が mount状態の時、使えなかったよ 
+
+>> orz <<
+
+しかも、Perl の -e 演算子って、4GB 以上のサイズのファイルが何故か
+認識できなかったし。結局、SQL*Plus + bash で、お茶を濁したとさ…。
+
+<pre>
+#!/bin/sh
+
+export NLS_LANG=American_America.JA16SJIS
+sqlplus -s /nolog <<'__SQLPLUS__' >/dev/null
+    connect / as sysdba;
+
+    set echo off
+    set pages 0
+    set lines 32767
+    set trims on
+    set feed off
+    set hea off
+    set ver off
+    set term off
+    set pau off
+    spool datafile.lst
+        select name from v$datafile order by file# ;
+    spool off;
+    exit;
+__SQLPLUS__
+cat datafile.lst | while read filename
+do
+    if ((lb)) -r "$filename" ((rb)); then
+        echo "[^[[32mOK^[[0m] $filename"
+    else
+        echo "[^[[31mNG^[[0m] $filename"
+    fi
+done
+</pre>
+
+さりげにエスケープシーケンスで色を付けるなどという、
+ポータビリティーを無視したことをしているが、
+まぁ、いいじゃないか。
+
+<<[w3m からフォーム入力するとき|http://www.tees.ne.jp/~sin-x/200412b.html#2001]>>
+
+<blockquote>
+    外部エディタにどんなエディタでも指定出来るので
+    便利だという意見は見かけても、
+    入力中にウェブ閲覧出来ないという意見については全然見かけない
+</blockquote>
+
+すんません。そもそも「書く時」しか「w3m を」立ち上げてませんでした。
+つまり、普段「見る時」は専ら Opera を使っておりまして…
+おぉ、最寄りの神よ、漏れなくワタシをお許してください。
+
+<<((lb))UO((rb)) [７アイテム分のコードがセット価格12.99＄で販売開始|http://burikan.way-nifty.com/brilog/2004/12/7.html]>>
+
+ウルティマオンラインの中の強力なアイテム７つを
+本当のお金で販売するようだす。
+
+正直、こういうのはどうかと。
+ビデオカードの高速なものにするとか、回線を太くするのとは違い、
+アイテム集めというのは、本来「楽しむべき苦労」であり、
+それを金でパスするのは、不健全なゲームの楽しみ方としか思えない。
+
+>> もっとも、ネトゲ自体、不健全ですが <<
+
+日本のクレジットカードでは購入できないのは正解ですねぇ。
+日本法人偉いというしか。

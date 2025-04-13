@@ -1,0 +1,1021 @@
+OTRS クラスター導入手順書
+=========================
+
+See also
+    ..\1.Hinemosクラスター【櫻井】\Hinemosクラスターサーバの構築手順.txt
+    .\トラブルシューティング.txt
+
+初期設定
+========
+
+yum にプロクシーを追加
+
+    # ci -l yum.conf
+    # vim yum.conf
+
+    《変更差分》
+    diff -r1.1 yum.conf
+    20a21,22
+    >
+    > proxy=http://172.26.1.7:8080
+
+/etc/w3mrc にプロクシー設定を追加
+
+    # cd /etc/
+    # ci -l w3mrc
+    # vim w3mrc
+
+    《変更差分》
+    diff -r1.1 wgetrc
+    78,79c78,79
+    < #http_proxy = http://proxy.yoyodyne.com:18023/
+    < #ftp_proxy = http://proxy.yoyodyne.com:18023/
+    ---
+    > http_proxy = http://172.26.1.7:8080/
+    > ftp_proxy = http://172.26.1.7:8080/
+    82c82
+    < #use_proxy = on
+    ---
+    > use_proxy = on
+
+w3m を導入
+    # yum install w3m
+    # w3m .
+    → 「o」を押下してプロクシー「http://172.26.1.7:8080」を追加
+
+Fedora の epel パッケージを導入
+
+    # cd /tmp
+    # wget http://download.fedora.redhat.com/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm
+    # rpm -ihv epel-release-5-4.noarch.rpm
+
+⇒ epel-testing.repo 、epel.repo の二つが yum.repos.d に追加される。
+
+    # wget -O /etc/yum.repos.d/pacemaker.repo http://clusterlabs.org/rpm/epel-5/clusterlabs.repo
+    # yum install pacemaker.i386
+
+
+DRBD の導入
+===========
+
+yum install で以下が必要
+    drbd83-8.3.8-1.el5.centos
+    kmod-drbd83-PAE-8.3.8-1.el5.centos
+    kmod-drbd83-8.3.8-1.el5.centos
+
+○ リソースの設定ファイルの入力 【両方】
+
+DEBDモジュールのロードが正しいことを確認
+
+    # lsmod | grep drbd
+    drbd                  228528  0
+
+※ 表示されなければ modprobe drbd としてみる
+
+    # cd /etc
+    # cp -ip drbd.conf drbd.conf.org
+    # vi drbd.conf
+
+以下の修正をする。
+
+----- ここから ----- ここから ----- ここから ----- ここから -----
+global {
+  usage-count no;
+}
+common {
+  protocol C;
+}
+resource r0 {
+  device    /dev/drbd0;
+  disk      /dev/cciss/c0d0p4;
+  meta-disk internal;
+  syncer {
+        rate 40M;
+  }
+  on borderless1 {
+    address 192.168.2.1:7789;
+  }
+  on borderless2 {
+    address 192.168.2.2:7789;
+  }
+}
+----- ここまで ----- ここまで ----- ここまで ----- ここまで -----
+
+※ /etc/sysconfig/network のホスト名が borderless1.borderless 等となっている時は
+  「borderless1」に直しておくこと。
+  (on の後のホスト名と `uname -n` の内容を合わせておくこと)
+
+○ パーティションの作成 【両方】
+
+----- ここから ----- ここから ----- ここから ----- ここから -----
+[root@borderless2 etc]# fdisk /dev/cciss/c0d0
+
+このディスクのシリンダ数は 8920 に設定されています。
+間違いではないのですが、1024 を超えているため、以下の場合
+に問題を生じうる事を確認しましょう:
+1) ブート時に実行するソフトウェア (例. バージョンが古い LILO)
+2) 別の OS のブートやパーティション作成ソフト
+   (例. DOS FDISK, OS/2 FDISK)
+
+コマンド (m でヘルプ): p
+
+Disk /dev/cciss/c0d0: 73.3 GB, 73372631040 bytes
+255 heads, 63 sectors/track, 8920 cylinders
+Units = シリンダ数 of 16065 * 512 = 8225280 bytes
+
+     デバイス Boot      Start         End      Blocks   Id  System
+/dev/cciss/c0d0p1   *           1          33      265041   83  Linux
+/dev/cciss/c0d0p2              34         670     5116702+  83  Linux
+/dev/cciss/c0d0p3             671         931     2096482+  82  Linux swap / Solaris
+
+コマンド (m でヘルプ): n
+コマンドアクション
+   e   拡張
+   p   基本領域 (1-4)
+p
+Selected partition 4
+最初 シリンダ (932-8920, default 932):
+Using default value 932
+終点 シリンダ または +サイズ または +サイズM または +サイズK (932-8920, default 8920):
+Using default value 8920
+
+コマンド (m でヘルプ): w
+領域テーブルは交換されました！
+
+ioctl() を呼び出して領域テーブルを再読込みします。
+
+警告: 領域テーブルの再読込みがエラー 16 で失敗しました: デバイスもしくはリソースがビジー状態です。
+カーネルはまだ古いテーブルを使っています。
+新しいテーブルは次回リブート時に使えるようになるでしょう。
+ディスクを同期させます。
+[root@borderless2 etc]# partprobe
+----- ここまで ----- ここまで ----- ここまで ----- ここまで -----
+
+※ 念の為、リブート
+
+○ メタデータの作成 【両方】
+
+----- ここから ----- ここから ----- ここから ----- ここから -----
+[root@borderless1 etc]# drbdadm create-md r0
+Writing meta data...
+initializing activity log
+NOT initialized bitmap
+New drbd meta data block successfully created.
+
+[root@borderless1 etc]# service drbd start
+Starting DRBD resources: drbdsetup 0 show:27: delay-probe-volume 0k => 0k out of range [4..1048576]k.
+
+[root@borderless1 etc]# cat /proc/drbd
+version: 8.3.8 (api:88/proto:86-94)
+GIT-hash: d78846e52224fd00562f7c225bcc25b2d422321d build by mockbuild@builder10.centos.org, 2010-06-04 08:04:43
+ 0: cs:Connected ro:Secondary/Secondary ds:Inconsistent/Inconsistent C r----
+    ns:0 nr:0 dw:0 dr:0 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:b oos:64169644
+
+[root@borderless1 etc]# drbdadm -- -o primary r0
+
+[root@borderless1 etc]# cat /proc/drbd
+version: 8.3.8 (api:88/proto:86-94)
+GIT-hash: d78846e52224fd00562f7c225bcc25b2d422321d build by mockbuild@builder10.centos.org, 2010-06-04 08:04:43
+ 0: cs:SyncSource ro:Primary/Secondary ds:UpToDate/Inconsistent C r----
+    ns:2048 nr:0 dw:0 dr:2048 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:b oos:64167596
+        [>....................] sync'ed:  0.1% (62660/62664)M delay_probe: 6442
+        finish: 44:33:38 speed: 340 (340) K/sec
+
+そのままだと同期速度が遅いので、速くする (通常は 40M )
+    # drbdsetup /dev/drbd0 syncer -r 110M
+
+元に戻すには以下の通り
+    # drbdadm adjust r0
+
+[root@borderless1 network-scripts]# mke2fs -j /dev/drbd0
+mke2fs 1.39 (29-May-2006)
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+8028160 inodes, 16042411 blocks
+802120 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=0
+490 block groups
+32768 blocks per group, 32768 fragments per group
+16384 inodes per group
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+        4096000, 7962624, 11239424
+
+Writing inode tables: done
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+This filesystem will be automatically checked every 30 mounts or
+180 days, whichever comes first.  Use tune2fs -c or -i to override.
+[root@borderless1 network-scripts]#
+
+
+Apache 設定
+===========
+
+■ サービスIPを設定
+
+    # cd /etc/httpd/conf
+    # ci -l httpd.conf
+    # vim httpd.conf
+    # rcsdiff httpd.conf
+    ===================================================================
+    RCS file: httpd.conf,v
+    retrieving revision 1.1
+    diff -r1.1 httpd.conf
+    265a266
+    > ServerName 192.168.38.136:80
+
+Dovecot の設定
+==============
+
+■ バナーに dovecot と出ないようにする。
+
+    vim /etc/dovecot.conf
+
+    - プロトコルを imap だけにする
+        protocols = imap
+
+    - メールの保持ディレクトリを Maildir 形式にする
+        mail_location = maildir:~/Maildir
+
+    - greeting メッセージを変更
+        login_greeting = IMAP Server Ready.
+
+    - IMAP のポートを指定
+        protocol imap {
+            listen = *:143
+            ssl_listen = *:943
+        }
+
+■ IP制限
+
+Dovecot は IP制限をするために、xinetd を通じて起動するようにする。
+
+    # yum install xinetd
+    # vim /etc/xinetd.d/imap
+
+----- ここから ----- ここから ----- ここから ----- ここから -----
+service imap
+{
+    protocol = tcp
+    socket_type = stream
+    wait = no
+    user = root
+    server = /usr/libexec/dovecot/imap-login
+    disable = no
+    only_from = 127.0.0.1 192.168.38.100 192.168.38.134 192.168.38.135 192.168.38.136 
+}
+----- ここまで ----- ここまで ----- ここまで ----- ここまで -----
+
+    # service dovecot stop
+    # service xinetd start
+
+
+Heartbeat 設定
+==============
+
+認証方式と認証鍵の設定
+----------------------
+
+    # cd /etc/ha.d
+    # cp -ip /usr/share/doc/heartbeat-3.0.3/authkeys .
+    # chmod 600 authkeys
+    # ci -l authkeys
+    # vim authkeys
+    # grep -v '#' authkeys
+    auth 1
+    1 sha1 OTRS-HA
+    #
+
+グローバルクラスタ構成の設定
+----------------------------
+
+    # cp -ip /usr/share/doc/heartbeat-2.1.3/ha.cf .
+    # ci -l ha.cf
+    # vim ha.cf
+    # cat ha.cf
+    crm yes
+    debugfile /var/log/ha-debug
+    logfile /var/log/ha-log
+    logfacility     local1
+    keepalive 2
+    deadtime 30
+    warntime 10
+    initdead 120
+    udpport 694
+    bcast bond1
+    bcast bond2
+    node borderless1
+    node borderless2
+    debug 1
+
+crmコマンドを用いたPacemakaer のリソース設定
+--------------------------------------------
+
+■ 全体オプション
+
+    # crm cofigure
+    crm(live)configure#
+        property stonith-enabled="false" no-quorum-policy="ignore"
+
+* STONITH を使用しない
+* クォーラムを使用しない。
+
+
+■ リソース定義：仮想IP
+
+    crm(live)configure#
+        primitive OTRS-IP ocf:heartbeat:IPaddr2 \
+                params ip="192.168.38.136" nic="bond0" cidr_netmask="24" \
+                op start interval="0s" timeout="60s" \
+                op monitor interval="10s" timeout="60s" \
+                op stop interval="0s" timeout="60s"
+
+* ip="～" は仮想IPアドレス
+
+
+■ リソース定義：ファイルシステム(DRBD)
+
+    crm(live)configure#
+        primitive OTRS-MOUNT ocf:heartbeat:Filesystem \
+                params device="/dev/drbd0" fstype="ext3" directory="/opt/otrs" options="noatime" \
+                op monitor interval="20s"
+
+■ リソース定義：Apache
+
+両ノードの /var/www/html/index.html に以下のファイルを作っておく
+    <html>
+    <body>
+    Welcome OTRS
+    </body>
+    </html>
+上記の『OTRS』の文字の有無をトリガーで切り替わるように設定する。
+
+http の自動起動も停止しておく
+    # service httpd stop
+    # chkconfig httpd off
+
+    crm(live)configure#
+        primitive OTRS-APACHE ocf:heartbeat:apache \
+            params configfile="/etc/httpd/conf/httpd.conf" \
+            httpd="/usr/sbin/httpd" port="80" \
+            statusurl="http://192.168.38.136/index.html" testregex="OTRS" \
+            op monitor interval="10s" timeout="60s"
+
+■ リソース定義：MySQL
+
+MySQL が未導入ならば：
+    # yum install mysql
+    # yum install mysql-server
+
+MySQL の自動起動を off にする。
+    # service mysqld stop
+    # chkconfig mysqld off
+
+crm configure で以下を定義
+
+    crm(live)configure#
+        primitive OTRS-MYSQL ocf:heartbeat:mysql \
+                params binary="/usr/bin/mysqld_safe" \
+                datadir="/var/lib/mysql" pid="/var/run/mysqld/mysqld.pid" \
+                op monitor interval="10s" timeout="60s"
+
+■ リソース定義：pingd
+
+NIC監視用に pingd を導入する。
+
+    crm(live)configure#
+        primitive OTRS-PINGD ocf:pacemaker:pingd \
+                params name="default_ping_set" host_list="192.168.38.12" multiplier="100" dampen="1" \
+                op monitor interval="10s"
+
+* host_list は ping する先の IP アドレス。例では直結しているスイッチにしている。
+
+
+■ リソース定義：postfix
+
+標準で提供されているリソースエージェントは Postfix 3.5～向けだが、CentOS 5.5 の Postfix は 3.3。
+そのため、次のような、LSB リソースエージェントを導入する。
+
+    vim /etc/init.d/postfix33
+----- ここから ----- ここから ----- ここから ----- ここから -----
+#!/bin/bash
+#
+# postfix33 Pacemaker LSB resource agent for Postfix Mail Transfer Agent
+#
+# chkconfig: 2345 80 30
+# description: Postfix is a Mail Transport Agent, which is the program \
+#              that moves mail from one machine to another.
+# processname: master
+# pidfile: /var/spool/postfix/pid/master.pid
+# config: /etc/postfix/main.cf
+# config: /etc/postfix/master.cf
+#
+# 2011.05.20: Fix for pacemaker
+
+POSTFIX=`dirname $0`/postfix
+
+# See how we were called.
+case "$1" in
+  start)
+        if $POSTFIX status ; then
+                exit 0
+        else
+                $POSTFIX start
+        fi
+        ;;
+  stop)
+        if $POSTFIX status ; then
+                $POSTFIX stop
+        else
+                exit 0
+        fi
+        ;;
+  status)
+        $POSTFIX status
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|status}"
+        exit 1
+esac
+
+exit $?
+----- ここまで ----- ここまで ----- ここまで ----- ここまで -----
+
+    crm(live)configure#
+        primitive OTRS-POSTFIX lsb:postfix33
+
+■ リソース定義：dovecot
+
+リソースエージェントは Xinetd を使う。
+
+    crm(live)configure#
+        primitive OTRS-DOVECOT ocf:heartbeat:Xinetd \
+            params service="imap" \
+            op monitor interval="10s" timeout="60s"
+
+■ 各種リソースのグルーピング
+
+    crm(live)configure# 
+        group OTRS-RG OTRS-IP OTRS-MOUNT OTRS-DOVECOT OTRS-POSTFIX OTRS-APACHE OTRS-MYSQL
+
+※ 後で OTRS-BODY を追加する
+
+■ DRBD のマスター/スレーブの制約定義
+
+    crm(live)configure# 
+        ms MASTER-SLAVE DRBD-RA meta master-max="1" \
+            master-node-max="1" clone-max="2" clone-node-max="1" \
+            notify="true" 
+
+■ pingd は両方のノードで常に起動するように設定する。
+
+    crm(live)configure# 
+        clone CLONE-OTRS OTRS-PINGD
+
+■ 1号機を初期起動ノードにする
+
+    crm(live)configure# 
+        location ACTIVENODE OTRS-RG 100: hayama-otrs1 
+
+■ NICが死んだら、ノードをダウンさせる設定をする。
+
+    crm(live)configure# 
+        location NICDOWNNODE OTRS-RG \
+            rule -inf: not_defined default_ping_set \
+            or default_ping_set lt 100
+
+■ DRBDをマスターにしてから、各リソースを起動するようにする
+
+    crm(live)configure#
+        order ORDER_OTRS 0: MASTER-SLAVE:promote OTRS-RG:start
+
+
+■ 各リソースが、DRBD がマスターがマスターになっていることに依存していることを定義
+
+    crm(live)configure#
+        colocation DEPEND_OTRS inf: OTRS-RG MASTER-SLAVE:Master
+
+
+■ 以上の設定の確定 & 相方サーバへの設定同期
+
+    crm(live)configure# commit
+    crm(live)configure# exit
+
+Pacemaker の稼働確認
+--------------------
+
+※ 以下には OTRS-BODY が入っているが、手順書の通りに進めている場合は入っていないはず
+
+    root@hayama-otrs1 ~]# crm_mon
+
+    ============
+    Last updated: Fri May 20 18:52:18 2011
+    Stack: Heartbeat
+    Current DC: borderless2 (b7d86773-f200-4c3a-9263-69c86421df17) - partition with quorum
+    Version: 1.0.10-da7075976b5ff0bee71074385f8fd02f296ec8a3
+    2 Nodes configured, unknown expected votes
+    3 Resources configured.
+    ============
+
+    Online: [ borderless1 borderless2 ]
+
+     Resource Group: OTRS-RG
+         OTRS-IP    (ocf::heartbeat:IPaddr2):       Started borderless1
+         OTRS-MOUNT (ocf::heartbeat:Filesystem):    Started borderless1
+         OTRS-DOVECOT       (ocf::heartbeat:Xinetd):        Started borderless1
+         OTRS-POSTFIX       (lsb:postfix33):        Started borderless1
+         OTRS-APACHE        (ocf::heartbeat:apache):        Started borderless1
+         OTRS-MYSQL (ocf::heartbeat:mysql): Started borderless1
+         OTRS-BODY  (ocf::borderless:otrs): Started borderless1
+     Master/Slave Set: MASTER-SLAVE
+         Masters: [ borderless1 ]
+         Slaves: [ borderless2 ]
+     Clone Set: CLONE-OTRS
+         Started: [ borderless1 borderless2 ]
+
+
+OTRS 3.0 の導入
+===============
+
+パッケージ導入
+--------------
+
+括弧内パッケージはたいていの場合、既に導入済みか、
+他のパッケージと連動して導入されている。
+
+    # yum install perl-DBD-MySQL
+    # yum install mod_perl
+    (# yum install perl-BSD-Resource)
+    # yum install mysql-server
+    (# yum install mysql)
+    (# yum install procmail)
+    (# yum install perl-libwww-perl)
+    (# yum install perl-Compress-Zlib)
+    (# yum install perl-HTML-Parser)
+    (# yum install perl-HTML-Tagset)
+    (# yum install perl-Net-DNS)
+    (# yum install perl-Digest-HMAC)
+    (# yum install perl-Digest-SHA1)
+    (# yum install perl-Net-IP)
+    (# yum install perl-IO-Socket-SSL)
+    (# yum install perl-Net-SSLeay)
+    # yum install perl-XML-Parser
+    (# yum install vixie-cron)
+
+    # w3m http://ftp.otrs.org/pub/otrs/RPMS/fedora/4/
+        XXXX → otrs-3.05-01.noarch.rpm を選択
+        → otrs-3.0.6-01.noarch.rpm を選択
+    # rpm -ihv otrs-3.0.5-01.noarch.rpm
+    (以下、二号機のみ)
+    # service mysqld stop
+    # cd /opt
+    # mv otrs otrs.bak
+    # mkdir otrs
+
+サービス起動
+------------
+
+    (一号機のみ)
+    # service mysqld start
+    # service httpd start
+    httpd を起動中: httpd: Could not reliably determine the server's fully qualified domain name, using 192.168.38.130 for ServerName
+    # chkconfig httpd on
+    # chkconfig mysqld on
+    # mysql -u root -p -e 'create database otrs charset utf8'
+    Enter password: (Enterのみ)
+    # mysql -u root -p otrs < /opt/otrs/scripts/database/otrs-schema.mysql.sql
+    Enter password: (Enterのみ)
+    # mysql -u root -p otrs < /opt/otrs/scripts/database/otrs-initial_insert.mysql.sql
+    Enter password: (Enterのみ)
+    # mysql -u root -p otrs < /opt/otrs/scripts/database/otrs-schema-post.mysql.sql
+    Enter password: (Enterのみ)
+    # mysql -u root -p -e 'GRANT ALL PRIVILEGES ON otrs.* TO otrs@localhost IDENTIFIED BY "some-pass" WITH GRANT OPTION;'
+    Enter password: (Enterのみ)
+    # mysqladmin -u root -p reload
+    Enter password:
+    # service otrs start
+
+ブラウザで http://192.168.38.132/otrs/installer.pl を開く
+(IPがサービスIPであることに注意)
+
+
+データベース作成(2/4)
+---------------------
+        ユーザ          root
+        パスワード      空
+        ホスト          localhost
+        種別            MySQL
+を選択する。
+    データベースユーザ
+        ユーザ              otrs
+        パスワード          hot
+        データベースホスト  localhost
+        行動                削除
+[次へ]を押下。[戻る]を選んでから「作成」を選択して、再び[次へ]を押下
+
+
+
+システム設定(3/4)
+-----------------
+        システムID              10
+        システムのFQDN          192.168.38.132
+        管理者メール            root@192.168.38.132
+        組織                    tis
+    ログ
+        ログモジュール          Syslog
+        ログファイル            /var/log/otrs.log
+    Webフロントエンド
+        既定の言語              Japanese (日本語)
+        MXレコードのチェック    はい
+[次へ]を押下
+    送信メール設定
+        送信メール種別          SMTP
+        送信メールポート        25
+        SMTPホスト              192.168.38.132 (サービスIP)
+        SMTP認証                なし
+    受信メール設定
+        受信メール種別          IMAP
+        受信メールホスト        192.168.38.132
+        受信メールユーザ        root
+        受信メールパスワード    zaq12wsx
+[この手順を飛ばす]
+
+
+終了しました(4/4)
+-----------------
+
+表示内容をチェック
+
+    スタートページ: http://192.168.38.132/otrs/index.pl
+    ユーザー: root@localhost
+    パスワード: root 
+
+
+Proxy設定の追加
+---------------
+
+(0) http://192.168.38.132/otrs/index.pl よりログイン
+(1) メニューの「管理」を選ぶ
+(2) 「システム管理」枠内の「SysConfig」を選択
+(3) リストボックスの「Framework(381)」を選択
+(4) リンク「Core::WebUserAgent」を選択
+(5) WebUserAgent::Proxy のチェックを有効にして、
+    テキストボックスに「http://172.26.1.7:8080/」を記入して[更新]
+
+⇒ RSS は cron で読み込むようなので、この結果はすぐ画面に反映されない。
+   (「OTRSニュース」などが正常終了するのは、しばらく待つ必要がある。)
+
+
+MySQL のデータファイルの移動
+----------------------------
+
+1号機の中の、OTRS の DB 情報の入った設定ファイルを2号機にも複写しておく。
+前もって、OTRS/MySQL のサービスは止めておくこと
+
+(1号機にて)
+    # cd /var/lib
+    # mv mysql /opt/otrs/var_lib_mysql
+    # ln -s /opt/otrs/var_lib_mysql mysql
+
+(2号機にて)
+    # cd /var/lib
+    # mv mysql mysql.bak
+    # ln -s /opt/otrs/var_lib_mysql mysql
+
+
+OTRS の Hearbeat への登録
+-------------------------
+
+    OTRS のリソースマネージャーを作成する。
+        # vim /usr/lib/ocf/resource.d/borderless/otrs 
+----- ここから ----- ここから ----- ここから ----- ここから -----
+#!/bin/sh
+#
+#       High-Availability OTRS control script
+#
+# otrs
+#
+# Description:  starts/stops OTRS service.
+#
+# Author:       Kaoru Hayama
+#
+# Copyright:    (c) 2011 TIS Corporation.
+#                   (http://www.tis.co.jp)
+#
+# History:
+#      2011.03.08 - First version
+#      2011.04.05 - rewrite after reading ra-dev-guide.pdf
+#      2011.04.26 - rewrite after reviewed by 3ware.
+
+: ${OCF_FUNCTIONS_DIR=${OCF_ROOT}/resource.d/heartbeat}
+. ${OCF_FUNCTIONS_DIR}/.ocf-shellfuncs
+
+OCF_RESKEY_otrsuser_default=otrs
+: ${OCF_RESKEY_otrsuser:=${OCF_RESKEY_otrsuser_default}}
+
+if test -r /etc/sysconfig/otrs; then
+    . /etc/sysconfig/otrs
+else
+    exit $OCF_ERR_INSTALLED
+fi
+
+
+# logger $0 $*
+
+action_monitor(){
+    # $OTRS_POSTMASTER というスクリプトが稼働・停止の内部フラグになっている.
+    if [ -x $OTRS_POSTMASTER ] ; then
+        return $OCF_SUCCESS
+    else
+        return $OCF_NOT_RUNNING
+    fi
+}
+
+action_start(){
+    if action_monitor ; then
+        ocf_log warn 'Resource is already runnning'
+        return $OCF_SUCCESS
+    fi
+    #### import code from /etc/init.d/otrs ####
+    # Enable OTRS_POSTMASTER #
+    if chmod 755 $OTRS_POSTMASTER ; then
+        ocf_log info "Enable $OTRS_POSTMASTER ... done."
+    else
+        ocf_log err "Enable $OTRS_POSTMASTER ... failed."
+        return $OCF_ERR_GENERIC
+    fi
+
+    # Check OTRS Spool dir #
+    ocf_log info "Checking otrs spool dir...Start"
+    for i in $OTRS_SPOOLDIR/* ; do
+        # process old emails
+        if echo $i | grep -v '*' >> /dev/null; then
+            if $OTRS_POSTMASTER < $i >> /dev/null 2>&1 ; then
+                if rm $i ; then
+                    ocf_log info \
+                        "Starting otrs PostMaster... ($i) (remove email) done.";
+                else
+                    ocf_log err \
+                        "Starting otrs PostMaster... ($i) (remove email failed) done.";
+                fi
+            else
+                ocf_log err "Starting otrs PostMaster... ($i) failed."
+            fi
+        fi
+    done
+    echo " done."
+
+    # cron settings
+    if test $OTRS_CRON_RUNNING -gt 0; then
+        if  mkdir -p $OTRS_CRON_DIR; cd $OTRS_CRON_DIR && \
+            ls * | grep -v '.dist'|grep -v '.save'|grep -v 'CVS'|grep -v '.rpm'| \
+            xargs cat > $OTRS_CRON_TMP_FILE && \
+            crontab $OTRS_CRON_USER $OTRS_CRON_TMP_FILE
+        then
+            ocf_log info " Creating cronjobs (source $OTRS_CRON_DIR/*) ... done."
+        else
+            ocf_log info " Creating cronjobs (source $OTRS_CRON_DIR/*) ... failed!"
+            return $OCF_ERR_GENERIC
+        fi
+    else
+        ocf_log info " Disabled: cronjobs!"
+    fi
+
+
+    #### end import code ###
+
+    while ! action_monitor ; do
+        ocf_log debug "Resource has not started yet, waiting"
+        sleep 1
+    done
+    return $OCF_SUCCESS
+}
+
+action_stop(){
+    local rc
+    action_monitor
+    rc=$?
+    case "$rc" in
+    "$OCF_SUCCESS")
+        ocf_log debug "Resource is currently running"
+        ;;
+    "$OCF_NOT_RUNNING")
+        ocf_log info "Resource is already stopped"
+        return $OCF_SUCCESS
+        ;;
+    *)
+        return $OCF_ERR_GENERIC
+        ;;
+    esac
+
+    ### import code from /etc/init.d/otrs ###
+
+    # disable otrs.PostMaster.pl
+    if chmod 644 $OTRS_POSTMASTER; then
+        ocf_log info "Disable $OTRS_POSTMASTER ... done."
+    else
+        ocf_log err  "Disable $OTRS_POSTMASTER ... failed."
+    fi
+
+    if [ $OTRS_CRON_RUNNING -gt 0 ] ; then
+        if crontab $OTRS_CRON_USER -r ; then
+            ocf_log info " Shutting down cronjobs ... done."
+        else
+            ocf_log err  " Shutting down cronjobs ... failed!"
+            # return $OCF_ERR_GENERIC
+        fi
+    else
+        ocf_log info " Disabled: cronjobs!"
+    fi
+    ocf_log info "Final shutdown of $OTRS_PROG.. done"
+    ###
+
+    while action_monitor ; do
+        ocf_log debug "Resource has not stopped yet, waiting"
+    done
+    return $OCF_SUCCESS
+}
+
+action_metadata(){
+        cat <<END
+<?xml version="1.0"?>
+<!DOCTYPE resource-agent SYSTEM "ra-api-1.dtd">
+<resource-agent name="otrs">
+<version>1.0</version>
+<longdesc lang="en">
+This is the resource agent for Borderless OTRS service.
+</longdesc>
+<shortdesc lang="en">Manages an Borderless OTRS service instance</shortdesc>
+<parameters>
+  <parameter name="otrsuser" unique="0" required="0">
+     <longdesc  lang="en">OS-Username where OTRS running.</longdesc>
+     <shortdesc lang="en">OS-Username where OTRS running.</shortdesc>
+     <content type="string" default="${OCF_RESKEY_otrsuser_default}" />
+  </parameter>
+</parameters>
+<actions>
+<action name="start"   timeout="40s" />
+<action name="stop"    timeout="60s" />
+<action name="monitor" depth="0"  timeout="20s" interval="10" />
+<action name="meta-data"  timeout="5" />
+</actions>
+</resource-agent>
+END
+        return $OCF_SUCCESS
+}
+
+action_validate(){
+        if [ -f /etc/init.d/otrs ]; then
+                return $OCF_SUCCESS
+        else
+                return $OCF_ERR_INSTALLED
+        fi
+}
+
+case "$__OCF_ACTION" in
+status|monitor)
+        action_monitor ;;
+start)
+        action_start   ;;
+stop)
+        action_stop ;;
+meta-data)
+        action_metadata ;;
+validate-all)
+        action_validate ;;
+*)
+        exit $OCF_ERR_UNIMPLEMENTED
+esac
+rc=$?
+ocf_log debug "${OCF_RESOURCE_INSTANCE} $__OCF_ACTION returned $rc"
+# logger RETURN=$rc
+exit $rc
+
+# vim: set ai et sw=4 ts=8:
+----- ここまで ----- ここまで ----- ここまで ----- ここまで -----
+
+        # chmod a+x /usr/lib/ocf/resource.d/borderless/otrs 
+        
+    # crm configure
+    crm(live)configure#
+        primitive OTRS-BODY ocf:borderless:otrs \
+                op start interval="0s" timeout="80s" \
+                op monitor interval="30s" timeout="60s"
+    crm(live)configure#
+        group OTRS-RG OTRS-IP OTRS-MOUNT OTRS-DOVECOT OTRS-POSTFIX OTRS-APACHE OTRS-MYSQL OTRS-BODY
+
+■ サービスが正常終了できなかった時、リブート時に cron を解除するサービススクリプト
+
+以下のスクリプトを /etc/init.d/ejctcrn という名前で配置しておく
+----- ここから ----- ここから ----- ここから ----- ここから -----
+#!/bin/sh
+#
+# chkconfig: 345 98 02
+# description: CIM latter system cron initilizer
+#
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# ----------------------------------------
+# HOW TO INSTALL
+#  Please do this on root user.
+#    1. put this to /etc/rc.d/init.d
+#         ** BE CAREFUL CODE FOR END OF LINE **
+#         ** Is it LF only ?                 **
+#         ** If CRLF, then remove cr-code as below :
+#               > vim ejctcrn
+#               > :set notextmode
+#               > :wq
+#    2. type 'chkconfig --add ejctcrn'
+#    3. type 'chkconfig ejectcrn on'
+#
+# HISTORY
+#    2004.09.06 2nd Version.
+#    2011.04.14 3rd Version for Borderless
+# -----------------------------------------
+
+USERLIST=otrs
+
+logger "$0: called $*"
+
+case "$1" in
+start)
+    for u in $USERLIST
+    do
+        logger "$0: crontab -u $u -r"
+        crontab -u $u -r
+    done
+esac
+exit 0
+----- ここまで ----- ここまで ----- ここまで ----- ここまで -----
+
+作成後
+    chkconfig --add ejctcrn
+    chkconfig ejectcrn on
+を実行してサービス登録しておく。
+
+やっているのは、起動時に OTRS ユーザの cron を解除するだけ
+
+これを作っておかないと、マシンがハングアップ/リセットした後、
+サービスのフェイルバックが正常に出来なくなる。
+
+
+最終状態確認
+------------
+
+    # crm configure show
+
+----- ここから ----- ここから ----- ここから ----- ここから -----
+node $id="0b4fd3c4-38ee-473e-926d-30d4ded3e4bd" borderless1 \
+        attributes standby="off"
+node $id="b7d86773-f200-4c3a-9263-69c86421df17" borderless2 \
+        attributes standby="off"
+primitive DRBD-RA ocf:linbit:drbd \
+        params drbd_resource="r0" drbdconf="/etc/drbd.conf" \
+        op monitor interval="20s"
+primitive OTRS-APACHE ocf:heartbeat:apache \
+        params configfile="/etc/httpd/conf/httpd.conf" httpd="/usr/sbin/httpd" port="80" statusurl="http://192.168.38.136/index.html" testregex="OTRS" \
+        op monitor interval="10s" timeout="60s"
+primitive OTRS-BODY ocf:borderless:otrs \
+        op start interval="0s" timeout="80s" \
+        op monitor interval="30s" timeout="60s"
+primitive OTRS-DOVECOT ocf:heartbeat:Xinetd \
+        params service="imap" \
+        op monitor interval="10s" timeout="60s"
+primitive OTRS-IP ocf:heartbeat:IPaddr2 \
+        params ip="192.168.38.136" nic="bond0" cidr_netmask="24" \
+        op start interval="0s" timeout="60s" \
+        op monitor interval="10s" timeout="60s" \
+        op stop interval="0s" timeout="60s"
+primitive OTRS-MOUNT ocf:heartbeat:Filesystem \
+        params device="/dev/drbd0" fstype="ext3" directory="/opt/otrs" options="noatime" \
+        op monitor interval="20s"
+primitive OTRS-MYSQL ocf:heartbeat:mysql \
+        params binary="/usr/bin/mysqld_safe" datadir="/var/lib/mysql" pid="/var/run/mysqld/mysqld.pid" \
+        op monitor interval="10s" timeout="60s"
+primitive OTRS-PINGD ocf:pacemaker:pingd \
+        params name="default_ping_set" host_list="192.168.38.12" multiplier="100" dampen="1" \
+        op monitor interval="10s"
+primitive OTRS-POSTFIX lsb:postfix33
+group OTRS-RG OTRS-IP OTRS-MOUNT OTRS-DOVECOT OTRS-POSTFIX OTRS-APACHE OTRS-MYSQL OTRS-BODY
+ms MASTER-SLAVE DRBD-RA \
+        meta master-max="1" master-node-max="1" clone-max="2" clone-node-max="1" notify="true"
+clone CLONE-OTRS OTRS-PINGD
+location ACTIVENODE OTRS-RG 100: borderless1
+location NICDOWNNODE OTRS-RG \
+        rule $id="NICDOWNNODE-rule" -inf: not_defined default_ping_set or default_ping_set lt 100
+colocation DEPEND_OTRS inf: OTRS-RG MASTER-SLAVE:Master
+order ORDER_OTRS 0: MASTER-SLAVE:promote OTRS-RG:start
+property $id="cib-bootstrap-options" \
+        dc-version="1.0.10-da7075976b5ff0bee71074385f8fd02f296ec8a3" \
+        cluster-infrastructure="Heartbeat" \
+        stonith-enabled="false" \
+        no-quorum-policy="ignore" \
+        last-lrm-refresh="1305781722" \
+        default-resource-stickiness="200"
+----- ここまで ----- ここまで ----- ここまで ----- ここまで -----

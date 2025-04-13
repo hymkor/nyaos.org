@@ -1,0 +1,62 @@
+<<[nyaos] 上に行く cd 作った>>
+
+* http://d.hatena.ne.jp/hitode909/20101002/1285994430{上に行くcd作った - hitode909のダイアリー}
+
+リンク先は zsh 版らしい。NYAOS 版を作った。
+以下のソースは「up.lua」とでも保存して「source up.lua」するか、
+_nya の中で、``lua_e "～"`` 内に入れてください。
+
+<<<#1:up 3ってやると，3つ上に行く>>>
+
+8<
+function nyaos.command.up(cnt)
+    for i=1,cnt do
+        nyaos.chdir('..')
+    end
+end
+>8
+
+<<<#2:考えながら入力できるように、引数の数だけ見る>>>
+
+8<
+function nyaos.command.up(...)
+    for i in pairs{...} do
+        nyaos.chdir('..')
+    end
+end
+>8
+
+<<<#3: ディレクトリ名からさかのぼるディレクトリを探す>>>
+
+カレントディレクトリが「c:\a\b\c\d」の時、「up b」を実行すると、
+「c:\a\b」へ移動する。
+
+8<
+function nyaos.command.up(argv)
+    local p=nyaos.eval('pwd')..'\\'
+    local d=argv..'\\'
+    local r=0
+    while 1 do
+        local t=string.find(p,d,r+1,true)
+        if not t then break end
+        r=t
+    end
+    if r > 0 then
+        nyaos.chdir( string.sub(p,1,r+string.len(argv)-1) )
+    else
+        print("no such file or directory: "..argv)
+    end
+end
+>8
+
+Lua には Perl の rindex 相当が無いから面倒だったぜよ
+
+<<<#4: コマンドラインが空の時に ^ をタイプすると、cd .. する>>
+
+8<
+function nyaos.keyhook(t)
+    if t.key == string.byte('^') and t.text == '' then
+        return 'cd ..',true
+    end
+end
+>8

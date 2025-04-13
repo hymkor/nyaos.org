@@ -1,0 +1,27 @@
+!!! ((title [NYAOS] フルパスを取得する方法))
+
+それ Lua と COM で出来るよー
+
+8<
+[C:hayama]
+$ type fullpath.lua
+local fso=assert(nyaos.create_object("Scripting.FileSystemObject"))
+function nyaos.filter.fullpath(cmdline)
+    return string.gsub(cmdline,"@ABSPATH(%b())",function(m)
+        return fso:GetAbsolutePathName(string.sub(m,2,-2))
+    end)
+end
+[C:hayama]
+$ source fullpath.lua
+[C:hayama]
+$ echo @ABSPATH(.)
+C:\Documents and Settings\hayama
+[C:hayama]
+$ echo @ABSPATH(c:\)
+C:\
+[C:hayama]
+$ echo @ABSPATH(..)
+C:\Documents and Settings
+>8
+
+以上、よろしくお願いいたします。

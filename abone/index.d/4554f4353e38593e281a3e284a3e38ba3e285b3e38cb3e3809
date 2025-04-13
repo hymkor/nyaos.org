@@ -1,0 +1,5 @@
+ net use \\10.128.1.29\public /delete
+ net use \\10.128.1.29\public 20110920 /user:tritis
+
+* borderless / zaq12wsx
+* tritis / 20110920

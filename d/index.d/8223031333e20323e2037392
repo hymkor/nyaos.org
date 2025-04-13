@@ -1,0 +1,94 @@
+<<[NYAOS][Lua] 実行ファイルのバージョンを得る>>
+
+* http://d.hatena.ne.jp/aspx/20070111/1168483298{VBScriptでファイルのバージョン情報を取得するには - aspxの日記2009}
+
+意外と簡単だった。
+
+'''exever.lua'''
+8<
+local fso = nyaos.create_object("Scripting.FileSystemObject")
+print( fso:GetFileVersion( "c:\\usr\\bin\\nyaos.exe" ) )
+>8
+
+8<
+[C:\home]
+$ nyaos exever.lua
+3.3.4.2
+>8
+
+専用関数があるのはいいけど、他に応用がないな。
+
+<<[VC++] DebugOutput改良>>
+
+* >>{(2013.01.08)#p2}{MHI 5.0 - $ OutputDebugString を何回も書くのがうざい}
+
+数値が出せなかったので対応。さくっと、stdafx.h に貼り付けるだけ
+
+8<
+class DebugStream {
+	void (__stdcall *func)(LPCTSTR s);
+public:
+	DebugStream( void (__stdcall *f)(LPCTSTR) ) : func(f){}
+	DebugStream &operator << ( LPCTSTR s )
+	{  (*func)(s); return *this; }
+	DebugStream &operator << ( int n )
+	{  CString tmp;tmp.Format(_T("%d"),n); (*func)(tmp); return *this; }
+};
+static DebugStream DebugOutput(OutputDebugString);
+>8
+
+今まで
+
+8<
+CString tmp;
+tmp.Format(_T("%d\n"),値);
+OutputDebugString(tmp);
+>8
+
+とかしてたのが
+
+8<
+DebugOutput << 値 << _T("\n");
+>8
+
+になった。なんで今までしてなかったんだろう。
+
+<<[VisualStudio] プロジェクトフォルダの名前の変更>>
+
+* http://oshiete.goo.ne.jp/qa/1416303.html{プロジェクトフォルダの名前の変更について - Visual Basic - 教えて！goo}
+
+vim で *.sln ファイルを編集したら、start *.sln で VisualStudio が起動しなくなってしまった。
+どうやら、文字コード情報が消えてしまったらしい。
+
+notepad で開きなおして、UTF-8 で保存し直したら、直った。
+VisualStudio は BOM か何かの存在を見ていたのかな。
+
+<<[VC++] 開発環境で再現しない不具合を調査する場合に使うロギングクラス>>
+
+上に DebugStream では、IDE の下での実行の場合だけ情報がとれるけど、
+自分の環境で再現しない不具合の調査には使えない。
+
+なので、普通にファイルに出力する版を作った。
+特定ブロック下で「``UserDebugStream DebugOutput;``」と宣言すると、
+そのブロック下のみ、デバッグ出力が ``C:\debug.log`` にスイッチする。
+
+8<
+class UserDebugStream {
+        FILE *fp;
+public:
+        UserDebugStream(bool sw=true){ if( sw==false || _tfopen_s(&fp,_T("C:\\debug.log"),_T("at,ccs=UNICODE")) ) fp=NULL; }
+        UserDebugStream &operator << (LPCTSTR s )
+        {   if( fp ){ _fputts(s,fp);} return *this; }
+        UserDebugStream &operator << ( int n )
+        {   if( fp ){ CString tmp;tmp.Format(_T("%d"),n); _fputts(tmp,fp);} return *this; }
+        ~UserDebugStream()
+        {   if( fp ){ fclose(fp); } }
+};
+>8
+
+「``UserDebugStream DebugOutput(false);``」のように、
+コンストラクタに false を渡すと無効になるので、
+実行時に出力On/Off を切り替えることもできる。
+
+さて、これでボスの環境でしか発生しない問題を解決できるだろうか。
+客先持ってくのは来週早々だぞ…

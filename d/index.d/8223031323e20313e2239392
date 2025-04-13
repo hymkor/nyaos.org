@@ -1,0 +1,120 @@
+<<[NYAOS] ×で閉じた時に signal でキャッチできたらいいんだけど>>
+
+6<
+:https://twitter.com/#!/nocd5/status/163438218186985472{@nocd5}
+::※これは決して要望ではありません。 nyaosで諦めてる事 -- ・^zからのbg ・ckw+nyaosで×で閉じた時のsavehis←ckwをゴニョゴニョしたらいけるかも
+>9
+
+''(要望ではないことを承知で)'' やり方が分かれば、実現させるんだけどなー。
+特に×で閉じた時に signal とかでキャッチできたらいいんだけど
+
+8<
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <windows.h>
+
+void dying_message(int foo)
+{
+    FILE *fp=fopen("dying_message.txt","w");
+    if( fp != NULL ){
+        fputs("signaled!\n",fp);
+        fclose(fp);
+    }
+}
+void dying_message2(void)
+{
+    dying_message(0);
+}
+
+int main()
+{
+    signal( SIGINT , dying_message );
+    signal( SIGBREAK , dying_message );
+    signal( SIGABRT , dying_message );
+    signal( SIGTERM , dying_message );
+    atexit(dying_message2);
+    Sleep(100000);
+}
+>8
+
+これを動かして、コマンドプロンプトを閉じても、
+ファイル「dying_message.txt」は作成されていない。
+
+つーか、tasklist コマンドで見ると、
+コマンドは別に止まっておらず、普通に動いているので、
+「``taskkill /f /pid ''PID''``」で停止させなきゃいけない。
+
+どうすればいいんでしょうねぇ。うーむ。
+
+<<[NYAOS] 試してみたけれど、何故かエラーになる>>
+
+:https://twitter.com/#!/lpproj/status/163581764080640001{@lpproj}
+::@zetamatta 一応それらしいAPI（SetConsoleCtrlHandler）はあるっぽいですが、試したことはないです…
+   http://msdn.microsoft.com/ja-jp/library/cc429519.aspx{msdn.microsoft.com/ja-jp/library/…}
+
+試してみました。
+
+8<
+[c:hayama]
+$ type foo.c
+#include <stdio.h>
+#include <windows.h>
+
+BOOL WINAPI HandleRoutine( DWORD dwCtrlType )
+{
+    FILE *fp;
+    switch( dwCtrlType ){
+    case CTRL_CLOSE_EVENT:
+    case CTRL_LOGOFF_EVENT:
+    case CTRL_SHUTDOWN_EVENT:
+        fp=fopen("dying_message.txt","w");
+        if( fp != NULL ){
+            fputs("犯人はヤス\n",fp);
+            fclose(fp);
+        }
+        break;
+    default:
+        break;
+    }
+    return TRUE;
+}
+
+int main()
+{
+    BOOL rc=SetConsoleCtrlHandler( HandleRoutine , TRUE );
+    printf( "SetConsoleCtrlHandler=[%d]\n" , rc );
+    if( rc == 0 ){
+        Sleep( 100000 );
+    }else{
+        printf("GetLastError=[%d]\n",GetLastError());
+    }
+    return 0;
+}
+[c:hayama]
+$ a
+SetConsoleCtrlHandler=[1]
+GetLastError=[126]
+>8
+
+何故かエラーになりました(SetConsoleCtrlHandler が 1 で返ってきた)。
+なんでだろう。初期化か、何か、いるのかなぁ…
+
+<<[NYAOS] うまくいったお>>
+
+:通りすがりの齊藤さん
+:: 関数が成功すると、0 以外の値が返ります。 なので 1 がかえってきてるのは成功です。 rc!=0 に変更してみたところ、私の環境ではハンドラが呼ばれるのですが…。
+
+うっかりしてました。http://msdn.microsoft.com/ja-jp/library/cc429733.aspx{仕様書}
+を読んでみたところ、確かに「関数が成功すると、0 '''以外'''の値が返ります」とありました。
+これを元に修正してみたところ、確かにうまくいきました。
+
+ハンドラが呼ばれなかったのは、ターミナルが ckw のためだったようです。
+コマンドプロンプトから実行してみると、
+「このプログラムは応答がありません」的なダイアログがちゃんと出ました。
+そこでハンドラの中で ExitProcess 関数を呼び出してみると、
+スムーズに終了し、ちゃんとダイイングメッセージが呼ばれました。
+
+これが ckw の場合、ダイアログもでず、ウインドウが閉じるのですが、
+裏でしっかりプロセスが稼働したままになっています。
+ここは ckw の側での対応が必要のようです。だれかー!

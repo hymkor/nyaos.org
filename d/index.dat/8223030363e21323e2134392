@@ -1,0 +1,42 @@
+* こゐふきの奴、マジレスしてやがるぜ。
+
+* 自分の足食ってるタコ状態
+++ 偉いさん、あせる
+++ 偉いさん、いらんことする '''← 今ここ'''
+++ うざくなって従業員やめる
+++ パワーダウンな部署増える
+++ 最初に戻る
+
+* 一時期、やねうらおさんが、Windows のリモートデスクトップを
+  絶賛していたことがあったが、まったくもって何なんだろうね。
+  おっしゃるとおりではないか。
+** WindowsXP 標準装備なので、2000ユーザはシブシブ、
+  ターミナルサービスクライアントという旧のクライアントを
+  使わざるを得ない…と思っていたら、
+  XP のインストールディスクから
+  http://www.itmedia.co.jp/help/tips/windows/w0543.html{
+  導入できたりする}し、
+  http://www.forest.impress.co.jp/article/2004/09/06/remotedesktop.html{
+  ウェブからダウンロードできたりもする}。
+  ふざけやがって。いいぞ、もっとやれ。
+
+<<[python] コンマ区切りの文字列を逆順に>>
+
+* http://d.hatena.ne.jp/rubyco/20061130/reverse{
+   rubyco（るびこ）の日記 - コンマ区切りの文字列を逆順に}
+
+8<
+s = "Alice,Bobby,,David,Elmo,"
+print ",".join( reversed(s.split(",")) ) #=> "Elmo,David,,Bobby,Alice"
+print s                                  #=> "Alice,Bobby,,David,Elmo,
+>8
+
+実際に実行してみると…
+
+8<
+,Elmo,David,,Bobby,Alice
+Alice,Bobby,,David,Elmo,
+>8
+
+カンマが消えませんね…。処理としては、まぁ真っ当なので、まぁ、よし。
+

@@ -1,0 +1,16 @@
+* 神戸の http://ojizoo.jp/{王子動物園}にもカピバラがいるという情報を得て、
+  遠出したいという気持ちが霧散してしまったのは秘密である。
+
+* http://d.hatena.ne.jp/lurker/20070115/1168792839{
+  新山さんの日記にpermalink付加するGreasemonkeyスクリプト - 嫌がらせ対応版}
+  が、2月を『如らぎ』と表現することによって、
+  早くも回避されてしまっている件について。
+
+* 余談だけど：
+8<
+def lookup(x):
+    a = getit1(x) or getit2(x) or getit3(x)
+    if not a: raise KeyError(x)
+    return func(a)
+>8
+ぢゃいけないんだろうな。多分、そういう問題ではないと思うから。

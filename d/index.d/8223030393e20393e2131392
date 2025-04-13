@@ -1,0 +1,37 @@
+<<[wifky] 携帯対応>>
+
+最近の携帯は CSS をちゃんと理解してくれるのはいいのですが、
+wifky の画面を表示させようとすると、
+狭い画面にサイドバーを無理矢理表示させようとするため、
+崩れてしまって読めたものではありませんでした。
+
+ということで、本体を改造して、携帯の場合はサイドバーをサイドに置かずに、
+末尾のままにしようと思いました。
+
+---
+
+が、実は別に改造しなくとも、CSS のプラグマ？で、
+メディアごとに場合分けができたのでした。
+具体的には、こうします。
+
+旧：
+
+8<
+div.sidebar{ float:right; width:25% ; word-break: break-all;font-size:90%}
+div.main{ float:left; width:70% }
+>8
+
+新：
+
+8<
+@media screen{
+  div.sidebar{ float:right; width:25% ; word-break: break-all;font-size:90%}
+  div.main{ float:left; width:70% }
+}
+>8
+
+次のバージョンで、デフォルトCSS にも、これ書いときます。
+
+:参考
+:: http://www.xml.vc/kiso/media.html{
+   CSS基礎知識～media属性を使った媒体別のスタイルシート～}

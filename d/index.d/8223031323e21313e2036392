@@ -1,0 +1,70 @@
+<<[python] 分散パッケージダウンローダーを作ろうとしてます>>
+
+Windows にも yum とか apt-get みたいなパッケージマネージャーが欲しいなぁと思いました。
+
+が、たいていのアプリにはクローズドソースなインストーラーがついていて、
+その挙動をバラして、パッケージマネージャーでエミュレートするのは、
+レジストリ変更なども含まれるため、かなり難しい。
+
+ならば、せめて、アプリケーションのアーカイブファイルの最新版を自動で検索・ダウンロードして、
+インストーラーを起動させるくらいのことくらいなら出来るんじゃねと、
+Python スクリプトを書き始めました。
+
+* 名前は暫定的に「nya-get」
+** 名前が命なので、'''いい名前を思いついたら即変えます'''。
+* 設定ファイルには、アーカイブファイルが置いてある HTML の URL が書いてあって、
+  そこからのリンクされている URL で、一定のパターンにマッチしたもので、
+  最もバージョンナンバが高いと思われるものをダウンロードするようにする。
+** 設定ファイル「nya-get.txt」の内容は1行1アプリ：「アプリ名＿検索先ページURL＿ダウンロードURL候補の正規表現」
+** 具体的には以下のような感じ
+
+8<
+7zip32 http://sevenzip.sourceforge.jp/ /7z.*\.exe/$
+7zip64 http://sevenzip.sourceforge.jp/ /7z.*\.msi/$
+ffftp http://sourceforge.jp/projects/ffftp/releases/?package_id=12429 /ffftp-.*\.zip/
+lua52w32 http://sourceforge.net/projects/luabinaries/files/5.2.1/Executables/ /lua-.*_Win32_bin\.zip/download
+ntuxtl http://www.piedey.co.jp/softs/ntuxtl016.html ntuxtl.*\.lzh$
+nyaos https://bitbucket.org/zetamatta/nyaos3000/downloads /nyaos-.*-win\.zip$
+opentween http://sourceforge.jp/projects/opentween/releases/ /OpenTween_.*\.zip/$
+teraterm http://sourceforge.jp/projects/ttssh2/releases/ /teraterm-.*\.zip/$
+wifky http://sourceforge.jp/projects/wifky/releases/ /wifky-.*\.zip/$
+>8
+
+!! 使用例
+
+8<
+[c:nya-get]
+$ nya-get wifky
+wifky-1.5.11_4.zip: downloading .done
+[c:nya-get]
+>8
+
+この直後に、ダウンロードしたファイルに割当てられたアプリケーション
+(デフォルトだと、エクスプローラー)
+が起動して、wifky-1.5.11_4.zip が自動で開かれるので、
+あとはユーザがインストール先を決めて展開するだけです。
+
+!! 最新版のレポジトリ
+
+* https://bitbucket.org/zetamatta/nya-get
+
+!! 課題
+
+* sourceforge.jp 向けに <meta> タグによるリダイレクトにも対応しているが、
+  どうも、某サイトではそれが誤認識されてしまう。
+** ダウンロード先の Content-Type が text/html だったら、
+   <meta> タグを検索するようにしているが、
+   某サイトでは本体そのものが落ちてくるのに、何故か text/html になってたりする可能性がある。
+   (無論、不具合の可能性も高いので、おいおい調査する)
+** リダイレクトが分かっているサイトは、設定ファイルにその旨、明示させた方がよいか？
+* 現状だと、インストール済のアプリがバージョンアップしているかのチェックが個別にしか出来ない
+** ダウンロード済みか否かの識別はカレントディレクトリに、
+  該当ファイルがあるかどうかだけでしか判別していないので、
+  きちんとファイル管理するようにする。
+* 一部のサイトでは、最新ファイルが置いてあるページがバージョン毎に別々になっていて困ったなぁ。
+* Python 2.7 が必須なので、できたら C# 化できたらいいなぁ。
+** だったら、最初から C# でやればいいじゃんという感じなんですが、
+   まずはウェブ側の問題を概ねクリアしておかないと、
+   いきなり C# はハードルが高いです！高いです！
+** C++ + libcurl も、ありか？
+* 32bit版と64bit版の両方がある場合、自動で選択できるようにしたいが、どういう仕様にしたらよいものか

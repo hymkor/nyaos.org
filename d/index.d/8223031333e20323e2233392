@@ -1,0 +1,102 @@
+<<NYAOS の 3.2 系列捨てたよー>>
+
+日常的に開発者が使ってて、対応も早い「開発版」の方が安定してるので、
+現行「安定版」としている 3.2 系列は終了ね！
+''(ぶっちゃけ、バックポートが面倒くさいのが本音だけど、ポートしたところで、
+普段使ってないので、不具合あってもすぐキャッチできない問題には変わりない)''
+
+今後は 3.3 系列を普通に安定版と思って、見守ってね！
+
+開発版は… 強いて言うなら、今後 たまに Nightly build で出す奴 nyaos-YYYYMMDD.zip になるかな！
+
+----
+
+NYAOS内蔵Luaは、文字列リテラルだけ2バイト文字の処理に対応させた。
+「パターン」は COM で使える正規表現オブジェクトで代替すればいいかなと思ってた。
+
+が、よく考えると、string.len とか string.sub に相当する奴はどこにも無かったので、
+そっちは NYAOS の方で実装した(nyaos.len , nyaos.sub)。
+
+まぁ、簡単だったしね。Luaインタプリタ本体に手を入れるのは必要最小限にしたかった。
+
+<<[NYAOS] 新しいカレントディレクトリをGUIのダイアログで指定する Super-CHDIR>>
+
+* http://d.aoikujira.com/blog/index.php?JScript%E3%81%A7%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E9%81%B8%E6%8A%9E{JScriptでフォルダ選択 - くじらぶろぐD}
+
+これなら NYAOS でも出来る。というわけで作った！
+
+8<
+[C:hayama]
+$ type supercd.lua
+function nyaos.command.cd(arg)
+    if arg == '@' then
+        local objShell=nyaos.create_object('shell.application')
+        local folder = objShell:BrowseForFolder(0, 'フォルダ選択', 0)
+        arg = folder.self.path
+    elseif not arg then
+        arg = os.getenv('HOME') or os.getenv('USERPROFILE')
+    end
+    nyaos.chdir(arg)
+end
+[C:hayama]
+$ source supercd.lua
+supercd.lua reading ....
+[C:hayama]
+$ cd @
+[C:デスクトップ]
+$
+>8
+
+cd の引数を @ にすると、新しいカレントディレクトリをGUIのダイアログで指定できるのだ！
+すごいぜ、COM！
+
+<<[NYAOS] コマンドラインのファイル名入力を GUI のファイル選択ダイアログで>>
+
+8<
+[C:hayama]
+$ type filedialog.lua
+function nyaos.keyhook.filedialog(t)
+    if t.key == nyaos.key.ESCAPE then
+        local fop=nyaos.create_object('UserAccounts.CommonDialog')
+        fop.Filter = '全てのファイル|*'
+        fop.Flags = 4096
+        if fop:ShowOpen() ~= 0 then
+            if string.match(fop.FileName,' ') then
+                return '\034'..fop.FileName..'\034'
+            else
+                return fop.FileName
+            end
+        end
+    end
+end
+[C:hayama]
+$ source filedialog.lua
+filedialog.lua reading ....
+[C:hayama]
+$
+>8
+
+これを実行してから ESC キーをたたくと、ファイル選択ダイアログが出る。
+それでファイルを選択すると、選択したファイルのフルパスがコマンドラインに挿入される…
+
+だけど、何故か選択中のディレクトリ名がなぜか標準出力(標準エラー出力?)にちょろちょろ表示されるんだよな。
+なぜだろ。
+
+試しに JScript で実験したが、同じような現象が出るので、別に NYAOS の不具合というわけではないようだ。
+
+8<
+[C:hayama]
+$ type filedialog.js
+var fop=new ActiveXObject('UserAccounts.CommonDialog')
+fop.Filter = '全てのファイル|*'
+fop.Flags = 4096
+if( fop.ShowOpen() != 0 ){
+    WScript.Echo(fop.FileName);
+}
+>8
+
+大方、UserAccounts.CommonDialog の方でデバグログを削除し忘れてるとか、そんなんだろね。
+ちょっと、こちらは使えそうにないな。
+
+* 参考
+** http://3rd.geocities.jp/kaito_extra/Source/InputInfo.html{WSH JScriptを使いこなそう ～情報の入力方法～}

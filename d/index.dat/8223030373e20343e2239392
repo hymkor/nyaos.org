@@ -1,0 +1,64 @@
+* http://www.bousai.go.jp/oshirase/h17/yureyasusa/{地震のゆれやすさ全国マップ}
+    によると、実家の近辺の計測震度増分が、
+    上から二番目の 0.8〜1.0 らしく、一応ショックを受ける。
+    近くの中途半端な規模な丘陵のせいかな？
+
+* InstantRails をインストールしたものの、次どうしたらいいのか分からんので、
+    ((amazon 4798013951)) を買ってきた。
+    この後の展開としては「買う」という行為によって、
+    妙に安心して、勉強が停滞するというパターンが待ち受けている。
+
+* セッション管理をしたいんだが、ファイル書き込みするとなると、
+    ロックとか、いろいろめんどいので、やっかりだなぁ。
+
+* 会社が提供始めた社内向け SNS & Wiki サービス、
+    文法に```''''```〜```''''```(巨大文字)があったり、
+    CSS をページとして編集できたりと、どっかで聞いたことがあるような特徴が…。
+    松本零士ではないので、パクった！などという野暮なことは言わないが、
+    ちょっとくらい影響を与えてるのかな？
+
+* Linux ばっかやってると、BSD や UNIX で作業する時、苦労するね。
+    正直、gawk や vim に慣れすぎた。
+
+<<Yeti なるエージェントが結構な勢いでアクセスしているので遮断した>>
+
+こういう奴：
+
+8<
+Yeti/0.01 (nhn/1noon, yetibot@naver.com, check robots.txt daily and follows it)
+>8
+
+ログを見ると、アクセス数が異常。
+
+8<
+$ grep -ci google access_log_20070429
+87
+$ grep -ci yahoo access_log_20070429
+30
+$ grep -ci yeti access_log_20070429
+1663
+>8
+
+robots.txt を毎日見るとか言ってるけど
+
+8<
+$ awk '/Yeti/ && /\/robot/' access_log_20070429 | wc -l
+     103
+>8
+
+明らかに見過ぎです。ということで、今後、相手にしないよう、``.htaccess`` で遮断。
+
+8<
+SetEnvIf User-Agent "Yeti"              ng
+
+order allow,deny
+allow from all
+deny from env=ng
+>8
+
+さいなら
+
+<<<参考>>>
+
+* http://memo.jj-net.jp/218{【IT-resucue】Yeti/0.01(yetibot@naver.com) naver.comの新たなクローラ（？）が登場}
+* http://memo.jj-net.jp/164{【IT-resucue】DoS攻撃/DoSアタック対策 : User-agent によるアクセス制御/アクセス拒否}

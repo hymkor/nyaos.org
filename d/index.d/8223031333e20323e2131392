@@ -1,0 +1,68 @@
+<<[NYAOS] キャレット(^)をエスケープ文字にする>>
+
+<<<経緯>>>
+
++「https://bitbucket.org/zetamatta/nyaos3000/issue/17/ignored-as-escape-char{キャレットは Windows 標準のエスケープ文字なのに無視される、バグだ}」と起案される(1/15)
++「バグ」扱いされて心外なので、「改善」に変更した上で、棚上げにする(1/17)
++ やる気になったので、再び開く(2/9)
++ 対応完了(2/10) → https://bitbucket.org/zetamatta/nyaos3000/commits/54c548c5daa{commit 54c548c5daa}
+
+Martin さんは起案してくれるのはありがたいけど、そのあと、レスポンスがあんまりないのが残念だ。
+まぁ、こっちが邪険にしてしまったのが悪かったんだろう
+''(だいたい俺が悪い)''
+
+<<<テストが面倒だった>>>
+
+||| コマンドライン|CMD動作|NYAOS期待動作
+|| echo foo ^' bar|foo ' bar|同左
+|| echo foo ^｜ bar|foo ｜ bar|同左
+|| echo foo ^" bar|foo " bar|同左
+|| echo "foo ^' bar"|"foo ^' bar"|同左
+|| echo "foo " bar"|"foo " bar|quote>
+|| echo "foo ^" bar"|"foo ^" bar"|quote>
+|| echo "foo ^｜ bar" | "foo ^｜ bar"|同左
+|| fecho foo ^' bar|foo  bar|同左
+|| fecho foo ^｜ bar|foo ｜ bar|同左
+|| fecho foo ^" bar|Unmatched ".|同左
+|| fecho "foo ^' bar"|foo ^ bar|同左
+|| fecho "foo " bar"|Unmatched ".|quote>
+|| fecho "foo ^" bar"|Unmatched ".|quote>
+|| fecho "foo ^｜ bar"|foo ^｜ bar|同左
+|| "hoge and hoge"|called as "["hoge and hoge"] [] [] [] [] [] [] [] [] []"|同左
+|| hoge^ and^ hoge|hoge^ は、内部コマンドまたは外部コマンド、操作可能なプログラムまたはバッチ ファイルとして認識されていません。|called as...
+|| echo "|"|quote>
+|| echo ^|More ?|同左
+|| echo " "" "|" "" "|同左
+|| fecho ".""."|..|同左
+|| "hoge and hoge.cmd" """"|called as "["hoge and hoge.cmd"] [""""]|同左
+
+8<
+$ type "hoge and hoge.cmd"
+@echo called as "[%0] [%1] [%2] [%3] [%4] [%5] [%6] [%7] [%8] [%9]"
+>8
+
+fecho は UNIX Like tools の fecho.exe のこと
+
+<<<仕様>>>
+
+CMD.EXE でのキャレットの仕様としては
+
+* キャレットは続く文字の機能を無効化する。
+* ただし、ダブルクォーテーションに囲まれたキャレットは機能しない
+* ダブルクォーテーションが閉じてなくてもエラーにしないし、行は終結する
+
+ということになっているらしい。NYAOS は一応 CMD.EXE 準拠だけど、
+ダブルクォーテーションが閉じてなければ、
+続く行の入力を促すようになっている点が違う。
+
+<<会社と家でフォルダーを共有したいけど…>>
+
+Dropbox はバックアップがわりにしていて、外に持ち出したくないデータまで入ってるからなぁ。
+
+Google Drive なり Skydrive なり、もう一つフォルダ共有ツールを導入したらいいんだけれども、
+常駐物を増やしたくないし。
+
+家では A と B というフォルダーを共有して、会社では A のみを共有するということができるツールは無いものか
+
+:追記
+:: SugarSync が要件を満たしそうなので、現在、試し中

@@ -1,0 +1,41 @@
+<< 仕事向け>>
+
+: [IP changer|http://hp.vector.co.jp/authors/VA015664/ipchange/]
+::	IPアドレスの切換えツール。HTA(HTml Application)
+: [PrimoPDF|http://www.primopdf.com/]
+::	PDF作成ツール。小さいドキュメントなら、これで十分。
+: [AreaEditor|http://www.iburiworks.com/products/areaeditor/download.html]
+::	IE の TEXTAREA を任意のエディタで編集できるようにするソフトウェア。
+::	Wiki愛用者/にっき人/ブロガには必須であろう。
+::	Opera 版、誰か作ってくれ…(w3m 併用してるから、いいけど)
+: [X-Deep/32 X-Server - Interoperability Solutions|http://www.pexus.com/]
+::	フリーになったらしい、Ｘサーバソフト
+: [Google Desktop Search Download|http://desktop.google.com/]
+::	ローカルＰＣ内の検索ソフトウェア
+
+<< 仕事でも使いたいけど、未だ趣味の範囲>>
+
+: [暗号バッグ|http://cryptobag.sourceforge.jp/]
+:: PGP より操作が簡単な、暗号通信キット
+: [Microsoft Visual C++ Toolkit 2003|http://msdn.microsoft.com/visualc/vctoolkit2003/]
+:: Free 版の Visual C++。GUIビルダーはないらしい。
+: [WideStudio|http://www.widestudio.org/]
+:: マルチプラットフォーム対応、多言語対応の GUI Builder。
+Windows/Linux × C++/Ruby/Perl で使える、GUI ビルダーソフト。
+任意のエディタが利用できるところが素晴らしい。
+
+<<スパイウェア対策>>
+
+Lavasoft AD Aware SE Personal Edition
+
+:ダウンロード
+::http://lavasoft.element5.com/support/download/
+:解説(日本語)
+::http://enchanting.cside.com/security/adaware.html
+
+<< もはや、仕事とか趣味とか関係ない>>
+
+: [SKKIME|http://www.tatari-sakamoto.jp/~tatari/skkime.jis.html]
+:: Windows 用IMEとして実装された SKK
+: [AN HTTP Server Home Page|http://www.st.rim.or.jp/~nakata/]
+:: Windows 用の簡易 http サーバ

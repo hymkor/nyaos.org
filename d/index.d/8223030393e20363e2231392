@@ -1,0 +1,127 @@
+<<ネーミングの妙>>
+
+http://anond.hatelabo.jp/20090617102954{はてな匿名ダイアリー}より：
+
+6<
+プログラムでよく使われる
+'''ファイアウォール'''とか、'''デーモン'''とか'''ウイザード'''の語源がそれこそワードナと一緒だって事に気がつけば、
+アニメの名前を使ったぐらいで、何か言うのは、プログラム業界の歴史と伝統がわかってねーよ。
+>9
+
+あー、Firewall がウィザードリーってのは気がつかなかったな。
+そうか、そう言えば、そうだ。他に考えられないや。
+(いやいや「Dungeons & Dragons だよ」とか言うなよwww)
+
+わたしは結構ネーミング命なところがあって、いろいろがんばって、
+人目に付くような名前をつけようと努力している。
+いいかどうかは後世の歴史家に評価を委ねるものとして（笑）
+
+: NYAOS - Nihongo Yet Another "OS/2" Shell ((fn 元々は「OSes」ではなく「OS/2」だった))
+:: 元々、Hobbes という欧米のサイトに、コマンドラインシェル YAOS (Yet Another OS/2 Shell) というのがあった。「N 付けると『にゃおす』になって面白いんじゃね？」「NEmacs (Nihongo Emacs)とかもあるし、Nihongo を頭に付けてもおかしくないよねー」ということで、NYAOS という名前は、作る前から決まっていた！
+: wifky - A Single file Wiki
+:: wifky 自体は「wiki on @nifty」の略。@nifty の @homepage (ラクーカンではない方)に、FSWiki を置こうとしたが、本来、Perl に普通に備わっているライブラリすら自分でチマチマ入れなくてはいけないのに切れた結果、えぇい「ライブラリの要らん Wiki を作ってやる！」ということで作った。ということで、名前に nifty が入っているのは必然なのである。「A Single file Wiki」というのは、他の1枚板 Wiki (Python製だったと思う)から、拝借した。
+: oluacle - Lua for Oracle
+:: これは…そのままですね
+: LogStalker (ログストーカー)
+:: うちの社内(部内)でだけ公開している、Perl製の ログ監視 & メール通知アプリケーション。Dungeons & Dragons に Invisible Stalker(見えない刺客)という Monster がおり、「Log の中のエラーメッセージを追いまわす刺客」というイメージを重ねてみた。ただ、社内で「ログストーカー」「ログストーカー」言われて、最初ちょっと恥かしかった。
+
+結構、作る前から名前決めてること多いな。
+
+ところで、Java のすばらしいフレームワークで Slim (スリム)というものがあると聞くが、そのうち、絶対 Slim Enhanced の略で Slime (スライム) とか誰かが作るに違いないと確信するものである (ただし、SEO的には最低)
+
+<<[Python] 汎用の Amazon Proxy を作ってみた [wifky]>>
+
+<<<経緯>>>
+
+* http://chalow.net/2009-05-09-1.html{[を] アマゾンAPIを使うのに2009年8月15日から認証が必要になるらしい}
+
+Amazon から書籍情報を得るのに、API認証が必要となりました。
+この認証処理には Perl の場合 Digest::SHA などのライブラリを使えばよいそうですが、wifky はそもそも「別途ライブラリをインストールしなくても動く」が売りであり、
+これにより wifkyの「Amazonプラグイン」は事実上廃止の危機に陥りました。
+
+そんな折、tDiary で有名な、ただただしさんがプロクシーサーバの利用はライセンス上問題が無いことを Amazon に確認されたそうです。すばらしい！
+
+* http://sho.tdiary.net/20090619.html#p01{Amazon API認証のPROXYを書いたよ(AmazonのAPI認証導入はOSSに対する挑戦だよなぁ(4)) - ただのにっき(2009-06-19)}
+
+というわけで、wifky もプロクシーサーバで当問題を回避する方向で対応します。
+
+まずは、その第１弾として、プロクシーサービス(CGI)を、えいやっと用意しました。
+ただし、ただ作るのは面白くないので、wifky に特化したものではなく、
+いろんなクライアントから使える汎用的なものにしてみました。
+
+<<<インターフェイス>>>
+
+8<
+http://forgot.uh-oh.jp/amazon_proxy.cgi?user=アソシエイトID&item=ASIN番号&enc=文字コード
+>8
+
+という GET リクエストを送信すると、TSV 形式((fn Tab Seperated Values。CSVのカンマをタブ文字に置き変えたようなもの))で必要最小限の情報を返します。
+例えば「http://forgot.uh-oh.jp/amazon_proxy.cgi?user=manhimazinein-22&item=4797353953」とコールすると、次のような応答を返します。
+
+8<
+Status	Success
+Title	みんなのPython 改訂版
+DetailPageURL	http://www.amazon.co.jp/%E3%81%BF%E3%82%93%E3%81%AA%E3%81%AEPython-%E6%94%B9%E8%A8%82%E7%89%88-%E6%9F%B4%E7%94%B0-%E6%B7%B3/dp/4797353953%3FSubscriptionId%3D1YKWYFPHYWMTQ1WKYBG2%26tag%3Dmanhimazinein-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4797353953
+LargeImage	http://ecx.images-amazon.com/images/I/51gtTVlZz4L.jpg	355	500
+MediumImage	http://ecx.images-amazon.com/images/I/51gtTVlZz4L._SL160_.jpg	114	160
+SmallImage	http://ecx.images-amazon.com/images/I/51gtTVlZz4L._SL75_.jpg	53	75
+>8
+
+GET の際の CGI パラメータは次のとおりです。
+
+||| パラメータ | 意味
+|| user | アソシエートID。省略すると、葉山のIDとなってしまうので注意
+|| item | ASIN番号。省略すると「ひやしあめ」になってしまうので注意
+|| enc | TSV を記述して欲しい文字コード。「utf8」(省略時)「encjp」「shiftjis」「cp932」
+
+これに対し、以下をTSV形式にしたデータを Content-Type: text/plain で返します。
+
+||| 応答項目 | 意味
+|| Status | 「Success」だと成功。それ以外はエラーメッセージ
+|| Title | 標題
+|| DetailPageURL | Amazon 側のページ
+|| LargeImage | イメージのURL<TAB>横幅のピクセル数<TAB>縦幅のピクセル数
+|| MediumImage | イメージのURL<TAB>横幅のピクセル数<TAB>縦幅のピクセル数
+|| SmallImage |イメージのURL<TAB>横幅のピクセル数<TAB>縦幅のピクセル数
+
+<<<利用上の注意>>>
+
+wifky のプラグイン自身が対応してないから言うのもなんですが、
+wifky 以外のツールから使ってもいいことにしたいと思います。
+でも…
+
+>> キャッシュしてないので、連打しないでね！ <<
+
+<<<ソース>>>
+
+http://forgot.uh-oh.jp/amazon_proxy.py から、どうぞ。
+ソース本体は .py の方に書いて、環境情報を .cgi の方に書くのが、
+最近のわたくしの Python-CGI を書く上での作法になりました。
+
+<<<余談>>>
+
+* Google App Engine で書いてみようかと思ったが、
+  ソケット通信ができなくて断念した。絶望した！
+* 今回、Amazon の応答は xml.parsers.expat でパースした。
+  XML を使うたびに思うけど、なんで、
+  こんな「こむずかしい表現」をせにゃならんのだ。
+
+>> TSV でいいやん！ TSVで！<<
+
+ということで、nyaos.org はこれからのサーバ間連携の手段として
+「Remote TSV Call」を提唱するものであります。
+
+<<[wifky] amazon.pl 対応中>>
+
+自前プロクシーに、さっそく対応してみた。ふむ、テストテスト：
+
+* ((amazon 408872271X))
+* ((amazon B00005OV11))
+
+あれ、「ぐっすんおよよ」だけ、イメージが想定したのと違う。
+そういえば、複数イメージがある場合があったな…
+(つまり、裏面が出ているわけだ)。
+これはプラグインではなくて、プロクシーを直すべきか。
+
+:(2010.08.29)
+:: 直したのを反映

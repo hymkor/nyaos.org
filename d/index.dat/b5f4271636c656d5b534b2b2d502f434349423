@@ -1,0 +1,259 @@
+略して OCCI。
+
+* インストール時に OCI を指定するといっしょに入ってくる（多分）
+* <strike>Pro*C/C++ のライセンスが無くても使える（多分）</strike>[有償|http://www.tis.co.jp/product/oracle/orainfo/Oracle9ivs8i.htm]だった。orz
+* オプション製品 Oracle Programmer に含まれてる。
+* Pro*C/C++ と違い、純粋な C++ なので、STL を思う存分使える。
+* OCI と違って、ごちゃごちゃしたところを、オブジェクト内に隠蔽できている。
+* マニュアルが糞。
+
+次の案件から OCCI をぜひ使いたいところだ
+
+<< C++ ソース>>
+
+Java と同程度には書ける。
+ただし、せっかくの C++ のデストラクタが活用できていない。
+何かしらの簡単なラッピングが欲しい。
+
+<pre>
+    #include <string>
+    #include <iostream>
+    #include <sstream>
+    #include <exception>
+    #include <iomanip>
+    #include <occi.h>
+    
+    using namespace oracle::occi;
+    using namespace std;
+    
+    const char *at=""; /* 障害箇所特定の為のポインタ */
+    
+    int main(int argc,char **argv)
+    {
+	if( argc < 4 ){
+	    cerr << "Usage: " << argv[0] << " USERNAME PASSWORD DBNAME" << endl;
+	    return -1;
+	}
+	try{
+	    /*** テーブル名を保持する可変長配列 ***/
+	    vector<string> tnames;
+    
+	    /*** 出力内容保持用バッファ ***/
+	    ostringstream oss;
+    
+	    at = "/*** Oracle 環境オブジェクト ***/";
+	    Environment *env =
+		Environment::createEnvironment(Environment::DEFAULT);
+    
+	    at = "/*** Oracle 接続オブジェクト ***/";
+	    Connection *conn =
+		env->createConnection(argv[1],argv[2],argv[3]);
+    
+	    at="*** create statement ***";
+	    Statement *stmt=conn->createStatement("select tname from tab");
+    
+	    at="*** execute sql ***";
+	    ResultSet *rs=stmt->executeQuery();
+    
+	    at="*** read from database ***";
+	    while( rs->next() ){
+		tnames.push_back( rs->getString(1) );
+	    }
+	    at="*** close ***";
+	    stmt->closeResultSet(rs);
+    
+	    at="*** terminate statement ***";
+	    conn->terminateStatement(stmt);
+    
+	    at="*** output result ***";
+	    oss << "00" << endl;
+	    oss << setw(4) << tnames.size() << endl;
+	    for(int i=0 ; i<tnames.size() ; ++i ){
+		oss << setw(4 ) << (i+1) ;
+		oss << setw(30) << tnames[i].c_str() << endl;
+	    }
+    
+	    at="*** DB Connection close ***";
+	    env->terminateConnection(conn);
+	    Environment::terminateEnvironment(env);
+    
+	    at="*** flush output ***";
+	    cout << oss.str();
+	}catch( SQLException &e ){
+	    /* Oracle 関係のエラー */
+	    cout << "40" << endl;
+	    cout << at << endl;
+	    cout << e.what() << endl;
+	}catch( exception &e ){
+	    /* その他の深刻なエラー */
+	    cout << "99" << endl;
+	    cout << at << endl;
+	    cout << e.what() << endl;
+	}
+	return 0;
+    }
+</pre>
+
+<< Makefile>>
+
+マニュアルによると、$(ORACLE_HOME)/rdbms/demo/demo_rdbms.mk を
+テンプレートとして改造すればよいらしいが、こんなもん改造できる奴は神。
+
+とりあえず、demo_rdbms.mk を外部から呼び出す方法で、
+Makefile を簡単にすることに成功。
+
+<pre>
+    foo : foo.o
+	    make -f $(ORACLE_HOME)/rdbms/demo/demo_rdbms.mk \
+		EXE=foo OBJS="foo.o" USRLIBS=-lstdc++ buildocci
+
+    foo.o : foo.cc
+	    $(CCC2O)
+
+    clean :
+	    rm foo.o foo
+
+    include $(ORACLE_HOME)/rdbms/lib/env_rdbms.mk
+</pre>
+
+<< Pro*C で同じコードを書いてみた。>>
+
+（本セクションは仕掛り中）
+
+<pre>
+    EXEC SQL INCLUDE SQLCA;
+    #include <stdio.h>
+    
+    enum {
+	SIZE_USER     = 16  ,
+	SIZE_PASSWORD = 16 ,
+	SIZE_TNAME    = 256 ,
+    };
+    
+    int main()
+    {
+	EXEC SQL BEGIN DECLARE SECTION;
+	    varchar h_user[ SIZE_USER ];		short   i_user;
+	    varchar h_password[ SIZE_PASSWORD ];	short   i_password;
+	    varchar h_tname[ SIZE_TNAME ];		short   i_tname;
+	EXEC SQL END  DECLARE SECTION;
+    
+	EXEC SQL DECLARE cur1 CURSOR FOR
+	    SELECT TNAME FROM TAB;
+    
+	const char *at="(nowhere)"; /* variable to find error point */
+	
+	at="*** connect database ***";
+	EXEC SQL WHENEVER SQLERROR GOTO errpt_notlogin;
+	h_user.len     = sprintf(h_user.arr     ,"%s","UUUUUU");
+	h_password.len = sprintf(h_password.arr ,"%s","PPPPPP");
+	EXEC SQL CONNECT :h_user IDENTIFIED BY :h_password ;
+    
+	at="*** open Cursor ***";
+	EXEC SQL WHENEVER SQLERROR GOTO errpt;
+	EXEC SQL WHENEVER NOT FOUND GOTO done1;
+	EXEC SQL OPEN cur1;
+	for(;;){
+	    at="*** fetch cursor ***";
+	    EXEC SQL FETCH cur1 INTO :h_tname:i_tname;
+	    if( i_tname == 0 ){
+		printf("\"%.*s\"\n" , h_tname.len , h_tname.arr );
+	    }
+	}
+      done1:
+	at="*** close cursor1 ***";
+	EXEC SQL WHENEVER NOT FOUND CONTINUE;
+	EXEC SQL CLOSE cur1;
+    
+	at="*** disconnect database ***";
+	EXEC SQL ROLLBACK WORK RELEASE;
+	return 0;
+    
+      errpt:
+	/*** disconnect database for error ***/
+	EXEC SQL WHENEVER NOTFOUND CONTINUE;
+	EXEC SQL ROLLBACK WORK RELEASE;
+	fprintf( stderr, "(main) error found at '%s'\n" , at );
+	return 1;
+    
+      errpt_notlogin:
+	/*** error occured before connecting database ***/
+	fprintf( stderr, "(main) can not login database\n" );
+	return 1;
+    }
+</pre>
+
+以下、OCCI との違いを列挙してみる。
+
+<<<< SQL はコンパイル時に構文チェックされる。>>>>
+
+これは、Pro*C の重要なメリットである。
+早期にミスを見付けられるというのは大きい。
+
+しかしながら、9i 時点では、Pro*C プリコンパイラの構文解析ルーチンに
+内蔵された SQL パーサは実は 8i 相当なので、
+9i から追加された新SQL関数(RANK関数他)は、静的SQL では使えない。
+この時は、動的SQL を使わざるを得ないのだ。
+
+また、ソースの中に静的に SQL を書くというのは、
+ある意味ハードコーディングと同じである。
+SQL 文字列を外出しして、再コンパイルせずに
+チューニングできるようにすると、
+プリコンパイルのメリットはなくなる。
+
+<<<< カラムのサイズを把握して、文字列バッファを確保するようにしなければならない。>>>>
+
+これはたいへんだ。
+
+某地獄案件では、DBスキーマがなかなか確定しなかったため、
+上記のような SIZE_**** といった定数を定義しているヘッダファイルを
+自動生成するスクリプトを Ruby で作成した。
+それでも、静的な生成であっため、スキーマ変更の度に、
+それなりの手間（変更→CVS登録→MLにアナウンス）を強いられた。
+
+OCCI + STL だと、string が使えるので、
+このような手間はないし、バッファオーバーフローも避けることが出来る。
+
+<<<< エラートラップに goto を使う。>>>>
+
+goto を使うこと自体は特に悪いことではない。
+C言語にあっては、goto は例外処理の為にあるといっても過言ではないからだ。
+
+ただ、try 〜 catch を使うやり方に比べると、次の点で劣ることは否定できない。
+
+* エラートラップが関数ローカルになるため、関数の数だけ、多重にエラーチェックを書かねばならなくなる。
+* WHENEVER SQLERROR GOTO 構文が、そもそもダサい。
+
+<<<< VARCHAR 構造体 と char配列 との相互変換がいちいち必要>>>>
+
+上コードでは、printf/sprintf を駆使して、
+変換の手間を最小限としているが、
+Oracle のマニュアル通りに行うと、
+strlen , strncpy が変数の数だけ出てきて、頭をかかえることになる。
+（両者をセットで行うマクロを使って、手間を半分にはできるが…）
+
+C++ だと、この変換を「キャスト演算子の多重定義」によって自動化できないかと
+誰もが考えるところだ。だが、VARCHAR 型というのは、
+
+<pre>
+    struct {
+	unsigned int len;
+	char arr[ 桁数 ];
+    } 変数名;
+</pre>
+
+と変数ごとに別の型を定義されてしまうため、事実上、無理である。
+
+<< 参考文献>>
+
+: [Oracle C++ Call Interfaceプログラマーズ・ガイド リリース2 (9.2)|http://otn.oracle.co.jp/mp/EL/sll?p=974-2520-2-0] (2MB)
+: [Pro*C/C++ Precompiler プログラマーズ・ガイド リリース9.2|http://otn.oracle.co.jp/mp/EL/sll?p=974-2517-2-0] (3.7MB)
+::	[OTN Japan|http://otn.oracle.co.jp/] からダウンロードできる 
+	PDF ドキュメント。ダウンロードには、登録が必要。
+: [Oracle C/C++実践入門|http://www.seshop.com/detail.asp?pid=5229]
+::	Pro*C/C++ の解説あり。なぜか、OCCI が無い。何故だ！
+: [Global Knowledge Japan|https://www.globalknowledge.co.jp/reference/Reference.asp?KBN=1&DCODE=11&SCODE=7&PCODE=1273]
+::	研修でお世話になっている、グローバルナレッジの研修コース
+	「Oracle Database 10g 管理 ワークショップ I」。
+	見てのとおり、Java と並んで、OCCI はあるが、Pro*C は無い。
+: [ash.or.jp/データベースについて|http://ash.or.jp/db/index.htm]

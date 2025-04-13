@@ -1,0 +1,48 @@
+実験実験
+
+8<
+[hayama@YUKIKAZE home]$ cat exists_defined_check.pl
+#!/usr/bin/perl
+
+my %hogehoge=(
+    something=>'FOO' ,
+    null=>undef ,
+    empty=>'',
+    zero=>0
+);
+
+# defined で参照しただけで、キーは増えるか?
+if( defined( $hogehoge{check_defined} ) ){
+    print "not executed code (1).\n";
+}
+
+# exists で参照しただけで、キーは増えるか?
+if( exists $hogehoge{check_exists} ){
+    print "not executed code (2).\n";
+}
+
+while( my ($k,$v)=each %hogehoge ){
+    print $k,"\n";
+    print "\texists\n"  if exists $hogehoge{$k} ;
+    print "\tdefined\n" if defined $hogehoge{$k} ;
+    print "\ttrue\n"    if $hogehoge{$k} ;
+}
+[hayama@YUKIKAZE home]$
+>8
+
+8<
+[hayama@YUKIKAZE home]$ perl -w exists_defined_check.pl
+zero
+        exists
+        defined
+empty
+        exists
+        defined
+null
+        exists
+something
+        exists
+        defined
+        true
+[hayama@YUKIKAZE home]$
+>8

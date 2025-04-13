@@ -1,0 +1,96 @@
+<<NYAOS 3000 で Lua for Windows のライブラリを拝借しようとしたんだ>>
+
+うまいこといかん。
+
+8<
+$ lua_e "require 'luacom'"
+[string "require 'luacom'"]:1: module 'luacom' not found:
+        no field package.preload['luacom']
+        no file '.\luacom.lua'
+        no file 'C:\usr\BIN\lua\luacom.lua'
+        no file 'C:\usr\BIN\lua\luacom\init.lua'
+        no file 'C:\usr\BIN\luacom.lua'
+        no file 'C:\usr\BIN\luacom\init.lua'
+        no file 'C:\Program Files\Lua\5.1\lua\luacom.luac'
+        no file '.\luacom.dll'
+        no file 'C:\usr\BIN\luacom.dll'
+        no file 'C:\usr\BIN\loadall.dll'
+>8
+
+これは、想定の範囲内。パスとか、もろもろ通さないとね。
+
+ということで、_nya に次の文を書いてみた。
+
+8<
+set LUA_PATH+="c:\Program Files\Lua\5.1\lua\?.lua"
+set LUA_PATH+="c:\Program Files\Lua\5.1\lua\?\init.lua"
+set LUA_PATH+="c:\Program Files\Lua\5.1\?.lua"
+set LUA_PATH+="c:\Program Files\Lua\5.1\?\init.lua"
+set LUA_PATH+="C:\Program Files\Lua\5.1\lua\?.luac"
+set LUA_CPATH+="C:\Program Files\Lua\5.1\clibs\?.dll"
+set PATH+="C:\Program Files\Lua\5.1\lib"
+>8
+
+(``set XX+=YY`` という文法は NYAOS の文法拡張ね)
+
+``require 'ほげ'`` とすると「ほげ」の部分が環境変数 LUA_PATH , LUA_CPATH のところに置き換えて、ファイルが無いかを検索してくれるらしい。
+やるなブライト。
+
+8<
+$ lua_e "require 'luacom'"
+error loading module 'luacom' from file 'C:\Program Files\Lua\5.1\clibs\luacom.dll':
+        指定されたモジュールが見つかりません。
+>8
+
+ふむ。思いあたるところもなくはない。
+
+* NYAOS は Lua をスタティックリンクしているのに対し、Lua for Windows の lua.exe はダイナミックリンクしている。
+* Lua for Windows に添付されているライブラリは、lua51.dll を使う前提になっているから、ライブラリからインタプリタ内蔵ルーチンをコールバックできない
+
+のではないかと。
+
+アデブレーデ オブリガード
+
+<<[NYAOS] DLL が読めん？>>
+
+8<
+$ objdump -x nyaos.exe | grep "DLL Name:"
+        DLL Name: msvcrt.dll
+        DLL Name: msvcrt.dll
+        DLL Name: KERNEL32.dll
+        DLL Name: OLE32.dll
+        DLL Name: SHELL32.DLL
+        DLL Name: USER32.dll
+        DLL Name: lua5.1.dll
+>8
+
+8<
+$ objdump -x "c:\Program Files\Lua\5.1\lua.exe"  | grep "DLL Name:"
+        DLL Name: lua5.1.dll
+        DLL Name: MSVCR80.dll
+        DLL Name: KERNEL32.dll
+>8
+
+NYAOS は msvcrt.dll 、lua.exe は MSVCR80.dll を使ってるってことは…
+なんとなく MSVCR80.dll をリンクできるようにすればいいような気がする。
+
+MSVCR80.dll のあるパスを %PATH% に足してみた。
+
+8<
+set PATH+="c:\Program Files\Lua\5.1\install\support\Microsoft.VC80.CRT"
+set PATH+="c:\Program Files\Lua\5.1\install\support\Microsoft.VC80.CRT.SP1"
+>8
+
+``lua_e "require 'luacom'"`` をやってみると…
+
+<<{20091205_R6034.PNG}
+
+にょー。まぁ、よう分からんが、いきなりパス指定しても、
+だめってことだけは分かった。
+
+でも、症状が変わったってことは、
+DLL の依存関係あたりに原因があるって線は外れてないってことだよね、ララァ
+実際、Mingw で作った oluacle.dll なんかは、NYAOS から何ら問題なく、
+使用できているわけだし。
+
+むーん、困ったもんだなぁ。というか、面倒くさくなってきた。

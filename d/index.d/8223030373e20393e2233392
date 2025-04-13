@@ -1,0 +1,37 @@
+*  コードを書いたことがない人は、内部設計をうるさく言う資格を「本来は」持っていない。
+
+*  Python 2.4 では、buildin の exit というシンボルには
+'Use Ctrl-D (i.e. EOF) to exit.' という文字列が設定されていたのだな。
+びっくりした。
+インタラクティブモードで、「exit」と入力された時に表示されるようにという
+目的なんだろうが…手の抜き方がうまいなー。
+
+8<
+287 if not user or user == "anonymous" :
+288     print_title(form,None)
+289     exit(0)
+290
+291 data = UserData(user)
+builtin exit = 'Use Ctrl-D (i.e. EOF) to exit.'
+
+TypeError: 'str' object is not callable
+args = ("'str' object is not callable",)
+>8
+
+*  それにしても、Python 2.5 で上記のコードがうまく動いていたというのは、
+buildin の exit == sys.exit になっていたからなのかなぁ。
+(調べるのめんどうだから、調べんけど)
+
+*  オブジェクトの永続化に便利な shelve モジュールで使うファイル名だが、
+Windows(Cygwin/Python2.5)と FreeBSD(Python2.4)で微妙に違っていたので、
+小一時間ハマってしまった。
+FreeBSD では「.db」という拡張子を付けるのだな。
+
+*  「拡張子を勝手につける場合がある」と但書がちゃんとドキュメントに
+書いてあったにも関わらず、Windows 環境では拡張子無しのファイルを
+生成していたので、つい、それに依存したコードを書いてしまったわけだ。
+
+*  一例をもって、それが常に成り立ってしまうという誤解は、
+こうして後々の憂いとなって、地雷化する。気をつけねばね。
+
+*  本件の発見に協力いただいた、yamaji氏には心より感謝する。

@@ -1,0 +1,33 @@
+<<[NYAOS] GROOVY_HOME が PATH に反映されない>>
+
+Java がめんどいので、http://groovy.codehaus.org/{Groovy} で楽をしようとインストールしてみた。マイコンピューターで見ると、システム環境変数の PATH に
+%GROOVY_HOME%\bin が入っているので、groovy.bat がそのまま使えるはずだった。
+
+>> が、何故か、そんなファイル無いと言われる。<<
+
+8<
+$ echo %PATH%
+…中略…;%GROOVY_HOME%\bin;…略…
+>8
+
+なぜか、環境変数へ代入する過程で %～% が展開されず、そのまま埋め込まれてしまっているっぽい。どうしようかなと思ったが、NYAOS/Lua で対応することにした。
+
+8<
+lua_e "
+    -- for GROOVY_HOME
+    local path=os.getenv('PATH')
+    path=string.gsub( path , '%([^%]-)%' ,
+        function(s1) return os.getenv(s1) end
+    )
+    nyaos.exec('SET PATH='..path)
+"
+>8
+
+これを _nya に埋め込んで、NYAOS を再立ち上げすると
+
+8<
+$ echo %PATH%
+…略…;C:\Program Files\Groovy\Groovy-1.7.5\bin;…略…
+>8
+
+地球は平和になった。

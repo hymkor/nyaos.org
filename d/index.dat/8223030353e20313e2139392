@@ -1,0 +1,20 @@
+<<ロボット除け追加>>
+
+昨日、急にアクセス数が 100 も増え、不審に思ったので、
+（普段あまり見ないんだが）アクセスログを見てみた。
+
+>> Yahoo! め <<
+
+105台(IP別)のロボットで１日集中でなめまわしやがる。
+
+<pre>
+$ gawk '/slurp/{ print $1 }' 050118.log | sort | uniq -c | wc -l
+     105
+</pre>
+
+とりあえず、http://help.yahoo.com/help/jp/ysearch/slurp{
+Yahoo の良心}を信用して、<code>/robots.txt</code> に追加しておこう。
+（<code>.htaccess</code> は下手うつと、
+    他のセキュリティーを壊してしまうので、あまり触りたくない）
+
+

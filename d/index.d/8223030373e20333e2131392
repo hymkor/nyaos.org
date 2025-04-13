@@ -1,0 +1,112 @@
+* 女子高生の制服は、どういうわけで水兵の服になったんぢゃ？
+
+* [wifky] メーリングリストで発言されたのが、KMC の大先輩と知って驚愕。
+** さらに、KMC の mixi コミュニティーがあったのを今頃知る。
+   さっそく、入会申し込み。
+
+* 今まで、放射線状であった人脈が、若干、
+  蜘蛛の巣状になってきたような気がする。
+** が、あんまり、それを有効活用できそうもないな。
+** だって、わし、ネガティブなんだもん。
+
+* [wifky] せっかく、トラックバックを実装したんだけれども、
+  トラックバックを送信する先が無ければ、
+  トラックバックをもらえるような優良なネタも提供できぬ罠。
+
+* [wifky] 他所の Wiki 処理系で「たかが 1000ページ程度で遅くなった」
+  という話を聞いて、「はて、wifky はどうだろう」と当サイトの
+  ページ数を数えてみた…
+** 単純計算で 821ページ。まぁまぁか。
+
+* http://www.paramount.jp/deadzone/{Dead Zone / デッド・ゾーン}、
+  関西圏放送開始。
+  偶然、第一話を見たのだけれども、なかなかおもしろい。
+  タイトルの「Wheel of Fortune」は
+  「運命の紡ぎ車」より「運命の糸車」の方がいいような
+
+* http://kitaj.no-ip.com/tdiary/20070312.html#p02{
+  倖田來未をはじめてまじまじとテレビで見た
+  「この人，ブッサイクじゃねー? 」}
+** 実はワシもそう思ってました。
+
+* 「テラ」とか言うと、「http://www.terra-e.com/{地球(テラ)へ}」ではなく、
+  「テラ4001」を想像するのは俺だけ？
+** とは言え、実はやったことねーの(惑星メフィウスだけ)。
+   レトロゲー、いろいろやりてーなぁー。
+
+* ネガティブなのは必ずしも悪いことではないと思う。
+  影(陰)に着目するからこそ、対象の輪郭が見えるのだ。
+  光ばかり見ていては、目がくらむだけだ。
+
+* 多分、明日は死ぬ。間違いなく、死ぬ。あとは、よろしく。
+
+<<不確定深刻理論万歳>>
+
+親の確定申告のため、医療費やら修繕費やらを計算したりと。
+
+最終的には税理士さんのところへ持ってゆくのだが、
+http://blog.livedoor.jp/dankogai/archives/50782342.html{404 Blog Not Found}で
+紹介されていた、
+https://www.keisan.nta.go.jp/h18/ta_top.htm{国税庁の確定申告書等作成コーナー}
+の紙書類作成ツールを使えば、自分でも書けそうな感じなので、
+つい必要以上に書こうとしてしまった。
+
+まぁ、結局
+
+* 減価償却費の計算で、過去の経緯を知らないと整合性を合わせられないこと
+* 税理士さんに支払う費用そのものを経費に形状できるので、
+  自分でやっても金銭的なメリットがあまり無いこと
+* 明日 6:30 に起きんといかんかったこと
+
+に気付いたので断念してしまったが… 
+でも、来年度はちゃんと勉強してやりたいなぁ。
+
+<<[Perl] IO::Socketモジュール>>
+
+今までソケット通信をいちいち
+
+8<
+my $ip       = Socket::inet_aton($host) or die("$host not found.");
+my $port     = getservbyname('http', 'tcp');
+my $sockaddr = Socket::pack_sockaddr_in($port, $ip);
+socket(HTTP, Socket::PF_INET, Socket::SOCK_STREAM, 0)
+    or die("socket error.\n");
+connect(HTTP, $sockaddr);
+binmode(HTTP);
+my $output=select(HTTP); $| = 1; select($output);
+    :(以下省略)
+>8
+
+とかやっていたが、どっちみち、Socket モジュールを使ってるし、
+それなら http://x68000.q-e-d.net/~68user/net/module-1.html{IO::Socket}
+とかの方が簡単でいいよなとか、今頃思ったりして。
+
+8<
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use IO::Socket;
+
+my $host='www.nifty.com';
+my $http=IO::Socket::INET->new(
+    PeerAddr => $host ,
+    PeerPort => '80' ,
+    Proto    => 'tcp' )
+or die("can not connect $host");
+
+$http->print("GET / HTTP/1.1\n");
+$http->print("Host: $host\n");
+$http->print("Connection: close\n\n");
+
+while( <$http> ){
+    print $_;
+}
+
+$http->close();
+>8
+
+確認したら、5.005 の頃から、IO::Socket はあったみたい。
+コンストラクタのパラメータだけは分かりにくいけど、
+がんばって覚えようっと。
+(本番環境触っている時は、さすがにググれないからね)

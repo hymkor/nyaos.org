@@ -1,0 +1,48 @@
+<<[NYAOS] PMアプリケーションは判別して、起動できるようになったけど>>
+
+http://www.cyborg.ne.jp/~hedghog/emx/usegcc.html{About EMX/use gcc} より：
+
+8<
+詳しい話は抜きにして、次のようにコンパイルするとemxのランタイム(.DLL)を使用しない、単独で実行できるプログラムを作る事が出来ます。 
+
+	[C:]gcc -Zomf -Zsys -static -o foo.exe -Wall foo.c foo.def
+>8
+
+emxlib.doc より：
+
+8<
+int spawnl (int mode, const char *name, const char *arg0, ...);
+   ：
+
+With the system call library sys.lib (-Zsys), only modes P_WAIT,
+P_NOWAIT and P_OVERLAY are currently available.
+>8
+
+>> あー <<
+
+:補足
+:: OS/2 の PM (GUI) アプリを起動するには、mode のところに P_PM ってのを設定してやらないといけないらしい。
+
+なるほど…。要は PM の時は spawn 使うなと。
+
+ちなみに、emxランタイム使うバージョンでは、もう PMアプリを選別起動できるようになっとります。齊藤さま、savaさま、ありがとうございました。
+
+<<[Lua] strict.lua の仕様を調べてみた>>
+
+C:\Program Files\Lua\5.1\Lua\strict.lua を読んでみた。
+
+:代入時
+:: 未定義のグローバル変数に代入する時、
+その場所が「Cの関数」・「チャンクのメイン部」でなければ
+(つまり「Lua の関数内」)、エラーとする。
+:参照時
+::「Cの関数」以外で未定義の変数を参照しようとすると、エラーとする。
+: その他
+:: ``global("シンボル名",…)`` という関数が用意されており、それを使えば任意の場所で、グローバル変数を「宣言」することができる。宣言済みの変数かどうかは、値が nil かどうかではなく、別途テーブルで管理している。
+
+技術的要素
+
+* 代入・参照の検出は、グローバルシンボルテーブル http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html#pdf-_G{_G} に、メタテーブルを設定していて、そこから代入(```__newindex```)、参照(```__index```)にフックをかけている。
+* 代入している場所を知るには、http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html#pdf-debug.getinfo{debug.getinfo} という関数を使っている。
+
+まぁ、無難だなぁ。残念なのは、これらのチェックが全て動的に行われる点で、静的ではないというところ。Perl の ``use strict;`` ほど強力じゃないってことです。

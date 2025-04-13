@@ -1,0 +1,15 @@
+http://www.syboos.jp/opensource/bookmark/detail/20080226182737688.html{Mozilla Rhino - オープンソースなJavascriptのJava実装 - オープンソースコラム}
+
+8<
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
+public class HelloJavaScript {
+    public static void main(String[] args){
+        ScriptEngineManager factory = new ScriptEngineManager();
+        ScriptEngine engine = factory.getEngineByName ("JavaScript");
+        engine.eval("print('Hello World Javascript')");
+    }
+}
+>8

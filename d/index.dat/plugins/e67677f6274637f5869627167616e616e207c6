@@ -1,0 +1,9 @@
+package wifky::hiragana;
+
+my $original_comment=$::action_plugin{comment};
+$::action_plugin{comment} = sub {
+    if( $::form{comment} !~ /\xA4[\xA0-\xFF]/ ){
+        die("Your comment has no hiragana!");
+    }
+    $original_comment->(@_);
+};

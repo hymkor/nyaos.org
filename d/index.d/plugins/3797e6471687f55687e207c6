@@ -1,0 +1,51 @@
+package syntax_ex;
+
+# use strict; use warnings;
+
+my $version='0.1';
+
+### ~+Enter -> <br> 
+### $#nnnn;
+
+$::inline_syntax_plugin{'701_br_amp'} = sub{
+    my $text = shift;
+    $$text =~ s/\~$/<br>/gm           if $::config{'syntax_ex__tildecr2br'};
+    $$text =~ s/&amp;(\#?\w+\;)/&$1/g if $::config{'syntax_ex__entity_reference'};
+};
+
+###
+### >> ... >>  -> <p align="right">...</p>
+###
+
+if( $::config{'syntax_ex__rightalign'} ){
+    $::block_syntax_plugin{'501_right'} = sub{
+        my ($text,$session)=@_;
+
+        if( $text =~ /\A\s*\&gt;&gt;\s*(.*)\s*\&gt;\&gt;\s*\Z/s ){
+            my $s=&::preprocess($1,$session);
+            &::puts('<p class="rightalign" align="right">',$s,'</p>');
+            return 1;
+        }else{
+            return 0;
+        }
+    };
+}
+
+### Switch ###
+$::preferences{"Syntax extender $version"} = [
+    {
+        name=>'syntax_ex__tildecr2br' ,
+        desc=>'Enable to replace ~+Linefeed to <br>' ,
+        type=>'checkbox' ,
+    } ,
+    {
+        name=>'syntax_ex__entity_reference' ,
+        desc=>'Enable to use Entity References (&#...;)' ,
+        type=>'checkbox' ,
+    } ,
+    {
+        name=>'syntax_ex__rightalign' ,
+        desc=>'Enbale to replace >>...>> to <div align="right">...</div>' ,
+        type=>'checkbox' ,
+    } ,
+];

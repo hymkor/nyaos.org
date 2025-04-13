@@ -1,0 +1,357 @@
+package nikky;
+
+#use strict;
+#use warnings;
+
+my $version="2005.10.24";
+
+$main::inline_plugin{'nikky.pl_version'} = sub{ "nikky.pl $version" };
+$main::inline_plugin{'include'}=\&include;
+$main::inline_plugin{'includes'}=\&includes;
+$main::inline_plugin{'lastdiary'}=\&lastdiary;
+$main::inline_plugin{'recentdiary'}=\&recentdiary;
+$main::inline_plugin{'referer'}=\&referer;
+
+$main::inline_plugin{'echo'}= sub{ join(' ',@_[1 .. $#_]) };
+$main::inline_plugin{'if'}= \&plugin_if ;
+$main::inline_plugin{'eq'}= \&plugin_eq ;
+$main::inline_plugin{'ne'}= \&plugin_ne ;
+$main::inline_plugin{'has'}= \&plugin_has ;
+
+$main::action_plugin{rss} = \&action_rss ;
+
+push( @main::html_header ,
+    qq(<link rel="alternate" type="application/rss+xml"
+        title="RSS" href="$main::me?a=rss">) );
+
+push( @main::menubar_2 , qq(<a href="$main::me?a=rss">RSS</a>) );
+
+&set_date2p;
+&set_nextprev;
+
+unshift( @main::copyright , "Powered by nikky.pl ${version}<br>" );
+
+sub include_is_nested{
+    q(<blink>Can't nest include-plugin.</blink><br>);
+};
+
+sub title2dateurl{
+    my $title=shift;
+    if( $title =~ /^\((\d\d\d\d)\.(\d\d)\.(\d\d)\)$/ ){
+	sprintf("%s?date=%4s%2s%2s" , $main::me , $1 , $2 , $3 );
+    }else{
+	&main::title2url($title);
+    }
+}
+
+sub include{
+    my $session = shift;
+    my $htm_pagename = join(' ',@_);
+    my $pagename     = &main::denc($htm_pagename);
+    my $url=&title2dateurl( $pagename );
+
+    local $main::inline_plugin{include} = \&include_is_nested;
+    local $main::print = '';
+    local $main::form{p} = $pagename;
+
+    &main::print_page( title=>$pagename );
+    &main::print_page( title=>'Footer' , class=>'footer' );
+    
+    qq(<div class="include"><h1><a href="${url}">${htm_pagename}</a></h1>\n) . $main::print . '</div>';
+};
+
+sub includes{
+    my $session=shift;
+    my %opt=();
+    my @arg=();
+
+    local $main::inline_plugin{includes} = \&include_is_nested;
+
+    &main::parse_opt(\%opt,\@arg,@_);
+
+    my @list=&main::ls_core(\%opt,@arg);
+    splice(@list,10) if $#list > 10;
+    my $buf="";
+    foreach my $p (@list){
+	$buf .= &{ $main::inline_plugin{include} }(
+	    $session , &main::enc($p->{title}) );
+    }
+    qq(<div class="includes">$buf</div>);
+};
+
+
+sub lastdiary{
+    my $session=shift;
+    my $days = ($_[0] || 3);
+    local $main::inline_plugin{ diary } = \&include_is_nested;
+    my $buf = &{ $main::inline_plugin{includes} }(
+	$session,"-r","-${days}","(????.??.??)*");
+    qq(<div class="lastdiary">$buf</div>) ;
+};
+
+
+sub recentdiary{
+    my ($session,$day)=@_;
+    my @list=&main::ls_core({ r=>1 , countdown=>$day } , '(????.??.??)*' );
+    if( $#list >= 0 ){
+	"<ul>\n" . join('' , map( sprintf('<li><a href="%s">%s</a></li>',
+				&title2dateurl($_->{title}) ,
+				&main::enc($_->{title}) ) , @list ))
+	. "</ul>\n";
+    }else{
+	'';
+    }
+}
+
+sub referer{
+    my $session=shift;
+    my @exclude=@_;
+    my @title=($main::form{'p'} || 'FrontPage' , 'referer.txt' );
+    my $ref=$ENV{'HTTP_REFERER'};
+
+    my @lines=split(/\n/,&main::read_object(@title));
+    if( $ref && $ref !~ /$main::me\?[aq]=/ &&
+	grep(index($ref,$_) >= 0 , @exclude) <= 0 )
+    {
+	my $found=0;
+	foreach my $line ( @lines ){
+	    my ($cnt,$site)=split(/\t/,$line,2);
+	    if( $site eq $ref ){
+		$found = 1;
+		$line = sprintf("%4d\t%s",$cnt + 1,$site);
+		last;
+	    }
+	}
+	unless( $found ){
+	    push(@lines,sprintf("%4d\t%s",1,$ref));
+	}
+	if( grep($_->{name} eq 'referer',@main::history) <= 0 ){
+	    &main::write_object(@title,join("\n",reverse sort @lines));
+	}
+    }
+    if( $#lines >= 0 ){
+	'<ul class="referer">' .
+	join("\r\n",reverse sort map('<li>'.&main::enc($_).'</li>',@lines) ) .
+	'</ul>';
+    }else{
+	'';
+    }
+};
+
+sub action_rss{
+    my $URL=sprintf('http://%s%s', $ENV{'HTTP_HOST'} , $ENV{'SCRIPT_NAME'} );
+    my $RSS="$URL?a=rss";
+    my $articles=5;
+    $main::inline_plugin{comment} = sub { '' };
+
+    %::enclist = (
+	'lp'       => '&#40;' ,
+	'rp'       => '&#41;' ,
+	'lb'       => '&#91;' ,
+	'rb'       => '&#93;' ,
+	'll'       => '&#40;&#40;' ,
+	'rr'       => '&#41;&#41;' ,
+	'vl'       => '&#124;' ,
+    );
+    my $sitename=$main::config{sitename};
+
+    print qq(Content-Type: text/plane; charset=EUC-JP\n\n);
+
+    ### read page list ###
+    my @pagelist = map( 
+	{ fname=>$_ , title=> &main::fname2title($_) }
+	, &main::list_page() 
+    );
+    @pagelist = sort{ $a->{title} cmp $b->{title} } 
+	grep( $_->{title} =~ /^\(\d\d\d\d\.\d\d\.\d\d\)/ , @pagelist );
+    splice(@pagelist,0,-$articles);
+
+    foreach my $p (@pagelist){
+	my $attachment = {};
+	foreach my $attach ( &main::list_attachment($p->{title}) ){
+	    my $e_attach = &main::enc( $attach );
+	    my $url=sprintf("http://%s%s?p=%s&amp;f=%s" ,
+		    $ENV{'HTTP_HOST'} ,
+		    $ENV{'SCRIPT_NAME'} ,
+		    &main::percent( $p->{title} ) ,
+		    &main::percent( $attach ) 
+	    );
+	    $attachment->{ $e_attach } = {
+		name => $attach ,
+		url  => $url ,
+		tag  => $attach =~ /\.(png|gif|jpg|jpeg)$/i
+			? qq(<img src="${url}" alt="${e_attach}">)
+			: qq(<a href="${url}" title="${e_attach}">${e_attach}</a>) ,
+	    };
+	}
+	$p->{attachment} = $attachment;
+    }
+
+    print qq(<?xml version="1.0" encoding="EUC-JP" ?>
+<rdf:RDF 
+  xmlns="http://purl.org/rss/1.0/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xml:lang="ja">
+ <channel rdf:about="${RSS}">
+  <title>${sitename}</title>
+  <link>${URL}</link>
+  <description>${sitename}</description>
+  <items>
+   <rdf:Seq>
+);
+
+    ### read title list ###
+    my @topics;
+    foreach my $p (@pagelist){
+	my $text = &main::read_object($p->{title});
+	local $/="\n\n";
+
+	my $title=$p->{title};
+	my $pageurl = &main::percent($title);
+	my $id=0;
+	my $desc=[];
+	foreach my $frag ( split(/\r?\n\r?\n/,$text) ){
+	    if( $frag =~ /^\s*<<([^<].*)>>\s*$/s || $frag =~ /^!!!(.*)$/s ){
+		if( scalar(@{$desc}) > 0 ){
+		    unshift(@topics , { 
+			page  => $p->{title} ,
+			url   => sprintf("%s?p=%s#p%d",$URL,$pageurl,++$id),
+			title => sprintf("%s - %s",$p->{title},$title) ,
+			desc  => join('',@{$desc} ) ,
+		    });
+		}
+		$title = &main::preprocess($1,{ attachment=>{} } );
+		$desc = [];
+	    }else{
+		local $main::print="";
+		&main::syntax_engine( &main::enc($frag) , {
+			attachment => $p->{attachment} ,
+		    } 
+		);
+		push(@{$desc}, $main::print );
+	    }
+	}
+	if( scalar(@{$desc}) > 0 ){
+	    unshift(@topics , { 
+		page => $p->{title} ,
+		url => sprintf("%s?p=%s#p%d",$URL,$pageurl,++$id),
+		title => sprintf("%s - %s",$p->{title},$title) ,
+		desc => join('',@{$desc} ) ,
+	    });
+	}
+    }
+
+    ### write list ###
+    foreach my $t (@topics){
+	printf qq(<rdf:li rdf:resource="%s"/>\n),$t->{url} ;
+    }
+    print "</rdf:Seq>\n";
+    print "</items>\n";
+    print "</channel>\n";
+
+    ### write description ###
+    foreach my $t (@topics){
+	printf qq(<item rdf:about="%s">\n),$t->{url} ;
+	printf qq(<title>%s</title>\n),&main::enc($t->{title}) ;
+	printf qq(<link>%s</link>\n),$t->{url} ;
+	if( $t->{title} =~ /\[([^\]])\]/ ||
+	    $t->{title} =~ /&#91;(.*?)&#93;/ ){
+	    print qq(<category>$1</category>\n);
+	}
+	print  qq(<author>$sitename</author>);
+	printf qq(<description><![CDATA[%s]]></description>\n),$t->{desc};
+	print  qq(</item>\n);
+    }
+    print "</rdf:RDF>\n";
+    exit(0);
+};
+
+sub quote1{
+    my ($session,$a,$f)=@_;
+    my @params;
+    while( $#{$a} >= 0 && (my $t=shift(@{$a})) ne ')' ){
+	push(@params, $t eq '(' ?  &quote1($session,$a) : $t);
+    }
+    my $name=shift(@params);
+    $f || ( exists $main::inline_plugin{$name} 
+	    ? &{$main::inline_plugin{$name}}($session,@params) 
+	    : 'Plugin Not Found!' );
+}
+
+sub quote{
+    my ($session,$a,$f)=@_;
+    my $t=shift(@{$a});
+    if( $t && $t eq '(' ){
+	quote1($session,$a,$f)
+    }else{
+	$f || $t;
+    }
+}
+
+sub plugin_if{
+    my $session=shift;
+    &quote($session,\@_) eq '' && &quote($session,\@_,'SKIP');
+    &quote($session,\@_);
+}
+
+sub plugin_eq{
+    my $session=shift;
+    my $left=&quote($session,\@_);
+    my $right=&quote($session,\@_);
+    $left eq $right ? 't' : '' ;
+}
+
+sub plugin_ne{
+    my $session=shift;
+    my $left=&quote($session,\@_);
+    my $right=&quote($session,\@_);
+    $left ne $right ? 't' : '' ;
+}
+
+sub plugin_has{
+    my $session=shift;
+    my @title=($form{'p'} || 'FrontPage' , &main::denc(join(' ',@_)) );
+
+    -f &main::title2fname(@title) ? 't' : '';
+}
+
+sub set_date2p{
+    if( exists $main::form{date} ){
+	my $date=$main::form{date};
+	$main::form{p} = sprintf('(%04d.%02d.%02d)',
+			substr($date,0,4) ,
+			substr($date,4,2) ,
+			substr($date,6,2) );
+    }
+}
+
+sub set_nextprev{
+    my $cur=&main::title2fname( $main::form{'p'} || '(9999.99.99)' );
+    my $prev;
+    my $next;
+    foreach my $t ( &main::list_page() ){
+	next if $t !~ /^82/;
+	if( $t lt $cur && ( !defined($prev) || $t gt $prev ) ){
+	    $prev = $t;
+	}elsif( $t gt $cur && ( !defined($next) || $t lt $next ) ){
+	    $next = $t;
+	}
+    }
+    if( defined($prev) ){
+	unshift(@main::menubar_1,
+	    sprintf('<a href="%s?p=%s">&lt;&lt;</a>' 
+		    , $main::me 
+		    , &main::percent(&main::fname2title($prev))
+	    )
+	);
+    }
+    if( defined($next) ){
+	push(@main::menubar_2,
+	    sprintf('<a href="%s?p=%s">&gt;&gt;</a>' 
+		    , $main::me 
+		    , &main::percent(&main::fname2title($next))
+	    )
+	);
+    }
+}
+1;

@@ -1,0 +1,75 @@
+<<NYAOS 3.3.4_2 を公開しました>>
+
+http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS.ORG - NYAOS 3000}
+
+* Lua で COM を呼ぶと、クラッシュする不具合を修正(Windows)
+** 前日に起案した「https://bitbucket.org/zetamatta/nyaos3000/issue/19/lua-mydocument{issues #19 - 内蔵Luaで MyDocument の位置を取ろうとすると落ちる}」に対する修正です。
+* 実行ファイルのプロパティーでバージョンを確認できるようにした(Windows)
+
+以上、よろしくお願いいたします。
+
+<<NYAOS内蔵Luaでショートカットを自動で作る>>
+
+仮想環境を何個も作ってると、いちいちツールを展開するのが面倒なので、
+バッチファイル一発で NYAOS と vim と UNIX Like Tools を所定フォルダーに展開する
+テンプレートを作ろうとしています。
+
+が、ショートカットをどうしようかと思いました。
+わたしの場合、いつも「デスクトップ」と「送るメニュー」に
+NYAOS と gvim のショートカットを作っているのですが、
+結構手間がかかりますから、当然自動化したい。
+
+ググってみると Windows Script Host で出来るみたいなので、NYAOS内蔵Luaでもいけそうです。
+というわけで、動作を確かめながら、ちょっとずつ作ってみましょう。
+
+8<
+local shell=nyaos.create_object("WScript.Shell")
+local desktop=shell.SpecialFolders:Item("MyDocuments")
+print(desktop)
+>8
+
+>> なんか、落ちたーー <<
+
+NYAOSのCOM処理がバグっているようです。
+
+正直、原因解明にはかなり手間取ると覚悟していたのですが、
+デバグ行を入れながら場所を特定してみると、
+SysFreeString で落ちていたので、
+単なるポインタの初期化漏れだったようです
+''(API の Invoke が NULL を代入してくれると思ったんだよぉぉぉ)'' 。
+あっさり見付かってよかったよかった。
+
+気をとりなおして、できたての NYAOS 3.3.4_2 でやり直します。
+で、出来たのが以下のスクリプト
+
+'''shortcut.lua''':
+
+8<
+function create_shortcut(shell,src,dst)
+    local shortcut=assert(shell:CreateShortcut(src))
+    shortcut.TargetPath=dst
+    shortcut:Save()
+end
+
+local shell   = assert(nyaos.create_object("WScript.Shell"))
+local desktop = assert(shell.SpecialFolders:Item("Desktop"))
+local sendto  = assert(shell.SpecialFolders:Item("SendTo"))
+
+local fileset = {
+    { "Nihongo Yet Another Open Shell" , "c:\\usr\\bin\\nyaos.exe" } ,
+    { "GVim" , "c:\\usr\\vim73-kaoriya-win32\\gvim.exe" } ,
+}
+
+for i,e in ipairs(fileset) do
+    create_shortcut(shell , desktop.."\\"..e[1]..".lnk" , e[2])
+    create_shortcut(shell , sendto .."\\"..e[1]..".lnk" , e[2])
+end
+>8
+
+8<
+$ nyaos shortcut.lua
+>8
+
+「デスクトップ」と「送るメニュー」に、それぞれ nyaos.exe と gvim.exe へのショートカットができました。
+
+うむ、ばっちそ

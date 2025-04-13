@@ -1,0 +1,65 @@
+<<((lb))oldtype((rb)) bash vs gawk>>
+
+人の書いたシェルの負荷が高いということで、チューニングをしていたら、
+コードの８割方が、インラインの gawk コードになっちまった。
+まぁ、でも、これでも成長したのか、だいぶと遠慮した方だ。
+前にやった時は、拡張子が pl になってたからなぁ。
+
+ただ、実のところ、gawk でやって、本当に負荷やら処理速度的に
+マシになるのか、少々不安になってきた。
+理論的には、シェルの中で head やら tail やらで切り貼りするよりは、
+全て１プロセス内で完結する gawk の方が圧倒的に速いはず。
+だが、今まで「理論的にはこっちの方が速いのに、
+実際にやってみたら、逆だった」という目に過去2,3回あっているのだ。
+もっとも、その時は
+
+>> 相手が悪かった(Oracle)という説もあるが <<
+
+ということで、精神衛生の為、さっそく実験である。
+
+<pre>
+((lb))hayama@YUKIKAZE tmp((rb))$ cat cat.sh
+#!/bin/bash
+
+cat $* | while read line
+do
+    echo $line
+done
+((lb))hayama@YUKIKAZE tmp((rb))$ cat cat.awk
+#!/usr/bin/gawk -f
+
+{
+    print $0
+}
+hayama@YUKIKAZE tmp((rb))$ cat catawk.sh
+#!/bin/bash
+
+cat $* | gawk '
+    { print $0 }
+'
+((lb))hayama@YUKIKAZE tmp((rb))$ time cat.sh 050718.log >/dev/null
+
+real    0m3.938s
+user    0m0.690s
+sys     0m2.102s
+((lb))hayama@YUKIKAZE tmp((rb))$ time cat.awk 050718.log >/dev/null
+
+real    0m0.134s
+user    0m0.030s
+sys     0m0.080s
+((lb))hayama@YUKIKAZE tmp((rb))$ time catawk.sh 050718.log > /dev/null
+
+real    0m0.252s
+user    0m0.090s
+sys     0m0.170s
+</pre>
+
+ふむ、オーダーが一桁も違うぜ、よかった。もっとも、
+
+* Cygwin なので fork のコストが、Linux よりも大きいかも
+* サンプルが単純すぎかも
+
+というところが問題になるやもしれない。
+が、それを差し引いても十分のはずだ、きっと。
+
+

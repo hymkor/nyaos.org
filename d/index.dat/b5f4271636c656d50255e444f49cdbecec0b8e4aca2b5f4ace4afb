@@ -1,0 +1,83 @@
+開発環境の DB の UNDO 表領域が壊れた。
+何とか直したので、今後のために、メモ。 
+
+<<+手順>>
+
+<<<+ 新規に、別の UNDO 表領域を作成する. >>>
+
+<pre>
+    SQL>create undo tablespace （新UNDO表領域名） DATAFILE
+	'（データファイル名.dbf）'
+	size 256M reuse
+	AUTOEXTEND ON NEXT 5120K MAXSIZE UNLIMITED ;
+</pre>
+
+ストレージオプションは、旧UNDO表領域のそれに合わせておくもの。
+
+<<<+ UNDO 表領域を変更する。 >>>
+
+現行UNDO表領域 
+
+<pre>
+    SQL> alter system set undo_tablespace=（新UNDO表領域名）;
+</pre>
+
+再起動時UNDO表領域（初期パラメータファイル）
+
+<pre>
+    undo_tablespace=（旧UNDO表領域名）; 
+</pre>
+
+<<<+ データベースを再起動する。>>>
+
+定番は
+
+<pre>
+    SQL> shutdown immediate
+    SQL> startup
+</pre>
+
+だが、クラスターのサービスに起動を組み込んでいる時は、
+そっちを下げ上げすること。
+サービスの take over 等が起きないよう、配慮を忘れないように。
+
+<<<+ 壊れた UNDO 表領域を offline にする。 >>>
+
+<pre>
+    SQL> alter tablespace undo01 offline ;
+</pre>
+
+<<<+ 壊れた UNDO 表領域を削除する。 >>>
+
+<pre>
+    SQL> drop tablespace undo01 ;
+</pre>
+
+<<<+ 物理的にデータファイルを削除しておく >>>
+
+<pre>
+    $ rm (旧データファイル名)
+</pre>
+
+<<+ データファイルのメディアリカバリ>>
+
+うっかりと、データファイルを offline にしてしまうと、
+表領域を offline できず、
+またデータファイル自体も online にできない。 次のように online 化する。 
+
+<<<+ メディアリカバリを実施 >>>
+
+<pre>
+    SQL> recover automatic datafile '（データファイル名）';
+</pre>
+
+<<<+ オンライン化する >>>
+
+<pre>
+    SQL> alter database datafile '（データファイル名）' online ;
+</pre>
+
+<<+参考文献>>
+
+* Oracle9i バックアップ および リカバリ概要 リリース2(9.2) p.3-11
+* Oracle9i データベース管理者ガイド リリース2(9.2) p.11-22

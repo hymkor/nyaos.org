@@ -1,0 +1,31 @@
+
+$::preferences{'Google Code Prettify'} = [
+    { desc => 'Directory for scripts and css (default:"src")' ,
+      name => 'prettify_dir' ,
+    }
+];
+my $dir=$::config{'prettify_dir'} || 'src';
+
+$::call_syntax_plugin{'100_verbatim'} = sub {
+    ${$_[0]} =~
+    s!^\s*\&lt;pre&gt;(.*?\n)\s*\&lt;/pre&gt;|^\s*8\&lt;(.*?\n)\s*\&gt;8|`(.)`(.*?)`\3`!
+    defined($4)
+    ? &verb('<code class="prettyprint">'.&cr2br($4).'</code>')
+    : "\n\n<pre class=\"prettyprint\">".&verb(defined($1) ? $1 : $2)."</pre>\n\n"
+    !gesm;
+};
+
+unshift( @::html_header , <<HERE 
+<link rel="stylesheet" type="text/css" href="${dir}/prettify.css"></link>
+<script type="text/javascript" src="${dir}/prettify.js"></script>
+HERE
+);
+
+push( @::copyright , <<HERE
+<script type="text/javascript">
+<!-- 
+    prettyPrint();
+// -->
+</script>
+HERE
+);

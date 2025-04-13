@@ -1,0 +1,31 @@
+!!! Proxy の設定
+
+8<
+-bash-3.2# cpan
+Terminal does not support AddHistory.
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support available (maybe install Bundle::CPAN or Bundle::CPANxxl?)
+
+cpan[1]> o conf http_proxy
+    http_proxy         []
+Type 'o conf' to view all configuration items
+
+
+cpan[2]> o conf http_proxy http://tisproxy.tis.co.jp:8080/
+    http_proxy         [http://tisproxy.tis.co.jp:8080/]
+Please use 'o conf commit' to make the config permanent!
+
+
+cpan[3]> o conf ftp_proxy http://tisproxy.tis.co.jp:8080/
+    ftp_proxy          [http://tisproxy.tis.co.jp:8080/]
+Please use 'o conf commit' to make the config permanent!
+
+
+cpan[4]> o conf commit
+commit: wrote '/usr/lib/perl5/5.10.0/CPAN/Config.pm'
+
+cpan[5]> bye
+Terminal does not support GetHistory.
+Lockfile removed.
+>8

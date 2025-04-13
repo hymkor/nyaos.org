@@ -1,0 +1,49 @@
+
+本ドキュメントは、脆弱性修正モジュールのソース比較情報ついて説明しています
+ソースを確認する場合にご確認ください
+
+■修正対象環境
+　INSUITE				V2.4.0
+　個別修正モジュール	Hotfix1 / Hotfix2 / V2040.imap / V2040.tis-2010072001
+　その他				TIS様向けアドオンモジュール一式
+
+■修正前ソース
+　修正を実施した環境のソースになります
+　backup_tis_20100729.tgz
+　
+　解凍すると以下のフォルダ内にファイルが作成されます
+　LIB  admin-cgi-bin  bin  cgi-bin  insuite  mo-cgi-bin
+　
+　LIB以外は/home/DreamArts以下の該当フォルダになります
+　LIBの実際のフォルダとの関連は以下になります
+
+　LIB/DA	/usr/local/lib/perl5/site_perl/5.6.1/DA/
+　LIB/WA	/usr/local/lib/perl5/site_perl/5.6.1/WA/
+
+■修正モジュール
+　修正時、３段階で修正し、各々インストールして頂く仕様になっております
+　修正ソースは以下のファイルを解凍してご確認ください
+　　TIS0809.tgz
+　　TIS0816.tgz
+　　TIS0830.tgz
+　
+　解凍すると以下のフォルダ内にファイルが作成されます
+　AD_CGI  CGI  JS  LIB  MO_CGI TMPL
+　実際のフォルダとの関連は以下になります
+　
+　AD_CGI	/home/DreamArts/admin-cgi-bin/
+　CGI		/home/DreamArts/cgi-bin
+　JS		/home/DreamArts/insuite/js/
+　LIB/DA	/usr/local/lib/perl5/site_perl/5.6.1/DA/
+　LIB/WA	/usr/local/lib/perl5/site_perl/5.6.1/WA/
+　MO_CGI	/home/DreamArts/mo-cgi-bin/
+　TMPL		/home/DreamArts/insuite/html/template/
+
+■注記
+・修正モジュールは修正作業中の最新モジュールのため、脆弱性修正差分.xlsに記述の無い修正が入っています
+・修正作業中のため、現在の修正情報、修正内容は今後、変更・追加が発生する可能性があります
+・脆弱性修正差分.xlsの修正箇所の行数は修正中の情報のため、行数が変わってしまっている可能性があります
+・提出済みの「010816-TIS様脆弱性報告資料.doc」の修正情報の内容が変更・修正、もしくは検討の結果、修正対象外になっている問題がありますので、
+　脆弱性修正差分.xlsに同じ問題が記述されていない場合があります
+
+以上

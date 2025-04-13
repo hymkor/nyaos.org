@@ -1,0 +1,50 @@
+* http://d.hatena.ne.jp/dayflower/20080908/1220853214{V8 (Google JavaScript Engine) を embed した感想とかあれこれ - daily dayflower}
+
+より要約：
+
+* Handle<T> … スマートポインタ(抽象クラス)
+* Local<T> … Handle<T> からの継承。auto_ptr 的なもの。直近で宣言された HandleScope のデストラクタが呼び出されるまで最低有効だが、他で参照されていれば、そのまま存続する。
+* Persistent<T> … Handle<T> からの継承。恒常的に用いるものに使う。直近の Context オブジェクトの dispose メソッドが呼ばれるか、v8::V8::Dispose が呼ばれるまで有効 
+
+8<
+#include <v8.h>
+
+using namespace v8;
+
+int main(int argc, char* argv[]) {
+
+  /* ローカルなスコープを作る。handle_scope オブジェクトが消えると、
+   * それに合わせて、handle_scope オブジェクトが有効な間に作成された
+   * Local<T> なオブジェクトが消滅する
+   */
+  HandleScope handle_scope;
+
+  /* グローバルなスコープ(コンテキスト)を作る。
+   * context.Dispose() が呼び出されるまで、
+   * グローバルなオブジェクトは存続する
+  Persistent<Context> context = Context::New();
+
+  /* 上で定義したコンテキストにスイッチする */
+  Context::Scope context_scope(context);
+
+  /* V8 とやりとりする文字列は String::New(char*)で作成する。
+   * 戻り値は Local<String> だが、ここはスーパークラスの
+   * Handle<String> で受け取る
+   */
+  Handle<String> source = String::New("'Hello' + ', World!'");
+
+  /* ソースをコンパイルする。戻り値は、多分 Local<Script> */
+  Handle<Script> script = Script::Compile(source);
+
+  /* スクリプトを走らせる */
+  Handle<Value> result = script->Run();
+
+  /* context のグローバルオジェクトを全て破棄する */
+  context.Dispose();
+
+  // Convert the result to an ASCII string and print it.
+  String::AsciiValue ascii(result);
+  printf("%s\n", *ascii);
+  return 0;
+}
+>8

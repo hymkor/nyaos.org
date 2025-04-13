@@ -1,0 +1,97 @@
+<<[Python][NYAOS][Lua] NYAOS で Python 3/2 自動判別>>
+
+:(追記 02/06 15:42)
+:: コマンドが存在していなかった場合のエラー処理が抜けていたので、追記しました。
+
+UNIX/Linux の場合だったら、Python3 と Python2 が共存してても、シェバングで
+
+8<
+#!/usr/bin/python3
+>8
+
+とやってたら、バージョンを明示できるけど、Windows では、この仕組みがない。
+https://bitbucket.org/vinay.sajip/pylauncher/downloads{Windows向け Python ランチャー}
+とかいうものもあるけど、NYAOS の suffix コマンドは Windows の拡張子の関連付けとは独立してるので、
+NYAOSの中では有効に機能しない(はず)。
+
+ということで、内蔵Luaを使って、自動判別させるようにしてみた。
+
+_nya に入れるコード:
+
+8<
+lua_e "
+    function nyaos.command.python3or2(...)
+        local argv={...}
+        local fd=io.open(argv[1],'r')
+        if not fd then
+            print(argv[1]..': No such file or directory')
+            return
+        end
+        local shebang = fd:read()
+        fd:close()
+        if shebang:match('python3') then
+            table.insert(argv,1,'c:\\Python32\\python.exe')
+        else
+            table.insert(argv,1,'c:\\Python27\\python.exe')
+        end
+        for i=1,#argv do
+            if argv[i]:match(' ') then
+                argv[i] = '\034'..argv[i]..'\034'
+            end
+        end
+        nyaos.exec( table.concat(argv,' ') )
+    end
+"
+suffix py python3or2
+>8
+
+テストしてみよう
+
+8<
+[C:hayama]
+$ type foo3.py
+#!/usr/bin/python3
+
+import sys
+print(sys.version)
+print("cmdline=" + " ".join("<"+e+">" for e in sys.argv))
+[C:hayama]
+$ ./foo3.py
+3.2.2 (default, Sep  4 2011, 09:51:08) [MSC v.1500 32 bit (Intel)]
+cmdline=<.\foo3.py>
+>8
+
+8<
+[C:hayama]
+$ type foo2.py
+#!/usr/bin/python
+
+import sys
+print sys.version
+print "cmdline=" + " ".join("["+e+"]" for e in sys.argv)
+[C:hayama]
+$ ./foo2.py
+2.7.2 (default, Jun 12 2011, 15:08:59) [MSC v.1500 32 bit (Intel)]
+cmdline=[.\foo2.py]
+[C:hayama]
+$
+>8
+
+>> どやっ <<
+
+* 仕組みとしては、スクリプトの1行目を読んでみて、
+  「python3」という文字列があれば Python 3インタープリタを、
+  なければ Python2 インタープリタを呼び出しているわけだ。
+* Python のインストールディレクトリは、最新に揃えて「C:\Python32」「C:\Python27」にしているが、
+  各位のインストール状況に合わせて、適宜変更いただきたい。
+  (自動検索させてもいいんだけれども、そこまでやるのはねぇ)
+* Lua 5.1/5.2 の判別も同様にできると思うけど、5.1 と 5.2 共用コードを書くのは、それほど難しくない
+  (unpack を利用するのに``(unpack or table.unpack)(…)``するくらい？)ので、
+  必要なかろー。
+* lua_e コマンド内のコードで直接ダブルクォーテーションは書けないので \034 とか書いてる。
+  \nnn が八進数ではなく、十進数なので、注意が必要だ。
+  こういうコードは _nya に直接書かず、別途 hoge.lua などと保存してから source すれば、
+  ダブルクォーテーションへの配慮はいらんのだが、
+  今回は nyaos の suffix コマンドを実行しなければいけなかったから、
+  このような書き方をした。
+

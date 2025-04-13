@@ -1,0 +1,73 @@
+<<glib を使ってみやふ>>
+
+C++ も使えん環境で、手で文字列をペタペタやってると、
+漏れなく発狂するので、
+何かよい文字列ライブラリが無いか、調べてみた。
+
+glib というものが標準で使えるようだ。
+glib の g は gnome の g らしく、相当高名なライブラリのようだ。
+
+* http://www-06.ibm.com/jp/developerworks/linux/000811/j_glib.html
+* http://search.luky.org/linux-users.6/msg00190.html
+
+を参考に使ってみる。
+
+8<
+$ cat foo.c
+#include <glib.h>
+
+int main(int argc,char **argv)
+{
+    GString *str = g_string_new(NULL);
+    int i;
+
+    for(i=0;i<argc;i++){
+        g_string_append( str , argv[i] );
+        g_string_append_c( str , ' ' );
+    }
+    printf( "%s\n" , str->str );
+    g_string_free( str , FALSE );
+
+    return 0;
+}
+$ gcc `glib-config --cflags --libs` foo.c
+$ ./a.out hogehoge uhahaha ihihi
+./a.out hogehoge uhahaha ihihi
+$
+>8
+
+素晴しい。しかし、Oracle のプリコンパイラでも使えるか、それが問題だ。
+
+<<glib を使ってみやふ for Pro*C>>
+
+Pro*C のオプションに：
+
+8<
+`glib-config --cflags | perl -pe 's/-I/INCLUDE=/g'`
+>8
+
+を追加して、include パスを無理矢理追加したが、
+glib.h の中で使われている GNU 拡張マクロ構文を、
+Pro*C プリコンパイラがきちんと認識してくれない模様。
+
+ヘッダの include 部分を：
+
+8<
+#ifdef ORA_PROC
+typedef void *GString;
+#else
+#  include <glib.h>
+#endif
+>8
+
+としたところ、何とか、プリコンパイル→コンパイル→リンクが通った。
+一応、動作もしているようである。
+
+関数名については、プリコンパイラのパーサは未定義でも見逃してくれるが、
+型名だけはさすがにそうもいかないので、ダミーで void* の別名にしておく。
+汚い技だ。
+
+だが、これで巨大な SQL文字列も作れるというものである。
+サポートのことが心配ではあるが、メモリリークも心配であるしねぇ。
+
+*  Pro*C/C++ Precompiler プログラマーズ・ガイド,リリース 9.2 p.5-31 より

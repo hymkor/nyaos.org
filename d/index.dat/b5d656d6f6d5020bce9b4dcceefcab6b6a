@@ -1,0 +1,61 @@
+多かぁ書かねぇ、たった一行。
+
+<<Bookmarklet>>
+
+ブラウザのブックマーク/お気に入りの URL に書く、小さな JavaScript
+
+<<<そのページへのアンカーを作る(通常HTMLアンカー)>>>
+
+<pre>
+javascript:void(prompt('Link:','<a href="' + location.href + '" target="_blank">'+document.title+'</a>'))
+</pre>
+
+<<<そのページへのアンカーを作る(文書原稿アンカー)>>>
+
+<pre>
+javascript:void(prompt('Link:',location.href + '{'+document.title+'}'))
+</pre>
+
+<<<そのページのタイトルを取得する>>>
+
+<pre>
+javascript:void(prompt('Title:' , document.title))
+</pre>
+
+<<<はてなアンテナに現在の表示中のページを追加する>>>
+
+<pre>
+javascript:location.href='http://a.hatena.ne.jp/append?'+location.href;
+</pre>
+
+<<ALTIME>>
+
+Windows でキーの入れ変えを行う ALTIME に対する変則的な設定.
+
+<<<CapsLock・左Ctrl キーを共に Ctrl キーにする。>>>
+
+高度な設定に「/2901」と書く
+
+<<<半角/全角,ESC 両方を ESC にする>>>
+
+高度な設定に「/3a1d」と書く。(逆かもしれないが)
+
+<<<レジストリ修正による CapsLock の Ctrl 化>>>
+
+ただのにっき( http://sho.tdiary.net/20040119.html#p02 )より
+
+<pre>
+  \SYSTEM
+      \CurrentControlSet
+         \Control
+            \Keyboard Layout
+               \Scancode Map (バイナリ)
+</pre>
+
+上記のキーに、下記の値を設定。
+
+<pre>
+00 00 00 00 00 00 00 00
+02 00 00 00 1D 00 3A 00
+00 00 00 00
+</pre>

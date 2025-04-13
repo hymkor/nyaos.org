@@ -1,0 +1,138 @@
+* えーとね、残業しすぎてね、''''そろそろ法律違反寸前''''っぽい。
+
+* 発言を遮られると殺意が湧くけど、飲み込むから大丈夫だよ！((v heartsuit))
+
+* 偉いさんはコードの品質をバグ票の数でしか測れない。
+
+* 今更だけど、rsync って便利だねぇ。今日 nyaos.org のバックアップに初めて使った。
+    cygwin なら setup.exe でインストールできるのもいい。
+
+* どうもね… 身内は、ぬるい考え方の人が多いと思うんだ。
+  でないと、○○○社をライバルだなんて言えないよ。
+  規模が全然違うじゃん。
+
+<<[Perl][Python] ソース中の非英語圏文字>>
+
+Perl は「http://blog.livedoor.jp/dankogai/archives/50857509.html{
+UTF-8以外の文字列リテラルは極力ソース中には置かず}」がスタンスだそうで、
+Windows環境では正直辛い。
+
+>> というか、Linux/UNIX のことしか考えてねーんじゃね？ <<
+
+Python は別に Shift_JIS がソースにあっても構わないらしい。
+
+8<
+#!/usr/bin/env python
+# coding:shiftjis
+
+import re,fileinput
+for line in fileinput.input():
+    if '表' in line :
+        print "in>%s" % line
+    if re.search(unicode('表','shiftjis'),unicode(line,'shiftjis')) :
+        print "re>%s" % line
+>8
+
+「表」「ソ」といった文字は ShiftJIS では 2byte目が \ と同じコードなので、
+この文字の箇所で文法エラーになることが多いのだ。
+
+8<
+[mahershalal study] $ python shiftjistest.py
+a
+b
+c
+d
+表
+.
+in>表
+
+re>表
+
+>8
+
+さすがに正規表現は、\ をライブラリが特殊な扱いをするので、
+UNICODE へ変換しなくちゃいけないけど、
+単純にバイトコードとして含まれるかを見る分なら、
+「coding:shiftjis」を付けるだけでよい(ように思われる)。
+
+「いやいや、それは間違ってるぜ、ジョニー」ということであれば、ツッコミよろしく。
+
+<<[Oracle] ｍ９（・∀・）日付を CHAR(8) にする？>>
+
+違う会社のエンジニアの人に、日付は CHAR(8) にすべきだという話を聞いた。曰く：
+
+* DATE 型だと、時刻が含まれてしまう
+** アプリケーションのバグで時刻が入ってしまうと、等号で日付比較ができない。
+** 回避するには TRUNC(FOO_DT) == TO_DATE('日付文字列','YYYYMMDD') のように
+   せざるを得ず、インデックスが効かない。
+** 使用容量的にも不利
+
+わたしは：
+
+* CHAR(8)型だと、6月45日などという架空の日付や、数字以外の文字列が入ってしまう。
+** 時刻部分が 00:00:00 以外になってしまうリスクより、そちらの方が大きいような気がする。
+** 日付単位で検索するにしても、不等号で、今日 ≦ 〜 ＜ 明日にすればいい。
+   そうすればインデックスは普通に効く。
+* DATE は明かに日付であると分かりやすい。
+
+だから、DATE 型の方がよいと思う。
+
+が、よく考えたら、CHAR(8) だと、ユニークインデックス普通に張れるねぇ。
+
+<<[Python] xml.parsers.expat が使いにくい件について>>
+
+Python で使える XML パーサライブラリ：
+http://www.python.jp/doc/release/lib/module-xml.parsers.expat.html{Expat}
+を使ってみようとしたが、I/F が微妙に使い辛い。
+
+要素の開始の時に呼び出されるフック関数の仕様が次のとおりだからだ。
+
+8<
+    StartElementHandler(name, attributes)
+>8
+
+name は要素の名前 , attributes は属性の辞書(ハッシュ)。
+呼び出されるのはよいとして、その XML 要素の解析結果をどこに残せばいいのだ。
+
++ グローバル変数に残す
++ StartElementHandler に関数そのものではなく、関数オブジェクトを設定する。
+
+関数オブジェクトというのは、```__call__(self,…)```
+((fn C++風に言うと、```operator()(…)```))
+を定義したクラスオブジェクトのことである。
+このオブジェクトは関数のように振舞えるので、
+本来関数が要求されるところへもそのまま渡すことができる。
+
+今回の場合だと、解析結果の内容を self に渡してやればよいというわけだ。
+
+8<
+def parseEDM( fd ):
+    class EDMObject:
+        def __call__(self,name,attrs=None):
+            ;
+            self.result = { …解析結果… }
+    
+    xmlparser = xml.parsers.expat.ParserCreate("UTF-8")
+    edmobject = EDMObject()
+    xmlparser.StartElementHandler = xmlparser.EndElementHandler = edmobject
+    xmlparser.ParseFile( fd )
+    return edmobject
+>8
+
+でも、普通のプログラマって、あんまり関数オブジェクトなんて知らないよね。
+そうすると、ダサダサなグローバル変数を使うはめになる。これ不親切じゃね？
+せめて：
+
+8<
+    StartElementHandler(hash , name, attributes)
+>8
+
+てな感じで、解析結果を格納するハッシュを持たせてくれれば、
+そういう事態は回避できるのになーと。
+
+それとも、もしかして、XML解析なんぞやろーという輩は、
+関数オブジェクトくらい使えて常識だろということなんだろーか。
+
+:(追記)
+:: Perl とか Ruby だったら、クロージャーが親関数の変数を引き継いてくれるので、
+こういう面倒な引き渡しはいらないはずなんじゃがのー。

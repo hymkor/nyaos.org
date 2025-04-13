@@ -1,0 +1,100 @@
+* 「神が人間を作ったんじゃない、人間が神を作ったんだ」((br))
+  「今やテレビこそが、宗教なのさ」((br))
+  ―― COWBOY BEBOP #23「ブレイン・スクラッチ」より
+
+<<[Ruby] シンボルというと、豪和と対立している謎の組織（違う）>>
+
+同僚から、「``:symbol => value``」について質問された。
+``=>`` についての回答はハッシュのキーと値をつなげる記号と言えば楽なのだが、
+シンボルについては難しい。
+文字列と同じなのだが、どう違うか、そのメリットの説明が難しい。
+
+* インタプリタの名前解決の仕組みを使うので処理が早い
+* 引用符2個書かねばならないところを : 1個で済むので楽
+
+などあると思うのだが、ピンとくるだろうか。
+もっといい説明があればいいのだが。
+
+このシンボルという奴は、Ruby 特有のもので、Python には存在しない。
+Perl にはベアワードというのがあるが、これは単に
+限定された条件でのみ引用符を省略できるというケースで、
+実態は文字列と大差ない。
+
+:(2007.05.01) 追記
+:: http://mono.kmc.gr.jp/~yhara/d/?date=20070501{いい説明}を教えていただいた。
+    「C言語のenum的な用途に使う」というのがピンときやすくていいかもしれない。
+    感謝！
+
+<<[python] Python でのソケット>>
+
+8<
+import socket
+
+s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.connect(('nyaos.org',80))
+s.send("GET / http/1.1\n")
+s.send("Host: nyaos.org\n")
+s.send("Connection: close\n\n")
+data = s.recv(1024)
+s.close()
+print data
+>8
+
+クライアントを書く分には思ったよりも簡単だった。
+定番の socket オブジェクトの引数を覚えなくちゃいけないのが、アレだけど。
+''(httplib があるとか言わないように。http は例で使ってるだけだから)''
+
+ただ、やっぱり、Perl や Ruby の方がお手軽であるのは否めない。
+ソケットオブジェクト作成とコネクション張りを1行で書けし、
+ソケットオブジェクトが普通のファイルハンドルのように使えるからね。
+
+<<<Perl>>>
+
+8<
+use IO::Socket;
+
+my $s = IO::Socket::INET->new(PeerHost=>'nyaos.org',PeerPort=>80,Proto=>'TCP');
+$s->print("GET / http/1.1\n");
+$s->print("Host: nyaos.org\n");
+$s->print("Connection: close\n\n");
+while( <$s> ){
+    print $_;
+}
+$s->close();
+>8
+
+<<<Ruby>>>
+
+8<
+require 'socket'
+
+s = TCPSocket.new('nyaos.org',80)
+s.print "GET / http/1.1\n"
+s.print "Host: nyaos.org\n"
+s.print "Connection: close\n\n"
+while s.gets
+    print $_
+end
+s.close
+>8
+
+なんだかんだ言って、Ruby が一番手軽だよなぁ。
+…いや、待て、奴を忘れていた。
+
+<<<gawk>>>
+
+8<
+BEGIN{
+    s = "/inet/tcp/0/nyaos.org/80"
+    print "GET / http/1.1"    |& s
+    print "Host: nyaos.org"   |& s
+    print "Connection: close" |& s
+    print "" |& s
+    while( s |& getline ){
+        print $0
+    }
+    close(s)
+}
+>8
+
+gawk も、これで、あと Oracle 接続くらいできれば完璧なんだが…

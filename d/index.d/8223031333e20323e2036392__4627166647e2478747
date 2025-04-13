@@ -1,0 +1,35 @@
+<<[CMD.EXE] バッチファイルで今日の日付文字列 YYYYMMDD を作成する>>
+
+'''foo.cmd''':
+8<
+for /f "delims=/ tokens=1,2,3" %%I in ('date /T') do echo hoge-%%I%%J%%K.txt
+>8
+
+awk で言うところに $1 に相当する %%I は明示的に変数名を指定するのに、
+$2、$3は I の次のアルファベットの %%J %%K とかになるってのも、適当な文法だなぁ。
+
+8<
+[c:hayama]
+$ foo
+
+c:\Documents and Settings\hayama>for /F "delims=/ tokens=1,2,3" %I in ('date /T') do echo hoge-%I%J%K.txt
+
+c:\Documents and Settings\hayama>echo hoge-20130207 .txt
+hoge-20130207 .txt
+[c:hayama]
+$
+>8
+
+for の使い方は ``cmd /c for /?`` で分かるけど、
+何回見ても覚えられないぜよ。
+
+まぁ、NYAOS 使ってんなら Lua でもいいんだけど、
+スクリプトの使用要件は少ないに越したことないからね。
+
+!! (追記)
+
+まるまるさんから、もっと早い方法を教えてもらいました。
+DATE==関数=={という環境変数}なんてあるんですね！
+
+: @canaan18 https://twitter.com/canaan18/status/299749518516314112
+:: @zetamatta 読んできました。forの文法は本当に覚えられませんよね。以前に同じくYYYYMMDDのファイルを作ろうと試みた事がありその時はdate==関数=={という環境変数}を切り取ってやりました。echo hoge-%date:~0,4%%date:~5,2%%date:~8,2%.txt

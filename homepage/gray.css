@@ -1,0 +1,65 @@
+.H{
+  font-size:large;font-weight:bold
+}
+H1{
+  text-align:right;
+  border-style:solid;border-width:0px 0px 4px 0px;border-color:white;
+  color:snow;
+  font-size:large;
+  clear: both;
+  width: auto;
+}
+H2{
+  border:none;
+  background-color:#444444;
+  font-size:large;
+  width:auto;
+}
+H2 SMALL{
+  font-size:small;
+  line-height:large;
+}
+H3{
+  border-style:solid;border-width:0px 0px 0px 20px;border-color:silver;
+  font-size:medium;
+  text-indent:5pt
+}
+.BOX{
+  border-style:solid;border-color:white;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  text-decoration:underbar;white-space:pre
+}
+.XOB{
+  border-style:solid;border-color:gray;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  background-color:white;color:black;white-space:pre
+}
+DT{ color:silver;font-weight:bold; }
+UL LH{ color:silver;font-weight:bold; }
+EM{ color:gray;font-weight:bold;font-style:normal }
+STRONG{ color:red }
+STRIKE{ color:red }
+B.PLASMA{
+    color:red;background-color:#440000;font-size:xx-small;font-weight:bold;
+}
+B.DOKEN{
+    color:#FFFF00;background-color:#444400;font-size:xx-small;font-weight:bold;
+}
+DIV.D{
+    text-indent:12pt
+}
+TABLE.LINE {
+    border-collapse:collapse;
+    border-width:2px ;
+    border-style:solid ;
+    border-color:white;
+}
+TABLE.LINE TD{
+    border-width:1px ;
+    border-style:solid ;
+    border-color:white; }
+A:hover { background-color:#440000; }
+BIG{ font-size:xx-large; }
+CITE,BLOCKQUOTE{
+    color:silver;font-style:italic;
+}

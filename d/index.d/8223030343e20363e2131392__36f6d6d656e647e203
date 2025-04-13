@@ -1,0 +1,5 @@
+2004/06/11 01:12:46	fake	ftp って単独で使ってました。こんな感じです。   $ ftp ftp://USER:PASSWD@SERVER/SERVERDIR/FILENAME  
+2004/06/11 08:13:47	はやま	それは UNIX系の ftp では？ Windows では cygwin  が必要なんじゃないんですか？  
+2004/06/11 09:12:59	きた	ぬぉーーー，括弧とパイプの組み合わせ，cmd.exeでもできるんですね! 知りませんでした．  
+2004/06/11 10:40:06	fake	Windows 98/2000 付属版だとこんなもんです。  > ftp.exe -s:ftp1.lst  ------  ftp1.lst  ----- open SERVER USER PASSWORD lcd c:\home lcd /LOCALDIR cd /SERVERDIR/ get FILENAME quit  
+2004/06/11 12:04:18	はやま	いや、だから、そういうことは分かっているんですが(汗) >fake様。 配布ファイルを一つに出来ることにメリットがあるんデス。本文読んでください。m(__)m  

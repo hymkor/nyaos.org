@@ -1,0 +1,89 @@
+8<
+<table style="width:100%;font-size:80%">
+    <tr>
+        <td colspan="3" style="font-weight:bold">分野別ポータル</td>
+    </tr>
+    <tr style="background-color:#CFC;">
+        <td style="width:33%"><a href="Notes://PENTAT051/49256EBC0007C79D/">経理ポータル</a></td>
+        <td style="width:33%"><a href="Notes://PENTAT051/49256C28000D6AC2/">IS連絡ボード</a></td>
+        <td style="width:33%"><a href="Notes://PENTAT051/492572300016B6A3/">人事ポータル</a></td>
+    </tr>
+    <tr style="background-color:#DFD">
+        <td><a href="Notes://PENTAO051/49256BF300258CB1/">インフラポータル</a></td>
+        <td><a href="http://p2www.tis.co.jp/">PENTAポータル</a></td>
+    </tr>
+
+
+    <tr>
+        <td colspan="3" style="font-weight:bold">コミュニケーション</td>
+    </tr>
+    <tr style="background-color:#CFC">
+        <td><a href="http://sns.itholdings.jp/">ITHD-SNS</a></td>
+        <td><a href="http://tc.tis.co.jp/">TCポータル</a></td>
+        <td><a href="http://tc.tis.co.jp/bazaar/project/fureai">fureai</a></td>
+    </tr>
+    <tr style="background-color:#DFD">
+        <td><a href="http://tc.tis.co.jp/bazaar">バザール</a></td>
+        <td><a href="http://tc.tis.co.jp/laputa">ラピュタ</a></td>
+        <td><a href="http://tc.tis.co.jp/app/redmine/">Redmine</a></td>
+    </tr>
+
+
+    <tr>
+        <td colspan="3" style="font-weight:bold">業務系</td>
+    </tr>
+    <tr style="background-color:#CFC">
+        <td><a href="http://tispjpr1.tis.co.jp/titan_pj/">TITAN-PJ収益管理</a></td>
+        <td><a href="http://tisbpm.tis.co.jp/">BPM</a></td>
+        <td><a href="http://tc.tis.co.jp/catalog">社内PJ台帳</a></td>
+    </tr>
+    <tr style="background-color:#DFD">
+        <td><a href="http://pentao301.tis.co.jp/parl/db/ptnr_maint.nsf">Parl（東京）</a></td>
+        <td><a href="http://pentao301.tis.co.jp/parl/db/ptnr_maino.nsf">Parl（大阪）</a></td>
+        <td><a href="http://tomasdb2.tis.co.jp/tomas/htmls/tomas">TOMAS管理システム</a></td>
+    </tr>
+    <tr style="background-color:#CFC">
+        <td><a href="http://tisezpr.tis.co.jp/">TITANサポートサイト</a></td>
+    </tr>
+
+
+    <tr>
+        <td colspan="3" style="font-weight:bold">情報系</td>
+    </tr>
+    <tr style="background-color:#CFC">
+        <td><a href="http://jinjios4.tis.co.jp/jshp/">社員ホームページ</a></td>
+        <td><a href="http://bsw.tis.co.jp/">Bayside Web</a></td>
+        <td><a href="http://ppit.tis.co.jp/">人事給与明細</a></td>
+    </tr>
+    <tr style="background-color:#DFD">
+        <td><a href="http://pentat051.tis.co.jp/penta/naisen/TelSearch.nsf/">内線番号ＤＢ</a></td>
+        <td><a href="http://pentat051.tis.co.jp/penta2/wpkeisai.nsf/6404938c6e35f03d49256b44002a5e90?OpenView">食堂献立</a></td>
+        <td><a href="http://ppit.tis.co.jp/">給与明細</a></td>
+    </tr>
+    <tr style="background-color:#CFC">
+        <td><a href="http://tc.tis.co.jp/bazaar/group/S-kanri">情報セキュリティ関連検索</a></td>
+        <td><a href="http://tc.tis.co.jp/bazaar/group/itss_papers">ITSS論文集</a></td>
+        <td><a href="http://tc.tis.co.jp/bazaar/group/SWAT">SWAT</a></td>
+    </tr>
+    <tr style="background-color:#DFD">
+        <td><a href="http://takeshiba.dreamarts.co.jp/cgi-bin/lib_file_list.cgi?bid=224">座席表</a></td>
+        <td><a href="http://p2www.tis.co.jp/toyukai/">東友会通信</a></td>
+        <td><a href="http://www.ithdgkenpo.com/">ITHDG健保</a></td>
+    </tr>
+    <tr style="background-color:#CFC">
+        <td><a href="http://tc.tis.co.jp/bazaar/group/tool_map">開発支援ツールポータル(生産技術部)</a></td>
+    </tr>
+    <tr>
+        <td colspan="3" style="font-weight:bold">機器・ツール</td>
+    </tr>
+    <tr style="background-color:#CFC">
+        <td><a href="http://p2scant01.tis.co.jp/WebCentre/asp/c/SiteView.ASP?Folder=%2FWebCentre%2Fcommon&ID=07d40108010c3400da%2D1cafdbae">スキャナー東京</a></td>
+        <td><a href="http://p2scano01.tis.co.jp/WebCentre/asp/c/SiteView.ASP?Folder=%2FWebCentre%2Fcommon&ID=07d4010801122b0280%2D3f007925">スキャナー大阪</a></td>
+        <td><a href="http://p2scant01.tis.co.jp/WebCentre/asp/c/ListPage.asp?Folder=%2FWebCentre%2Fcommon&SortType=2&SiteIndex=10&ID=07d4010801102d01d4%2D1cafdbae">スキャナーサウス</a></td>
+    </tr>
+    <tr style="background-color:#DFD">
+        <td><a href="http://tc.tis.co.jp/app/memo/">メモ(TCポータル)</a></td>
+    </tr>
+</table>
+<!-- vim:set ft=html: -->
+>8

@@ -1,0 +1,15 @@
+local dic1=nyaos.create_object("Scripting.Dictionary")
+local dic2=nyaos.create_object("Scripting.Dictionary")
+
+print("CompareMode=>",dic1.CompareMode)
+dic1:Add("a","「aaaaa」")
+dic1:Add("A","「AAAAA」")
+print("a=>" , dic1:Item("a"))
+print("A=>" , dic1:Item("A"))
+
+dic2.CompareMode = true
+print("CompareMode=>",dic2.CompareMode)
+dic2:Add("a","＜aaaaa＞")
+dic2:Add("A","＜AAAAA＞")
+print("a=>" , dic2:Item("a"))
+print("A=>" , dic2:Item("A"))

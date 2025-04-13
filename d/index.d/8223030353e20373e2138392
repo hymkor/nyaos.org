@@ -1,0 +1,46 @@
+<<((lb))wifky((rb)) http://scl.littlestar.jp/revwiki/{RevisionistWiki}>>
+
+http://pc8.2ch.net/test/read.cgi/php/1106478373/{
+Wiki系とWikiEngine について語るスレ Part4}で見つけて、秘かにヲチ中。
+（しかし、２ちゃんねるで晒すとは勇気がある御方だ）
+
+* Ruby 製
+* はてなダイアリーみたいに、キーワード自動リンク
+* 可変文法（現在は MarkdownStyle のみ）
+* 更新履歴の管理が強力らしい。
+
+wifky とポリシーが正反対ながら、
+既存の和製 wiki のあり方に満足できないという
+作者の意欲には、共感できるところがある。
+というわけで、勝手にライバル視。
+
+しかし、PStore があるから、Ruby はいいよな〜。
+ライブラリもない「素Perl」だと、
+データの保持方法一つでも、悩むところ。
+この辺、やはり、ライブラリこそパワーですね。
+
+<<((lb))wifky((rb)) http://sonic64.hp.infoseek.co.jp/2004-05-24.html{
+    IE 内で pdf や Excel を開かせない方法}>>
+
+（http://homepage1.nifty.com/maname/log/200507.html#182253p4{まなめはうす}より）
+
+ヘッダに
+
+<pre>
+    Content-disposition: attachment; filename=ファイル名
+</pre>
+
+を入れれば、ファイルをアプリケーションで開くのではなく、
+((lb))ファイルのダウンロード((rb))ダイアログを出すようにしてくれるらしい。
+
+おぉ、これは
+http://www.itmedia.co.jp/enterprise/articles/0505/19/news107.html{
+例の脆弱性}への対応になるのでは！！！と思ったら、まさしくその通りで、
+Hiki などは http://hikiwiki.org/ja/advisory20050519.html{
+とっくの昔に対応していた}模様。
+
+>> むきー、これ、添付機能を捨てない限り、対応不能なんだと勘違いしてたよーー <<
+
+ということで、0.50 にて wifky も対応いたしました。
+
+

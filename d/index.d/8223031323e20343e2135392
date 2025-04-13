@@ -1,0 +1,71 @@
+<<[NYAOS] 多次元配列の馬鹿野郎>>
+
+NYAOS内蔵Luaのテーブルを、COMの一次元配列として代入できるようにした。
+
+8<
+local excel=nyaos.create_object("Excel.Application")
+excel.Visible = true
+local workbook = excel.Workbooks:Add()
+local worksheet = workbook.Worksheets:Item(1)
+worksheet:Range("A1:D1").value = { "東","西","南","北" }
+>8
+
+一方、Ruby の win32ole は配列を含む配列を、COMの多次元配列として扱えるようだ。
+
+8<
+require 'win32ole'
+excel = WIN32OLE.new('Excel.Application')
+excel.visible = TRUE
+workbook = excel.Workbooks.Add();
+worksheet = workbook.Worksheets(1);
+worksheet.Range('A1:D4').value = [
+    [ 1 , 2 , 3 , 4 ],
+    [ 5 , 6 , 7 , 8 ],
+    [ 9 ,10 ,11 ,12 ],
+    [13 ,14 ,15 ,16 ]
+]
+>8
+
+うーん、http://homepage1.nifty.com/markey/ruby/win32ole/index.html{Win32OLE の製作過程}
+には書いてないけど、これ結構たいへんなはずだぞ。
+win32ole.c 見ると、比較的短いコードで再帰を使ってえらいことしてるみたいだ
+((fn 要は天才的コードに凡才の私がついていけてないとご理解いただきたい))。
+
+こっちのソースは
+
+* COMのAPI関数をC++クラスでラッピングしている win32com.cpp
+* Luaとのインターフェイスとラップしたクラスを結ぶ lua32com.cpp
+
+という二つに分けているんだけれども
+((fn だから、win32com.cpp は Lua や NYAOS 以外の用途にも転用できる))、
+テーブルの中のテーブルみたいなややこしい構造は
+C++ のプレーンな型に変換しにくく、
+二つのソース間を渡しにくくなってしまっている。
+くまったなー。
+
+<<[NYAOS] Luaの多重テーブルを、n次元配列として COM に渡せるようにでけた>>
+
+折れそうな心をセロハンテープで貼り付け、
+Ruby の win32ole.c のソースのロジックを==パクり=={参考にし}つつ、
+多重テーブルを n 次元配列として COM に渡せるようにした。
+
+8<
+local excel=nyaos.create_object("Excel.Application")
+excel.Visible = true
+local workbook = excel.Workbooks:Add()
+local worksheet = workbook.Worksheets:Item(1)
+worksheet:Range("A1:D4").value = {
+    { "東","西","南","北" },
+    { "A","B","C","D" },
+    { 1,2,3,4 },
+    { "W","X","Y","Z" }
+}
+>8
+
+が、具体的なテストは2次元まで出来んのだよなー。
+複雑なロジック組んでいるので、他にもいろいろテストしないと。
+なんとか、新しい職場へ初出勤するまでには正式リリースしたいぞ。
+
+なお、二つのソースをまたがる問題なので、どう解決するか悩ましいとか言ってましたが、
+結局、lua32com.cpp の方でも、COM の API を直接呼んじゃいましたとさ。
+まぁ、もともと win32com.cpp で COM の API を完全にラッピングできてませんでしたしねー。

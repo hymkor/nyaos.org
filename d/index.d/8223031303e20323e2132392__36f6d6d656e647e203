@@ -1,0 +1,2 @@
+2010/02/13 18:15:54	tyru	初めまして。^r^nskk.vimは現在改良中のものが下のURLに置いてあります。^r^n一応紹介だけ...^r^nhttp://github.com/tyru/skk.vim^r^nこちらのskk.vimは数人かで改良している途中なので、^r^nもし興味があったら訪れてください。^r^n^r^n> Ctrl-J というホームポジションに近いキーバインドでIME の ON/OFF ができる。 ^r^n改良版skk.vimならfとjの同時押しでIMEのON/OFFが可能にできたりしますよ。^r^n正確にはarpeggio.vimというプラグインをインストールすればできるのですが、^r^nこれも興味があったらこちらを参照してみてください。^r^nhttp://d.hatena.ne.jp/tyru/20100209/skk_vim_sticky_shift_patch
+2010/02/13 22:40:49	zetamatta	ありがとうございます。さっそく差し替えてみました。今後楽しみにバージョンアップを追いかけさせていただきます！

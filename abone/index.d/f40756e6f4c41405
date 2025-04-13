@@ -1,0 +1,91 @@
+|| OS | Fedora Core 3
+|| データベースサーバー | PostgreSQL 8.0
+|| WWWサーバー | Apache 2.0
+|| アプリケーションサーバー | Tomcat 5.5 , Tomcat Web Server Connectors | ◯
+|| Java開発環境 |J2SE5.0
+
+!!! Apache
+
+8<
+$ rpm -qa | grep httpd
+httpd-manual-2.2.3-31.el5
+httpd-2.2.3-31.el5
+>8
+
+要件 Ok
+
+!!! Tomcat
+
+8<
+$ rpm -qa | grep tomcat
+tomcat5-jsp-2.0-api-5.5.23-0jpp.7.el5_3.2
+tomcat5-servlet-2.4-api-5.5.23-0jpp.7.el5_3.2
+>8
+
+* http://jakarta.apache.org/tomcat/tomcat-5.0-doc/config/http.html
+
+!!! PostgreSQL
+
+8<
+$ rpm -qa | grep -i postgresql
+postgresql-8.1.11-1.el5_1.1
+postgresql-server-8.1.11-1.el5_1.1
+postgresql-libs-8.1.11-1.el5_1.1
+postgresql-python-8.1.11-1.el5_1.1
+>8
+
+!!! Java
+
+8<
+$ rpm -qa | grep -i java
+xmlrpc-javadoc-2.0.1-3jpp.1
+java-1.4.2-gcj-compat-src-1.4.2.0-40jpp.115
+bsh-javadoc-1.3.0-9jpp.1
+java-1.4.2-gcj-compat-1.4.2.0-40jpp.115
+gcc-java-4.1.2-46.el5
+java-1.4.2-gcj-compat-devel-1.4.2.0-40jpp.115
+>8
+
+http://java.com/ja/download/manual.jsp{Sun のサイト}から、
+jre-6u20-linux-i586-rpm.bin をダウンロード。
+実はシェルスクリプトで、root で実行すると、
+jre-6u20-linux-i586.rpm という rpm に展開され、
+パッケージ jre-1.6.0_20-fcs としてインストールされる。
+
+----
+
+8<
+# service postgresql start
+
+root@plmtest1 ~]# su - postgres
+-bash-3.2$ createuser olap
+Shall the new role be a superuser? (y/n) y
+CREATE ROLE
+-bash-3.2$ createdb -O olap -E EUC_JP openolap
+CREATE DATABASE
+-bash-3.2$ ls
+backups  data  pgstartup.log
+-bash-3.2$ createlang plpgsql openolap
+-bash-3.2$ psql -U olap openolap
+psql: FATAL:  Ident authentication failed for user "olap"
+>8
+
+ここで OSユーザ olap を作って、olap の中から次を実行すると、
+うまくいった。(一見すると…だが)
+
+8<
+[root@plmtest1 ~]# su - olap
+[olap@plmtest1 ~]$ psql openolap
+Welcome to psql 8.1.11, the PostgreSQL interactive terminal.
+
+Type:  \copyright for distribution terms
+       \h for help with SQL commands
+       \? for help with psql commands
+       \g or terminate with semicolon to execute query
+       \q to quit
+
+openolap=# create schema oo_meta
+openolap-# ;
+CREATE SCHEMA
+openolap=#
+>8

@@ -1,0 +1,77 @@
+<<[Mercurial] 開発版から安定版への不具合修正の反映>>
+
+''(追記あり)''
+
+えーと、もっといい方法があると思うんですがー。
+とりあえず、べたな方法で。
+(安定版から開発版なら、リベース？とやらがあるんですかねー > 識者)
+
+8<
+$ hg log | more
+チェンジセット:   417:ef5652d3c6ec
+タグ:             tip
+ユーザ:           HAYAMA_Kaoru <iyahaya@nifty.com>
+日付:             Tue Jun 19 00:23:33 2012 +0900
+ファイル:         nyados.cpp nyaos_en.txt nyaos_ja.txt
+説明:
+* フリーズ問題についてのドキュメント修正 & バージョン番号更新
+
+
+チェンジセット:   416:c0fdbbc663a3
+ユーザ:           HAYAMA_Kaoru <iyahaya@nifty.com>
+日付:             Mon Jun 18 23:38:44 2012 +0900
+ファイル:         ntcons.cpp
+説明:
+* 「lua_e "print(io.read())"」という内容のファイルを nyaos -f で実行するとフリーズする問題( see issue 10 )を修正
+>8
+
+この開発版の「416:c0fdbbc663a3」を、安定版ブランチ「3.2.x」へ反映したい。
+まずはファイルへエクスポート。
+
+8<
+$ hg export -r 416 > tmp.txt
+>8
+
+ワーク領域をブランチ 3.2.x へ切り替える。
+
+8<
+$ hg update 3.2.x
+>8
+
+ここで一度 make clean ; make してテストする。
+はい、症状(フリーズ)が再現されました。
+
+んでもって、パッチを反映。ただし、commit はしない。
+
+8<
+$ hg import --no-commit tmp.txt
+tmp.txt を適用中
+ファイル ntcons.cpp をパッチ適用しています
+作業領域への適用
+>8
+
+make clean ; make して、テスト。はい、症状が消えました。
+Ok～Ok。
+
+8<
+$ hg commit
+>8
+
+同じように、ドキュメントとバージョンナンバー更新の 417:ef5652d3c6ec の方も反映しようかと思いましたが、さすがにコンフリクトして駄目でしたwww
+
+<<<追記>>>
+
+先生に教えていただきました。hg graft というものがあるそうです。ありがとうございました。
+
+* '''troter''':@zetamatta hg graft使えば良いのでは？ [http://twitter.com/troter/status/216354530999283713]
+* '''zetamatta''':@troter なるほど、キーワードが分かりませんでした。ありがとうございます。こちらの場合、--no-commit がなさそうなので、テストして駄目だったら hg rollback って感じになりそうですね。 [http://twitter.com/zetamatta/status/216355333000536066]
+* '''troter''':@zetamatta mercurial本体の開発では、安定版(stableブランチ)の変更を開発版(default)に取り込む場合はmerge、開発版の変更を安定版に取り込む場合はgraftを使っています。 [http://twitter.com/troter/status/216355815110606850]
+* '''troter''':@zetamatta そうですね。あとは、mq使い始めるとqimportして直すか、stripしちゃいます。graftは移植元の情報も記録されるので便利ですよ。 [http://twitter.com/troter/status/216356959429992449]
+
+8<
+$ hg help graft
+hg graft [OPTION]... REVISION...
+
+別ブランチ上から現行ブランチへの指定リビジョンの複製
+     ：
+>8

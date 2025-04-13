@@ -1,0 +1,78 @@
+<<NYAOS 3000 20091220版をリリースしました>>
+
+変更点は以下のとおり
+
+<<<Stop read _nyados, _nyacus>>>
+
+NYAOS の設定ファイルは _nya から読むのが仕様ですが、
+_nyados , _nyacus といった設定ファイルも互換性のために残していました。
+
+いい加減いいだろうということで、削除しました。
+
+<<<Read all _nya on the directory which NYAOS.EXE exists , %HOME% or %USERPROFILE% and current directory.>>>
+
+これ重要。
+
++ NYAOS.EXE にある _nya ,
++ %HOME% あるいは %USERPROFILE% が差すディレクトリにある _nya 
++ カレントディレクトリにある _nya
+
+これらを順に全て読むようにしました。
+
+NYAOS.EXE に添付されている _nya は NYAOS.EXE と同じ場所に、
+ユーザが作成する _nya は %HOME% あるいは %USERPROFILE%
+の下に置くようにしてもらうことを意図しています。
+
+これにより、こちらで提供する _nya と、ユーザによって変更された _nya を
+毎回マージしなくてよいようになると思います。
+
+<<<Fix: option -r did not work.>>>
+
+_nya のかわりに読むファイルを指定するオプション -r が機能していなかったという
+不具合を修正しました。
+これは NYAOS 2.30 にもある不具合ですので、2.30 側もそのうち修正いたします、多分
+
+<<<Add function on the table nyaos: access, exec, chdir, dir, bitand, bitor, bitxor, rshift, lshift>>>
+
+ツール関数を多数用意しました。
+
+* ``nyaos.exec("～")``
+** NYAOS のコマンドを Lua 内から実行します。
+* ``nyaos.access("ファイル名",パーミッション)``
+** ファイルに対して与えられるパーミッションで、アクセスできるかをテストします。C言語の access 関数と同じです。アクセス可能であれば true が帰ります。
+* ``for fname in nyaos.dir('.') do print(fname) end``
+** ディレクトリのファイルリストを取得します。
+* ``nyaos.chdir("ディレクトリ名")``
+** えーと、chdir です。
+* ``nyaos.bitand(x,y) , nyaos.bitor(x,y) , nyaos.bitxor(x,y) , nyaos.rshift(x,y) , nyaos.lshift(x,y)``
+** ビット操作の結果を返します。
+
+ビット操作について、シェルに必要ではないんですが、oluacle.exe のコードを転用したら、
+いっしょについてきちゃいました（笑）
+
+<<<Add option: -E and -F>>>
+
+NYAOS.EXE を lua.exe のかわりに使えるようにするオプションです。
+
+8<
+nyaos -E "Lua コード"
+nyaos -F Luaスクリプトファイル名
+>8
+
+のように使えます。
+
+<<<Add object: nyaos.history>>>
+
+``nyaos.history[...]`` という形で、ヒストリをテーブルのように扱えます。
+
+* 添字は数値のみ(Lua風に1スタート)
+* ``nyaos.history:add( "..." )`` により、末尾にヒストリを追加可能
+* ``nyaos.history:drop()`` により、末尾のヒストリを削除
+
+<<<remove some alias which was set for only Hayama>>>
+
+自分用に入れていた _nya の設定をなんぼか削除しました。
+
+<<<まとめ>>>
+
+正式に 3.0 になるのは、いつなんでしょうね？

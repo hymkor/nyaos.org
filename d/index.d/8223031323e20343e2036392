@@ -1,0 +1,71 @@
+<<[NYAOS] やったね! COMを呼べるようになったよ>>
+
+Lua には luacom という COM オブジェクトを呼ぶ、れっきとしたライブラリがあるんですが、
+Visual C++ でビルドされているせいか、
+あるいは NYAOS が Lua をスタティックリンクしているせいか、
+MinGW g++製の NYAOS内蔵Luaでは使えませんでした。
+
+そこで、'''かなりがんばって'''
+((fn もう途中で何回心が折れそうになったことやら))
+MinGW g++ で COM を呼ぶコードを書いて、NYAOS内蔵Luaで使えるようにしてみました。
+
+* <<{nyaos-3.3.20120406-win.zip} (ソースはhttps://bitbucket.org/zetamatta/nyaos3000{レポジトリ}から取ってください)
+
+こんな感じです。
+
+:comtest.lua:
+::「nyaos -f comtest.lua」で、自分自身のソースのフルパスとその内容を表示します。
+
+8<
+local obj=nyaos.create_object("Scripting.FileSystemObject")
+local path=obj:GetAbsolutePathName("comtest.lua")
+print(path)
+local file,err=obj:GetFile(path)
+if not file then
+    print("obj:GetFile:",err)
+    os.exit()
+end
+local fp,err=file:OpenAsTextStream()
+if not fp then
+    print("file:OpenAsTextStream:",err)
+    os.exit()
+end
+while not fp.AtEndOfStream do
+    local s,err=fp:ReadLine()
+    if not s then
+        print("fp:ReadLine:",err)
+        os.exit()
+    else
+        print(s)
+    end
+end
+>8
+
+:dictest.lua
+:: COM の連想配列オブジェクトを使っています。
+
+8<
+local dic1=nyaos.create_object("Scripting.Dictionary")
+local dic2=nyaos.create_object("Scripting.Dictionary")
+
+print("CompareMode=>",dic1.CompareMode)
+dic1:Add("a","aaaaa")
+dic1:Add("A","AAAAA")
+print("a=>" , dic1:Item("a"))
+print("A=>" , dic1:Item("A"))
+
+dic2.CompareMode = true
+print("CompareMode=>",dic2.CompareMode)
+dic2:Add("a","aaaaa")
+dic2:Add("A","AAAAA")
+print("a=>" , dic2:Item("a"))
+print("A=>" , dic2:Item("A"))
+>8
+
+まだまだ開発途上なので…
+
+* VBScript で言うところの CreateObject はありますが(``nyaos.create_object``)、
+  GetObject に相当するものがありません。
+* パラメータとして、配列を渡せません。
+
+ということで、正式リリースはまだ先になりそうですが、とりいそぎ(見せびらしたかったので)。

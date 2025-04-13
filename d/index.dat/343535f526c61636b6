@@ -1,0 +1,265 @@
+.sectionmark,.subsectionmark,.subsubsectionmark{
+    float:right; font-size:70%; text-decoration:none;
+}
+.hatebu_subject{
+    font-weight:bold;
+}
+
+.caption{
+    font-weight:bold;
+}
+
+table.calender{
+    position:absolute;top:3px; left:3px;
+    font-size:80%;
+}
+
+.calender td{
+   border-width:0pt;
+}
+
+.Today{
+   background-color:#AAEEEE;
+}
+
+div.update textarea{
+    font-size:90%;
+}
+
+input.field,textarea.field{
+    background-color:black;
+    color:white;
+    border-style:inset;
+    border-width:1px;
+}
+
+body{
+    color:white;font-size:90%;
+    background-color:black;
+    background-image: url(<<{¶õ.jpg});
+    background-repeat: repeat-x;
+}
+
+.header{
+    text-align:right;
+    color:black;
+}
+
+.header img{
+    float:left;
+}
+
+span.adminmenu a:link,span.adminmenu a:visited,span.adminmenu a:hover{
+    color:black;
+}
+
+h1{
+    border-color:white;
+    font-size:200%;
+    font-family:Comic Sans MS,cursive;
+    padding:3px 3px 20pt 3px;
+}
+
+h2{
+   font-size:180%;
+   border-color:white;
+   border-width:0 0 1px 0;
+   border-style:solid;
+}
+
+h2 a{
+    text-decoration:none;
+}
+
+h3{
+    background-color:#444444;
+    font-size:120%;
+}
+
+h4{
+    border-style:solid;
+    border-width:0px 0px 0px 10px;
+    border-color:#444444;
+    font-size:100%;
+    padding-left:3px;
+}
+
+.xsectionbody,.xsubsectionbody,.xsubsubsectionbody{
+    margin-left:1em;
+}
+
+dt{
+    font-weight:bold;
+}
+
+A:hover {
+    color:black;
+    background-color:white;
+}
+
+big,p.centering{
+    font-size:200%;
+}
+
+cite,blockquote{
+    font-style:italic;
+}
+
+a:link {
+    color:silver;
+    font-weight:bold;
+}
+
+a:visited {
+    color:silver;
+}
+
+div.day table{
+    border-collapse:collapse;
+    border-width:2px ;
+    border-style:solid ;
+    border-color:white;
+    margin-left:4em;
+    font-size:80%;
+}
+
+td,th{
+    border-width:1px ;
+    border-style:solid ;
+    border-color:white;
+}
+
+.adminmenu{
+    text-align:right;
+    font-size: 90%;
+}
+
+.adminmenu a{
+/*    border-style: solid;
+    border-color: white;
+    border-width: 1px 2px 2px 1px;
+    padding: 3px;
+    background-color: black;*/
+    color:black;
+}
+
+.adminmenu a:hover{
+/*    border-style: solid;
+    border-width: 1px 2px 2px 1px;
+    padding: 3px;
+    background-color:white;*/
+    color:black;
+}
+
+
+pre{
+    margin-left: 1cm;
+    margin-right: 1cm;
+    border-width:1px 0px 1px 1px;
+    border-color:white;
+    border-style:solid;
+    white-space: -moz-pre-wrap; /* Mozilla */
+    white-space: -pre-wrap;     /* Opera 4-6 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    white-space: pre-wrap;      /* CSS3 */
+    word-wrap: break-word;      /* IE 5.5+ */
+    padding:3px;
+    font-size:90%;
+}
+
+div.terminator{
+    font-size:90%;
+    background-color:#444444;
+    margin-left:0.5cm;
+    margin-right:0.5cm;
+    padding:3pt;
+}
+
+div.main{
+    float:right;
+    width:70%;
+}
+
+div.sidebar{
+    float:left; 
+    width: 25%;
+    font-size:90%;
+    background-color:transparent;
+    padding:145px 3px 3px 3px;
+}
+
+div.sidebar h3{
+    border-width:1px 3px 0px 0px;
+    border-color:white;
+    border-style:solid;
+    padding:1px 1px 1px 3px;
+    -moz-border-radius:4%;
+    margin:0;
+    color:black;
+    font-size:normal;
+    background-color:white;
+    font-size:90%;
+}
+
+div.sidebar h3 a{
+    color:black;
+}
+
+div.sidebar ul li{
+    padding-left: 0em;
+}
+
+div.sidebar div.xsection{
+    border-width:1px 3px 3px 1px;
+    border-color:white;
+    border-style:solid;
+    margin:4px 0 0 4px;
+    -moz-border-radius:5%;
+}
+
+sup a{
+    text-decoration:none;
+    font-size:90%;
+}
+
+div.footnote{
+    font-size:70%;
+    margin:1em 1em 1em 1em;
+}
+
+ul.referer{
+    font-size:80%;
+}
+
+ul.comment{
+    font-size:90%;
+}
+
+div.comment p{
+    margin:3px 3px 3px 3px;
+}
+
+span.commentator{
+    color:silver;
+    font-weight:bold;
+}
+
+span.comment_date{
+    font-size:80%;
+    color:silver;
+}
+
+div.body img{
+    float:right;
+}
+
+.sidebar img{
+    float:none;
+    border-width:0px;
+}
+
+.copyright{
+    text-align:right;
+    font-size:90%;
+    font-style:italic;
+}

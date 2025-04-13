@@ -1,0 +1,40 @@
+<<[Lua] 動的配列と空要素と要素の列挙>>
+
+* http://blog.livedoor.jp/dankogai/archives/51765448.html{
+  404 Blog Not Found:tips - 動的配列と空要素と要素の列挙}
+
+Lua でやってみた。
+
+8<
+$ cat a.lua
+local fizzbuzz = {}
+for i=1,30 do
+    if i % 3 == 0 then fizzbuzz[i] = (fizzbuzz[i]or"").."Fizz" end
+    if i % 5 == 0 then fizzbuzz[i] = (fizzbuzz[i]or"").."Buzz" end
+end
+print(#fizzbuzz)
+for i,e in pairs(fizzbuzz) do
+    print(e)
+end
+>8
+8<
+$ lua a.lua
+0
+Fizz
+Buzz
+Fizz
+FizzBuzz
+FizzBuzz
+Fizz
+Fizz
+Buzz
+Buzz
+Buzz
+Fizz
+Fizz
+Fizz
+Fizz
+>8
+
+* 要素数: 空(nil)を取る要素の最も小さい添字-1
+* 列挙: 空要素は無視する

@@ -1,0 +1,298 @@
+<HTML>
+<HEAD>
+  <TITLE>コマンドラインシェル NYAシリーズ FAQ ページ</TITLE>
+  <LINK REL="stylesheet" TYPE="text/css" HREF="../gray.css" />
+  <STYLE TYPE="text/css">
+  <!--
+    DT{ font-weight:bold ; color:silver }
+    B{ color:red }
+  -->
+  </STYLE>
+</HEAD>
+<BODY TEXT="white" LINK="silver" VLINK="gray" ALINK="red" BGCOLOR="black">
+
+<H1>FAQ</H1>
+
+<UL>
+  <LH>- 目次 -</LH>
+  <LI><A HREF="#soboku">素朴な</A></LI>
+  <LI><A HREF="#bug7">バグ？</A></LI>
+  <LI><A HREF="#request">要望系</A></LI>
+  <LI><A HREF="#source">ソース</A></LI>
+</UL>
+
+<P STYLE="margin-left:10%;margin-right:10%"
+    >FAQ といっても、別に頻繁に質問されているわけではありません。
+    単なるノウハウ集です。本当はマニュアルに記述すべきなんですけどね。
+</P>
+
+<H2><A NAME="soboku">素朴な</A></H2>
+<DL>
+  <DT>Cygwin で bash があるのに、何故 NYADOS/NYACUS を作ったんですか？</DT>
+  <DD>Windows95/98/Me では、WIN32アプリ上が何故か DOS窓での日本語入力を
+      読みこめないという問題があります。
+      Cygwin の bash も、この例外ではなく、日本語入力のできる
+      Windows95/98/Me 用コマンドラインシェルが不在状態になっていました。
+      <BR /><BR />
+      一方、世の中には LFN対応の KI-Shell というシェルが存在し、
+      DOS アプリケーションであれば、上問題がクリアできることが分かっていました。
+      が、KI-Shell の操作性は UNIX に慣れたユーザには辛いものがありました。
+      そこで、bash や tcsh ライクな日本語拡張コマンドラインシェルを
+      新たに DOS/Windows95/98/Me 向けに作成することにしたのです。
+  </DD>
+  <DT>では、NYACUS は何故作ったのでしょう</DT>
+  <DD>当初の目的は NYADOS で果たせたわけですが、思った以上に、
+      WindowsNT/2000系でのニーズがありました。
+      個人的には当時どうでもよかったのですが
+      「貝が欲しいか…ならばくれてやろう」
+      と何かが降臨しますた。
+  </DD>
+
+  <DT>なんで、0.28 の次が 2.00 なんですか？</DT>
+  <DD>NYADOS,NYAGOSの前身の OS/2 用シェル NYAOS
+      (Nihongo Yet Another Os/2 Shell)
+      とバージョンを合わせるために、2.xx からとしています。
+  </DD>
+
+  <DT>NYAGOS（にゃあごす）はどこへ行きました？</DT>
+  <DD>諸般の事情で、NYACUS（にゃ～かす）と名前を改めました。
+      でも、やめときゃよかったかなと最近後悔してます。
+  </DD>
+
+  <DT><A HREF="http://hp.vector.co.jp/authors/VA009797/warp/nyaos.html"
+      >NYAOS-I</A> ってなに？</DT>
+  <DD>正式には Nihongo Yet Another Os/2 Shell 1.xx といいます。
+      作者が 1996年～1999年にかけてメンテナンスしていた、OS/2 向けのシェルです。
+      米国製の YAOS(Yet Another OS/2 Shell)というシェルを参考に
+      0 から作成しました。
+      現在メンテナンスは 1.65 リリースを最後に停止しています。
+      仕様的には、NYADOS/NYACUS/NYAOS-II の原型となっていますが、
+      未だに NYAOS-I しかない機能(「かんな」サポート、内蔵カラーls)も
+      存在しています。
+      NYADOS/NYACUS/NYAOS-II には NYAOS-I で学んだ教訓が随所に生きています。
+      生きてるんだってば。
+  </DD>
+
+  <DT>NYADOS/NYACUS/NYAOS-II の総称によく「NYA*S」と書きますが、
+      そもそも、何て読むんですか？</DT>
+  <DD>「ニャースターシェル」とでも呼んでください（ぉぃ）</DD>
+
+  <DT>NYADOS/NYACUS について議論する場所はないのですか？</DT>
+  <DD>ないです（掲示板は廃止しました：過去ログは<a href="./kakolog.html">こちら</a>）
+      <strike>今までそういうものは一切なかったのですが、
+    とりあえず、<!--a href="http://hpmboard2.nifty.com/cgi-bin/bbs_by_date.cgi?user_id=ZXH02315"-->掲示板<!--/a-->を用意しました。
+      必要であれば、メーリングリストの作成も検討しますが、
+      おそらく必要ないでしょう。
+      バグリポートなどは作者へのメールでも構いません。
+      それとも、<A HREF="http://sourceforge.jp/">SourceForge.jp</A
+      >でも使った方がいいでしょうかねぇ…</A>。
+      </strike>
+  </DD>
+
+  <DT>パッチなどを送ると、取りこんでもらえるでしょうか？</DT>
+  <DD>おそらく取り込むことでしょう？
+      しかし、内容によっては拒絶する場合がありますので、ご了承ください。
+  </DD>
+
+  <DT>自分で修正したバージョンを公開してもいいですか</DT>
+  <DD>GPL に沿う限り構いません。別に作者に連絡する義務もありません。</DD>
+
+  <DT>アンインストールするには</DT>
+  <DD>レジストリなどは一切触っていませんので、ファイルを全て削除して
+      いただくだけで Ok です。
+  </DD>
+
+  <DT>シェアウェアにする予定はありますか？</DT>
+  <DD>ありえないと断言します。</DD>
+</DL>
+
+<H2><A NAME="bug7">バグ?</A></H2>
+
+<DL>
+  <DT>aliasでコマンドを設定しても、再びNYADOSを使ったときに
+      その設定が残っていません
+  </DT>
+  <DD>仕様です。毎回、同じ alias を使いたいときは、
+      <TT>_nya</TT> というファイルに、その alias 文を書いてください。
+      (サンプルが ZIP ファイル内に入っていると思います)
+      その<TT>_nya</TT>を、nyados.exe と同じディレクトリか、
+      C:\ か、ホームディレクトリ(環境変数HOMEの差す
+      ディレクトリ)のいずれかに置いておけば、
+      nyados が起動する度に<TT>_nya</TT>の内容を(キーボードから
+      タイプされたのと同様に)読み込みます。
+  </DD>
+  <DT>二重引用符を用いたコマンドを &amp; 起動しようするとすると、
+      コマンド名がタイトルだけになって、CMD.EXE だけが別窓で
+      起動してしまう(NT系)
+  </DT>
+  <DD>「<code>option start &quot;start &quot;&quot;&quot;&quot;&quot;</code>」
+      と定義してください。
+      NT系の start 句の仕様で、二重引用符が最初にあると、
+      タイトルと認識してしまいますので、これで回避します。
+  </DD>
+
+  <DT>more を頻繁に利用していると、実行結果がプリンタに出てしまうことが
+      あります。</DT>
+  <DD><B>NYADOS/NYACUSのせいではありません</B>。
+      more での入力待ちの際に Ctrl-P を押していないでしょうか？
+      MS-DOS の機能として、Ctrl-P を押すと、出力をプリンターにも出すという
+      ものがあります。それが働いているだけです。
+  </DD>
+
+  <DT>バッチコマンドでの環境変数変更が、反映されません。</DT>
+  <DD><B>仕様です</B>。高度な制御構文を利用していないバッチファイルであれば、
+      「source バッチファイル名」で実行できる場合があります。
+  </DD>
+
+  <DT>source 文で読みこんだバッチの中で<code>if errorlevel</code>がうまく働きません。</DT>
+  <DD>DOS,Windows95,Windows98,WindowsMe など、command.com を利用する環境での
+      <B>OS の制限のためです</B>。
+      standalone モードで、command.com を利用しないのも一つの手です。
+      具体的には「option +standalone」を _nya に入れると
+      <UL>
+	<LI><code>if [not] errorlevel</code> が正常に動く</LI>
+	<LI>メモリが 11KB 空く(command.com分)。</LI>
+	<LI>ほんのちょっとだけ高速になる(はず…)</LI>
+      </UL>
+      というメリットがありますが、command.com の内蔵コマンド
+      (dir , mkdir)などが利用できなくなります。これに関しては、
+<PRE STYLE="margin-top:0px;margin-bottom:0px;margin-left:2em">
+alias dir &quot;command /c dir $*&quot;
+alias mkdir &quot;command /c dir $*&quot;
+</PRE>
+      と _nya に記述しておけば、回避できます。
+      なお、<B>NYACUS では、standalone モードはパイプまわりがまだ不安定です</B>。
+  </DD>
+
+  <DT>設定ファイルがうまく読みこめません。</DT>
+  <DD>元々 _nyados , _nyacus , _nyagos といったファイル名でしたが、
+      管理がややこしいので、_nya に統一しました。
+      それらの旧ファイルが残っているということはありませんか？
+      _nyados , _nyagos も使用可能ですが、今後廃止する予定ですので、
+      なるべく使わないでください。
+      NYADOS , NYACUS で処理を変えるときは、%nyatype% で判別可能です。
+  </DD>
+
+  <DT>カーソルが見えにくいです(WindowsNT,2000 上の NYACUS)</DT>
+  <DD>2.09 以降のバージョンをご利用ください。
+      <STRIKE>スタートメニュー → 設定 → コントロールパネル → キーボードで、
+      表示の間隔などを調整いただくと、ちょっとマシになりますが…
+      根本的な対応を今検討中です。</STRIKE>
+  </DD>
+
+  <DT>NYACUS の STANDALONE モードで、パイプラインの右側に DOS コマンド
+      (UNIX like tools の head 等) をつなげると
+      <BLOCKQUOTE STYLE="margin-top:0pt;margin-bottom:0pt;font-weight:normal">
+          エラーです. 読み取り中 デバイス<BR />
+          中止 (A), 再試行 (R), 失敗 (F)?
+      </BLOCKQUOTE>
+       と表示されることがあります。
+  </DT>
+  <DD>これは…どうも、OS のバグか制限のようです。
+       NYAシリーズとは関係ない、某シェルでも同様の症状が確認されました。
+       そもそも、NYACUS を使う環境(WindowsNT,2000,XP のコマンドプロンプト)
+       で、DOS コマンドを使うのが間違いとも考えられますので、Win32系の同様
+       のコマンドを利用して回避してください。
+  </DD>
+</DL>
+
+<H2><A NAME="request">要望系</A></H2>
+
+<DL>
+  <DT><STRIKE>コマンドプロンプトヒアのようなことをしたい</STRIKE>
+      <BR />
+      アイコンにドロップしたり、送るメニューで送ったフォルダーを
+      カレントディレクトリにして、起動したい。
+  </DT>
+  <DD><B>スクリプトレベルで実現できます</B>。
+      _nya に一行
+      <strike>「<code>if not /%1/ == // cd --basedir %1</code>」</strike>
+      「<code>if not &quot;%1&quot; == &quot;&quot;
+      cd --basedir &quot;%1&quot;</code>」を追加し、
+      NYADOS,NYACUS のショートカットを送るメニューに入れてみてください。
+      送ったディレクトリをカレントディレクトリとして起動させることができます
+      ディレクトリでなくとも、ディレクトリの下にあるファイルでも Ok です。
+      (例:.jar : 「<code>suffix jar start</code>」を_nya に追加する)
+  </DD>
+
+  <DT>バッチ機能の強化は？</DT>
+  <DD>多分、これ以上はしないと思います。
+      <UL>
+	<LI>WindowsScriptingHost</LI>
+	<LI>Perl</LI>
+	<LI><A HREF="http://www.ruby-lang.org/ja/">Ruby</A></LI>
+	<LI>REXX(OS/2)</LI>
+      </UL>
+      などのスクリプト言語をお使いになることをお薦めします。
+  </DD>
+
+  <DT>ls や mv , cp を内蔵して欲しい。</DT>
+  <DD><strike><B>予定はありません</B>。NYADOS の場合、メモリが限られているので、
+      必ずしもシェルに内蔵せずとも実現できる機能は内蔵しません</strike>。
+      UNIX Like なコマンド集としては、下記をお薦めします。
+      <UL>
+	  <LI>(DOS,Windows95,98,Me 向け)
+	  <a href="http://www.vector.co.jp/soft/win95/util/se010511.html"
+	      title="Go to UNIX-like tools(Windows95/98/Me/ユーティリティ)"
+		  >UNIX-like tools</a></LI>
+	  <LI>(WindowsNT,2000,XP向け)
+	      <a href="http://www.piedey.co.jp/softs/ntuxtl.html" 
+		  title="Go to NT版UNIX-like tools">NT版UNIX-like tools</a></LI>
+      </UL>
+  <dd>
+      (2003.10.04) 方針を転換し、ls については、list コマンドという形で
+      内蔵することにしました。また「<code>nyacus -a</code>」で起動すると、
+      ls , mv , cp がそれぞれ list , move , copy のエイリアスとして
+      定義されます。
+  </DD>
+</DL>
+
+<H2><A NAME="source">ソース</A></H2>
+<DL>
+  <DT>ソースからビルドするコンパイラは何を使えばいいですか？</DT>
+  <DD>NYADOS は<A HREF="http://www.digitalmars.com/">Digital Mars C++</A>、
+      NYACUS は Borland C++ 、NYAOS-II は emx/gcc を利用ください。
+      いずれもフリーで利用することができます。
+      昔は Turbo-C++ もサポートしていましたが、今は外しています。
+  </DD>
+
+  <DT>NYADOS/NYACUS/NYAOS2 は独自のクラスライブラリを使っているのは何故ですか？</DT>
+  <DD>STL 等のテンプレートは巨大すぎます。
+      NYADOS は DOS 環境での動作も想定しているため、実行ファイル自体を
+      あまり大きくすることはできません。
+      ということで、最初は Turbo-C++ 付属のクラスライブラリ＋αから出発しました。
+      その後、
+      <UL>
+	<LI>ライブラリ自体の仕様が気に要らなかった</LI>
+	<LI>日本語サポート度が低い</LI>
+	<LI>他のコンパイラでの利用も必要になった</LI>
+      </UL>
+      等の理由で、少しずつ置き換えてゆき、最終的に独立したライブラリとなりました。
+      作者はこれを生意気にも Nihongo Nano Class Library と勝手に呼んでいます。
+  </DD>
+
+  <DT>文字列ライブラリ NnString には二項演算子＋がないのは何故ですか？</DT>
+  <DD>二項演算子は、戻り値まわりの実行コストが大きい割に、
+      それほど、見やすいとは思えません。
+      かわりに、挿入演算子 &lt;&lt; を用意しています。
+      「s = a + b ;」ではなく「s &lt;&lt; a &lt;&lt; b ;」を使ってください。
+      (完全に同じ動作というわけではありませんが)
+  </DD>
+
+  <DT>ソースを見ると、コマンド実行部での shell.cpp と mysystem.cpp の役割分担が
+      どうも不可解です。内蔵コマンドの実行などは mysystem.cpp から呼び出すべき
+      では？</DT>
+  <DD>これは、NYA*S がコマンドの実行を COMMAND.COM / CMD.EXE に頼っているから
+      です。STANDALONE モードの導入により、単独でのコマンド実行ができるように
+      なりましたが、まだまだ非STANDALONEモードで利用することが多いため、
+      COMMAND.COM / CMD.EXE の代わりに実行する部分を一応分離しておいて、
+      off にできるようにしておく必要がありました。
+      これが mysystem.cpp に記述されているコードです。
+  </DD>
+
+</DL>
+
+<A HREF="index.html">戻る</A>
+</BODY>
+</HTML>
+<!-- vim:set sw=2 ai: -->

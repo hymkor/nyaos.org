@@ -1,0 +1,19 @@
+# use strict;use warnings;
+
+push( @::html_header , <<STYLESHEET );
+<style type="text/css">
+div.ascii-art{
+ font-size:12pt;
+ line-height:18px;
+ font-family: "Mona","IPA MONAPGOTHIC","MS PGothic","£Í£Ó £Ð¥´¥·¥Ã¥¯","MS PŽºŽÞŽ¼Ž¯Ž¸","MS P¥´¥·¥Ã¥¯",sans-serif;
+}
+</style>
+STYLESHEET
+
+$::block_syntax_plugin{'050_asciiart'} = sub {
+    return 0 unless $_[0] =~ /\A\s*aa\&gt\;/; # args are not copied.
+    my $aa=$';
+    $aa =~ s/\n/<br>/gm;
+    &::puts( '<div class="ascii-art">' . $aa . '</div>' );
+    1;
+};

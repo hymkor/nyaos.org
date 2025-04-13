@@ -1,0 +1,175 @@
+<HTML>
+<HEAD>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+  <LINK REL="stylesheet" TYPE="text/css" HREF="../gray.css" />
+    <TITLE>The eff Support page</TITLE>
+    <STYLE TYPE="text/css">
+    <!--
+      UL B{color:#FF00FF}
+    --></STYLE>
+</HEAD>
+<BODY BGCOLOR="black" TEXT="white" LINK="silver" VLINK="gray" ALINK="red" >
+
+<DIV ALIGN="RIGHT">
+<TABLE>
+<TR>
+  <TD><DIV CLASS="BOX"
+  ><A HREF="/VA009797/warp/nyaos.html">NYAOS</DIV></TD>
+  <TD><DIV CLASS="XOB">eff</DIV></TD>
+  <TD><DIV CLASS="BOX"
+  ><A HREF="/VA009797/warp/ell.html">ELL &amp; etc</A></DIV></TD>
+  <TD><DIV CLASS="BOX"
+  ><A HREF="/VA009797/warp/port.html">移植物</A></DIV></TD>
+  <TD><DIV CLASS="BOX"
+  ><A HREF="/VA009797/rexx/index.html">REXX</A></DIV></TD>
+</TR>
+</TABLE>
+</DIV>
+
+<DIV ALIGN="right">
+<TABLE><TR><TD>
+<PRE STYLE="font-size:12pt;line-height:12pt"
+><FONT COLOR="#00CCFF">   __________________</FONT>
+<FONT COLOR="#00AAFF">  /  ___/  ___/  ___/</FONT
+>   <SPAN STYLE="color:#EEEEAA;font-weight:bold;font-style:italic"
+>eff -- えふ</SPAN>
+<FONT COLOR="#0088FF"> /  ___/ ___// ___/ </FONT>
+<FONT COLOR="#0066FF"><U>/     / </U>/   <U>/ </U>/     </FONT
+><I>Copyright (c) 1998-2002 HAYAMA,Kaoru</I
+></PRE>
+</TD></TR></TABLE>
+</DIV>
+
+<DIV ALIGN="right">
+<TABLE>
+<TR>
+  <TD><SPAN CLASS="BOX"><A HREF="effmacro.html">マクロ集</A></SPAN></TD>
+  <TD><SPAN CLASS="BOX"><A HREF="eff-faq.html">ＦＡＱ</A></SPAN></TD>
+  <TD><SPAN CLASS="BOX"><A HREF="history-eff.html">履歴</A></SPAN></TD>
+</TR>
+</TABLE>
+</DIV>
+
+<P><TT>eff</TT> は OS/2 プロンプト画面用のファイラーらしき代物です。</P>
+
+<P ALIGN=CENTER CLASS="SAY1M">
+    「何で OS/2 にはフルキーだけで扱えるファイラーが無いねん！」
+</P>
+
+<P>と、お困りのタッチタイパーの方に御使用をお薦めします。
+    現バージョンにおける特徴は次の通りです。
+</P>
+
+<UL>
+    <LI>キー・拡張子にOS/2コマンドや<B>組込みのREXX構文をバインド</B>できる。</LI>
+    <LI>画面を複数に分割して、一度に複数のディレクトリを扱うことができる。
+        (Emacsっぽく)</LI>
+    <LI>UNIX 使いに優しいキーバインド。しかも、あらゆる一行入力に、<!--
+        --><B>かんな</B>・<B>ヒストリ</B>・<B>補完</B>などが使える。</LI>
+    <LI>ファイルをワークプレイスオブジェクトとして OPEN できる。</LI>
+    <LI>ファイルの<B>コメントの読み書き</B>ができる(拡張属性.SUBJECTを<!--
+        -->利用するので、多くのフリーソフトのコメントと互換性がある)</LI>
+    <LI>WPSとは別に、設定ファイルによる関連付けもできる。</LI>
+    <LI>less ライクな内蔵ページャ。</LI>
+    <LI>マークしたファイルの名前一覧をクリップボードにもコピーできる。</LI>
+    <LI>カット＆ペースト感覚で、ファイルの移動/コピーができる。</LI>
+    <LI> .LONGNAME属性を利用して、<B>FAT でも長いファイル名</B>を管理可能。</LI>
+    <LI>なぜか、<B>他のセッションをアクティブ/最小化</B>などもできる。</LI>
+    <LI><B>ツリー表示</B>なんかもできたりしゃったりなんかして。</LI>
+    <LI>設定ファイルにインタフェイスを記述すれば、<B>任意の書庫<!--
+        -->(含む自己解凍型書庫)</B>をディレクトリ内のファイルで<!--
+        -->あるかのように閲覧可能</LI>
+    <LI><B>色</B>もいろいろ変えられる(バキッ)</LI>
+    <LI><A HREF="./nyaos.html">NYAOS</A>と似ても似つかぬ<!--
+        --><B>タイニーコマンドラインシェル</B>内蔵</LI>
+    <LI>勘違いする人がいたので明記しますが、<B>Windows では動作しません</B>。</LI>
+</UL>
+<P ALIGN=CENTER>
+    eff 実行画面：
+    <A HREF="../img/effimg.png">-rw-a--- 26,337 Oct 1 12:38 ../img/effimg.png</A>
+</P>
+<H2><A NAME="whatsnew">What's New!</A></H2>
+
+<H3><A NAME="138">1.38 を公開しました</A></H3>
+
+<UL>
+    <LI>コマンドモードで、全角文字を入力すると落ちるバグを修正
+</UL>
+
+<P>曲がりしっぽさん、バグリポートありがとうございました。</P>
+
+<H3 CLASS=RED><A NAME="137">1.37 を公開しました</A></H3>
+
+<UL>
+    <LI>100MB 以上のファイルでも崩れないよう、表示フォーマットを修正。
+	(1列・2列表示の際のサイズ桁数を一つ増やしただけ)
+    </LI>
+    <LI><B>[虫繕]</B>_eff の print 文の内容が実際の表示に反映されていなかった。
+	ただし、プロパティー eff.directory に関しては問題なし。
+	また、標準の _eff で print文と、eff.directory 
+	プロパティーの両方が使用されていたので、後者をコメントアウトした。
+    </LI>
+    <LI><B>[虫繕]</B>かんなが使えない環境で、_eff に「canna 2」を指定すると、
+	落ちてしまう。
+    </LI>
+</UL>
+
+<P>なーがさん、バグリポートありがとうございました。</P>
+
+<H2 CLASS=AQUA><A NAME="download">DOWNLOAD</A></H2>
+<P>
+    http によるリンクですので、Shift + 左クリックか<!--
+    -->「リンク先の保存」を選んで、ダウンロードしてください。<!--
+    -->ただの左クリックでは、誤って文字化けテキストとしてブラウザ上に<!--
+    -->書庫内容が表示されてしまうことがあるので、注意してください。
+</P>
+<TABLE ALIGN=CENTER><TR><TD BGCOLOR="white">
+<TABLE CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="black"><TD BGCOLOR="black" ROWSPAN=2 STYLE="font-weight:bold">1.38</TD>
+<TD>(binary)</TD>
+   <TD BGCOLOR="black"><A HREF="eff138.zip"><FONT FACE="Terminal"><TT>325986 May 26 03:19  eff138.zip</TT></FONT></A></TD></TR><TR BGCOLOR="black"><TD>(source)</TD>
+   <TD BGCOLOR="black"><A HREF="eff-1.38.tar.bz2"><FONT FACE="Terminal"><TT>107454 May 26 03:19  eff-1.38.tar.bz2</TT></FONT></A></TD></TR>
+<TR BGCOLOR="black"><TD STYLE="font-weight:bold" COLSPAN=2 BGCOLOR="black">icon &amp; installer</TD>
+    <TD>
+        <A HREF="effetc.lzh" STYLE="white-space:pre"
+        ><FONT FACE="Terminal"><TT>  4318 Oct  1 12:39  effetc.lzh</TT></FONT></A>
+    </TD>
+</TR>
+<TR BGCOLOR="black"> <TD STYLE="font-weight:bold" COLSPAN=2
+    >emx 0.9d</TD>
+    <TD>
+        <A HREF="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+        ><FONT FACE="Terminal"><TT>emxrt.zip(Hobbes)</TT></FONT></A>
+    </TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+<P>1.35以降は emx 0.9d FIX04 のランタイム DLL,
+    1.34以前は emx 0.9d FIX03 のランタイム DLL が必要です。
+</P>
+
+
+
+<H2>謝辞</H2>
+
+<P>本ファイラー‘eff’の製作にあたって</P>
+
+<DIV STYLE="margin-left:2em">
+    <NOBR>
+    宇野 篤也さん、<WBR>岡林 利明さん、<WBR>大久保 均さん、<WBR>
+    橋本 出　さん、<WBR>我那覇 誠さん、<WBR>Ｓｏｆｉｙａさん、<WBR>
+    なーが さん、<WBR>品野 竜太さん、<WBR>沢田石 順さん、<WBR>
+    ＦＲＩＥＳさん、<WBR>藤原 利弘さん、<WBR>日下部 憲一さん、<WBR>
+    我澤賢之さん、<WBR>中山　康さん
+    </NOBR>
+</DIV>
+
+<P>他、みなさまに助言・提案・プレッシャー(笑)・バグリポートなどいただきました。
+    この場を借りてお礼申し上げます。m(__)m
+</P>
+
+<A HREF="/VA009797/">戻る</A>
+
+</BODY>
+</HTML>

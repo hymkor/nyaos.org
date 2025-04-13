@@ -1,0 +1,53 @@
+<<[ロストテクノロジー] 文字列スタック>>
+
+NYAOS に付属させるべく、cp/mv/rm を作ってるわけですが、
+ディレクトリにあるファイル名を保持するのに、
+コンテナライブラリが欲しくなりました。
+
+実のところ、普通に vector<string> で用が足りるんですが、
+STL使うと小さなソースでも、バイナリサイズが 500KB くらいに膨れあがってしまうので、
+やむなく、C言語のロストテクノロジーを持ち出しました。
+
+<<<宣言>>>
+
+8<
+struct nodelist_s {
+    struct nodelist_s *next;
+    char buffer[1];
+} *stack;
+>8
+
+<<<push_back(s)>>>
+
+8<
+struct nodelist_s *tmp=(struct nodelist_s *)alloca(sizeof(struct nodelist_s)+strlen(s));
+n->next = stack;
+strcpy(n->buffer,s);
+stack = n;
+>8
+
+正確には push_front か？
+
+<<<全要素操作>>>
+
+8<
+for(struct nodelist_s *p=stack ; p != NULL ; p=p->next ){
+    ;
+}
+>8
+
+<<<解放>>>
+
+関数から抜けるだけ
+
+-----
+
+今時、こんなコード書いてる人いないだろうなぁ。
+
+STL を使えば、非常に楽だし、分かりやすいのは分かってるんですが、
+cp 一つに 500KB ってのは、あまりに…。
+ちなみに、ロストテクノロジーを使うと、10KB になってしまいますた。
+((fn ちなみに NYAOS では、独自のコンテナライブラリを作り込んでいます。
+ それはそれでどうよ…って感じですが))
+
+メンテナンス性という尊い犠牲の上に成り立った「コンパクトさ」です。

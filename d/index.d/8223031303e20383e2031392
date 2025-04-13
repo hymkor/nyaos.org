@@ -1,0 +1,18 @@
+<<NYAOS 3.1.0_0 を公開しました>>
+
+当バージョン 3.1 より、開発版となります。
+既存の 3.0系列は安定版として、当面不具合修正のみ行う予定です。
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS.ORG - NYAOS 3000}
+** http://www.nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos-3.1.0_0-win.zip{nyaos-3.1.0_0-win.zip}
+** http://www.nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos-3.1.0_0-os2.zip{nyaos-3.1.0_0-os2.zip}
+** http://www.nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos-3.1.0_0-src.zip{nyaos-3.1.0_0-src.zip}
+
+変更点は次の通り：
+
+* 日本語以外の全DBCSもサポート
+* 標準出力が端末でない時、ls は ls -1 として動作するようにした。
+* ls に -x オプションを追加(端末でない時も、強制的に数列表示させる、「-1」の逆)
+* Lua関数: nyaos.splitknj() 追加(1文字(DBCS)毎に分割して、テーブルへ格納する)
+
+以上、よろしくお願い致します。

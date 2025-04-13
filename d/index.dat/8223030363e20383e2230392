@@ -1,0 +1,23 @@
+* http://msig.info/web2.php{Web2.0 Logo Creator by Alex P}で、wifky のロゴ作った。
+
+* http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%5Bplugin%5D+%B9%E2%B6%B6%A5%E1%A5%BD%A5%C3%A5%C9%A5%D7%A5%E9%A5%B0%A5%A4%A5%F3{高橋メソッドプラグイン}つくった。
+
+* 一見、それなりに活動してるように見えるかもしれないが、実はとても鬱。
+    単に逃避先になっているだけなのだ。
+
+<<http://pc8.2ch.net/test/read.cgi/linux/1003248633/l50{日記ツール総合スレッド}を見る>>
+
+5年くらい続いているスレなので、
+これだけでにっきシステムの変遷が見られて、おもしろい。
+
++ hns vs TDS (このスレでは hns が嫌われていた模様)
++ hns vs TDS vs tDiary vs nDiary (徐々に tDiary の評価が上がってゆく)
++ 話題の中心が ブログ vs ウェブ日記へ
++ wiki (特に PukiWiki) , Chalow がぼちぼち登場
+
+方式も、静的 HTML生成 → ユーザによる FTP から、
+サーバサイドでの動的生成が中心になってゆく。
+が、前者に対するニーズも、まだまだ根強いものがあるな。
+
+自分は全てサーバサイドにおいといた方が幸せ派になりつつあるが。
+そのうち「魂」すらも、サーバサイドに置きたがるかもしれない。

@@ -1,0 +1,106 @@
+<<ヒキコモリ 関東へ跳ぶッ！ 【第一夜】>>
+
+<<{20090704183600.jpg} ♪ 新大阪～ 新大阪～
+
+目の前の売店で、柿の葉寿司とお茶を買って、のぞみに乗り込む
+
+<<{20090704183553.jpg} さぁ、行くぞ ＞ 俺 
+
+車中でのはやまの心中が知りたい人は twitter を見てみよう！
+(流れないうちにね)
+
+さて、http://www.nackworld.com/cgi-bin/nicky/nicky.cgi?DT=20090704A#20090704A{Nackさん}
+とは品川駅の南のりかえ口で待ち合わせの約束だったので、
+北のりかえ口に通じる階段をスルーして、
+ぼちぼち南のりかえ口かな～と思われる階段を登ってみた…
+
+>> まだ、北のりかえ口だった！ <<
+
+なにやってんの！ 
+ということで、4,5分ほどロスタイム。
+やはり、今回も関東で最初にしたことは「迷子」であったか。ニンニン
+
+(続く!)
+
+<<[Mercurial] 開発中に旧バージョンに不具合を見付けた>>
+
+にっきに画像を うp したのに、
+RSS にそれが表示されてない！
+''(amazon の書影は出るのに、何故だ！/坊やだからさ)''
+
+たぶん、書き掛けの「にっきプラグイン」のコードのせいだと思うけど、
+それ以前の原因かもしれないので、
+書き掛けのコードは一旦退避して、公開コードでテストしたいなぁ。
+でも、ワークディレクトリをあちらこちらに用意したり、
+名前をかえて保存といった'''ベタなこと'''はやりたくないぜ。
+''(CGIディレクトリを増やさにゃいかんし)''
+
+というわけで、
+「http://d.hatena.ne.jp/dayflower/20090520/1242794877{Mercurial MQ について - daily dayflower}」を教科書に
+Mercurial MQ を使ってみる。
+
+最近の Mercurial は MQ が既に導入されてるそうなので、
+MQ の拡張を On にするだけでいいらしい。
+えーと「``vim .hg/hgrc``」して
+
+8<
+[extensions]
+mq=
+>8
+
+と追記。次に退避場所(キュー)として、nikky-dev というキューを作る。
+もう既に修正を始めてしまっているので -f オプションを付けんと駄目らしい
+(-f をつけないと、エラーで拒否られた)
+
+8<
+$ hg qnew -f nikky-dev
+>8
+
+キューへ、今の修正状況を反映する。これは実は commit と同じ操作らしい。
+
+8<
+$ hg qrefresh
+>8
+
+キューの修正を pop する
+
+8<
+$ hg qpop
+>8
+
+``hg log`` とか ``hg diff`` とかすると修正コードが普通に消えているぜ。
+でも、
+
+8<
+$ hg qpush nikky-dev
+applying nikky-dev
+No username found, using 'hayama@IBM-5D12ABBF575' instead
+Now at: nikky-dev
+>8
+
+とすると、修正は復活するっぽいし
+
+8<
+$ hg log | less
+changeset:   384:49c8043d0517
+tag:         qtip
+tag:         tip
+tag:         nikky-dev
+tag:         qbase
+user:        hayama@IBM-5D12ABBF575
+date:        Sun Jul 05 09:04:52 2009 +0900
+summary:     imported patch nikky-dev
+
+changeset:   383:2c232ead0228
+tag:         qparent
+user:        hayama@IBM-5D12ABBF575
+date:        Tue May 05 15:56:08 2009 +0900
+summary:     * sort footnotes' number including ones in blockquotes.
+>8
+
+履歴にも復活するっぽい。
+消えてなさげなので、も一回「hg qpop」を実行して封印しておこう、
+闇から闇へ''(なんでやねん)''
+
+さて、こうやって公開バージョンに戻しはしてみたのだが…、
+'''やっぱり画像が出ないんじゃよ～'''

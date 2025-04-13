@@ -1,0 +1,68 @@
+!!! ((title #golang で一文字キー入力))
+
+ほとんどパクりだけど、でけたような雰囲気
+
+8<
+package main
+
+// https://groups.google.com/forum/?fromgroups#!topic/golang-nuts/EpAiBOX4Ylc
+// https://gist.github.com/tadglines/5565147
+
+/*
+#include <windows.h>
+KEY_EVENT_RECORD* getKeyEvent(struct _INPUT_RECORD *input) {
+	return &(input->Event.KeyEvent);
+}
+char getAsciiChar(struct _INPUT_RECORD *input) {
+	return input->Event.KeyEvent.uChar.AsciiChar;
+}
+WCHAR getUnicodeChar(struct _INPUT_RECORD *input) {
+	return input->Event.KeyEvent.uChar.UnicodeChar;
+}
+*/
+import "C"
+import "fmt"
+
+func main(){
+	handle := C.GetStdHandle( C.STD_INPUT_HANDLE )
+	fmt.Printf("C.STD_INPUT_HANDLE=%d\n",handle)
+
+	var buffer [10]C.struct__INPUT_RECORD
+	var numberOfEventsRead C.DWORD
+
+	for {
+		result := C.ReadConsoleInput( handle ,
+							&buffer[0] ,
+							C.DWORD(len(buffer)) ,
+							&numberOfEventsRead )
+
+		fmt.Printf("result=%d\n",result)
+		fmt.Printf("eventRead=%d\n",numberOfEventsRead)
+		for i:=C.DWORD(0) ; i< numberOfEventsRead ; i++ {
+			if buffer[i].EventType == C.KEY_EVENT &&
+			   (C.getKeyEvent(&buffer[i]).bKeyDown) != C.FALSE {
+				fmt.Printf("[%d]\n", C.getAsciiChar(&buffer[i]))
+				return
+			}
+		}
+	}
+}
+>8
+
+8<
+$ go run ReadConsoleinput.go
+C.STD_INPUT_HANDLE=31
+result=1
+eventRead=1
+result=1
+eventRead=1
+[102]
+>8
+
+* パクリ元
+** https://groups.google.com/forum/?fromgroups#!topic/golang-nuts/EpAiBOX4Ylc
+** https://gist.github.com/tadglines/5565147
+
+* go は、普通に windows.h を呼べる
+* ただし、ネストされた構造体は、どうもうまくコンバートできないので、一個変換関数を噛ませてやらなくてはいけない。
+* import "C" の直前のコメントに、C言語のコードが書けてしまう。どうやって実現してんだこりゃ？

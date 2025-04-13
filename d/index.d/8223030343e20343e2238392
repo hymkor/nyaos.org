@@ -1,0 +1,38 @@
+
+<<BUG>>
+
+「<code>cd \hoge ; echo `pwd`\x</code>」が
+「<code>\hoge\x</code>」ではなく
+「<code>\hoge \x</code>」になってしまう。
+
+<<KNOWHOW>>
+
+NYACUS をフォルダに関連付けると(一見すると)幸せになるようで、
+実は普通にエクスプローラーで Open できなくなる罠がまっていた。。
+さて、どうやって復旧するか。。
+
+* http://box.elsia.net/~blog/archive/2004/04/24/#id1082739383{
+    rubyってtDiaryを動かすのに必要なヤツだっけ?}
+    (http://sho.tdiary.net/20040427.html#p02{ただのにっき}より)
+    :: こうした発言が出ることは、tDiary が Ruby を超えて
+	認知されているという事で、逆に望ましいことのような。
+	「普通」のソフトは、どんな技術で作られていようが、
+	一般人は気にしないものですし。
+    :: また、言い換えれば、気にされないようになってこそ、
+	その技術も、また成熟したと言えるような気がします。
+* http://homepage3.nifty.com/mogami/diary/d0404.html#23t1{
+    エレベータの開閉ボタンは逆だろ、逆！}
+    (http://www.annie.ne.jp/~hachi/aketekure/diary.shtml#040426{
+	あけてくれ - おれカネゴンの「算数できんの気にし過ぎとや」日記}より)
+    :: 開と閉は、漢字が似ていて、見間違えやすい。
+	<strike>わし</strike>小学生にも分かるように
+	「あける」「しめる」と書くべし。
+* http://www.itmedia.co.jp/news/articles/0404/26/news068.html{
+    「はてな」が東京に来た理由}
+    (http://sodium.dnsalias.com/sodium/diary/20040427.html#p02{
+	sodiumイオンにっき}より)
+    :: 京都に帰りたいな。。(今いるのは大阪だけど)
+* http://diary.cgiboy.com/d01/kougi/{手塚治とマクドナルド
+    ―― どっからどうみても、両者は対立する}
+    (http://dayomon.fc2web.com/index.html{それゆけ！！だよもん星}より)
+    :: 目のつけどころが、シャープです。

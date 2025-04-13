@@ -1,0 +1,27 @@
+!!! http://hail2u.net/blog/software/turn-off-zip-folder.html{hail2u.net - Weblog - 圧縮フォルダを使わないようにするとエクスプローラがキビキビ動く}
+
+!! 解除
+
+8<
+regsvr32 /u zipfldr.dll
+regsvr32 /u cabview.dll
+>8
+
+ただし、拡張子 .zip/.cap にするツールを関連付けしてやらないとすぐ復活する。
+
+!! 再登録
+
+8<
+regsvr32 zipfldr.dll
+regsvr32 cabview.dll
+>8
+
+!!! http://questionbox.jp.msn.com/qa686377.html{エクスプローラを、初期表示をデスクトップにして起動するには - 質問・相談ならMSN相談箱}
+
+XP限定。ショートカットのリンク先を以下のようにする。
+
+8<
+explorer /e,/root,shell:::{603D3800-BD81-11d0-A3A5-00C04FD706EC}
+>8
+
+

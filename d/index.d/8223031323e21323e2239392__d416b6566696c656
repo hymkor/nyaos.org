@@ -1,0 +1,12 @@
+mingwfree.lib : mingwfree.dll mingwfree.def
+	lib /DEF:mingwfree.def /MACHINE:X86 /out:mingwfree.lib
+
+mingwfree.dll : mingwfree.o
+	$(CC) -shared -o $@ $<
+
+.cpp.o:
+	$(CC) -c $<
+
+
+clean:
+	rm mingwfree.o mingwfree.dll mingwfree.lib mingwfree.exp

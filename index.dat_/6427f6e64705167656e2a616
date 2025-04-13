@@ -1,0 +1,23 @@
+NYAOS(NYACUS,NYADOS,NYAOS-II)は Windows,DOS,OS/2上の DOS窓/コマンドプロンプト上で動作するコマンドラインシェルです。 主な特徴として次のような点があります。
+
+* tcsh ライクなだけの編集機能（NYACUS,NYAOS-II はクリップボード読書き可能）
+* Vzライクな単語単位のヒストリ機能(tcshライクも可能)
+* DOS,Windows95,98,Me,NT,2000,XP,OS/2 と幅広いプラットフォームをサポート
+* 内蔵カラー ls (listコマンド)
+  ((br))<<{color-ls.png}
+* エイリアス/関数機能
+* キーカスタマイズ可能
+* コマンドが長くても、横スクロールするので、編集に支障が出ない
+* 逆クォート
+* 強力な補完機能
+** VFAT 対応
+** tcsh 同様の補完(TAB)、候補リスト表示機能(TABx2)
+** 英大文字・小文字の違いは自動修正。
+** 空白を含むファイル名の場合、引用符も自動付加。
+** スラッシュ・バックスラッシュの自動使い分け
+** 変換型の補完もサポート(Ctrl-TAB)
+   ((br)) (例)
+***「``c:/progTAB``」 →「``"c:/Program Files/"``」
+*** 「``c:\progTAB``」 →「``"c:\Program Files\"``」
+    <<{nyaos_completion.gif}
+* GNU General Public License の下で配布可能なフリーソフトウェア

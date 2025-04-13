@@ -1,0 +1,13 @@
+# use strict; use warnings;
+
+$::inline_plugin{abone} = sub {
+    my %save_syntax = %::block_syntax_plugin ;
+    %::block_syntax_plugin = (
+        '990_normal' => sub{ 1 }
+    );
+
+    $::call_syntax_plugin{'000_restore_all'} = sub {
+        %::block_syntax_plugin = %save_syntax;
+    };
+    '&#12354;&#12412;&#12540;&#12435;';
+};

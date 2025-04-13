@@ -1,0 +1,89 @@
+<<Mercurialリポジトリでリポジトリのホームに戻るNYAOS関数を作った>>
+
+http://d.hatena.ne.jp/yoppiblog{id:yoppiblog} さんが、
+http://d.hatena.ne.jp/yoppiblog/20110502{Mercurialリポジトリでリポジトリのホームに戻るzsh関数を作っ}てられたので、NYAOS版(Lua製)を作ってみた。
+
+8<
+function nyaos.command.hu(argv)
+    local cdup=nyaos.eval('hg showconfig bundle.mainreporoot')
+    if argv then
+        cdup = cdup .. '/' .. argv
+    end
+    nyaos.chdir(cdup)
+end
+>8
+
+これを ``hu.lua`` という名前で保存してから、``source hu.lua`` しましょう。
+
+8<
+[C:hayama]
+$ source hu.lua
+hu.lua reading ....
+[C:hayama]
+$ cd src\nyaos3k\tstcode\
+[C:tstcode]
+$ hu
+[C:nyaos3k]
+$ pwd
+C:\Documents and Settings\hayama\src\nyaos3k
+>8
+
+実行させてみると、思ったよりも遅い。hg の起動に時間がかかってるんじゃないかと思った。で、hg コマンドを呼び出さないバージョンを作ってみた。
+
+8<
+function nyaos.command.hu2(argv)
+    local dots='.'
+    while not nyaos.stat(dots..'/.hg') do
+        dots = dots .. '/..'
+        if not nyaos.stat(dots) then
+            return
+        end
+    end
+    if argv then
+        nyaos.chdir( dots ..'/'..argv )
+    else
+        nyaos.chdir( dots )
+    end
+end
+>8
+
+単に「``.hg``」というディレクトリを親ディレクトリ方向へ探してゆくだけ。
+こっちだと、ほぼ瞬時に終了する。いいね！
+
+<<今更だが、標準的な角丸の作り方を復習してみた>>
+
+巷には画像を使わず、CSS だけで角丸を実現する方法もあるし、
+CSS3 では標準装備と聞くが、まずは基本どころを押さえておく必要があると考え、
+角丸のHTML・CSSコードを生成してくれるウェブサービス
+http://www.roundedcornr.com/{RoundedCornr}
+の出力内容を吟味してみた。
+
+<<{標準的な角丸構成.png}
+
+8<
+<div class="灰色">
+  <div class="緑色"><div class="空色"></div></div>
+  <div class="黄色">
+     ～文章～
+  </div><!-- /黄色 -->
+  <div class="桃色"><div class="赤色"></div></div>
+</div><!-- /灰色 -->
+>8
+
+* 実線のオーバルは、実際に表示されるオーバルの境界線
+* 破線エリアは、文章が入るエリア
+* その他の長方形は全て<div> タグ
+* オーバルの内側の色は、一番外側の灰色部分の background-color で指定する
+** CSSは「``background: 内側の色``」な感じ。単純
+* 左上の角丸は、空色の部分の<div>タグの背景画像で表示する
+** CSSは「``background: url(画像URL) no-repeat top left;width:100%;height:30px;font-size: 1px``」
+* 右上の角丸は、緑色の部分の<div>タグの背景画像で表示する
+** CSSは「``background: url(画像URL) no-repeat top right;width:100%;height:30px;font-size: 1px``」
+* 左下の角丸は、赤色の部分の<div>タグの背景画像で表示する
+** CSSは「``background: url(画像URL) no-repeat bottom left;width:100%;height:30px;font-size: 1px``」
+* 右下の角丸は、桃色の部分の<div>タグの背景画像で表示する
+** CSSは「``background: url(画像URL) no-repeat bottom right;width:100%;height:30px;font-size: 1px``」
+* オーバルの内側の文章は、黄色の部分の <div> タグ内に書く。
+** CSSは「``margin: 0 30px``」で、内側にインデント
+
+うむ、めんどくさいね！

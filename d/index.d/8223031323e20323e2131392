@@ -1,0 +1,22 @@
+<<NYAOS 3.2.0_3/3.3.0_3 を公開しました>>
+
+<<<ダウンロード>>>
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000
+
+<<<変更点>>>
+
+* 実行ファイルをチルダ付きパスで呼び出す時、ホームディレクトリ名に 含まれる空白を、パラメータ区切りと誤認識してしまう問題を修正
+
+具体的には、WindowsXP で
+
+8<
+[C:nyaos3k]
+$ ~/"My Documents/Downloads/cygwin/setup.exe"
+C:\Documents: No such file or directory
+>8
+
+というエラーが発生する不具合を修正しました。
+「``~``」(チルダ)、すなわち、%USERPROFILE%中の
+「C:\Documents and Settings」の中の空白を
+プログラムとパラメータの区切りを誤認識していたわけです。

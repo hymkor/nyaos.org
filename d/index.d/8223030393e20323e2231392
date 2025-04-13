@@ -1,0 +1,92 @@
+<<[Lua] Lua のライブラリ置き場>>
+
+Lua にも CPAN のような場所があるらしい。
+
+* [LuaForge: Welcome|http://luaforge.net/]
+
+必要だなと思った奴を探してみた：
+
+* [LuaForge: bitlib - library for bitwise operations: Project Info|http://luaforge.net/projects/bitlib/]
+** ビット演算ライブラリ。なんと、標準でビット演算(and/or/xor とかビットシフト)が
+   できなかった！ 結構、衝撃。これ、かなり痛くね？
+* [LuaForge: LuaSQL: Project Info|http://luaforge.net/projects/luasql/]
+** DBMS用ライブラリ。ADO, ODBC, Oracle, MySQL, SQLite と
+   PostgreSQLがいけるとのこと。
+*** せっかく「oluacle」などという、よいネーミングを考えたのにな！
+
+なさげな奴：
+
+* fileinput つーか ARGF みたいな奴
+** 絶対ありそうなもんなんだけどな。
+* ==日本語関連=={[lua-iconv|http://luaforge.net/projects/lua-iconv/]というのがあった}
+
+ためしに EUC-JP → ShiftJIS 変換の関数を書いてみた。
+lua は標準でマルチバイト文字をサポートはしてないけど、
+8ビットクリーンなので、C言語と同様に普通にバイト列として
+扱うことができるので、問題ないはず…
+
+8<
+function euc2sjis(s)
+    return (s:gsub("[\128-\255][\128-\255]", function(s)
+        c1,c2 = string.byte(s,1,2)
+        c1 = c1 - 128
+        c2 = c2 - 128
+        if c1 % 2 ~= 0 then
+            c2 = c2 + 0x1F;
+        else
+            c2 = c2 + 0x7D;
+        end
+        if c2 >= 0x7F then
+            c2 = c2 + 1
+        end
+        c1 = math.floor((c1-0x21)/2) + 0x81
+        if c1 > 0x9F then
+            c1 = c1 + 0x40
+        end
+        return string.char(c1,c2)
+    end ))
+end
+
+for line in io.lines() do
+    print(euc2sjis(line))
+end
+>8
+
+置換メソッドの第二引数に無名関数を書けるのがありがたい。
+
+EUC-JP で記述されたページの HTML をダウンロードしてきて、
+「```lua jcode.lua < ファイル名```」でうまく動作した
+(ShiftJISのターミナルで化けずに表示された)。
+
+!! 追記
+
+不具合があったので修正しました。
+
+* 余りを切り捨てて欲しかったのに、1/2 を 0.5 にしてしまうので、
+  math.floor(…) で囲むようにした。
+* string.gsub の結果が、変換後文字列,変換の回数という二つの値を返していたので、
+  丸括弧で囲んで 2 番目の値を消すようにした。
+
+<<[wifky] 1.5.1_0 を公開しました>>
+
+* [A single file wiki - wifky! - (2009.02.21) wifky 1.5.1_0 【開発版】 を公開しました|http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%282009.02.21%29+wifky+1.5.1_0+%A1%DA%B3%AB%C8%AF%C8%C7%A1%DB+%A4%F2%B8%F8%B3%AB%A4%B7%A4%DE%A4%B7%A4%BF]
+
+前々からやっていたプルダウンメニュー対応です。
+これで、メニューバーが横に長くなってしまうことを気にせず、
+機能を追加できます。
+
+<<[game] The Return of American McGee's Alice>>
+
+去年か今年かに映画が出る…はずが立消えになったような雰囲気だったので、
+「もうだめかもしれんね」と思ってた「アリス・イン・ナイトメア」。
+
+まさか続編が出るとは。やるな、ブライト
+
+* [EA、アリス・イン・ナイトメアの続編『The Return of American McGee's Alice』を発表 - Game*Spark|http://gs.inside-games.jp/news/179/17978.html]
+* [4Gamer.net ― EA，あの「American McGee's Alice」の新作を発表。McGee氏の率いるSpicy Horseとパブリッシング契約を締結（The Return of American McGee's Alice（仮題））|http://www.4gamer.net/games/085/G008532/20090220010/]
+
+邦題はなんてなるんだろうか。Return だから「帰ってきた」か「帰還」
+といったところだが…さて。
+
+しかし、これはもう XBOX360 か PS3 を買うしかないかもしれんね。
+(PC版も出るみたいだが、たぶん、スペック足りんだろう、ノートではwww)

@@ -1,0 +1,82 @@
+<<[Perl] ひろしです。未だにモジュールを作ったことがありません>>
+
+積極的にモジュールの作り方を調べようとしないのは、
+C++ で NYAOS 1.x を作った時、
+
+>> ライブラリは作るものではなく使うもの <<
+
+と悟ったつーのが大きいんですけどね。
+標準品を使うことが大切なんですよね。
+こういうのって。
+
+<<[wifky] にっきプラグイン 0.22.0 リリース>>
+
+* コメントを RSS に出せるようにした。
+* 普通の Wiki と同じように、(YYYY.MM.DD) 形式以外のページを
+  更新順に RSS に出せるオプションを追加。
+
+@nifty 上の、wifky 1.0.3_1 の試験環境もパスしたし、多分、問題なかろー。
+（この検証のためだけに、@nifty のウェブ付きアカウントをキープしているのだ！）
+
+しかし、そろそろ 1.0 にすべき頃かもしれませぬな。
+
+<<[Perl][Python][Ruby] 各言語の Cygwin における Win32 の OLE オートメーション対応状況>>
+
+'''Ruby は最初から入っている'''のでパス（これは大きい）
+
+Perl の場合、Win32::OLE のソースを
+http://search.cpan.org/~jdb/libwin32-0.27/{search.cpan.org(libwin32-0.27)}
+からとってきて、いつもの手順でビルドしてみる。
+
+8<
+$ tar zxvf libwin32-0.26.tar.gz
+$ perl Makefile.PL
+$ make
+$ make install
+>8
+
+「``use Win32::OLE;``」だけのソースがエラーなく流れるし、とりあえずはいけた感じ。
+やるな、ブライト。
+
+さて、同じような感じで、Python もと思い、
+http://sourceforge.net/projects/pywin32/{SourceForge.net(Python for Windows extensions)}
+から、ソースをダウンロードして、コンパイルしようとした。
+
+8<
+$ unzip ./pywin32-210.zip
+$ python setup.py
+Traceback (most recent call last):
+  File "setup.py", line 65, in <module>
+    import _winreg
+ImportError: No module named _winreg
+>8
+
+README.txt に
+
+8<
+these extensions require MSVC7 for Python 2.4 and later, otherwise MSVC6.
+>8
+
+ってあるから仕方ないか…。
+でも、こうした微妙な差が蓄積して、トータルで負けているのが、
+悲しいかな、現在の Python の実情だと思う。
+
+<<がらにもなく、自宅で仕事>>
+
+和名の DB スキーマに英名をつけてる。
+
+Excel シートなんだが、これを SI ObjectBrowser に読み込ませる方法はないかな。
+
+Oracle でテーブルを作ってしまってから、実体ベースで SI ObjectBrowser で
+読み込ませるのは、ちょっとダサイな。
+
+でも、それしかないか…。
+
+<<<Oracle メモ：COMMENT文>>>
+
+テーブルやカラムにコメントを打つ。
+
+* COMMENT ON TABLE schema.table IS 'text';
+* COMMENT ON COLUMN shema.table.column IS 'text';
+
+和名は、これで text として各テーブル・カラムに設定すればよいはず。

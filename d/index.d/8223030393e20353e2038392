@@ -1,0 +1,40 @@
+<<[vim] 地味な日誌>>
+
+~/memo-YYYYMMDD.txt というファイルに、
+vim でその日の記録を残すようにしているんだけれども：
+
+* 毎回ファイル名を入力するのが面倒くさい
+* 忘却力を鍛えた結果、今日の日付を覚えられなくなった
+  ((br))(覚えるころには翌日になっている悲劇)
+
+というわけで、自動でファイル名を設定するようにした。
+
+(1) .vimrc に以下を追記
+
+8<
+function! Memo(n)
+    if exists("b:ago")
+        let ago = b:ago + a:n
+    else
+        let ago = a:n
+    endif
+    let fname="memo-".strftime("%Y%m%d", localtime()-24*60*60*ago).".txt"
+    if exists("$HOME")
+        let fname = $HOME . "/" . fname
+    endif
+    try
+        execute "e " . fname
+        let b:ago = ago
+    endtry
+endfunction
+noremap <F12> :<C-u>call Memo(1)<Return>
+noremap <F11> :<C-u>call Memo(-1)<Return>
+>8
+
+(2) ```gvim.exe -c "call Memo(0)"``` というショートカットを作る。
+
+* ショートカットをダブルクリックすると、
+  今日の ~/memo-YYYYMMDD.txt が開かれる。
+* F12 をクリックすると前日、F11 をクリックすると翌日のファイルに移動する。
+
+習作なので、コードがダサいのは、御容赦ください

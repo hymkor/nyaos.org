@@ -1,0 +1,60 @@
+<<Lua - for の変数スコープ>>
+
+* http://blog.livedoor.jp/dankogai/archives/51693259.html{404 Blog Not Found:perl - for(each)やwhileの変数スコープ}
+
+Perl や Ruby 1.9 ではループの中にスコープが作成されるが、Python 3 ではそうではなかったというお話。さて、我らが Lua はどうか？
+
+8<
+$ cat tmp.lua
+k = 'qb'
+v = 'incubator'
+
+print("outer:",k,"=>",v)
+
+h = {
+    m='Kriemhild Gretchen' ,
+    s='Oktavia von Seckendorff' ,
+}
+
+for k,v in pairs(h) do
+    print("  for:",k,"=>",v)
+end
+print("outer:",k,"=>",v)
+>8
+
+8<
+$ lua tmp.lua
+outer:  qb      =>      incubator
+  for:  m       =>      Kriemhild Gretchen
+  for:  s       =>      Oktavia von Seckendorff
+outer:  qb      =>      incubator
+>8
+
+ばっちそだぜ。まぁ、http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html#2.4.5{マニュアル}にも「ループ変数 var はループ内でローカルである」と明記してあるしね。Lua 使いには常識かな。
+
+<<そういえば Lua の local はレキシカルスコープでよかったっけ？>>
+
+* http://gihyo.jp/dev/serial/01/perl-hackers-hub/000702{Perl Hackers Hub：第7回　新人さんのための仕事で使えるPerl基礎知識（2）｜gihyo.jp … 技術評論社}
+
+を見てて思ったんだけど、Lua の local は、Perl で言うところの my と local のどっちだったっけ？
+
+8<
+$ cat foo.lua
+a="ahaha"
+function foo()
+    print("a="..a)
+end
+
+function bar()
+    local a="ihihi"
+    foo()
+end
+bar()
+>8
+
+8<
+$ lua foo.lua
+a=ahaha
+>8
+
+my と同じだった(つまり、レキシカルスコープ)。

@@ -1,0 +1,13 @@
+:捨てメールアドレス
+:: hymkor@infoseek.jp
+:デベロッパーID
+:: 8dd707c818231700a7b19c3a8653d55c
+:アフィリエイトID(β版)
+:: 0d2d1bf7.1ed333d2.0d2d1bf8.b3e5999c
+
+:SOAPサービス仕様書
+: http://webservice.rakuten.co.jp/api/itemsearch/soap.html
+
+http://api.rakuten.co.jp/rws/3.0/rest?developerId=8dd707c818231700a7b19c3a8653d55c&operation=ProductSearch&version=2010-11-18&keyword=%E3%83%8E%E3%83%BC%E3%83%88%E3%83%91%E3%82%BD%E3%82%B3%E3%83%B3
+
+http://localhost:48309/?developerId=8dd707c818231700a7b19c3a8653d55c&operation=ProductSearch&version=2010-11-18&keyword=%E3%83%8E%E3%83%BC%E3%83%88%E3%83%91%E3%82%BD%E3%82%B3%E3%83%B3

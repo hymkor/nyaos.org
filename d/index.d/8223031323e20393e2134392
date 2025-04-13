@@ -1,0 +1,228 @@
+<<upx いいですなー。EXEファイルがかなり圧縮できますね>>
+
+:zetamatta
+::必要最小限のコンテナクラスが使えて、最も配布する実行ファイルのサイズが小さくなるには、何がいいかなぁ。D言語か、それとも、意外と C# か(ライブラリである .NET が大抵インストールされているという意味で) [http://twitter.com/zetamatta/status/246541383085744128]
+:SaitoAtsushi
+::@zetamatta STL を使うことによって増大する分のデータは冗長性が大きいらしく、圧縮率が高いですね。 普通に作って UPX とかで圧縮するというのが簡単で良いかもしれません。 [http://twitter.com/SaitoAtsushi/status/246543744587948034]
+
+試してみますた。まず、upx をゲト → http://upx.sourceforge.net/
+
+サンプルプログラムを作成
+
+8<
+[c:test_pack]
+$ cat add.cpp
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main(int argc,char **argv)
+{
+    string result;
+    for(int i=0;i<argc;i++){
+        result += argv[i];
+        result += '\n';
+    }
+    cout << result;
+    return 0;
+}
+>8
+
+<<<普通にビルド(DLLを使う)>>>
+
+8<
+[c:test_pack]
+$ g++ add.cpp
+[c:test_pack]
+$ ls -l a.exe
+-rwx    51848 2012-09-14 19:18 a.exe*
+>8
+
+DLL を使うと、51KB 程度で済む。
+
+ただ、MinGW の DLL そのものが大きいし、別途インストールして頂戴というのは、
+面倒がられるものなので、今回はナシの方向で。
+
+<<<何も考えずに、static リンクする>>>
+
+8<
+[c:test_pack]
+$ g++ add.cpp -static
+[c:test_pack]
+$ ls -l a.exe
+-rwx  1173403 2012-09-14 19:19 a.exe*
+>8
+
+はーい、一気に 1Mバイトを越えました。
+これは勘弁願いたい。
+
+<<<g++ 単体で圧縮系のオプションを付ける>>>
+
+8<
+[c:test_pack]
+$ g++ -Os -Wl,-s add.cpp -static
+[c:test_pack]
+$ ls -l a.exe
+-rwx   563200 2012-09-14 19:22 a.exe*
+>8
+
+ふむ、563KB ですか。まだまだ大きいですねー。
+
+<<<普通にstaticビルドして、UPXをかける>>>
+
+8<
+[c:test_pack]
+$ g++ add.cpp -static
+[c:test_pack]
+$ ls -l a.exe
+-rwx  1173403 2012-09-14 19:24 a.exe*
+[c:test_pack]
+$ upx a.exe
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2011
+UPX 3.08w       Markus Oberhumer, Laszlo Molnar & John Reiser   Dec 12th 2011
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+   1173403 ->    678299   57.81%    win32/pe     a.exe
+
+Packed 1 file.
+[c:test_pack]
+$ ls -l a.exe
+-rwx   678299 2012-09-14 19:24 a.exe*
+>8
+
+ありゃ、strip かけた時より、大きいようです。うむむ
+
+<<<stripオプション付けて、さらに UPX かける>>>
+
+8<
+[c:test_pack]
+$ g++ -Os -Wl,-s add.cpp -static
+[c:test_pack]
+$ ls -l a.exe
+-rwx   563200 2012-09-14 19:27 a.exe*
+[c:test_pack]
+$ upx a.exe
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2011
+UPX 3.08w       Markus Oberhumer, Laszlo Molnar & John Reiser   Dec 12th 2011
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+    563200 ->    156160   27.73%    win32/pe     a.exe
+
+Packed 1 file.
+[c:test_pack]
+$ ls -l a.exe
+-rwx   156160 2012-09-14 19:27 a.exe*
+>8
+
+おー、156KB まで縮みました。これはいい
+
+<<<UPX -9 してみる>>>
+
+8<
+[c:test_pack]
+$ g++ -Os -Wl,-s add.cpp -static
+[c:test_pack]
+$ ls -l a.exe
+-rwx   563200 2012-09-14 19:28 a.exe*
+[c:test_pack]
+$ upx -9 a.exe
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2011
+UPX 3.08w       Markus Oberhumer, Laszlo Molnar & John Reiser   Dec 12th 2011
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+    563200 ->    153088   27.18%    win32/pe     a.exe
+
+Packed 1 file.
+[c:test_pack]
+$ ls -l a.exe
+-rwx   153088 2012-09-14 19:28 a.exe*
+>8
+
+あー、さすがに、更に縮むのは 3KB 程度ですか。これは仕方がない。
+
+個人的には、1実行ファイルで100KB台ならば、まぁ許容範囲かなーという気がします。
+ただ、nfutils みたいに、多数の実行ファイルがある場合は、ちょっと悩みどころですが。
+
+さて、実行ファイル自体は、ここまで縮みましたが、配布サイズはどうなるでしょう。
+
+8<
+[c:test_pack]
+$ gzip -9 a.exe
+[c:test_pack]
+$ ls -al a.exe.gz
+-rw-   150997 2012-09-14 19:28 a.exe.gz
+>8
+
+やっぱり二重圧縮になるみたいで、それほど減りませんね。まぁ、仕方ないでしょう。
+
+@SaitoAtsushi さん、ありがとうございました。
+
+<<同じアプリケーションを C# で書いてみた>>
+
+C++ で書いていたアプリを C# で書き直してみますた。
+
+8<
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            StringBuilder result = new StringBuilder();
+            foreach (string e in args)
+            {
+                result.Append(e);
+            }
+            Console.WriteLine(result.ToString());
+        }
+    }
+}
+>8
+
+8<
+[C:Release]
+$ ls -l ConsoleApplication1.exe
+-rwx     4608 2012-09-14 21:17 ConsoleApplication1.exe*
+[C:Release]
+$ ConsoleApplication1.exe あ い う え お
+あいうえお
+>8
+
+>> なにー、たったの 5KB じゃとー <<
+
+やっぱり、ライブラリを外出ししてると、つよいなー。
+
+あ、そうだ、試しに upx をかけてみよう。
+
+8<
+[C:Release]
+$ upx ConsoleApplication1.exe
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2011
+UPX 3.08w       Markus Oberhumer, Laszlo Molnar & John Reiser   Dec 12th 2011
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+upx: ConsoleApplication1.exe: CantPackException: .NET files (win32/.net) are not yet supported
+
+Packed 1 file: 0 ok, 1 error.
+[C:Release]
+>8
+
+あー、無理かー。まぁ、しゃーないね。
+
+しかし、やっぱり、きょうび、C言語を使うシーンは、もう無さそうだねぇ。
+UNIX系だと、スクリプト言語。Windows だと、.NET系言語で作るのが正解か。
+まぁ、仕方ないねぇ。

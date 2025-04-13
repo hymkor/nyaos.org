@@ -1,0 +1,24 @@
+8<
+.programlisting { 
+  background: #d3d3d3;
+}
+.programlisting:before { 
+  background: transparent url(images/top-right-small.png) scroll no-repeat top right;
+  margin-bottom: -5px;
+  height: 15px;
+  display: block;
+  content: url(images/top-left-small.png);
+  padding: 0;
+  line-height: 0.1;
+  font-size: 1px;
+}
+.programlisting:after { 
+  display: block;
+  line-height: 0.1;
+  font-size: 1px;
+  content:  url(images/bottom-left-small.png);
+  height: 15px;
+  background: transparent url(images/bottom-right-small.png) scroll no-repeat bottom right ;
+  padding: 0;
+}
+>8

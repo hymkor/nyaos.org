@@ -1,0 +1,24 @@
+<<[NYAOS] 正式バージョンナンバー付与 (2.90_0)>>
+
+中身は全然変わってませんけどね。
+あ、ドキュメント(ただし、日本語)をちゃんと書いたか。
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+
+|| Windows Binary | http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.90_0-win.zip{nyaos3k-2.90_0-win.zip}
+|| OS/2 Binary | http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.90_0-os2.zip{nyaos3k-2.90_0-os2.zip}
+|| Source | http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.90_0-src.zip{nyaos3k-2.90_0-src.zip}
+
+<<[wifky] 久しぶりのプラグイン開発>>
+
+* http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%282010.03.16%29+%B8%AB%BD%D0%A4%B7%A5%DE%A1%BC%A5%AF%A5%D7%A5%E9%A5%B0%A5%A4%A5%F3%B8%F8%B3%AB{A single file wiki - wifky! - (2010.03.16) 見出しマークプラグイン公開}
+** http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%5Bplugin%5D+%B8%AB%BD%D0%A4%B7%A5%DE%A1%BC%A5%AF%A5%D7%A5%E9%A5%B0%A5%A4%A5%F3{[plugin] 見出しマークプラグイン}
+
+最近、twitter 投稿マークがついてるページが多いので、漏れも漏れもという勢いで、作ったのはいいんだけれども…
+
+>> ページ名が長いと 140文字以内に全然おさまらねぇ！<<
+
+ほら、wifkyって、ページ名を％エンコードして URL化してるから、ものすごく URL が長くなっちゃうんだよね…。JavaScript レベルで URL短縮サービスが使えたらいいんだけどなぁ。
+
+「にっきプラグイン」で、ページ名も (YYYY.MM.DD) が基本だったら、まぁ、なんとかギリギリセーフなんですけどね。
+

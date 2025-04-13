@@ -1,0 +1,10 @@
+<<NYAOS 3.1.7_2 を公開しました>>
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000
+
+3.1.7 でのヒストリの仕様変更に Lua がついていってませんでした。
+申しわけありません。
+
+* ``nyaos.history`` が "<NnObject>" しか返さなくなっている不具合を修正
+* ``nyaos.history:add`` が機能しなくなっていた不具合を修正
+

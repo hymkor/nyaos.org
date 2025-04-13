@@ -1,0 +1,49 @@
+<<NYAOS の Lua でマイドキュメントなど特殊パスを得る>>
+
+* http://d.aoikujira.com/blog/index.php?WSH%E3%81%AEJScript%E3%81%A7%E3%83%9E%E3%82%A4%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88%E3%81%AA%E3%81%A9%E7%89%B9%E6%AE%8A%E3%83%91%E3%82%B9%E3%82%92%E5%BE%97%E3%82%8B{WSHのJScriptでマイドキュメントなど特殊パスを得る - くじらぶろぐD}
+
+ふむ、新しい NYAOS ならば、同じことが出来るはずだ！
+
+8<
+[c:hayama]
+$ cat foo.lua
+local shell = assert(nyaos.create_object("WScript.Shell"))
+local mydoc = assert(shell:SpecialFolders("MyDocuments"))
+print(mydoc)
+[c:hayama]
+$ nyaos -f foo.lua
+foo.lua:2: attempt to call field 'SpecialFolders' (a userdata value)
+[c:hayama]
+$
+>8
+
+あれ、エラーになった？
+「userdata」ってことは、SpecialFoldersってメソッドじゃなくて、プロパティーなのか？
+
+参考サイトとして挙げらているhttp://www.atmarkit.co.jp/fwin2k/operation/wsh06/wsh06_01.html{＠ITのページ}を見てみると、SpecialFolders の下に Item とか、いろいろメソッドが垂れてますなぁ。
+そいつらを使えばいいのかな。
+
+8<
+[c:hayama]
+$ cat bar.lua
+local shell = assert(nyaos.create_object("WScript.Shell"))
+local mydoc = assert(shell.SpecialFolders:Item("MyDocuments"))
+print(mydoc)
+[c:hayama]
+$ nyaos -f bar.lua
+C:\Documents and Settings\hayama\My Documents
+[c:hayama]
+$
+>8
+
+>> バッチソである <<
+
+まぁ、実際のところ、現行バージョンのNYAOS でも Lua 無しに
+
+8<
+[c:hayama]
+$ echo ~mydocuments/
+"C:\Documents and Settings\hayama\My Documents"/
+>8
+
+てな感じで出来るんですけどね

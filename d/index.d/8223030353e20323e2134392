@@ -1,0 +1,52 @@
+ふむ、一応、勝利宣言しておくものナリ。
+
+まぁ、明らかに義理ではあるが、
+嫌われていないだけヨシ！とせねばなるまい。
+
+休暇をとってるのに何故の秘密は謎にしておくことがマイ・ミステリアシー
+
+<<((lb))D((rb)) Phobos が駄目なら、Ｃ言語のライブラリを使えばいいのよ>>
+
+std.stream 系の stdin が日本語文字列を(バイナリ扱いしても)
+全然読み込もうとしてくれないので、Ｃ言語の stdio での代用を考える。
+
+<pre>
+[d:d]cat tststdin2.d
+import std.c.stdio;
+
+int main(char[][] argv)
+{
+    while( !feof(stdin) ){
+        printf("%c",fgetc(stdin) );
+    }
+    return 0;
+}
+[d:d]dmd tststdin2.d
+d:\usr\dmd\bin\..\..\dm\bin\link.exe tststdin2
+[d:d]tststdin2
+hoge
+hoge
+スレッド
+スレッド
+^Z
+[d:d]
+</pre>
+
+そりゃそうだわな。
+厳密には SJIS を char に入れてる時点でアウトなのだが、
+まぁ、細かいことは言うな。
+
+Phobos 本体のコードはあてにならないので、
+InputStream の interface だけ合わせてやって、
+表面上のインターフェースだけを保つのが正解なのかな？
+（と誰に聞いてる http://www.hirax.net/pukiwiki/pukiwiki.php?%A4%AA%A4%EC%A5%AB%A5%CD%A5%B4%A5%F3%CA%B8%C2%CE{おれカネゴン}）
+
+<<((lb))おさんぽ((rb)) 実はそれほどうろうろはしていないつもりなのだが>>
+
+* http://b.hatena.ne.jp/{はてなブックマークbeta}
+    (http://www.hyuki.com/tf/200502#i20050211203953{textfile.org}より)
+((br))　複数台のマシンを使うことが多いので、もう何もかも
+    サーバ上で管理したくなってきた。
+    はぁ、息をするのも、サーバで管理してぇ（←死神が見えてます）
+
+

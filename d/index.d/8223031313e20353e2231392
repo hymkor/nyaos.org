@@ -1,0 +1,104 @@
+<<[Lua] Lua で例外処理>>
+
+http://d.hatena.ne.jp/morchin/20110520#p1{2011-05-20 - プログラミング日記「[一般] クラスの機能に関して」}にて
+
+6<
+Luaは、そういう意味では軽くて良いが、例外処理がないので、PythonのEAFP機能が実現できるかどうかが、最近気になっている
+>9
+
+Lua でも、Perl なみには例外処理できます。
+要は引数付き大域脱出が出来ればいいのです。
+Lua には明示的にエラーを発する error文と、関数内でエラーが起きても処理を止めずに該当関数だけを終了させる pcall文があるので、これで簡単な例外を実現できます。
+
+というわけで作った、try関数：
+
+8<
+function try(block,catch)
+    local success,error_info=pcall(block)
+    if not success then
+        if type(error_info)=='table' then
+            -- catch節を呼び出す --
+            return catch(error_info)
+        else
+            -- マジエラー --
+            error(error_info,2)
+        end
+    end
+end
+
+function func(n)
+    if n < 0 then
+        error{ class="Invalid Value" }
+    end
+    print(n)
+end
+
+try( function()
+    print("*** 例外処理の例 ***")
+    func(1)
+    func(0)
+    func(-1)
+    func(-2)
+end ,
+function(e)
+    print("Exception occured: ".. e.class)
+end
+)
+
+try( function()
+    print("*** こちらはマジエラーの例 ***")
+    print( non_exist_function() )
+end,
+function()
+    print("Exception occured: ".. e.class)
+end
+)
+>8
+
+8<
+$ lua lua_exc.lua
+*** 例外処理の例 ***
+1
+0
+Exception occured: Invalid Value
+*** こちらはマジエラーの例 ***
+lua: lua_exc.lua:33: lua_exc.lua:35: attempt to call global 'non_exist_function' (a nil value)
+stack traceback:
+        [C]: in function 'error'
+        lua_exc.lua:9: in function 'try'
+        lua_exc.lua:33: in main chunk
+        [C]: ?
+>8
+
+error関数では通常エラー'''文字列''' をパラメータとして渡しますが、
+文字列ではなく、テーブルを渡すことも出来ます。
+そして、本当のエラーの時に文字列が渡されることはありません。
+今回はこれを利用して、
+
+* エラーパラメータが文字列の時 ⇒ 通常のエラー
+* エラーパラメータがテーブルの時 ⇒ 例外発生
+
+と判断させているのがポイントです。
+
+でも、やはり、無理矢理実装なので、見にくいですねぇ。
+次期 Lua で、ちゃんとした例外処理が実装されるのを希望します
+
+<<[English] http://twitter.com/dave_spector{デーブ・スペクターのツイート}は勉強になる>>
+
+大半はギャグなんだけれども：
+
+6<
+最近よくスキームという言葉を政治家やお役人さんは使いたがりますが英語では「たくらみ」という悪いニュアンスです。英語をカタカナで使うならプランかビジネス・モデルがいいと思います。自称・金髪先生より。( http://twitter.com/dave_spector/status/70446818768584704 )
+>9
+
+6<
+そういえばなぜか「ジンクス」という言葉も完全に間違って使われてます。縁起のいいものやラッキーということではなく呪いや縁起が悪い時に使います。正反対の意味。　ECCからのお知らせでした。
+( http://twitter.com/dave_spector/status/70476814295896064 )
+>9
+
+6<
+それからライブも日本式の表現。Liveは形容詞なので、PerformanceやConcertを付けないとおかしな感じになります。活け造りじゃあるまいしね。昨日、ロゼッタストーンでイギリス人の美人講師に習いました。
+( http://twitter.com/dave_spector/status/71246022193577985 )
+>9
+
+via http://dochikushow.blog3.fc2.com/blog-entry-1949.html{今日の、エアプレーンスピン：島国大和のド畜生}

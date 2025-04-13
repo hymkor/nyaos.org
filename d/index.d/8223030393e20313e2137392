@@ -1,0 +1,14 @@
+<<[wifky] Trackback は、たいへんだ>>
+
+こっちが受信の場合はログの出しようがあるんだけれども、
+送信の場合、先方(受信側)でどういう理由でハジいたのかが分からないというのがねぇ。
+
+||| こっち          | あっち            | → | ←
+||  nyaos.org            | Yahoo!blog        | OK | OK
+||  nyaos.org            | Hatena            | OK | OK
+||  nyaos.org            | Builder in ZDNet  | OK | OK
+||  wifky.sourceforge.jp | Yahoo!blog        | OK | '''NG'''
+||  wifky.sourceforge.jp | Hatena            | -  | -
+||  wifky.sourceforge.jp | Builder in ZDNet  | -  | -
+
+うーん。

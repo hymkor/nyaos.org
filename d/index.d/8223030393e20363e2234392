@@ -1,0 +1,17 @@
+<<[wifky] 認証API対応 amazon プラグイン公開>>
+
+ドラフトで一時保存にするだけのつもりが、
+うっかり公開してしまった。
+
+* http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%5Bplugin%5D+amazon+%BD%F1%B1%C6%2F%A5%EA%A5%F3%A5%AF{A single file wiki - wifky! - [plugin] amazon 書影/リンク}
+
+まぁ、一応、動作には問題ないので、ひっこめるのはやめて、
+そのまま公開してしまえッ！
+
+---
+
+デフォルトでは先日公開した ttp://forgot.uh-oh.jp/amazon_proxy.cgi
+認証プロクシーとして利用しますが、一応設定で変更可能なようになっています。
+
+こちらのプロクシーのソースも、いずれ ttp://wifky.sourceforge.jp/ の方から
+ゲトできるようにしておく予定です。

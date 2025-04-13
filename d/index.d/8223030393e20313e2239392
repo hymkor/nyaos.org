@@ -1,0 +1,39 @@
+<<[Mercurial] null ChangeSet はいいね>>
+
+man hg してたら、予約タグとして、tip(=最新リビジョン)の他に、
+null というものがあることを知った。
+どうやら、Revision 0 の親に相当するもので、hg init した直後の状態をさすらしい。
+
+これを使えば、hg bundle/unbundle だけで、オフライン clone ができるんじゃね？
+
+8<
+$ hg bundle --base null ~/all-changeset.hg
+360 changesets found
+$ cd /tmp/
+$ mkdir cgi-bin
+$ cd cgi-bin
+$ hg init
+$ hg unbundle ~/all-changeset.hg
+adding changesets
+adding manifests
+adding file changes
+added 360 changesets with 390 changes to 29 files
+(run 'hg update' to get a working copy)
+$ hg update
+17 files updated, 0 files merged, 0 files removed, 0 files unresolved
+>8
+
+できた。
+
+でも、よく見ると、hg bundle には --all というオプションがあって、
+どうやら、--base null と等価らしい。あれ？ そんなのあったかな？
+会社のサーバでは hg help bundle は散々見ていたのだが…
+
+6<
+http://www.selenic.com/mercurial/wiki/index.cgi/WhatsNew#head-5f0ede9d089a643d2c0295efb5ad598183120ad7{WhatsNew#Version 1.0 - 2008-03-24}
+
+* bundle: new --all option to bundle the whole repository more easily.
+>9
+
+あー、1.0 で追加されたオプションか。そういえば、会社のは 0.9 だったヨ。
+逆に言うと、古いバージョンでも --base null は使えるみたいだね(試した)。

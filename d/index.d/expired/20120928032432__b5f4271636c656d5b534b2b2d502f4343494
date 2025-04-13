@@ -1,0 +1,132 @@
+Oracle C++ Call Interface 、略して OCCI。
+
+*  インストール時に OCI を指定するといっしょに入ってくる（多分）
+*  Pro*C/C++ のライセンスが無くても使える（多分）
+*  Pro*C/C++ と違い、純粋な C++ なので、STL を思う存分使える。
+*  OCI と違って、ごちゃごちゃしたところを、オブジェクト内に隠蔽できている。
+*  マニュアルが糞。
+
+次の案件から OCCI をぜひ使いたいところだ。
+
+<< C++ ソース>>
+
+Java と同程度には書ける。
+ただし、せっかくの C++ のデストラクタが活用できていない。
+何かしらの簡単なラッピングが欲しい。
+
+<pre>
+    #include <occi.h>
+
+    using namespace oracle::occi;
+    using namespace std;
+
+    int main()
+    {
+	try{
+	    Environment *env = Environment::createEnvironment(Environment::DEFAULT);
+	    Connection *conn=env->createConnection("ユーザ名","パスワード","DB名");
+
+	    Statement *stmt=conn->createStatement("select tname from tab");
+	    ResultSet *rs=stmt->executeQuery();
+	    while( rs->next() ){
+		cout << '"' << rs->getString(1) << '"' << endl;
+	    }
+	    stmt->closeResultSet(rs);
+	    Environment::terminateEnvironment(env);
+	    conn->terminateStatement(stmt);
+	    env->terminateConnection(conn);
+	}catch( SQLException e ){
+	    cerr << e.what();
+	}
+	return 0;
+    }
+</pre>
+
+<< Makefile>>
+
+マニュアルによると、$(ORACLE_HOME)/rdbms/demo/demo_rdbms.mk を
+テンプレートとして改造すればよいらしいが、こんなもん改造できる奴は神。
+
+とりあえず、demo_rdbms.mk を外部から呼び出す方法で、
+Makefile を簡単にすることに成功。
+
+<pre>
+    foo : foo.o
+	    make -f $(ORACLE_HOME)/rdbms/demo/demo_rdbms.mk \
+		EXE=foo OBJS="foo.o" USRLIBS=-lstdc++ buildocci
+
+    foo.o : foo.cc
+	    $(CCC2O)
+
+    clean :
+	    rm foo.o foo
+
+    include $(ORACLE_HOME)/rdbms/lib/env_rdbms.mk
+</pre>
+
+<< ラッパ>>
+
+コーディング中。テストしとりません。
+
+<pre>
+    class AutoResultSet {
+	AutoStatement &stmt_;
+	ResultSet *rs_;
+	AutoResultSet( const AutoResultSet & )
+	{ /* copy is forbidden */ }
+    public:
+	AutoResultSet(AutoStatement &stmt) : stmt_(stmt) , rs_(0)
+	{ rs_ = stmt->executeQuery(); }
+	ResultSet *operator->(){ return rs_; }
+	~AutoResultSet(){ stmt_->closeResultSet(rs_); }
+    };
+    class AutoStatement {
+	AutoConnection &conn_;
+	Statement *stmt_;
+	AutoConnection( const AutoConnection & )
+	{ /* copy is forbidden */ }
+    public:
+	AutoStatement(AutoConnection &conn,const string &sql) : conn_(conn)
+	{ stmt_ = conn->createStatement( sql ); }
+	Statement *operator->(){ return stmt_; }
+	~AutoStatement()
+	{ conn_->terminateConnection(conn); }
+    };
+    class AutoConnection {
+	Environment *env_;
+	Connection  *conn_;
+	AutoConnection( const AutoConnection & )
+	{ /* copy is forbidden */ }
+    public:
+	AutoConnection( const string &user,
+			const string &pwd,
+			const string &dbname)
+	{
+	    env_=Environment::createEnvironment(Environment::DEFAULT);
+	    conn_=env_->createConnection(user,pwd,dbname);
+	}
+	Connection *operator->(){ return conn_; }
+	~AutoConnection()
+	{ env_->terminateConnection(conn_); }
+    };
+    int main()
+    {
+	AutoConnection conn("ユーザ名","パスワード","DB名");
+	AutoStatement  stmt("select tname from tab");
+	for( AutoResultSet rs(stmt) ; rs->next() ; ){
+	    cout << '"' << rs->getString(1) << '"' << endl;
+	}
+	return 0;
+    }
+</pre>
+
+ちょっとダサい。も一つ、ましにならんか。
+
+<< 参考文献>>
+
+*  OracleCallInterfaceプログラマーズ・ガイド9.2.pdf
+
+以下、occi について記載がないが参考まで
+
+*  ProC C++Precompilerプログラマーズ・ガイドリリース9.2.pdf
+*  Oracle C/C++実践入門 http://www.seshop.com/detail.asp?pid=5229

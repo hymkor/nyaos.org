@@ -1,0 +1,153 @@
+<<ネイティブ系コマンドラインも整ったことだしということで、Cygwin を再インストールしてみるの巻>>
+
+* 他のマシンから無理矢理コピーしたり
+* setup.exe を起動する OS のユーザが変わったり
+* Cygwin 1.5 → 1.7 のバージョンアップなどを経たり
+
+そんなことを経た結果 Cygwin 内のパッケージデータベースの整合性？がおかしくなってきた。
+
+そんなところで、
+>>{(2010.03.30)#p1}{我が NYAOS の例のバグが取れて}、ネイティブ系コマンドラインで
+かなりイケるようになり、しばらく Cygwin がなくても支障ないと思われたので、
+ここいらで全て再インストールしてみた。
+
+<<<まぜ、まだ Cygwin なのか>>>
+
+やはり、Cygwin でないと…というものもある。
+
+* ssh
+
+単に ssh 接続するだけであれば、ターミナルソフトウェアだけで足りる話だが、
+ssh 経由のリモートコマンドの入出力をローカルとつなげるといった高度なことを
+やろうと行う場合、Cygwin の ssh でないと困る。
+
+* w3m
+
+Cygwin 版しか無いから仕方がない。
+Terminfo ではなく、Termcap を使ってるので、そちらのインストールも忘れずに。
+w3m は酔狂な人間のブラウザかと誤解されがちだが、
+「長文を書くためのブラウザ」としては、なかなか安定感があって使いやすい。
+(任意のエディタで書けることが大きい)
+
+あと、だいたいレガシーなツールは、Cygwin しか無いことが多いよね！
+それにシンボリックリンクとか、いかにも UNIX 的なことをやろうとした時、
+Cygwin の出番となる。
+
+---
+
+もちろん、coLinux や仮想環境に Linux を導入すれば済む話ではあるが、
+この程度の用途に使うのは牛刀で鶏を割くというものだろう。
+
+<<<アンインストールの仕方>>>
+
+「http://www.amy.hi-ho.ne.jp/tachibana/cygwin/uninstall.html{Are You Cygwin Tonight? - uninstall}」を見ながらアンインストールした。
+
+* ファイル・レジストリを削除する前に、サービスを停止・削除しなさいっと。
+* パッケージ内容を控えようと、setup.ini をとっといたんだけど、結局使わなかった。
+  入れたのはいいけど、もはや、使わんかったパッケージがワンサカあったからね。
+  (パッケージの棚卸しという意味では良かったと言えよう)
+* ~/.ssh の避難を忘れるな！
+* 「rm -rf」で消せなくなるので、エクスプローラか CMD.EXE の「rmdir /s」で消そう。
+
+インストールは、いつも通り
+http://cygwin.com/setup.exe{setup.exe} で。
+とりあえず、以下といったところを追加。
+もう X とか、巨大系は入れない。
+
+* OpenSSH
+* Python
+** Mercurial
+** feedparser
+* Perl 
+* Lua
+* Ruby
+* vim
+* w3m
+* termcap (← w3m しか使ってねーんじゃねーの？)
+
+* (追記@2010.04.07)
+** RCS
+** w32api: Win32 API header and library impot files
+** perl-libwin32: Perl module for using the Win32 API
+** make
+
+<<<Cygwin の困った点>>>
+
+それでも、やっぱり、Cygwin には困った点が多い。
+
+* パッケージのバージョンが古い
+** 特に Python が致命的。2.6 ではなく、未だ 2.5 というバージョンが入っている。
+    SAKURA Internet でさえ、FreeBSD 7.1 と一緒に 2.6.2 が入っているというのに！
+*** Python の 3.x系列でも 2.x系列でも動作するスクリプトを書こうとすると、
+    2.5 ではかなり辛い。2.6 は 3.0 からのバックポートがいろいろ含まれているので、
+    是非利用したい。
+* パッケージが壊れていた
+** Python 2.5 早期の時に pysqlite3 が組み込まれていなかった事をを私は忘れない (ネチネチ)
+* COM オートメーション機能が仕える言語が少ない
+** Cygwin では Ruby だけ。他の言語も拡張パッケージという形で提供されているが、
+    それが仇になって、Cygwin版には適用できないことが多い。
+* そもそも、無いものも多い。
+** PostgreSQL はあるけど、MySQL は無いね！
+    Lua も無かったけど、最近入った。よかったよかった。
+* 将来が不安
+**
+    http://redmine.ruby-lang.org/wiki/1/SupportedPlatformsJa{
+    Ruby 1.9 では Cygwin 環境は Perhaps}:
+    「たぶん動くと思うが、公式にはサポートしていない。
+    この環境でエラーがあってもリリースを妨げない」だそうです。
+
+<<<ネイティブ系とCygwin環境の共存の工夫>>>
+
+ドットファイルを Mercurial で同期することにした。
+
+8<
+(1)【自宅】Cygwin環境
+        C:\Cygwin\home\hayama
+        (/home/hayama)
+            ↓↑
+(2)【自宅】Native環境
+        C:\Documents and Settings\hayama
+        (/cygdrive/c/Documents and Settings/hayama)
+            ↓↑
+(3) http://某サイト
+            ↓↑
+(4)【会社】Native環境
+        C:\Documents and Settings\hayama 
+        (/cygdrive/c/Documents and Settings/hayama)
+            ↓↑
+(5)【会社】Cygwin環境
+        C:\Cygwin\home\hayama 
+        (/home/hayama)
+>8
+
+まぁ、環境変数 HOME を定義して、ネイティブ環境・Cygwin環境を
+共通化してもよかったんだけど、Cygwin の方は一旦消すので、
+今回は敢えて分けてみた。
+
+なお、同期させるのは、今のところ、これくらい。
+
+8<
+$ hg locate
+.bashrc
+.gvimrc
+.hgignore
+.vimrc
+vimfiles/plugin/skk.vim
+vimfiles/syntax/wifky.vim
+>8
+
+vim の拡張ファイルは、vim のアプリケーションの方ではなく、
+ユーザ設定の方に置いておいた方が楽なんで…。
+
+ネイティブ版(kaoriya版) のユーザの runtimepath は ~/vimfiles/ だが、
+Cygwin版は ~/.vim/ なので「``cd ~ ; ln -s vimfiles .vim``」でリンクさせるべし。
+(これは vim の中で ``set runtimepath`` で確認できる )
+
+あと、_nya も足したいところだが、これはあまり会社と自宅で共通しているところが
+少ないので(必須なところは、本体付属の奴にくっつけてるし)
+
+<<<結>>>
+
+>>{(2009.12.19)#p1}{前にも書いた}けど、Cygwin のニーズは今後ますます
+微妙になってゆくことであろう。そんな中、我々はいったいどうすればよいか。
+今後の動向は見逃せなくもない！

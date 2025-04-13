@@ -1,0 +1,7 @@
+* [「Java SE 6完全攻略」第81回 JAX-WS その1 - Java技術最前線：ITpro|http://itpro.nikkeibp.co.jp/article/COLUMN/20080801/311972/]
+
+6<
+JAX-WS (Java API for XML-Based Web Services)は主にSOAPを使ったWebサービスを扱うためのAPIで，以前はJAX-RPC (Java API for XML Based RPC)と呼ばれていました。JAX-RPCは名前のとおり，リモートプロシジャーコールを主眼においていました。ところが，WebサービスはRPC以外に，メッセージングでやり取りをおこなうことも多くあります。
+
+そこで，メッセージングを含めたWebサービスを扱うため，JAX-RPCではなくJAX-WSとして衣替えしたのです。そのため，JAX-WSのバージョンには1.0が存在せず，2.0からはじまっています
+>9

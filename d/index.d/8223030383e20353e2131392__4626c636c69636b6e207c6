@@ -1,0 +1,26 @@
+package wifky::dblclick;
+
+# use strict; use warnings;
+
+if( $::config{dblclick__anyone_edit} || &::is_signed() ){
+    (*::print_page , *wifky::dblclick::orig_print_page ) =
+        (*wifky::dblclick::new_print_page,*::print_page );
+}
+
+$::preferences{'Edit with double-click'} = [
+    { name=>'dblclick__anyone_edit' , type=>'checkbox' ,
+      desc=>'anyone can edit with double-click' },
+    { name=>'dblclick__target_value' , type=>'text' ,
+      desc=>'target value on editing' },
+];
+
+sub new_print_page{
+    my %arg=@_;
+    my $url = &::myurl( { p=>$arg{title} , a=>'edt' } );
+    $url =~ s/'/\\'/g;
+    &::putenc(q|<div ondblclick="JavaScript:window.open('%s','%s')">|,
+        $url , $::config{dblclick__target_value} || '_self' );
+    my $result=&wifky::dblclick::orig_print_page;
+    &::puts('</div><!-- dblclick -->');
+    $result;
+}

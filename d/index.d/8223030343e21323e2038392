@@ -1,0 +1,27 @@
+
+<<結局、Opera に戻した>>
+
+ふむ、ストレスナッシング。
+FireFox も AdBlock 良かったんだけどねぇ。
+
+<<成功する言語>>
+
+* http://www.rubyist.net/~matz/20041206.html#p02{
+    Matz にっき：言語設計者とヒゲ }
+
+わしはリアルタイムで、往年の Matz さんなみに髭を備えておる。
+つーことは、何か言語を作れば成功するのかのぉ。。
+
+そんな、わしが気になるのが、Ｄ言語。
+設計者の http://www.walterbright.com/{Walter Bright 氏}
+((fn 世界初のネイティブの C++ コンパイラ Zortech C や、
+Java 開発環境 Cafe とかを手がけた、すごい人))
+は、どうなんじゃろ。Ｄは筋のよい言語だけに、はやってくれると嬉しいな。
+
+* http://a.hatena.ne.jp/k_ahiru/simple{D言語関係のアンテナ}
+
+<<わたしはおにーさんではない！>>
+
+<pre>
+    volatile int flag;
+</pre>

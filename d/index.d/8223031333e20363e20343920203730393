@@ -1,0 +1,58 @@
+!!! ((title go run で実行した時と、go test で実行した時で、C.GetStdHandle の値が全然違う。#golang))
+
+8<
+[C:bymain]
+$ type foo.go
+package main
+// #include <windows.h>
+import "C"
+import "fmt"
+
+func main(){
+        handle := C.GetStdHandle( C.STD_INPUT_HANDLE )
+        fmt.Printf("handle=%d\n",handle)
+}
+[C:bymain]
+$ go run foo.go
+handle=31
+[C:bymain]
+$
+>8
+
+go run で実行した時は、だいたい標準入力のハンドルは 30番台になる。
+
+8<
+[C:bylib]
+$ type foo.go
+package bylib
+// #include <windows.h>
+import "C"
+import "fmt"
+
+func Foo(){
+        handle := C.GetStdHandle( C.STD_INPUT_HANDLE )
+        fmt.Printf("handle=%d\n",handle)
+}
+[C:bylib]
+$ type foo_test.go
+package bylib
+
+import "testing"
+
+func TestFoo(t *testing.T){
+        Foo()
+}
+[C:bylib]
+$ go test
+handle=1872
+PASS
+ok      exam/bylib      0.125s
+[C:bylib]
+$
+>8
+
+go test で行うと、ほとんど、1000番台になる。
+
+で、go test で得られたハンドル番号はおかしいのか、昨日の ReadConsoleInput も機能しない。
+
+どういうことだ？

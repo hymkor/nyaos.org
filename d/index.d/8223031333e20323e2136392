@@ -1,0 +1,22 @@
+<<はてブの超タイニーブックマークレット>>
+
+* ブラウザ拡張だと、画面遷移の度に URL が hatena のサーバに送られてて、いやん。
+* 公式ブックマークレットだと、ニコニコ動画とかで画面をリロードしてしまって、いやん。
+
+チョー、簡単なものをでっちあげた。
+
+8<
+javascript:window.open('http://b.hatena.ne.jp/entry/'+location.href);
+>8
+
+これでいいのだ。
+
+---
+
+ちょっと改良
+
+8<
+javascript:window.open('http://b.hatena.ne.jp/zetamatta/add.confirm?url='+location.href);
+>8
+
+俺専用になってるけど、俺専用だから、いいのだ。

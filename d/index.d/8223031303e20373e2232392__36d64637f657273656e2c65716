@@ -1,0 +1,21 @@
+function nyaos.command.cmdsource(...)
+    local tmpfile = os.tmpname()
+    local arg={...}
+    for i=1,#arg do
+        if string.match(arg[i],' ') then
+            arg[i] = '\034'..arg[i]..'\034'
+        end
+    end
+
+    os.execute(table.concat(arg,' ')..' >nul & set > '..tmpfile)
+
+    for line in io.lines( tmpfile ) do
+        local left,right = string.match(line,'([^=]+)=(.*)$')
+        if os.getenv(left) ~= right then
+            print('SET '..left..'='..right)
+            nyaos.exec('SET '..left..'='..right)
+        end
+    end
+
+    os.remove(tmpfile)
+end

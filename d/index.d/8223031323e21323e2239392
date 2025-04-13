@@ -1,0 +1,93 @@
+<<MinGW のライブラリのために MSVCRT.DLL の free を最近の VC++ から使う>>
+
+http://fallabs.com/hyperestraier/{Hyper Estraier}
+の
+http://hyperestraier.sourceforge.net/win/{Windows バイナリは}、
+MinGW gcc でビルドされている。
+
+gcc でそのまま使う分には問題ないんだけど、VisualStudio などの VC++ から呼び出す場合、
+一つ問題が発生する。
+http://fallabs.com/hyperestraier/pguide-ja.html{プログラミングガイド}に
+6<
+戻り値の領域は `malloc' で生成されているので、不要になったら `free' で破棄してください。
+>9
+とある関数が幾つかあるんだけど、その通りに free すると、落ちてしまう。
+
+これは何故かというと、DLL内で領域確保のために使われている malloc は、
+MSVCRT.DLL の malloc なんだけど、比較的新しい VC++ では
+MSVCRT.DLL の free を使っているわけじゃないからだ。
+(どの DLL を使ってるかは VC++ のバージョンによる)
+
+ということで、VisualStudio 2008 の VC++ から MSVCRT.DLL の free を使えるように、
+MinGW gcc で「踏台のDLL」をでっちあげた。MinGW の方が慣れてて、たすかったよ。
+
+まずは MinGW をインストールする。最近は
+http://sourceforge.net/projects/mingw/files/Installer/mingw-get-inst/{mingw-get-inst}
+なんかあるから簡単じゃろ？
+次に、以下のようなテキストファイルを用意する。
+
+free を呼び出すだけのC言語のソース(<<{mingwfree.c}):
+
+8<
+#include <stdlib.h>
+
+void mingwfree(void *p)
+{
+	free(p);
+}
+>8
+
+DLL としてエクスポートするために def ファイル(<<{mingwfree.def}):
+
+8<
+EXPORTS
+        mingwfree
+>8
+
+<<{Makefile} :
+8<
+mingwfree.lib : mingwfree.dll mingwfree.def
+	lib /DEF:mingwfree.def /MACHINE:X86 /out:mingwfree.lib
+
+mingwfree.dll : mingwfree.o
+	$(CC) -shared -o $@ $<
+
+.cpp.o:
+	$(CC) -c $<
+
+
+clean:
+	rm mingwfree.o mingwfree.dll mingwfree.lib mingwfree.exp
+>8
+
+おっと、ここで``lib.exe`` は Visual Studio 同梱品なので、
+VisualStudio コマンドプロンプトから実行するか、
+VisualStudio コマンドプロンプトのバッチを、
+NYAOS から cmdsource((fn 一応、最近の NYAOS.EXE の _nya には標準で書いてあるんだが、
+カスタマイズしまくっている人は>>{(2010.07.22)}からコピペしてもらってもいい。
+どういうものかというと、Windowsの環境設定バッチを実行して、
+変更された環境変数を NYAOS に読み込むLuaスクリプトだ。原理はまぁ簡単なんだがね))
+して PATH を通しておこう。
+
+8<
+cmdsource "C:\Program Files\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86 >nul
+>8
+
+ふむ。で、``make`` とすると、>>{mingwfree.dll} と >>{mingwfree.lib} ができあがる。
+
+mingwfree.dll は実行時の %PATH% のどっかに置いておき、
+mingwfree.lib は VisualStudio のプロジェクトかソリューションだかのプロパティーに、
+追加のライブラリとして登録しておいていただきたい。
+
+で、HyperEstraier を使いたいソースの中で：
+
+8<
+extern void mingwfree(void *);
+>8
+
+とか宣言しておけば、あとは mingwfree を free 関数のかわりに使えるという寸法だ。
+なお、あくまで HyperEstraier の戻り値に対して使う代替freeなので、
+自分で malloc したポインタに対して使っちゃいけないよ。
+
+でも、これ、もっと別の方法ないんかねぇ。
+わざわざ、ラッパDLLを一つかますのは無駄としか言いようがない。

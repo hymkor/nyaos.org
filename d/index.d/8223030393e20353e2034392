@@ -1,0 +1,158 @@
+<<ヒキコモリすぎなＧＷ>>
+
+なに、いつものことです。
+
+暇な人は @zetamatta (←Twitter)で話かけてください。
+(多分、これが一番即応性が早いよ、スレッガーさん)
+
+---
+
+その辺で売ってる、4,5万クラスの安いＰＣにしとくか、
+10万円ちょい払って、ThinkPad 買うか迷ってる。
+
+まぁ、安いＰＣでも、今の ThinkPad X31 より十分スペックが上なのであるがね。
+でも、耐久性を考えると、天下の ThinkPad の最新機が欲しいよな。
+IBM ではなく、Lenovo なのが、アレだが。
+
+hp製も悪くは無いような気がする。
+俺的には仕事のサーバで比較的アタリを引いているので、
+悪い印象は無いのだ。
+でも、ノートPC を店頭でも触ったことが無いので、
+さすがにちょっと人柱するつもりは無い。
+
+いや、結論は出てるんだ、たぶん。
+一つ困ったことは、わたしが１万円あたり最低１時間程度、検討時間をかけてしまう、
+貧乏性属性の持主だということだ。
+
+この調子だと、家とか買おうものなら、1000時間単位で検討がいることになるなwww。
+どうやら、どこからか、スタンド：The Mottainai の攻撃を受けているようだ。
+
+<<母が「高木 ハツ江」とか言う人の料理本が欲しいと言ってたので>>
+
+amazon でポチッ。実はアフィリエイトでもらったギフト券で賄うことができた。
+((fn 年に2000円前後かな))
+
+でも、これ、多分、自分のサイトのアフィリエイトじゃなくて、
+wifky ユーザの誰かさん''(だいたいは推測ついてる)''のページで、
+わたくし名義で貼り付けてくれた奴が大半じゃねーの的な。
+だって、この「にっき」で買ってる形跡無いんだぜ。
+((fn 真剣に調べてないので、違ったらごめんなさい))
+
+ということで、本当に感謝でございます。
+
+---
+
+ちなみに、amazonプラグイン、デフォルトでは associate-ID は設定されません。
+(つまり、上の件は、わざわざ、わたくしの associate-ID を Tools
+ページに設定してくれているのですよ)
+
+別に http://ja.wikipedia.org/wiki/%E5%AB%8C%E5%84%B2{嫌儲}というつもりはなくて、
+手間暇かけた人間がそれなりの収入を求めることは十分理解してるのだけど
+
+* フリーなツールがあったからこそ、出来たツールなので、フリーで公開したい
+* ごちゃごちゃ言われる隙を見せたくない
+* おいらはどちらかというと、お金もらうより、ほめられて伸びる子だから
+
+ということで、敢えてこうしているわけでございます。
+
+でも、自分のページではしっかりと貼ってるけどね。
+
+<<[Python] Google App Engine に挑戦しようと思たが、目下、挫折中である>>
+
+アプリケーションが WSGI に準拠していれば Ok ということであれば、
+http://forgot.uh-oh.jp/feedsnake.cgi{feedsnake}((fn 大昔に作った RSSフィードの加工ウェブアプリ。))は ローカル稼働用に wsgiref.simple_server をサポートしているので、
+比較的対応させやすいはずである。
+
+というわけで、SDK をダウンロードして、ローカルで走らせてみると、
+莫大なエラーがブラウザにでる。
+自分の書いたソース部分のエラー記述を探してみると…
+
+8<
+28 #try:
+29 import sqlite3 as sqlite
+30 #except:
+>8
+
+はにゃ？ これはどういうことだ。コマンドラインで実行すると、
+普通に import sqlite3 は成功するのだが…。
+
+ググってみると(いや、ググらんでも、公式ページだから分かるけど。いや、Google のページ見てるから、ググるでいいのか)
+
+http://code.google.com/intl/ja/appengine/kb/general.html#libraries{Are there any Python libraries not supported by Google App Engine?}:
+
+6<
+A small percentage of native C python modules, and subsets of native C python modules are not available with Google App Engine. A full list detailing native C Python module support can be found http://code.google.com/appengine/kb/libraries.html{here}. The disabled modules fall in to the following categories:
+
+* Libraries that maintain databases on disk are not enabled in Python for Google App Engine
+* Sockets are disabled with Google App Engine
+* :
+>9
+
+6<
+'''Google App Engine でサポートされていない Python ライブラリはありますか？'''
+
+わずかな割合の C-Pythonネイティブのモジュールと、C-Python モジュールのサブセットが
+Google App Engine で使えません。
+ネイティブの C-Python モジュールサポートについての詳細のリストは
+http://code.google.com/appengine/kb/libraries.html{こちら}で分かります。
+無効となっているモジュールは、次のカテゴリに属します。
+
+* ディスク上でデータベースを維持するようなライブラリは、
+  Google App Engine の Python では有効になりません。
+* ソケットは、Google App Engine では無効です。
+*  :
+>9
+
+>> ぎゃあ <<
+
+では、どこにデータを保持すればよいのだろうか。
+
+同じページによると、http://code.google.com/intl/ja/appengine/kb/general.html#gql{GQL}
+(Google Query Language?)とかいう奴を使うらしい。
+なるほど、確かに Google App Engine を使うからには、
+Google の高度分散環境向けのデータ保持機能を使わなきゃ意味ねーからなぁ。
+奥が深い。
+
+でも、sqlite3 から書き直すの、めんどいなぁ。
+よし、あしたからがんばる！
+
+ちなみに cPickle はいいらしい(pickle に alias されてるけど)。
+
+<<[wifky] 不具合：引用中で、脚注を使うと番号がズレる>>
+
+:症状
+:: ```6< … >9``` の中で、```((fn …))``` を使うと、
+   同じ脚注番号 *1 が複数回使われてしまいます。
+:再現性
+:: 華麗に再現します
+:発見者
+:: おいら
+:担当者
+:: おいら
+:ステータス
+:: あしたからがんばる！
+
+<<[wifky] 不具合？引用中で、見出しを書くとえらいことになる>>
+
+:症状
+:: ```6< … >9``` の中で、見出しを書くと、
+   ```<div class="(sub)*section">``` が閉じられなかったり、
+   RSS の記事の切り出しが狂ったり、えらいことになる。
+:再現性
+:: 目を背けたいが、再現するから仕方がない
+:発見者
+:: おいら
+:担当者
+:: おいら
+:ステータス
+:: どうしよう
+
+wifky 本体だけなら何とか対応もできたんだけれども、
+RSSの切り出しについては、にっきプラグインの対応も必要で、
+'''そろそろフレームワークの構造的な限界点だなぁ'''と思う今日このごろだぜ
+(いや、2,3年前から言ってますけど)。
+
+「引用句の中では見出しを書かないようにしてもらう」という
+「運用で対応」が一番お手軽ではあるのだが…それはそれで敗北感
+
+ちとがんばってみる！？

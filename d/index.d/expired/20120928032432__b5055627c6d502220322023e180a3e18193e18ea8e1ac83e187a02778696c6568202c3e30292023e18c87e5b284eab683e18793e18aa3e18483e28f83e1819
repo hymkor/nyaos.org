@@ -1,0 +1,50 @@
+[Perlについての質問箱 20箱目
+    |http://pc8.2ch.net/test/read.cgi/tech/1131286411/]
+より：
+
+<pre>
+33 名前：デフォルトの名無しさん[] 投稿日：2005/11/08(火) 15:40:49
+    while (my $name = readdir(DIR)) {
+    のようにした時、「0」という名前のファイルがあると
+    $nameが"0"になるにも関わらず、whileが終了しないのは
+    どうしてなのでしょうか？
+
+34 名前：デフォルトの名無しさん[sage] 投稿日：2005/11/08(火) 15:44:09
+    perl -MO=Deparse
+    すりゃ分かる
+</pre>
+
+ふむ。試してみた。
+
+<pre>
+[hayama@YUKIKAZE tmp]$ perl -MO=Deparse
+open(DIR,'.');
+while( my $name=readdir(DIR) ){
+    print $name,"\n";
+}
+close(DIR);
+^D
+open DIR, '.';
+while (defined(my $name = readdir DIR)) {
+    print $name, "\n";
+}
+close DIR;
+- syntax OK
+</pre>
+
+なるほど。それは <> でも同じなのかな。
+
+<pre>
+[hayama@YUKIKAZE home]$ perl -MO=Deparse
+while( <> ){
+     print;
+}
+^D
+while (defined($_ = <ARGV>)) {
+    print $_;
+}
+- syntax OK
+</pre>
+
+どういう場合に defined が補完されるのか気になるところだ。
+代入が発生した時かな？

@@ -1,0 +1,79 @@
+!!! 不要なユーザの自動削除等
+
+ # mysql_secure_installation
+
+!!! データベース一覧の確認
+
+    mysql> show databases;
+    +--------------------+
+    | Database           |
+    +--------------------+
+    | information_schema |
+    | mysql              |
+    | otrs               |
+    +--------------------+
+    3 rows in set (0.00 sec)
+
+!!! テーブル一覧の確認
+
+http://www.bitscope.co.jp/tep/MySQL/quickMySQL.html#doc1_id825
+
+<<<
+mysql> show tables;
++------------------------------+
+| Tables_in_otrs               |
++------------------------------+
+| article                      |
+>>>
+
+!!! 現在のユーザ・ホストの確認
+
+<<<
+    mysql> select host,user,password from mysql.user ;
+    +----------------+------+------------------+
+    | host           | user | password         |
+    +----------------+------+------------------+
+    | localhost      | root | 2ebdbabf48e39515 |
+    | localhost      | otrs | 7ae97445221f6f74 |
+    | 192.168.38.100 | otrs | 7ae97445221f6f74 |
+    +----------------+------+------------------+
+>>>
+
+!!! アクセス先のホスト×ユーザの追加
+
+    mysql> grant all on otrs.* to otrs@borderless2 identified by 'hot' ;
+    Query OK, 0 rows affected (0.00 sec)
+
+    mysql> select host,user,password from mysql.user ;
+    +----------------+------+------------------+
+    | host           | user | password         |
+    +----------------+------+------------------+
+    | localhost      | root | 2ebdbabf48e39515 |
+    | localhost      | otrs | 7ae97445221f6f74 |
+    | 192.168.38.100 | otrs | 7ae97445221f6f74 |
+    | borderless2    | otrs | 7ae97445221f6f74 |
+    +----------------+------+------------------+
+    4 rows in set (0.00 sec)
+
+!!! アクセス先のホスト×ユーザの削除
+
+    mysql> drop user otrs@borderless2;
+    mysql> select host,user,password from mysql.user ;
+    +----------------+------+------------------+
+    | host           | user | password         |
+    +----------------+------+------------------+
+    | localhost      | root | 2ebdbabf48e39515 |
+    | localhost      | otrs | 7ae97445221f6f74 |
+    | 192.168.38.100 | otrs | 7ae97445221f6f74 |
+    +----------------+------+------------------+
+    3 rows in set (0.00 sec)
+
+!!! 外部サーバよりのアクセス可否の確認
+
+    # mysql -h (サーバIP) -u (ユーザ名) -p(パスワード) (データベース名)
+(例)
+    # mysql -h 192.168.38.136 -u otrs -phot otrs
+    ERROR 1130 (00000): Host 'borderless2' is not allowed to connect to this MySQL server
+
+
+

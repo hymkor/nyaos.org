@@ -1,0 +1,13 @@
+!!! 概要
+
+Python の fileinput で、レコードセパレータ(RS)を AWK のように変更できないことを不満に思って、作成した「もう一つの fileinput」
+
+!!! ソース
+
+<<{autoinput.py}{ダウンロード}
+
+((ref_text autoinput.py))
+
+!!! 参考
+
+((ls [Python]*))

@@ -1,0 +1,166 @@
+<<[oldtype] http://www.tees.ne.jp/~sin-x/200507a.html#0102d{
+    paste も行がずれると悲惨}>>
+
+paste なんて使ったことないので、JM で調べてみた。
+
+http://www.linux.or.jp/JM/html/gnumaniak/man1/paste.1.html{
+    paste.1 (section 1, GNU_textutils)}より
+
+<blockquote>
+    paste は与えられたそれぞれの FILE から、
+    <b>同じ行番号の行</b>を連結して標準出力に書き出す。
+</blockquote>
+
+http://www.linux.or.jp/JM/html/GNU_textutils/man1/paste.1.html{
+paste.1 (section 1, gnumaniak)}より
+
+<blockquote>
+    このマニュアルはGNUバージョンのpasteコマンドのものである。 
+    pasteコマンドは複数のファイルから、
+    <b>互いに一致する行</b>を次々とTABで区切って出力する
+</blockquote>
+
+よくある同じ名前の違うコマンドなんだろうけれども、全然違うなぁ。
+手元の Cygwin 環境で実験してみた。
+
+<pre>
+[hayama@YUKIKAZE tmp]$ cat foo
+A
+B
+C
+D
+[hayama@YUKIKAZE tmp]$ cat bar
+D
+C
+B
+A
+[hayama@YUKIKAZE tmp]$ paste foo bar
+A       D
+B       C
+C       B
+D       A
+[hayama@YUKIKAZE tmp]$
+</pre>
+
+一見すると、前者っぽい。
+この程度のものなら、関西awker としては、awk で組まずにはいられない（ぉぃ）
+
+<pre>
+[hayama@YUKIKAZE tmp]$ cat awkpaste.awk
+#!/usr/bin/gawk -f
+
+{
+    ++counter[FILENAME]
+    buf[ counter[FILENAME] ] = buf[ counter[FILENAME] ] "\t" $0
+}
+END{
+    for( i=1 ; i in buf ; ++i ){
+        print substr(buf[i],2)
+    }
+}
+[hayama@YUKIKAZE tmp]$ cat goo
+W
+X
+Y
+Z
+[hayama@YUKIKAZE tmp]$ ./awkpaste.awk foo bar goo
+A       D       W
+B       C       X
+C       B       Y
+D       A       Z
+[hayama@YUKIKAZE tmp]$
+</pre>
+
+あぁ、歯車を再生産する快楽。背徳感が辛抱たまらん
+（当初の目的を忘れている観が…）
+
+<<http://homepage1.nifty.com/maname/log/200507.html#012031p5{
+    Wikiはグループで使ってこそ意味があるツールですよね。。}>>
+
+別にグループで使ってないわけじゃないんですけどね。
+
+会社では FSWikiLite を使って、保守業務での定型作業とか、
+Ｑ＆Ａとか、トラブルシューティング手順とかを皆で共有してます
+（お前自作の使ってねーのかよ／これとは別の個人用ので使ってます）。
+うちの場合、みんな「自分が書いとけば、書いといた内容が必要になった時、
+自分が呼び出されることなく、各自でやってもらえる」
+というのを期待するので、いい感じで文書が蓄積されていってます
+（とは言え、一番書いているのは、やはり導入・紹介した私ですけど）
+
+さて、独りWiki の是非は「Excel をワープロ的に使うこと」に似たり、
+というところでしょうか。
+つまり、ツール本来(というか当初)の利用目的から逸脱した使い方を、
+良しとするか、悪しとするか。そういうことではないかと。
+
+ただ、せっかく便利なツールを「こういう使い方をせねばならない」と
+利用のあり方をせばめてしまうのは、もったいないなーと思います。
+
+<<[wifky] 「http://hpcgi2.nifty.com/hayamatta/wifky.pl{
+    wifky} は実は wiki ぢゃない」とか言ってみるテスト>>
+
+ちょっと、脱線しますが、上の話、今の私なら
+
+* http://hpcgi2.nifty.com/hayamatta/wifky.pl{
+    wifky} は Wiki 的な性質も持つけど、
+    本当は Wiki ぢゃなくて、個人向け書きもの支援ツールだったんですよ
+
+と宣言してしまうという技が…。
+さすれば、どのような使い方でも「おかしい」と言われる心配なし。
+幸い、名前も Wiki に似てるけれども、Wiki という単語自体は含まれてないし。
+つまり、既存の Wiki の枠組みにこだわる必要もないということですよ。
+
+そういえば、同じく maname house経由で
+「http://d.hatena.ne.jp/mutronix/20050630/wikiorblog{
+wikiとblogを両方使うにはどうしたらいいか}」という記事が！
+
+<blockquote>
+    僕がここで言いたいのは、ストック→フローにするインターフェイスを、
+    もっとblogらしく整備すると、
+    個人が書き物をするのに都合のいい仕組みができるんじゃないかなぁ、
+    ということだ。
+</blockquote>
+
+参考になる（＋１）
+
+<<[wifky] http://hpcgi2.nifty.com/hayamatta/wifky.pl{wifky 0.43} にて <code>((ll))ls))</code> 強化>>
+
+ページ一覧を出力するコマンド <code>((ll))ls))</code> を強化。オプションで
+
+* ソート順で名前順(default)・更新時間順(-t)
+* 昇順(default)・降順(-r)
+* ページ名だけ(default)・更新日時付き(-l)
+* 全ページ(default)・先頭 N ページのみ(-N)
+
+を指定できるようになった。
+また、前からだが、* や ? 等のワイルドカードも使えるので、
+これで、かなり柔軟なリストが表示できるようになった。
+
+<pre>
+    ((ls *[memo]*))
+</pre>
+
+とやれば、タグ [memo] がついているページの一覧が出る。
+また「(2005.01.21) タイトル」てなタイトルのページを
+日記帳として登録してゆけば、
+
+<pre>
+    ((ls -3 -r (200*)* ))
+</pre>
+
+で新しいものから３回分の日記のタイトルが出る。
+でも、こんなので blog/日記ツールの代わりになるかというと
+
+>> 全く、駄目駄目ぷぅ〜 <<
+
+時系列で登録される記事数は莫大であるからして、
+全てのページをフラットで管理する方式には自と限界があるからだ。
+でも、何が足りないのかは、見えてきた。
+
+* 複数のページを、昇順あるいは降順で、連結して表示する機能。
+* 年・月・日といったグループ単位で、ページ群を取り扱う機能。
+* そういった機能を特に意識せずに扱えるようなインターフェイス。
+* ツッコミ機能（まぁ、これは普通の Wiki ツールでもあるんだが）
+
+でも、今のところ、そこまでやるつもりなし。
+あくまで「日記帳に使えなくもない」という水準のまま、
+1.0.0 にのぞむ所存。

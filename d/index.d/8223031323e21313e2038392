@@ -1,0 +1,74 @@
+<<[C#] 分散アプリケーションダウンローダー Summon.exe を作ってみました>>
+
+アプリケーション名を渡すと、それに対応するウェブページをクロールして、
+アプリケーションのアーカイブの最新版をダウンロードし
+「開く」というアプリケーションを、.NET の勉強がてら作ってみました。
+
+: レポジトリ
+:: https://bitbucket.org/zetamatta/summon/{zetamatta / Summon — Bitbucket}
+: 実行ファイル
+:: https://bitbucket.org/zetamatta/summon/downloads
+
+使用には .NET Framework 3.5 が必要(なはず)です。
+
+使用方法は、summon-0.1.zip の中にある二つのファイル
+Summon.exe , Summon.Repository を同一ディレクトリに展開して、
+コマンドラインから Summon.exe を実行するだけです。
+
+TeraTerm の最新版をダウンロードしてくるのは次のような形になります。
+
+8<
+[c:Release]
+$ summon teraterm
+Searching http://sourceforge.jp/projects/ttssh2/releases/
+Found URI http://sourceforge.jp/projects/ttssh2/downloads/56762/teraterm-4.75.zip/
+Redirect to http://sourceforge.jp/frs/redir.php?m=keihanna&f=%2Fttssh2%2F56762%2Fteraterm-4.75.zip
+Download teraterm-4.75.zip done
+Open teraterm-4.75.zip
+[c:Release]
+$
+>8
+
+ダウンロードできるアプリケーション一覧は、引数なしの起動で確認できます。
+
+8<
+[c:Release]
+$ summon
+Distributed application downloader SUMMON.EXE
+
+7zip32 => 7zip(32bit)
+7zip64 => 7zip(64bit)
+ffftp => FFFTP
+lua52w32 => Lua Binaries(32bit)
+ntuxtl => NT-version UNIX Like Tools
+nyaos => Nihongo Yet Another Open Shell
+opentween => OpenTween
+teraterm => TeraTerm
+wifky => A Single File Wiki - wifky!
+[c:Release]
+$
+>8
+
+<<<課題>>>
+
+* Python版と違い、最新バージョンを選択するのに、
+  アーカイブファイル名を単純に文字列比較しているだけなので、
+  ちゃんとマイナーバージョン、リビジョンなどを考慮して比較するようにする。
+* ダウンロードするファイルの置き場がカレントディレクトリになっているので、
+  これを決まったディレクトリに置くようにする。
+* ダウンロードしたか否かは、カレントディレクトリに該当ファイルがあるか
+  どうかでしか見ていない。
+  ちゃんとデータベース的に管理する。
+** PC を再セットアップする時、そのデータベースファイルだけ復元すれば、
+   あとは半自動でアプリを再インストールできたらいいなぁ。
+* 現在のOSのbit数(32/64)に応じて、適切なアーカイブを取りにゆくようにする。
+* NT版UNIX Like tools については、バージョンごとに別のページが用意されてあって、
+  今後バージョンアップした時に自動で追尾できない。
+  何か対策を考えたい。
+* .NET Framework 4 の方がいいかしら？(3.5 の方が広くインストールされているかなとか単純に考えたが)
+* Summon.Repository を、もうちょっと編集しやすくする。
+** やはり、きょうび空白区切りは古いですか、そうですか
+** 将来的には Summon.Repository を単独で Bitbucket/Mercurial で管理して、
+   Pull Request で対応導入可能アプリを増やせるようになったらいいなぁ。
+
+しかし、まぁ、最大の問題は「やる気」だなぁ。

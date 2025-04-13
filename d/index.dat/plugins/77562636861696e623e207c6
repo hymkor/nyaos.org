@@ -1,0 +1,25 @@
+$::preferences{'WebChain/2'} = [
+    { name=>'webchain2username' , desc=>'WebChain/2 Username' }
+];
+$::inline_plugin{webchain2} = sub{
+    my $username=$::config{webchain2username};
+    <<HERE;
+<img width="88" height="31" src="$::me?a=webchain2" usemap="#WEBCHAIN2-2" alt="WebChain/2" border="0" />
+<map id="WEBCHAIN2-2" name="WEBCHAIN2-2">
+<area shape="rect" coords="0,0,21,30" alt="Previous" href="http://www.serina.org/cgi-bin/webchain2/webchain.cgi?go=prev&amp;usr=${username}"/>
+<area shape="rect" coords="22,0,44,30" alt="Ramdom Jump" href="http://www.serina.org/cgi-bin/webchain2/webchain.cgi?go=random&amp;usr=${username}"/>
+<area shape="rect" coords="45,0,63,30" alt="WebChain/2 Home" href="http://www.serina.org/cgi-bin/webchain2/webchain.cgi?go=home&amp;usr=${username}"/>
+<area shape="rect" coords="64,0,87,30" alt="Next" href="http://www.serina.org/cgi-bin/webchain2/webchain.cgi?go=next&amp;usr=${username}"/>
+</map>
+HERE
+};
+$::action_plugin{webchain2} = sub{
+    my $img=pack('h*','9805e474d0a0a1a0000000d09484442500000085000000f14030000000196e713d000000704794d454701d2060d0c1103d5b79e000000090078495370000b0210000b021102ddde7cf0000000305c4455400000000004802024b8787ff480048ff004848ffffffffff00000000000000000000000000000000000000000000000007227e4a000010779444144587ad5b4915e63c02c06837a8d1001d0fa59a7304b6f0055cbcb7496e001532f5f7efd6c429e2a9ab78150a8dc7df1363a63797fbd9b9f30cd43790f673189340be1acc98934a9b00cef52e40c7226247a23335fb4fb0dea17fb4a91074ad923449ba2bf109e9a07a931fc2b9cc8152204826e1d93d3fe16b072dd0b50067f88f44061c9a8c60b64f56bc16b3b8d07c6a4fa07e46b5b18d595f38e516256c16ed3c467310ca764ced36e2fb8715ed1c1a663a415c2669bc1f9098417ecb927f5bb3e22b8fb46d7307c36a3671e0061d8bd4ad605ba5d544acd2c851e266cf254b5381b6118c106bafc0e9ac8b9103890b8f60486851681c5da67b034f6ce4db38e03810c451e2168a2f32b975782c5d0ccf8b9f5072118ce735dbd206c1d393c19c161beee969903007d5bd1817587c01e775637b6538ae907c13f0dea549b6e0e0f1763ca41a938b67f1559f83fc60f8491f424f7fe91ff9514f0322d7295993caf81e5ed68515013bc3f93cf74a373ff4deb10239626892d74436000000009454e444ea240628');
+    print  qq(Content-Type: image/png\r\n);
+    print  qq(Content-Disposition: attachment; filename="webchain2.png"\r\n);
+    printf qq(Content-Length: %d\r\n),length($img);
+    print  "\r\n";
+    print $img;
+    exit(0);
+};
+

@@ -1,0 +1,51 @@
+<<[Lua] Lua on Windows で shebang>>
+
+はてブ棚卸しを見てたら、
+「http://d.hatena.ne.jp/fuzzhead/20080930/p1{
+batファイルで、そのファイル自身のパスを取得する}」
+という記事を発見。
+これによると、
+「``%~f0``」という表現で、
+現在実行中のバッチファイルのフルパスをゲットすることができるそうだ。
+
+これを使えば、比較的簡単に shebang を Windows で実装できるんじゃね？
+
+ということで Lua でやってみたのが、コレ。
+
+8<
+c:\cygwin\home\hayama>type foo.cmd
+@c:\cygwin\usr\local\bin\lua.exe -e "local X,Y=io.open([["%~f0"]],'r'):read('*l' ,'*a');assert(loadstring(Y))()" & exit 0
+
+print("ahaha")
+c:\cygwin\home\hayama>foo
+ahaha
+>8
+
+foo.cmd というファイル名にすれば、Windowsのコマンドプロンプトで実行できる。
+
+* Python 同様、Lua では二重引用符と一重引用符に違いはない。
+  Windows では CMD が認識するのは二重引用符なので、
+  Lua コードを囲むのには遠慮なく二重引用符を使うべし。
+* とはいえ、%~f0 には \ が含まれることがある。
+  そこで、生文字列をそのまま格納できる```[[ ]]```を Lua 内の引用符として使う。
+* shebang 行とその他の行を分離するのに file:read 関数の *l パラメータ(1行だけ読む),*a パラメータ(全行読む)を使う
+* Lua でファイル中のコードを実行するのは dofile だが、dostring というのは残念ながらない。
+  なので、loadstring でコードをロードしてから、関数コールする。
+  「``assert(loadstring(s))()``」は慣用句らしい。
+
+まぁ、.lua という拡張子を lua.exe に関連付けてたら、
+こんなことする必要は無いんだけれども、
+lua.exe だけ単品で USB で持ち歩いて…ってこともありますよね！？
+
+<<[wifky] 最もやってはいけないミスを…[amazonプラグイン]>>
+
+* http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%282009.10.05%29+amazon%A5%D7%A5%ED%A5%AF%A5%B7%A1%BC%A4%CE%C9%D4%B6%F1%B9%E7%A4%F2%BD%A4%C0%B5%A4%B7%A4%DE%A4%B7%A4%BF{A single file wiki - wifky! - (2009.10.05) amazonプロクシーの不具合を修正しました}
+
+よりにもよって、アフィリエイトを横取りしてしまうような挙動をさせてしまうとは…
+信用を大いに失なってしまった。orz
+
+ID が manhimazinein-22 になっている方は、上のリンク先にありますとおり、
+書影のページで bookinfo.XXXXXXXX という添付ファイルを削除して、
+情報を再取得いただけますでしょうか。
+
+本当に申しわけありません。

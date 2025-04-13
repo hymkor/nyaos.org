@@ -1,0 +1,25 @@
+((ref "ngmpop.PNG"))
+
+<<<
++OK Dovecot ready.
+user tie198064
+-ERR Unknown command.
+USER TIE198064
++OK
+PASS hemicat6
+-ERR Authentication failed.
+PASS Hemicat6
+-ERR No username given.
+USER TIE198064
++OK
+PASS Hemicat6
++OK Logged in.
+LIST
++OK 0 messages:
+.
+QUIT
++OK Logging out.
+
+
+ホストとの接続が切断されました。
+>>>

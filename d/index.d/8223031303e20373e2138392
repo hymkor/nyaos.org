@@ -1,0 +1,24 @@
+<<[NYAOS] zsh風のauto_cd の作り方>>
+
+NYAOS 3.0 ならば、コマンドラインフィルターを使って実現できるのだ！
+
+8<
+lua_e "
+    function nyaos.filter.auto_cd(argv)
+        local dir=argv:gsub('\034',''):gsub('\\$','')
+        local stat=nyaos.stat(dir)
+        if stat and stat.directory then
+            return 'cd '..argv
+        end
+        return argv
+    end
+"
+>8
+
+!! 制限
+
+* 2byte目が0x5C(='\')となる漢字で終わるディレクトリの場合、\ を足してやらないとうまく動作しない
+** が、ほとんどの場合、補完する際に \ が付くので、問題なし
+* コマンドラインの全文字を合わせて、そういうディレクトリが有るか無いかで判定しているので、理屈の上では誤動作の可能性がある。
+** 事実上は殆ど無い。
+

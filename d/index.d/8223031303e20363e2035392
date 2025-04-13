@@ -1,0 +1,44 @@
+<<EXEファイル識別プログラム>>
+
+ノートPC の bin フォルダに、16bitの実行ファイルが未だに残っている。
+古い PC の bin フォルダからコピーを延々と繰り返してきたからだ。
+まぁ、一応、動くことは動くんだけれども、
+動かす度にコンソール(ckw)がリサイズされたりして、
+欝陶しいので、いい加減除去したい。
+
+というわけで「http://codezine.jp/article/detail/412{EXEファイルの内部構造（PEヘッダ）（1/3）：CodeZine}」の記事を元にして、EXEファイルのタイプを識別するプログラムを書いてみた。
+
+<<{howexe.cpp} (<<{howexe.exe})
+((ref_text howexe.cpp))
+
+実行結果：
+
+8<
+$ howexe.exe *.exe
+_cat.exe : MZ MZ
+_cp.exe : MZ MZ
+_ls.exe : MZ MZ
+_mv.exe : MZ MZ
+_pwd.exe : MZ MZ
+_rm.exe : MZ MZ
+_tar.exe : MZ PE 32bit CUI
+basename.exe : MZ MZ
+BMP2IV.exe : MZ PE 32bit GUI
+BMP2PNG.EXE : MZ PE 32bit CUI
+bzip2.exe : MZ PE 32bit CUI
+cal.exe : MZ MZ
+Cassava.exe : MZ PE 32bit GUI
+cdate.exe : MZ MZ
+  (以下略)
+>8
+
+やー、まじってる、まじってる（笑）。
+Windows の 32bit 実行ファイルは二つ目のシグニチャが「PE」になってますね。
+ちなみに OS/2 の nyaos.exe の場合：
+
+8<
+$ howexe nyaos.exe
+nyaos.exe : MZ LX
+>8
+
+シグニチャは「LX」でした。うん、そういえば、そうだった。聞いたことがある、うん。

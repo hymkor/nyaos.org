@@ -1,0 +1,37 @@
+<<Cygwin で bitbucket に hg push すると警告がいっぱい出る>>
+
+8<
+$ hg push bb
+warning: bitbucket.org certificate with fingerprint 81:2b:08:90:dc:d3:71:ee:e0:7c:b4:75:ce:9b:6c:48:94:56:a1:fe not verified (check hostfingerprints or web.cacerts config setting)
+real URL is https://bitbucket.org/zetamatta/wifky
+pushing to http://zetamatta:***@bitbucket.org/zetamatta/wifky
+warning: bitbucket.org certificate with fingerprint 81:2b:08:90:dc:d3:71:ee:e0:7c:b4:75:ce:9b:6c:48:94:56:a1:fe not verified (check hostfingerprints or web.cacerts config setting)
+warning: bitbucket.org certificate with fingerprint 81:2b:08:90:dc:d3:71:ee:e0:7c:b4:75:ce:9b:6c:48:94:56:a1:fe not verified (check hostfingerprints or web.cacerts config setting)
+searching for changes
+no changes found
+warning: bitbucket.org certificate with fingerprint 81:2b:08:90:dc:d3:71:ee:e0:7c:b4:75:ce:9b:6c:48:94:56:a1:fe not verified (check hostfingerprints or web.cacerts config setting)
+>8
+
+なんだか、Warning まみれ。
+対応方法は http://mercurial.selenic.com/wiki/CACertificates{CACertificates - Mercurial} に書いてあるんだけど、Cygwin のセクションがない。
+
+仕方無いので「2.7. Other platforms」の従ってやってみよう。
+
+
++ http://curl.haxx.se/docs/caextract.html{cURL - Extract CA Certs from Mozilla}にある cacert.pem を /etc (C:\cygwin\etc) 直下に置く。
++ /etc/mercurial/hgrc を作って、次のような記述を書く
+
+8<
+[web]
+cacerts=/etc/cacert.pem
+>8
+
+直った！
+
+8<
+$ hg push bb
+real URL is https://bitbucket.org/zetamatta/wifky
+pushing to http://zetamatta:***@bitbucket.org/zetamatta/wifky
+searching for changes
+no changes found
+>8

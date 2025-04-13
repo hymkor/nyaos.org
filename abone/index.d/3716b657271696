@@ -1,0 +1,44 @@
+!!! OTRS 環境
+
+*192.168.38.15(OTRS2401)
+*ID : borderless
+*PW : borderless
+*ID : root
+*PW : 1030admin
+
+http://192.168.38.15/otrs/index.pl
+
+!! 櫻井さんクラウド環境
+
+* ●OTRSサーバ
+* https://borderless.ddo.jp/otrs/index.pl
+* ID: hayama
+* Password: hayama
+
+* ●iPhoneからの利用時
+* https://borderless.ddo.jp/otrs/json.pl
+
+!!! hinemos
+
+!!①Hinemosクライアント接続
+
+以下のURLから『HinemosClientInstaller-3.2.0_winxp_32.msi』をダウンロードして下さい。
+http://sourceforge.jp/projects/hinemos/releases/?package_id=11463
+
+Hinemosクライアントを起動させて、
+
+*ユーザーID：　hinemos
+*パスワード：　tech1030
+*接続先URL：   jnp://192.168.38.100:1099
+
+----------------------------------------------------------------------------
+
+!!②SSH接続
+
+192.168.38.100
+
+*ユーザー名：borderless
+*パスフレーズ：borderless
+
+*ユーザー名：root
+*パスフレーズ：==1030admin=={zaq12wsx}

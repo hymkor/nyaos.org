@@ -1,0 +1,127 @@
+package wifky::bk1;
+# use strict; use warnings;
+
+my $version='0.1';
+
+$main::preferences{"Plugin: bk1.pl $version"} = [
+    {
+        desc =>'Breeder ID' , 
+        name =>'partnerid'  ,
+        type =>'text'
+    }
+];
+
+$main::inline_plugin{'bk1'} = sub {
+    my ($session,$bibid) = @_ ;
+    my $title;
+    my %option=( left=>0  , right=>0 , center=>0 ,
+                 clear=>0 , image=>0 , text=>0 );
+    foreach(@_[2..$#_]){
+        if( exists $option{$_} ){ $option{$_}++ ; }
+        else { $title = $_; }
+    }
+
+    my %tag;
+    my $bookinfo=&main::read_object($session->{title},"bk1.$bibid");
+    if( $bookinfo ){
+        %tag = map{ split(/=/,$_,2) } split(/\n/,$bookinfo);
+    }else{
+        my $info=&query_bk1($bibid,$main::config{'partnerid'});
+        if( $info ){
+            %tag = %$info;
+            &main::write_object($session->{title},"bk1.$bibid",
+                    join("\n",map( $_.'='.$tag{$_} , keys %tag) ) );
+        }
+    }
+
+    if( %tag ){
+        $title ||= &main::enc( $tag{name} );
+        my $buf=sprintf('<a href="%s"%s>',$tag{url},$main::target);
+
+        if( ! $option{text} ){
+            $buf .= sprintf(
+                '<img align="%s" alt="%s" title="%s" border=0 class="bk1" src="%s">'
+                , ( $option{left}   ? 'left'   :
+                    $option{center} ? 'center' :
+                    'right' )
+                , $title , $title
+                , $tag{image}
+            );
+        }
+        $option{image} or $buf .= $title;
+        $buf . '</a>';
+    }else{
+        'can not get book info';
+    }
+};
+
+sub query_bk1{
+    my ($bibid,$partnerid) = @_;
+    my $responce = &post('breeder.bk1.jp','/cgi-bin/link/create.cgi',
+            {
+                bibid     => $bibid , 
+                partnerid => $partnerid ,
+                tmpl      => "[URL];[ProductName];[ImageUrlLarge]" ,
+            }
+    );
+    if( defined($responce) && 
+        $responce =~ m|<textarea[^>]*>\s*(.*?)\s*</textarea|s )
+    {
+        my $text=$1;
+        $text =~ s/&lt;/</g;
+        $text =~ s/&gt;/>/g;
+        $text =~ s/&amp;/&/g;
+        my @info=split( /;/ , $text );
+        { url=>$info[0] , name=>$info[1] , image=>$info[2] };
+    }else{
+        undef;
+    }
+}
+
+sub post{
+    my ($host,$path,$param)=@_;
+
+    use Socket;
+
+    my $ip       = Socket::inet_aton($host) or die("$host not found.");
+    my $port     = getservbyname('http', 'tcp');
+    my $sockaddr = Socket::pack_sockaddr_in($port, $ip);
+    socket(HTTP, Socket::PF_INET, Socket::SOCK_STREAM, 0) 
+        or die("socket error.\n");
+
+    connect(HTTP, $sockaddr);
+    binmode(HTTP);
+    my $output=select(HTTP); $| = 1; select($output);
+    my $value=join('&',map{
+        my $value=$param->{$_};
+        $value =~ s/([^\w\'\.\-\*\(\)\_ ])/sprintf('%%%02X',ord($1))/eg;
+        $value =~ s/ /+/g;
+        "$_=$value";
+    } keys %$param);
+
+    print  HTTP "POST $path HTTP/1.1\r\n";
+    printf HTTP "Content-Length: %d\r\n",length($value);
+    print  HTTP "Host: $host\r\n";
+    print  HTTP "Connection: close\r\n";
+    print  HTTP "\r\n";
+    print  HTTP $value;
+
+    my $flag=0;
+    my $body='';
+    if( ( split(/\s+/,<HTTP>) )[1] eq '304' ){
+        $body = undef;
+    }else{
+        while( defined(my $line=<HTTP>) ){
+            if( $line =~ /^\r?\n?$/ ){
+                while( defined(my $line=<HTTP>) ){
+                    $body .= $line;
+                }
+                last;
+            }
+        }
+    }
+    close(HTTP);
+    $body;
+}
+
+1;

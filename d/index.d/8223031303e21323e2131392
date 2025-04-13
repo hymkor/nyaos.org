@@ -1,0 +1,17 @@
+<<[NYAOS][wifky] いろいろリリースしました>>
+
+!! http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS 3.1.4_0}
+
+* TABキーの連続押下で深い階層ディレクトリの補完ができなかった点を解消
+* nyaos.hook.xxxxx の戻り値の中にテーブルが含まれていたら、その要素も
+  解釈するようにした。
+* nyaos.version にバージョン, nyaos.argv[0] に実行ファイルのパスを格納
+  するようにした。
+
+一番上のは分かりにくいんですが、Java をコマンドラインで開発していると、
+jp/co/example とかいう無意味に深いフォルダが出来るんですが、
+タブキー3回連続押下で補完が出来なかったんですね…これまで。
+
+!! http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%282010.12.11%29+wifky+1.5.6_1%2F1.4.0_5+%A4%F2%B8%F8%B3%AB%A4%B7%A4%DE%A4%B7%A4%BF{wifky 1.5.6_1/1.4.0_5}
+
+* Windows×ActivePerl下で動作させた場合、凍結ページにコメントを打つとエラーになるという不具合がありましたので、修正しました。

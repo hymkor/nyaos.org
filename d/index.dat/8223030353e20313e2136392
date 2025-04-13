@@ -1,0 +1,109 @@
+<<パーフェクトダウン>>
+
+ただでさえ体力落ちて、ふらふらなところ、
+
+>> ふとんをけっとばして寝てしまった <<
+
+毛布が残っていたのが幸いだが…、
+結果、完全に風邪引きました。
+ががー
+
+* http://sheepman.parfait.ne.jp/20050111.html#p03{
+    ゲーム脳っていうのは頭が良いってことなんだ}
+(http://www.ku3g.org/negi/diary/?20050115#200501152{ねぎ式}より)
+((br))　なるほど、脳に関するオームの法則か。説得力ある説明だ。
+((br))　熟練度が上がる
+    ⇔ 脳の中で「判断のショートカット」がたくさん作られている
+    ⇔ ショートカット = 近道を通っているから、所要エネルギーが少なくてすむ。
+* http://www.kbstyle.net/guchi/?date=20050101#p06{
+    愚痴口: 船舶油濁損害賠償保障法}
+    ((br))　すばらしい法律を作ったものだ。
+	まぁ、確かに金も無いのに、勝手に沈没されては困るからな…。
+	あ、金さんはいたか。
+* http://tabesugi.net/memo/cur/cur.html#160314{
+    tabesugi.net: NY の老舗プロバイダ panix.com がハイジャックされた}
+((br))　ドメインがハイジャックされ、メールが全て偽メールサーバへ
+    奪われてしまっているそうな。なんと恐しい。
+    どうも、http://it.slashdot.org/comments.pl?sid=136218&cid=11377840{ 
+    オーストラリアのレジストラーが悪さしたか、襲われたような雰囲気}
+    （被害者なんだか、加害者なんだか、よく分からん）。
+
+<<rmclone written with D>>
+
+昔、OS/2 で重複ファイルを検出・削除する
+http://hp.vector.co.jp/authors/VA009797/warp/ell.html#rmclone{
+rmclone} というプログラムを書いたことがあり、
+http://nyaos.org/d/?date=20050114#p04{
+Windows 版を作ろうとして投げ出したと書いた}わけだが、
+勉強がてら、Ｄ言語で書いてみた。
+
+<pre>
+import std.file;
+import std.stream;
+import std.string;
+
+void eachfile( char[] dirname , void delegate(char[] path) func ){
+    char[][] list=listdir(dirname);
+    foreach( char[] name ; list ){
+	char[] path = dirname ~ std.path.sep ~ name;
+	func(path);
+	if( isdir(path) )
+	    eachfile( path , func );
+    }
+}
+
+void main(char[][] args ){
+    char map[char[]][];
+
+    stdout.writef("@echo off\n\n");
+    foreach(char[] nm ; args[1..length] ){
+	eachfile( nm , delegate(char[] path){
+	    ulong size=getSize( path );
+	    if( size == 0 || isdir(path) ){
+		// stdout.writef( "[0] %s\n\n" , path );
+	    }else{
+		char[] key=format("%s-%d",std.path.getBaseName( path ) , size ) ;
+		if( key in map ){
+		    stdout.writef( "rem %s\ndel %s\n\n", map[key] , path );
+		}else{
+		    map[ key ] = path;
+		}
+	    }
+	});
+    }
+}
+</pre>
+
+いちいち、削除していいか確認するプロンプト出すのが面倒なので、
+バッチファイル形式で標準出力に吐かせるようにした。
+ファイルにリダイレクトさせて、エディタで編集して、CMD.EXE で実行すりゃ、
+十分実用になる（はず）。
+
+>> あ、パスの中の空白文字、考慮してなかったわ <<
+
+（言うまでもないが、当プログラムのせいで、えらいことなっても、わしは知らん）
+
+それにしても、かなり短かく書けてビックリ。いいぞ、この言語。
+ソースコード量がスクリプト言語なみだ。
+バイナリサイズは 112 KB とそれなりだが。
+
+delegate (クロージャ/イタレータ)・連想配列が気軽に使えるのは、
+本当にいいなぁ。正直、もう、C++ 出来んわ。
+
+>> 早く 1.00 になってくれ！ <<
+
+<<http://www.nhk.or.jp/sendai/top/news/yoshitune/{大河ドラマ「義経」}>>
+
+自称大河ドラマファンとしては、一応、欠かさず見ております。
+
+今のところの感想は「堅い作りでヨシ！」。
+妙なことをせず、脇をイメージを外さないベテランで固めて、
+堅実な作り方をしており、安心して視聴できます。
+
+>> 今のところは <<
+
+北条時宗の例もあるからなぁ。
+あれも最初は渡辺謙で素晴しかったんだ、最初は。
+中盤からの腐女子な展開が作品全体を台無しにした、
+まこと悲しい物語でございました。
+悲劇が繰り返されぬことを望む。

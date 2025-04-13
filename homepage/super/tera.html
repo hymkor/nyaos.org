@@ -1,0 +1,165 @@
+<HTML>
+<HEAD>
+<STYLE TYPE="text/css">
+    H1{ border-style:solid; border-color:black; border-width:0px 0px 0px 20px}
+    H2{ border-style:solid; border-color:black; border-width:0px 0px 1px 1px}
+    PRE{ margin-left:10%; margin-right:10%; white-space:pre;
+         border-style:outset; border-color:black; border-width:3px 3px 3px 3px}
+</STYLE>
+</HEAD>
+<BODY>
+
+<H1>知ったかぶりメモ</H1>
+
+<P>本ページ上に登場するソースは、架空のシステム用に内容を変更しています。
+    概ね、正しいはずですが、もし、間違い等見つかりましたら、ご一報ください。
+</P>
+
+<H2><A NAME="teraterm">TeraTerm</A></H2>
+
+<OL>
+    <LI>自分専用の UNIX アカウントをもらえない</LI>
+    <LI>作業をするサーバーに(いろんな都合で)直接ログインできない</LI>
+    <LI>ログインが面倒くせぇなぁ</LI>
+</OL>
+<P>ようなケースの場合、ターミナルソフト(Teraterm)のマクロを使うと幸せになれる。
+    基本は wait と sendln だけだ。
+</P>
+
+<PRE>
+; 入り口のサーバーに接続する
+; /KR と /KT などで、漢字コードをここで指定しても Ok
+connect '<B>123.45.67.89 /KR=SJIS /KT=SJIS</B>'
+
+; ログイン
+wait 'login:'
+sendln '<B>niranira</B>'
+
+wait 'Password:'
+sendln '<B>umainira</B>'
+
+; 目的のサーバーに telnet 
+; (exec を使えば、exit も１回で Ok )
+wait '$'
+sendln 'exec telnet <B>123.45.67.100</B>'
+
+wait 'login'
+sendln '<B>nirachar</B>'
+
+wait 'Password:'
+sendln '<B>umainira</B>'
+
+; 自分用の環境を設定するシェルを読みこむ
+wait '$'
+sendln 'source <B>~/hayama.profile</B>'
+
+; ターミナルのタイトルを設定
+settitle '∬旦 ニラ茶管理システム 運用サーバー(nira3a)'
+end
+</PRE>
+
+<P>これを、拡張子 .ttl のファイルとして保存。
+    TTPMACRO.EXE に関連付けておくべし。
+    後はアイコンをクリックすればよい。
+    私はスタートメニューに直接入れている(ォィ)。
+</P>
+<P>
+    なお、ファイル中にパスワードをべた書きするので、
+    セキュリティーが非常に甘いので、注意すること。
+    (その辺を回避する命令もあるみたいだが、
+    私は sendln と wait しか知らないので;-)
+</P>
+<P>なお、TTLファイルを直接たたくのではなく、
+    New connection のメニューに「IPアドレス /M=TTLファイル名」
+    という形で登録してもよい。
+    この場合は、ファイルから connect 文を削除しておく。
+    ttssh.exe (SSH)でも利用可能なのが、ポイント。
+</P>
+
+<H2><A NAME="multiweb">サーバーをまたぐページのローカルでのリンク</A></H2>
+
+<P>一つのプロバイダにのみページを持っている場合、
+    全てのリンクを相対パスにすることで、
+    編集中のローカルファイルのリンクをブラウザで確認できる。
+</P>
+<P>だが、ページが複数プロバイダにまたがる場合、
+    どうしても一部のリンクにホスト名を含んだフルURLを書かざるを得ない。
+    この場合、実際にウェブサーバーに転送してからでないと、
+    リンクをたどることさえできない。
+</P>
+<P>そこで、下記の JavaScript をページの最後の方に入れておくことで、
+    ローカルで閲覧する場合のみ、リンクを自動的にローカル用の
+    相対パスに変更するように変更できる。
+    ウェブサーバーに転送した後は、本Scriptは動く必要はないので、
+    一般ユーザが JavaScript が動かない環境でも No problem だ。
+</P>
+<PRE>
+&lt;SCRIPT language=&quot;<B>JavaScript1.2</B>&quot;&gt;&lt;!--
+    if( window.location.protocol != &quot;http:&quot; ){
+        var hdr='<B>http://homepage2.nifty.com/hayamatta/</B>';
+        for(var i=0; i&lt;document.links.length ; ++i ){
+            if( document.links[i].href.substring(0,hdr.length)==hdr ){
+                document.links[i].href
+                    = '<B>../nnn/</B>' 
+                    + document.links[i].href.substring(hdr.length);
+            }
+        }
+    }
+// --&gt;&lt;/SCRIPT&gt;
+</PRE>
+<P>太字のところは、各自の環境によって、適当に変更すべし。
+    スクリプト名のところは、あえて、JavaScript1.2 として、
+    対応ブラウザを減らしている。
+</P>
+<UL>
+    <LH>参考：筆者は下記のようにページをディレクトリに置いている</LH>
+    <LI>http://hp.vector.co.jp/authors/VA009797/ → c:/usr/www/</LI>
+    <LI>http://homepage2.nifty.com/hayamatta/ → c:/usr/nnn/</LI>
+</UL>
+
+<H2><A NAME="cmdtoolbar">Netscape のコマンドツールバーの追放</A></H2>
+
+<P>Netscape のコマンドツールバーは、
+    いらんコマンドボタン(ガイド・SHOP…)が多く、はっきりいって邪魔である
+    (特に VAIO-C1R では)。
+    表示させないようにすればいいのだが、戻る・次などは使用頻度が高く、
+    これだけを表示させておきたいが、そういうカスタマイズはできない。
+</P>
+<P>こういう場合、ユーザ設定ツールバーフォルダに
+    「JavaScript:history.go(-1)」というURLを持つブックマークを置いておけば、
+    戻るボタンだけを作ることができる。
+</P>
+<P>[ALT]+[←]を使ってもいいし、ジャンプから辿ってもいいのだが…。</P>
+<P>あ、一回のクリックで複数回もどれねーや。だめだ、こりゃ。</P>
+
+<H2><A NAME="worddown">とあるドキュメントを開くといつも MSWord が落ちる</A></H2>
+
+<P>ある種のドキュメントを Microsoft Word で編集すると、
+    セーブするタイミングで常に Word が落ちてしまう。
+</P>
+
+<PRE>
+WINWORD のページ違反です。
+モジュール : MSGRJP32.DLL、アドレス : 0167:48aae81f
+Registers:
+EAX=a0000001 CS=0167 EIP=48aae81f EFLGS=00010296
+EBX=80007ffd SS=016f ESP=0062e684 EBP=0062e6d8
+ECX=0270000c DS=016f ESI=a0000001 FS=4d6f
+EDX=84ea70b1 ES=016f EDI=84ea70b1 GS=0000
+Bytes at CS:EIP:
+8b 06 50 ff 15 f8 06 ae 48 8b 0e 51 ff 15 f0 06 
+Stack dump:
+84ea70b1 00000000 00000000 00007fff 0274f1a0 48ab0e22 
+a0000001 84ea70b1 48aa6938 0270000c 827577c5 02510170 
+02510010 0251006c 48a9593a 0274f1a0 
+</PRE>
+
+<P>→ 文章校正がインストールされていないのに、
+    文章の自動校正が ON になっている場合に起きる現象らしい。
+</P>
+<P>ワードを再インストールして、文章校正も導入するか、
+    「ツール → オプション → 文章校正」で、文章校正を全て off にするとよい。
+    (エラーは起きるが支障ないようだ…)
+</P>
+</BODY>
+</HTML>

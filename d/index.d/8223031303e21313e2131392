@@ -1,0 +1,34 @@
+<<NYAOS 3.1.2_0 を公開しました>>
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS.ORG - NYAOS 3000}
+
+変更点は以下の通り：
+
+* ``nyaos.keyhook`` をテーブル化した。
+* ``nyaos.filter3.``''xxxxx'' の呼び出しを辞書順にした。
+
+``filter3`` が辞書順で呼び出されていなかったのは、不具合ではなく、単に手抜きです。
+
+``nyaos.``''zzzzz'' が関数ならそのまま呼び出し、テーブルなら格納されている関数を辞書順に呼び出すとようにするというのは結構手間なので、今回、そういう処理をする汎用クラスを作成しました。``keyhook`` もそれを使ってテーブル化しました。
+
+``nyaos.keyhook`` をテーブル化することにより、より気軽にキーに Lua 関数をバインドすることが出来るようになりました。
+
+8<
+lua_e "
+    function nyaos.keyhook.date(t)
+        if t.key == nyaos.key.F11 then
+            return os.date('%Y%m%d')
+        end
+    end
+    function nyaos.keyhook.time(t)
+        if t.key == nyaos.key.F12 then
+            return os.date('%H%M%S')
+        end
+    end
+"
+>8
+
+これで F11 をタイプすると、当日の日付が YYYYMMDD 形式で、
+F12 をタイプすると、今の時刻が HHMMSS 形式でコマンドラインに挿入されます。
+
+ファイル名に今日の日付を付けることなど結構あるはずですので、これは便利なはず…きっと！

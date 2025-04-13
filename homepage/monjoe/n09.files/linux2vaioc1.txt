@@ -1,0 +1,171 @@
+VAIO C1R で、Redhat Linux をインストールする
+-------------------------------------------
+
+■ 環境
+    VAIO-C1R
+    Sony純正 CD-ROM ドライブ
+    Melco 製 PCMCIA LAN アダプタ LPC2-T
+
+■ 初期インストール
+
+(1) CD-ROM ブート
+	boot: text ide2=0x180,0x386 … RH 6.1J
+	boot: installl ide2=0x180,0x386 … TL 4.5
+    で起動する。
+    LILO の設定で
+	ide2=0x180,0x386
+    を入力しておく.
+    
+■ キーボードの設定
+
+http://www.linux.or.jp/JF/JFdocs/VAIO-C1R.html より
+
+/usr/lib/kbd/keymaps/i386/qwerty/jp106.kmap.gz を
+gunzip して、
+    #keycode  58 = Caps_Lock       
+    keycode  97 = Caps_Lock       
+
+    #keycode  97 = Control         
+    keycode  58 = Control 
+と書き換えて、gzip で戻す。
+(葉山は CtrlCaps も Control も両方とも Control にした)
+
+■ ネットワークカードの認識
+
+http://www.mlb.co.jp/linux/support-mld3/lpc2-t-tx.html より
+    
+・LPC2-Tの場合
+    (1) /etc/pcmcia/configに以下のエントリーを追加する。
+       (RH6.1のみ,TL はデフォルトで入っている)
+
+	card "Melco LPC2-T Ethernet"
+	  version "MELCO", "LPC2-T"
+	  bind "pcnet_cs"
+    
+    (2)  カードサービスを再起動します。
+	# /etc/rc.d/init.d/pcmcia restart
+
+    (3) PCMCIAカードを挿入して動作確認をします。
+	# dmesg
+	を実行して
+	eth0: NE2000 Compatible: port 0x320, irq 9, hw_addr xx:xx:xx:xx:xx:xx
+	等と表示されていれば、LANカードは認識されています。
+    
+    (4) ifconfig -a を実行する。
+
+    (5) /etc/sysconfig/ifcfg-lo を元に ifcfg-eth0 を作る
+        (cp -p して、存在する設定項目の右辺を適当に書いただけ)
+
+    (6) もう一回、
+	# /etc/rc.d/init.d/pcmcia restart
+    
+    (7) バッチソ
+
+■ PC カードの抜き差しをする時
+
+http://www.wind.sannet.ne.jp/koko/linux/pcmcia.html より
+
+    $ /sbin/cardctl eject
+    (RH 6.1J だとピっとなるが、TL4.5 では何故かならない)
+
+■ X11 の設定
+
+http://www.linux.or.jp/JF/JFdocs/VAIO-C1R.html より以下パクリ
+
+/etc/X11/XF86Config を編集する。
+-------------------- cut here ----------------
+Section "Files"
+    RgbPath "/usr/X11R6/lib/X11/rgb"
+    FontPath   "/usr/X11R6/lib/X11/fonts/local"
+    FontPath   "/usr/X11R6/lib/X11/fonts/japanese:unscaled"
+    FontPath   "/usr/X11R6/lib/X11/fonts/TrueType"
+    FontPath   "/usr/X11R6/lib/X11/fonts/misc:unscaled"
+    FontPath   "/usr/X11R6/lib/X11/fonts/75dpi/:unscaled"
+    FontPath   "/usr/X11R6/lib/X11/fonts/100dpi/:unscaled"
+    FontPath   "/usr/X11R6/lib/X11/fonts/Type1/"
+    FontPath   "/usr/X11R6/lib/X11/fonts/Speedo/"
+    FontPath   "/usr/X11R6/lib/X11/fonts/japanese"
+    FontPath   "/usr/X11R6/lib/X11/fonts/75dpi/"
+    FontPath   "/usr/X11R6/lib/X11/fonts/100dpi/"
+EndSection
+
+Section "Keyboard"
+   Protocol    "Standard"
+   AutoRepeat  500 5
+   LeftAlt        Meta
+   RightAlt        Meta
+   ScrollLock      Compose
+   RightCtl        Control
+   XkbKeycodes     "xfree86"
+   XkbTypes        "default"
+   XkbCompat       "default"
+   XkbSymbols      "us(pc101)"
+   XkbGeometry     "pc"
+   XkbRules        "xfree86"
+   XkbModel        "jp106"
+   XkbLayout       "jp"
+   XkbOptions      "ctrl:swapcaps"
+EndSection
+
+Section "Pointer"
+    Protocol    "PS/2"
+    Device      "/dev/psaux"
+    Emulate3Buttons
+    Emulate3Timeout    50
+EndSection
+
+Section "Monitor"
+    Identifier  "Generic Multisync"
+    VendorName  "Unkonwn"
+    ModelName   "Unknown"
+    HorizSync   20-64
+    VertRefresh 50-100
+Modeline "1024x480" 65  1024 1032 1176 1344 480 491 493 525 -hsync -vsync
+EndSection
+
+Section "Device"
+    Identifier  "NeoMagic"
+    VendorName  "Unknown"
+    BoardName   "Unknown"
+    Chipset     "NM2200"
+    VideoRam    2560
+    Option "override_validate_mode"
+EndSection
+
+Section "Screen"
+    Driver      "SVGA"
+    Device      "NeoMagic"
+    Monitor     "Generic Multisync"
+    Subsection "Display"
+#   Depth 24
+# 24 はウインドゥの移動が遅いんで、16 で我慢(^^;
+    Depth 16
+    Modes "1024x480"
+    EndSubsection
+EndSection
+-------------------- cut here ----------------
+
+■ CD-ROM の再認識
+    初期インストールのところで、LILO の設定をちゃんとしていたら不要。
+	/etc/lilo.conf に
+	    append = "lba32 ide2=0x180,0x386"
+	    という行を追加して、リブート.
+
+■ Oracle の導入
+
+    $ mount /dev/cdrom
+    $ cd /mnt/cdrom/orainst
+    $ bash orainst
+
+途中、root で oratab.sh を実行して、/etc/oratab を
+設定するところがあるが、 TurboLinux では、GROUPS が
+変更できないとエラーになってしまう。
+
+どうやら一時的に GROUPS という変数を使っていて、
+これが何故か変更できないためらしい。
+~oracle に oratab.sh をコピーし、これの GROUPS を
+vi で全て GROUPSX 等、適当な単語に置換し、
+こちらを実行することで解決した。
+
+
+以上

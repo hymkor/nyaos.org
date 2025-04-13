@@ -1,0 +1,26 @@
+<<夜間バックアップの成否をツイートさせるようにしてみたよ！>>
+
+以前に作ったツイートスクリプト}を使って、最近やってる夜間バックアップの結果を
+ツイートさせるようにしてみたよ！
+
+8<
+@echo off
+cd %~dp0
+set PATH=c:\Python27;c:\cygwin\bin;%PATH%
+set PYTHONPATH=%HOMEDRIVE%%HOMEPATH%\src\pythonlib
+rsync -avz --delete --timeout=30 nyaos@nyaos.sakura.ne.jp:~/www/ ./SAKURA
+if errorlevel 1 (
+    set MESSAGE=[自動ツイート] バックアップは失敗した雰囲気です、とほほ 
+) else (
+    set MESSAGE=[自動ツイート] バックアップは成功した雰囲気です、やったね！
+)
+echo %MESSAGE% | python -c "import twit_profile,datetime; t=twit_profile.load_and_auth(); t.update_status( raw_input().decode('cp932') + ' on ' + unicode( datetime.datetime.now()) )"
+@pause
+
+>8
+
+* ベースとなったバッチファイルは、先週作った奴だ。詳しくは「>>{(2012.06.24)#p2}{ファーストサーバーの件を踏まえて、ウェブのバックアップ体制強化}」を参照のこと
+* twit_profile.py は、~/.twit_profile という JSON ファイルから認証情報を読み出し、tweepyライブラリを使って認証を行う簡単なライブラリだ。詳しくは「>>{(2012.03.24)#p1}{[twitter] 続・やった、僕も OAuth できたよー}」を参照のこと
+
+:(追記)
+:: ssh の認証が通らなかった時にそこで止まる問題があったので、rsync に --timeout オプションを追加しました。

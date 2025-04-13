@@ -1,0 +1,29 @@
+H2 SPAN{font-size:small}
+P.SEP{text-align:center;color:silver;font-weight:bold}
+P.SAY1{color:#FF00FF;font-size:x-large;text-align:center}
+P.SAY2{color:#FFFF00;font-size:x-large;text-align:center}
+DIV.FOOTNOTE{font-size:x-small}
+DIV.COMMENT{text-indent:12pt}
+
+.FIRSTLETTER{
+    font-size:xx-large;
+    width:1em;
+    float:left;
+}
+H6{
+    text-align:right;border-width:0 1px 1px 0;
+    border-style:solid;border-color:white;font-size:x-small;
+    margin-top:2pt;margin-bottom:2pt;
+}
+.footer{
+    font-size:x-small;margin-bottom:8pt
+}
+div.menu{
+    width:200px;
+    float:right;
+    background-color:black;
+    border-color:white;
+    border-style:outset;
+    border-width:2px 2px 2px 2px;
+    text-align:center;
+}

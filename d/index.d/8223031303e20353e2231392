@@ -1,0 +1,32 @@
+<<NYAOS-3000 2.96_0 をリリースしました>>
+
+<<<ダウンロード>>>
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.96_0-win.zip{nyaos3k-2.96_0-win.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.96_0-os2.zip{nyaos3k-2.96_0-os2.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.96_0-src.zip{nyaos3k-2.96_0-src.zip}
+
+<<<変更点>>>
+
+* Luaオブジェクト：nyaos.command2 の設置
+** nyaos.command との違いは、リダイレクト・パイプラインが使えない替わりに、< > | といった文字列を受け取れること、引数は空白で区切られておらず、常に一つの文字列になっている点です。
+** これにより、また oluacle.dll と組み合わせて、コマンドラインから SQL 発行などが出来るようになりました。
+* Luaオブジェクト：nyaos.filter2 の設置
+** nyaos.filter との違いは、alias展開/インタプリタ名挿入後のタイミングのコマンドラインを加工できるということです。
+* nyaos.command/command2 の戻り値を errorlevel へ反映させるようにした。
+* Luaオブジェクト：nyaos.dirstack の設置
+** pushd/popd/dirs などで使うディレクトリスタックです。ヒストリと同様に扱えます。
+* nyaos.alias/suffix/option を pairs関数で扱えるようにした。
+* nyaos.history/dirstack を ipairs関数で扱えるようにした。
+** 今まで for i,e in nyaos.alias() としていたのを、for i,e in pairs(nyaos.alias) と普通のテーブルのように扱えるようになりました。
+* 起動オプション「-D」(デバッグオプション)で、コンパイル日時、_nya のロードタイミングを表示するようにした。
+* 起動オプション「-a」廃止
+** デフォルトエイリアスを定義するものでしたが、標準の _nya を提供するようになったので、廃止しました。
+* lua_e コマンドでの入力リダイレクトのサポート
+** 実は今まで出来ませんでした。
+* %errorlevel% で、エラー値を参照できるようにした
+** CMD.EXE の仕様を取り入れました。
+* [蟲繕] source 実行中にエラーが発生すると、NYAOS 本体が終了する問題を修正.
+
+よろしくお願い致します。

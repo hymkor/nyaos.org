@@ -1,0 +1,19 @@
+!!! リンク
+
+* http://dlc.sun.com.edgesuite.net/jdk/jdk-api-localizations/jdk-api-ja/builds/latest/html/ja/technotes/guides/scripting/programmer_guide/index.html#jsengine{Java スクリプトプログラマーズガイド}
+* Rhino の JavaDoc (英語) - http://www.mozilla.org/rhino/apidocs/{Overview (Rhino)}
+
+* http://java.sun.com/javase/ja/6/docs/ja/api/index.html?javax/script/package-summary.html{普通の JavaSDK6 の JavaDoc (javax.script も含まれる)}
+
+!!! http://www.mozilla-japan.org/rhino/rhino15R1.html{Rhino 1.5 新着情報}
+
+6<
+!!! Java クラスをスクリプトに見えるように
+
+JavaOne にて、ある出席者から、多くの組み込みでは、スクリプトがすべての Java クラスにアクセスできる必要はないだろう、との指摘がありました。 これは素晴らしい指摘であり、SecuritySupport インターフェースの追加を実施しました。 これは、組み込み開発者が、どのクラスをスクリプトに公開するのかを選択できるものです。 【訳注: Rhino 1.5R4 以降は, 新しいセキュリティー・インターフェースに置き換えられた】
+>9
+
+
++ http://builder.japan.zdnet.com/sp/scripting-on-java-kickstart/story/0,3800084107,20365793,00.htm{なぜJava＋スクリプト言語が求められたのか - builder by ZDNet Japan}
++ http://builder.japan.zdnet.com/sp/scripting-on-java-kickstart/story/0,3800084107,20366909,00.htm{JavaScript＋Java：Rhinoの導入と基本的な利用法 - builder by ZDNet Japan}
++ http://builder.japan.zdnet.com/sp/scripting-on-java-kickstart/story/0,3800084107,20366956,00.htm{Rhino詳細：JavaScriptからJavaインターフェースの実装とクラスの継承 - builder by ZDNet Japan}

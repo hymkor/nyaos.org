@@ -1,0 +1,317 @@
+<HTML>
+<BODY>
+Discussion資料(平成9年4月30日)
+<P ALIGN=CENTER>
+<FONT SIZE=7>ポリマー中の気泡の成長過程のモデリング</FONT>
+</P>
+
+<H2>はじめに</H2>
+
+昨年一年間、高分子プロセッシング(押し出し機)グループのうちの
+発泡グループの一員として、発泡機構のモデリングに
+関して、文献調査とシミュレーションを行ってきた。
+<BR>
+　現在、気泡成長シミュレーションと、気泡核生成速度論を組み合わせて、
+ポリマー中の気泡の半径分布、ならびに空隙率を求めんとしているところである。
+<BR>
+この方法論について、説明したい。
+
+<H2>単一気泡の成長シミュレーション</H2>
+
+状況として、減圧によって溶解ガスが過飽和状態となったポリマー融液と、
+その中に浮かぶ、核生成済の一気泡を想定する。
+<BR>
+　ガスは極めて高い圧力P<SUP>(D)</SUP><SUB>0</SUB>(通常数10気圧〜100気圧)で、融液に溶解させ、
+その後、P<SUP>(C)</SUP>(ほぼ大気圧)に減圧する。
+気泡の内圧は、周辺の融液中の溶解ガスの濃度と平衡な圧力を発生時の初期値とする。
+ゆえに圧力解放時刻に核生成した気泡の内圧はP<SUP>(D)</SUP><SUB>0</SUB>と等しくなる。
+<BR>
+　単一気泡成長モデルは、主に次の３式から構成される。
+
+<h3>気液界面の運動方程式</H3>
+
+気泡の気液界面は、内圧(P<SUP>(D)</SUP>)が、外圧:雰囲気圧(P<SUP>(C)</SUP>)+表面張力と
+つりあっていない場合、半径方向に移動を始める。これは次のように表される。
+<P ALIGN=CENTER>
+	4η(dR/dt)/R = P<SUP>(D)</SUP>- P<SUP>(C)</SUP> - 2γ/R
+</P>
+R:気泡半径、η:粘度、γ:表面張力を示す。
+<BR>
+　ここで、右辺の値が 0 となるような、気泡半径を臨界半径 R<SUB>c</SUB>と定義する。
+一般に、これより半径が大きいと成長、小さいと収縮する。
+<BR>
+　<a href="#Shafi">Shafi</a>は、この臨界半径の約1.1倍をもって、気泡の初期径としているが、
+そのオーダーは、2.1ナノメートルと極めて小さい。
+それに対し、<a href="#Patel">Patel</a>は、臨界半径とは関係無しに、ミクロンオーダーの
+値を適当に設定しているようである。当研究では、<a href="#Shafi">Shafi</a>に従っている。
+
+<H3>ポリマー融液中の溶解ガスの気泡内への流入</H3>
+
+気泡内のガスの物質収支式が次のように立つ。
+<P ALIGN=CENTER>
+	(d/dt)( P<SUP>(D)</SUP>・(4π/3)R<SUP>3</SUP>/R<SUB>gas</SUB>T)
+	=
+	4πR<SUP>2</SUP>D(∂c/∂r)|<SUB>r=R</SUB>
+</P>
+Dは拡散係数、c はポリマー融液中の溶解ガス濃度、R<SUB>gas</SUB>はガス定数、
+Tは絶対温度(今回定数)、rは半径座標を示す。
+<BR>
+　左辺は、気泡内のガスモル数の時間変化、右辺は気液界面を通じて拡散流入する
+ガスモルを示す。
+
+<H3>周辺ポリマー中での、溶解ガスの拡散対流方程式</H3>
+
+気泡周辺のポリマー融液上の球殻 : r〜r+Δrにおける、融解ガスの
+物質収支を考える。このガスの移動は
+<OL>
+  <LI> ガス自体の拡散による移動
+  <LI> 溶媒ポリマーの移動に伴う移動。
+</OL>
+の和で表される。後者の移動量は、同球殻での融液の物質収支式 :
+<P ALIGN=CENTER>
+(∂/∂t)(4πr<SUP>2</SUP>Δrρ)
+= 4πr<SUP>2</SUP>v<SUB>r</SUB>ρ|<SUB>r=r</SUB>
+- 4πr<SUP>2</SUP>v<SUB>r</SUB>ρ|<SUB>r=r+Δr</SUB>
+</P>
+と、気泡気液界面での境界条件 :
+<P ALIGN=CENTER>
+v<SUB>r</SUB>|<SUB>r=R</SUB> = dR/dt
+</P>
+を解くことで得られる対流速度 : v<SUB>r</SUB> = (dR/dt)R<SUP>2</SUP>/r<SUP>2</SUP>を使って、
+4πr<SUP>2</SUP>Δr v<SUB>r</SUB>c と表現できる。
+<BR>
+　これと拡散方程式を組み合わせた「対流拡散方程式」は次のようになる。
+<P ALIGN=CENTER>
+(∂/∂t)(4πr<SUP>2</SUP>Δr c)
+= -4πr<SUP>2</SUP>D(∂c/∂r)|<SUB>r=r</SUB>
+  +4πr<SUP>2</SUP>D(∂c/∂r)|<SUB>r=r+Δr</SUB>
+  +4πr<SUP>2</SUP>v<SUB>r</SUB>c|<SUB>r=r</SUB>
+  -4πr<SUP>2</SUP>v<SUB>r</SUB>c|<SUB>r=r+Δr</SUB>
+</P>
+これのΔr→0の極限は次のようになる。
+<P ALIGN=CENTER>
+(∂c/∂t) = (D/r<SUP>2</SUP>)(∂/∂r)[r<SUP>2</SUP>(∂c/∂r)]
+	- [(dR/dt)/R<SUP>2</SUP>]/r<SUP>2</SUP>×(∂c/∂r)
+</P>
+さて、この対流拡散方程式は、素直に実装した場合、
+メッシュの数だけ連立させなければならず、
+複数の気泡成長をシミュレートする場合、消費する計算機のパワーは尋常ではない。
+そこで、最近は 次に示す Integral Method(積分法)を用いて、
+計算を簡略化する手法がメジャーとなっている。
+
+<H3>Integral Method</H3>
+
+Integral Method とは、気泡周辺の(濃度)境膜の濃度分布を、適当に決め打ちしてやる方法である。
+まず、変数を次のように置く。<BR>
+<CENTER>
+<TABLE BORDER>
+<TR><TD>c<SUB>∞</SUB></TD>	<TD>P<SUP>(D)</SUP><SUB>0</SUB>に平衡な濃度</TD>
+<TR><TD>c<SUB>R</SUB></TD>	<TD>気液界面での濃度, P<SUP>(D)</SUP>に平衡</TD>
+<TR><TD>R</TD>			<TD>気液界面の半径座標</TD>
+<TR><TD>S</TD>			<TD>境膜外面の半径座標</TD>
+</TABLE>
+</CENTER>
+S は厳密には、次のように定義される。
+<P ALIGN=CENTER>
+	S = inf s  (r ≧ s : c(r)=c<SUB>∞</SUB>)
+</P>
+つまり、Sより外側では気泡成長運動による濃度の下降が一切ないものとする。
+<P>
+<a href="#Shafi">Shafi</a>などは、この境膜上に次のような濃度プロファイルを設定している。
+<P ALIGN=CENTER>
+	[ c(r)-c<SUB>R</SUB> ]/[ c<SUB>∞</SUB> - c<SUB>R</SUB>]
+	= 1 - [ 1-(r<SUP>3</SUP> - R<SUP>3</SUP>)/(S<SUP>3</SUP> - R<SUP>3</SUP>)]<SUP>4</SUP>
+</P>
+<a href="#Patel">Patel</a>は、より簡単に
+<P ALIGN=CENTER>
+	[ c(r)-C_R ]/[ c<SUB>∞</SUB> - c<SUB>R</SUB> ]
+	= 1 - [ 1 - (r-R)/(S-R)]<SUP>2</SUP>
+</P>
+としている。
+<P>
+さて、以上のようにプロファイル関数を設定したが、
+境膜厚み(S-R)が未知では机上の空論となる。
+これは、<B>気泡内で増加したガスモル量は、周辺ポリマー融液中で失われた
+溶解ガス量に一致する</B>ことに注目して、次の式から求めることができるはずである。
+<P ALIGN=CENTER>
+(c<SUB>∞</SUB>-c<SUB>R</SUB>) ∫<SUP>S</SUP><SUB>R</SUB>
+([c<SUB>∞</SUB>-c(r)]/[c<SUB>∞</SUB>-c<SUB>R</SUB>]4πr<SUP>2</SUP>dr
+= (4π/3)(R<SUP>3</SUP>ρ<SUB>G</SUB> - R<SUB>0</SUB><SUP>3</SUP>ρ<SUB>G0</SUB>)
+<P>
+ρ<SUB>G</SUB>は気泡中のガスの質量密度、ρ<SUB>G0</SUB>はその初期値である。
+<BR>
+　これより、原理的には、気液界面での濃度勾配がでるので、
+式(\ref{eq:molebalance})を解くことができるはずである。
+
+<H3>結果</H3>
+
+<P ALIGN=CENTER>
+<img alt="[Fig.1]" src="decfig.gif"><BR>
+図 1 : 最初の10秒間の成長(EPS-file)
+</P>
+実線の(A)はメッシュを使った方法、点線の(B)はIntegral Methodを使った方法である。
+◇の(C)は Shafi の示す文献値である。
+メッシュは気液界面の外側に100個程とったものだが、単独の成長を見る限りは、
+Integral Method でも遜色がないといえる。
+
+<H2>気泡の径分布を求める</H2>
+
+<H3>核生成速度理論</H3>
+
+<a href="#Suh">Suhら</a>によると、今、単位体積・単位時間あたり気泡の発生速度
+<I>J<SUB>s</SUB></I>[bubbles・m<SUP>-3</SUP>・s<SUP>-1</SUP>]は、
+次のようにで表される。
+<P ALIGN=CENTER>
+	J<SUB>s</SUB> =	 dN/dt = C<SUB>∞</SUB><I>f</I>exp(-ΔG<SUP>*</SUP>/k<SUB>B</SUB>T)
+	= C<SUB>∞</SUB><I>f</I>exp[(-16πγ<SUP>3</SUP>)/(3k<SUB>B</SUB>T(P<SUP>(D)</SUP>-P<SUP>(C)2</SUP>))]
+</P>
+γはポリマー融液と気泡との界面に生じる表面張力[N/m]、
+k<SUB>B</SUB>はボルツマン定数、
+C<SUB>∞</SUB>は周辺のポリマー融液中で過飽和状態になっている溶解ガスの濃度 [mol/m<SUP>3</SUP>]。
+<BR>
+　ΔG<SUP>*</SUP>は、核生成:半径 0 の気泡が半径 r の気泡になる時の自由エネルギー変化 :
+<P ALIGN=CENTER>
+	ΔG = -(4π/3)r<SUP>3</SUP>(P<SUP>(D)</SUP>-P<SUP>(C)</SUP>) + 4πr<SUP>2</SUP>γ
+</P>
+の初期気泡半径 r に対する極大値であり、
+核生成に必要な活性化エネルギーと解釈できる。
+<BR>
+　<I>f</I>は頻度因子と呼ばれるもので、10<SUP>5</SUP>と<a href="#Suh">Suh</a>は与えている。
+この数値の与え方に関しては今後の文献調査によって明らかにしたい。
+<P>
+以下、加圧解放時刻をt=0とする。
+この時点では、ポリマー融液全体が均一に濃度 C<SUB>0</SUB>で過飽和状態になっている。
+今、t&gt;0の任意時刻において、
+全ポリマー領域を、気泡核が生成できる領域と、そうでない領域の二つにわけるものとする。
+この分け方にも色々あるが、Shafi\cite{Shafi}は単純に濃度C<SUB>s</SUB> = 0.96C<SUB>0</SUB>より大きいか小さいかをその基準
+とした。この濃度C<SUB>s</SUB>は、さきの式で、ちょうど、核生成速度が初期濃度の時の
+それの 1/100 になる濃度である。
+
+<H3>系の気泡径の分布を調べる</H3>
+
+気泡径分布を求める時刻tよりも過去である、ある時刻t'での
+ポリマー融液の領域全体の核生成可能領域全体の大きさを
+V<SUB>L</SUB>(t') [m<SUP>3</SUP>]とおくとその時に発生する気泡の数は
+<P ALIGN=CENTER>
+	<I>n<SUB>b</SUB>(t') = V<SUB>L</SUB>(t')J<SUB>s</SUB>(t')</I> [bubbles/sec]
+</P>
+と表せる。
+以下、同時刻に核生成した気泡は、全て同じ径をもつとして話をすすめる。
+<BR>
+　今、時刻 t'に発生した気泡一つが、時刻tにおいて抱えている
+核生成不能領域の大きさを <I>V<SUB>s</SUB>(t,t')</I> [m<SUP>3</SUP>/bubble]と表すものとする。
+このV<SUB>s</SUB>(t,t')は、t'における核生成可能領域の平均濃度を、
+初期値として、前節の式に与えてやることで求めることができる。
+<BR>
+　これだけで、その時点での気泡径分布を求めることができるが、
+次の時刻t+Δtでの分布も出すためには、
+現時刻tで発生する気泡核数n<SUB>b</SUB>(t)とそれらの初期条件も用意しておいてやらねばならない
+(このままでは 時刻t=0の時の結果しか出ず、意味がない)。
+<BR>
+　今、t'〜t'+Δt'に発生した気泡全てが
+時刻tにおいて抱えている核生成不能領域の大きさは、
+<P ALIGN=CENTER>
+	<I>V<SUB>L</SUB>(t')J<SUB>s</SUB>(t')V<SUB>s</SUB>(t,t')</I> [m<SUP>3</SUP>/sec]
+</P>
+となる。これを圧力解放時から現在まで、つまり、t' = 0〜tについて積分すれば、
+系のtにおける核生成不能領域の全体積を求められる。
+より、体積の引き算から、核生成可能領域の大きさは
+<P ALIGN=CENTER>
+	V<SUB>L</SUB>(t) = V<SUB>L</SUB>(0)
+	- ∫<SUP>t</SUP><SUB>0</SUB> V<SUB>L</SUB>(t')J<SUB>s</SUB>(t')V<SUB>s</SUB>(t,t')dt'
+	- V<SUB>D</SUB>(t)
+</P>
+と求められる。
+V<SUB>D</SUB>は、外界への拡散によって減少した核生成可能領域の大きさで、
+導線被膜ポリマーの場合、円筒状のshellで拡散方程式を
+立てて、C<SUB>s</SUB>以下の領域を計算すれば求められる(今回はV<SUB>D</SUB>=0の結果のみ)。
+<BR>
+　次に、単位体積あたりの核生成速度J<SUB>s</SUB>を出す為に、
+そして、気泡成長計算の初期値を与えてやる為に、
+核生成可能領域の平均の溶解ガス濃度(C<SUB>∞</SUB> ≦ C<SUB>0</SUB>)を求める。
+これは、次の物質収支式で求めることができる。
+<CENTER>
+<TABLE>
+<TR><TD>C<SUB>∞</SUB> V<SUB>L</SUB></TD>
+<TD>= C<SUB>∞</SUB> V<SUB>L</SUB>(0)
+	- ∫<SUP>t</SUP><SUB>0</SUB> (4π/3) J<SUB>s</SUB>(t')V<SUB>L</SUB>(t')
+	[P_D(t,t')R<SUP>3</SUP>(t,t')]/[R<SUB>g</SUB>T]dt'
+</TD>
+<TR><TD></TD>
+<TD>- ∫<SUP>t</SUP><SUB>0</SUB>J<SUB>s</SUB>(t')V<SUB>L</SUB>(t')
+	∫<SUP>S(t,t')</SUP><SUB>R(t,t')</SUB>4πr<SUP>2</SUP>c(r,t,t')dr
+	dt</TD>
+<TR><TD></TD><TD>-(外界への拡散量)</TD>
+</TABLE><BR>
+</CENTER>
+R(t,t')は時刻t'に発生した気泡の時刻tにおける半径、
+S(t,t')は同気泡の周辺ポリマーの溶解ガス濃度がC=C<SUB>s</SUB>となる半径を示す
+(前節のSと違います)。
+<BR>
+　以上の計算を繰り返すことで、核生成可能領域が0になるまでの気泡径分布を
+計算することが可能になる。
+気泡径分布が分かると、これからポリマーの空隙率も計算できる。
+<P ALIGN=CENTER>
+<img alt="[Fig.2]" src="timeVSairvol.gif"><BR>
+図 2 : 空隙率変化 (EPS-file)
+</P>
+「f:1」は、通常の頻度因子fの値、「f:10000」は、fを1/10000にしたものである。
+曲線は途中で途切れているが、ここで、核生成可能領域が 0 になり、
+気泡中への拡散がほぼ停止することになっている。
+<BR>
+　拡散が終了した後の成長は、本来、三つの基本式で拡散を0としたものに切り替えて、
+計算すべきなのだが、ここでは
+<P ALIGN=CENTER>
+	(拡散停止時の気泡内圧)×(拡散停止時の気泡体積)＝(大気圧)×(成長停止時の気泡体積)
+</P>
+の関係から、最終的な気泡径だけを簡単に求めてみた。
+
+<CENTER>
+<TABLE BORDER>
+<TR><TD>外部拡散</TD><TD>無し</TD><TD>無し</TD><TD>有り</TD><TD>有り</TD>
+<TR><TD>頻度因子 f の比</TD><TD>標準(1)</TD><TD>1/10000倍</TD><TD>標準(1)</TD><TD>1/10000倍</TD>
+
+<TR><TD>拡散過程終了時の気泡の最大半径</TD><TD>5.628×10<SUP>-9</SUP>m</TD>
+<TD>6.636×10<SUP>-7</SUP>m</TD><TD>3.590×10<SUP>-9</SUP>m</TD><TD>1.145×10<SUP>-8</SUP>m</TD>
+
+<TR><TD>同空隙率</TD><TD>0.007</TD><TD>1.01 %</TD><TD>0.001</TD><TD>2.6×10<SUP>-6</SUP>%</TD>
+
+<TR><TD>拡散終了時刻</TD><TD>0.025秒</TD><TD>0.075 秒</TD><TD>0.017秒</TD><TD>0.03 秒</TD>
+
+<TR><TD>最終的な最大半径</TD><TD>4.27×10<SUP>-8</SUP>m</TD><TD>4.59×10<SUP>-6</SUP>m</TD>
+<TD>2.726×10<SUP>-8</SUP>m</TD><TD>8.702×10<SUP>-8</SUP>m
+
+<TR><TD>同空隙率</TD><TD>3.33 %</TD><TD>78.4 %</TD><TD>0.44 %</TD><TD>0.00115846 %</TD>
+</TABLE>
+</CENTER>
+空隙率は (空隙体積)／(空隙体積+ポリマー体積)×100 [%]である。
+<BR>
+　この結果は、実際の導線被膜樹脂の断面に写っている気泡のサイズと大きくことなっている。
+気泡が大きく育たないのは、本モデルでは核生成を均質系としているのに対し、
+皮膜樹脂は核剤が含まれた不均質系であるため、
+核生成速度式が不適当、つまり、モデルは核を発生しすぎであるからだと考えられる。
+そのため、微小な大量の気泡核だけで、ガスが全て消費される結果になっている
+(微細な気泡が多いという点においては、均質系発泡の特徴とは合致する)。
+
+<H2>最後に</H2>
+
+今後の予定としては、不均質系核生成に改めるのはもちろんとして、
+導線被膜樹脂の流れによる膨張も考慮にいれた、大気へのガス拡散モデルに
+発展させていきたい。
+
+<H3>参考文献</H3>
+<OL>
+<LI><a name="Shafi">Shafi,A.Muhanmad</a>, J.G.Lee, R.W.Flumerfelt, 
+     &quot;Prediction of Cellular Structure in Free Expansion
+     Polymer Foam Processing&quot;,
+     <I>Poly.Eng.Sci.</I> <B>36,</B> pp.1950--1959(1996)
+<LI><a name="Patel">Patel,R.D.</a>,
+     &quot;Bubble growth in a viscous Newtonian liquid&quot;
+     <I>Chem.Eng.Sci.</I> <B>35,</B> pp.2356-- (1980)
+<LI><a name="Suh">Colton,J.S.,N.P.Suh, </a>
+     &quot;The Nucleation of Microcellular Thermoplastic Foam With
+     Additives: Part I:Theoretical Considerations&quot;,
+     <I>Poly.Eng.Sci.</I> <B>27,</B> pp.485--492(1987)
+</OL>
+</BODY>
+</HTML>

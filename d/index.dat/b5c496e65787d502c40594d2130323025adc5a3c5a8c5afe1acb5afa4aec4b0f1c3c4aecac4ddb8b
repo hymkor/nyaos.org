@@ -1,0 +1,99 @@
+<<<< 基本設定>>>>
+
+/etc/sysconfig/network
+
+<pre>
+    NETWORKING=yes
+    HOSTNAME=lpic
+    GATEWAY=192.168.0.3
+</pre>
+
+<<<< IPアドレス情報>>>>
+
+/etc/sysconfig/network-scripts/ 以下に
+「ifcfg-eth0」等という形で、
+ネットワークインターフェイスの起動/停止を
+行うスクリプトが配置されている。
+
+<pre>
+    DEVICE=eth0
+    BOOTPROTO=static
+    BROADCAST=192.168.120.255
+    IPADDR=192.168.120.3
+    NETMASK=255.255.255.0
+    ONBOOT=yes
+</pre>
+
+BOOTPROTO を dhcp にすると、
+DHCP で IP を取得するようになる。
+
+<pre>
+    DEVICE=eth0
+    BOOTPROTO=dhcp
+    ONBOOT=yes
+</pre>
+
+名前解決
+
+名前解決の優先順位を決める
+/etc/host.conf 
+
+<pre>
+    order hosts,bind
+</pre>
+
+/etc/nsswitch.conf
+
+<< SSH>>
+
+最初に接続した時、クライアントの ~/.ssh/ssh_known_hosts に、
+サーバの公開鍵がセーブされる。
+
+<<<< 公開鍵・秘密鍵の利用>>>>
+
+<<<< (1) 鍵を作成.>>>>
+
+ローカルホストにて、ssh-keygen を実行
+
+<pre>
+    ssh-keygen [オプション]
+</pre>
+
+(例)
+
+<pre>
+    ssh-keygen -t rsa
+</pre>
+
+||-t 暗号方式|rsa1|dsa|rsa 等を指定
+
+拡張子 pub のファイル(公開鍵)が ~/.ssh に生成される。
+
+<<<< (2) リモートホストに公開鍵>>>>
+
+公開鍵ファイルをリモートホストの ~/.ssh/authorized_keys に追記する。
+
+<pre>
+    cat identity.pub >> ~/.ssh/authorized_keys
+    chmod 600 ~/.ssh/authorized_keys
+</pre>
+
+<<<< (3) 認証方法を変える>>>>
+
+/etc/sshd_config  を変更する。
+RSA の認証鍵を使う場合：
+
+<pre>
+    RSAAuthentication  yes
+    PasswordAuthentication  no
+</pre>
+
+<<<< (4) パスフレーズの省略>>>>
+
+<pre>
+    ssh-agent bash
+    ssh-add
+</pre>
+
+(この辺、参考書だと、ローカル・リモートの記述があいまいで、
+困ったもんだ。ということで、ここでもあいまいなまま)

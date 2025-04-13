@@ -1,0 +1,102 @@
+<<[NYAOS]「この操作を完了するのに必要なデータは、まだ利用できません。」だと…>>
+
+メソッドとプロパティーの違いだが、結局、呼び出す前に判別するのは諦めた。
+メソッドをプロパティーとして呼び出すと、
+戻り値(HRESULT)として DISP_E_MEMBERNOTFOUN が帰ってくるようだ。
+(つまり、プロパティーとして存在しないことと区別できない)
+
+一方、例の ResponseText を呼び出してエラーになる場合は
+DISP_E_EXCEPTION が返ってくるようだ。
+この場合、エラー情報を別途得ることができる。
+
+ということで、エラーメッセージを nyaos.error に代入するようにして、確認してみた。
+
+8<
+[c:nyaos3k]
+$ cat download.lua
+local http=nyaos.create_object("Microsoft.XMLHTTP")
+print("pass1");
+http:Open("GET","http://www.yahoo.co.jp/",false)
+print("pass2");
+http:Send("")
+print("pass3");
+print( http.ResponseText )
+print( nyaos.error );
+[c:nyaos3k]
+$ nyaos -f download.lua
+pass1
+pass2
+pass3
+nil
+この操作を完了するのに必要なデータは、まだ利用できません。
+
+[c:nyaos3k]
+$
+>8
+
+むむ、エラーメッセージは理解できるが、
+同様の呼び方をしている JScript ではエラーになっていない事実には変わりない。
+何故でしょうなぁ。
+ResponseText を参照する以前のメソッド呼び出しでしくじってるのかなぁ。
+
+----
+
+なお、Lua の関数ではエラーの時、「nilとエラーメッセージのペア」を返すのが普通なのに、
+なぜグローバル変数でエラーを返しているかというと、
+テーブル(もしくはテーブル風オブジェクト)の要素参照(```__index```)では、
+値を一つしか返せないためのようなんですよ。
+
+また、lua_error で強制エラーを発生するのは、longjmp が呼ばれる都合、
+C++のデストラクタをすっとばしてメモリリークが発生する恐れがあるので、
+なるべく使いたくないんですよ。
+そういうわけで、ダサイけど、仕方がない。
+
+<<[NYAOS] 解決篇>>
+
+朝の5:30までがんばってしまったが、だいたい解決した。
+
+http.ResponseText が「この操作を完了するのに必要なデータは、まだ利用できません。」と出るのは、
+Send がメソッドではなく、プロパティーとして解決されていたせいだった。
+Send をプロパティーとして呼び出した時、何故かエラーにならず、成功してしまうようだ。
+
+で、いろいろ試してみたところ、Send をプロパティーとして取得した時、
+戻り値として「空」(VT_EMPTY)が返っているらしい。
+プロパティーの取得(get)をしているのに空(VT_EMPTY)が返ってくるのはおかしい話なので、
+そういう場合はメソッドがあると判断することにした。
+
+結果、COMオブジェクト foo のメンバー bar がプロパティーかメソッドかを判断するのは、
+次のようなロジックで行うようにした。
+
+* bar をプロパティー取得として Invoke する。
+* エラーが発生した場合
+** エラーコード(HRESULT)が DISP_E_MEMBERNOTFOUND か DISP_E_BADPARAMCOUNTの時
+    メソッドとしてオブジェクトを生成して、「foo.bar」の値とする。
+** それ以外のエラーコードの場合は普通にエラー
+* エラーが発生しない場合
+** 戻り値が空(VT_EMPTY)で無い時、プロパティー取得の結果を「foo.bar」の値とする。
+** 戻り値が空(VT_EMPTY)の時、メソッドとしてオブジェクトを生成して、「foo.bar」の値とする。
+
+途中、エンバグしてしまって、ひどく時間がかかってしまったが、
+これで一応 download.lua も動くようになった。
+
+<<[NYAOS] Excel も一応呼べた…>>
+
+Amazon で注文した Office 2010 が届いたので、
+「(Rubyの)http://homepage1.nifty.com/markey/ruby/win32ole/index.html{Win32OLE の製作過程}」
+にある Excel サンプルをちょっと簡単にした奴を書いてみた。
+
+8<
+local excel=nyaos.create_object("Excel.Application")
+excel.Visible = true
+local workbook = excel.Workbooks.Add
+local worksheet = workbook.Worksheets:Item(1)
+worksheet:Range("A1").value = "おれだよおれ"
+>8
+
+まぁ、何とか動くんだけど、どうも変なところもあって、
+「Add」はWorkbooksオブジェクトのメソッドのはずだが、
+プロパティーとして動作してしまうのだな。
+
+プロパティーとして正常動作されてしまうと、
+逆にメソッド的な記述が出来なくなってしまうという…
+なんだかなー。

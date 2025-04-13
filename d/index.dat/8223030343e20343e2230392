@@ -1,0 +1,42 @@
+
+<<Windows より Ruby 経由での Oracle アクセス>>
+
+最初は http://www.jiubao.org/ruby-oci8/index.ja.html{
+Ruby/OCI} をなんとか、コンパイルしようとしたが、
+どうしてもうまくゆかず断念。
+Linux 上では、ものすごくあっさりコンパイルできたのだが。
+
+おそらく、Boland C++ , Digitalmars C++  , Cygwin とか
+http://slashdot.jp/article.pl?sid=04/04/19/1757207&topic=58{
+VC++}、ActiveScriptRuby , Cygwin Ruby , mswin-ruby 
+が混ざった変態環境なのが、よろしくないのであろう。
+
+今日のところは、あきらめて、明日、素直に 
+http://homepage1.nifty.com/markey/ruby/win32ole/index.html{Win32ole} 経由で、
+http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/18636{
+ActiveX Data Object を使ってアクセスする方法}などを
+試してみることにしよう。こっちは、あっさりといけそうな気がする。
+
+:(21日：追記)
+:: あっさりできた。以下、参考にしたメモ。
+
+* http://www.itmedia.co.jp/help/howto/win/win2000/0007special/complus_vb/chapa/a4.html{A.4 ADODB.Recordsetを使ったデータベースアクセス}
+* http://acvb.s19.xrea.com/main.html{Access Tweek}
+
+しかし、前にもメモっといて、結局忘れているような気がするな。
+
+<<めも>>
+
+本当にメモだけ
+
+* http://www.jcraft.com/weirdx/{WeirdX 
+	-- Pure Java X Window System Server under GPL}
+    (http://www.os2.jp/modules/news/article.php?storyid=1247{OS2.jp}より)
+    :: 1.032 にバージョンアップしたとのこと。
+* http://slashdot.jp/article.pl?sid=04/04/20/0737213&topic=81{
+    /.jp Microsoft Virtual PC 2004は5月に登場}
+    :: やっとかい。これで安心して、OS/2 版プログラムのメンテナンスが
+	できるというものだ。OS/2 Warp Convenience Pack 1/2 も
+	ゲストOS として、サポートしているそうだし。
+	しかし、まだ XP-Home 上がホストOS で動くかな？
+	(← 今まで、ずっと体験版を XP-Home で使ってきた奴)

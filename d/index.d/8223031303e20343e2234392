@@ -1,0 +1,44 @@
+<<NYAOS 3000 2.93_0 をリリースしました>>
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{
+    Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.93_0-win.zip{
+    nyaos3k-2.93_0-win.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.93_0-os2.zip{
+    nyaos3k-2.93_0-os2.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.93_0-src.zip{
+    nyaos3k-2.93_0-src.zip}
+
+今回は結構大改変？
+
+* Lua 関数で、ファイル名以外の文字列を補完候補に含められるようにした。
+* カラー ls での色の付け方を HIDDEN,SYSTEM を DIRECTORY より優先する
+  ようにした
+* & で別セッションで実行する時に、<プロセスID>を表示するようにした。
+* 新アイコンを用意。
+* Ctrl-\ で IME の ON/OFF ができるようにした。(Windows のみ)
+* 内蔵コマンドを介するパイプラインで、一時ファイルを使わないようにした。
+* [蟲繕]color-ls のデフォルト配色が、-l の有無で違ってしまう問題を修正
+* [蟲繕]リダイレクト失敗の際に、そのままコマンドが実行されてしまう問題を修正
+
+下記のように Lua 関数を定義すれば、 DNS キャッシュとか、hosts ファイルに
+書かれたホスト名や IP アドレスなども補完することが出来ます。
+(重たそうなので、リアルタイム反映にはしてませんけど)
+
+((ref_text complete_hosts.ny))
+
+Windows では、コマンドの呼び出しで、spawnvp ではなく、CreateProcess を使うようにしました。これに伴ない、正しいプロセスID の取得や、パイプラインの終了待ちがきちんと出来るようになりました(一時ファイルを作らなくてよくなった)。
+
+Ctrl-\ については、http://d.hatena.ne.jp/lukewarm/20091212#p2{lukewam(Sava)さんのコード}をそのまま使わせていただいています。ありがとうございます。
+なお「``bindkey CTRL_O ime-toggle``」とかすれば、別のキーで起動させることもできます。
+
+アイコンについては、いつまでも NYACUS と同じなのもどうかと思われたので、
+NYACUS の猫を白くして、Lua のマークを入れてます。
+Lua マークは本当は青ですが、背後が黒なので、月らしい黄色で許してくださいということで。
+
+最後に nyaos.org のhttp://nyaos.org/{トップ}をリニューアルしました。
+今までは、NYAOS 2.xx シリーズのホームページという位置付けでしたが、
+NYAOS 1.xx , 2.xx , 3000 の総合案内的なページにしました。
+
+相変わらず、読む人もいないのに英語です。マゾプログラマーだから仕方ない。
+今後とも、よろしくお願いいたします。

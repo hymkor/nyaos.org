@@ -1,0 +1,48 @@
+<<[vim] skk.vim を導入してみた>>
+
+気紛れで入れてみた。元々、Windows へは SKKIME を入れており、これはこれで不満がなかったし。だが、結果として、脱 Cygwin することができそうな雰囲気だ。
+
+コマンドプロンプトで、IME 経由(==SKKIME含む=={主にSKKIME})で日本語を入力すると：
+
+* ネイティブの vim (非gvim) だと、文字によっては化ける
+* Cygwin の vim だと化けない。
+
+:(2010.02.14) 画像追加
+:: <<{IMEandVIM.PNG}
+
+それゆえ、NYAOS の上で Cygwin を動かすということもよくやっていた。
+だが、skk.vim を導入して：
+
+* ネイティブ vim でも支障なく日本語を入力できるようになった。
+
+さらに：
+
+* Ctrl-J というホームポジションに近いキーバインドでIME の ON/OFF ができる。
+** GUI系アプリでは、xkeymacs で変換/無変換で、IME の ON/OFF をしているが、コマンドプロンプトだけはこのキーバインド変更が効かなかった。
+* gvim だと、三種類にカーソル色が変わる。
+** Off:緑、skk.vim:on=空色、WindowsのIMEがON:紫
+
+すばらしい。
+
+!! 自分用メモ
+
+! 参考URL
+
+* http://www.vim.org/scripts/script.php?script_id=1589{skk.vim - Japanese SKK : vim online}
+* http://d.tir.jp/pw?skk.vim{skk.vim}
+
+! ファイルの配置
+
+* アプリケーション ⇒ c:\usr\vim72-kaoriya-w32j\runtime\plugin\skk.vim
+* フル辞書⇒ c:\c:\usr\vim72-kaoriya-w32j\SKK-JISYO.L (SKKIME とは別とした)
+* 学習辞書⇒ ~/.skk-jisyo
+
+! .vimrc への追加
+
+8<
+let skk_jisyo = '~/.skk-jisyo'
+let skk_large_jisyo = $VIM . '/SKK-JISYO.L'
+let skk_auto_save_jisyo = 1
+>8
+
+意外とお手軽

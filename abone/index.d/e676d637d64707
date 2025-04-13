@@ -1,0 +1,50 @@
+* http://nai.homelinux.net/telnet_smtp_auth.html{Kung Noi:telnetでsmtp-authをやる}
+* http://perldoc.jp/docs/modules/libnet-1.12/Net/SMTP.pod{Net::SMTP - SMTP(Simple Mail Transfer Protocol)クライアント 【perldoc.jp】}
+* http://search.cpan.org/~gbarr/libnet-1.22/Net/SMTP.pm{Net::SMTP - search.cpan.org}
+
+----
+
+次世代メールサーバに telnet でメールを送った時のログ
+
+<<<
+hayama@dragon ~]$ telnet ngmsmtp.intra.tis.co.jp 25
+Trying 172.26.14.138...
+Connected to ngmsmtp.intra.tis.co.jp (172.26.14.138).
+Escape character is '^]'.
+220 tsmmta01.tsm.tis.co.jp ESMTP Postfix
+EHLO localhost
+250-tsmmta01.tsm.tis.co.jp
+250-PIPELINING
+250-SIZE 10485760
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-AUTH=PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250 DSN
+AUTH PLAIN LOGIN
+535 5.7.0 Error: authentication failed: another step is needed in authentication
+AUTH LOGIN
+334 VXNlcm5hbWU6
+Ym9yZGVybGVzcw==
+334 UGFzc3dvcmQ6
+WkFRITJ3c3g=
+235 2.0.0 Authentication successful
+MAIL FROM: borderless@tis.co.jp
+250 2.1.0 Ok
+RCPT TO: borderless@tis.co.jp
+250 2.1.5 Ok
+DATA
+354 End data with <CR><LF>.<CR><LF>
+From: borderless@tis.co.jp
+To: borderless@tis.co.jp
+
+test from hayama.
+.
+250 2.0.0 Ok: queued as 5B1004D8225
+QUIT
+221 2.0.0 Bye
+Connection closed by foreign host.
+[hayama@dragon ~]$
+>>>

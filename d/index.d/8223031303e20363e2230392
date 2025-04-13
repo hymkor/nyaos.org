@@ -1,0 +1,115 @@
+<<混迷を極めていたと思っていた ckw が実は統一されていた件>>
+
+* >>{(2010.04.13)#p1}{ckw の最新バージョンが混沌としている件について}
+* >>{(2010.06.19)#p1}{Windows用コンソール「ckw」の未来がますます混迷を極めている件について}
+
+その後、lingr.com の shell部屋にて、github.com に上がっているバージョンを教えてもらった。変更履歴を見ると、mod-mod ベースに、派生バージョン(mod-2/3,craftware氏版)などを取り込み、'''0.9.0-mod-d1'''というバージョンが、ほぼ'''統一ckw'''になっていたことが判明。
+
+というわけで内容を更新しますた
+ → http://www.nyaos.org/index.cgi?p=Where+is+ckw+%3F{Where is ckw ?}
+
+<<{ckw-history2.png}
+
+前の図では、0回以上のリリースのものをまとめて「プロジェクト」とかしてましたが、
+「やるやる詐欺状態」や「1回こっきりのパッチ」まで大きく取り上げることになり、
+逆に見難くなったので、図をリリースベースに整理し直しました。
+
+<<Visual Studio コマンドプロンプトを ckw + NYAOS で起動する方法>>
+
+VC++ 2010 Express Edition を入れたのはいいものの、
+コマンドラインコンパイラを使うには、
+「'''Visual Studio コマンドプロンプト (2010)'''」という専用コンソールから
+起動しなくちゃいけないらしい。
+
+このコンソール、やってることは環境変数の設定をするバッチファイルを /K オプション付きで
+CMD.EXE で実行しているだけだけれども…
+
+>> NYAOS は、このバッチを読み込めない <<
+
+最近の CMD.EXE は高機能になって、関数機能(CALL ラベル名)とか装備してたりして、
+NYAOS も追随できてないんですよ(追随するつもりもないけど)。
+
+環境変数変更の結果だけを取り込んでもいいけど、今一美しくないので、
+一工夫してみることにする。基本的には、起動処理を次のように逐次実行にすればいいのだ。
+
++「Visual Studio コマンドプロンプト」のバッチを起動
++ nyaos.exe を起動
+
+<<<ckw を使う場合>>>
+
+ckw.cfg に
+
+8<
+Ckw*exec:  cmd.exe /c "C:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 & c:\usr\bin\nyaos.exe
+Ckw*chdir: C:\Program Files\Microsoft Visual Studio 10.0\VC
+>8
+
+と書けば Ok。ckw 自身は
+
+||| 項目 | 値
+|| リンク先 | ``C:\WINDOWS\system32\cmd.exe /c start C:\usr\bin\ckw.exe``
+|| 作業フォルダ | ``C:\usr\bin``
+
+というショートカットで起動。
+(ちょっと変則的だが、start で起動しないと何故か私の環境では IME が効かないという問題が…orz)
+
+<<<ckw を使わない場合>>>
+
+「Visual Studio コマンドプロンプト (2010)」のアイコンをコピーして、
+プロパティで設定を下線部のように変更すればよい。
+
+||| 項目 | 値
+|| リンク先 | ``%comspec% __/c__ ""C:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"" x86 __& c:\usr\bin\nyaos.exe__``
+
+<<<まとめ>>>
+
+振り返ってみると、あまり一工夫というほどのものでもなかったなぁ。
+
+なお、この方法で用いると、'''起動が若干もっさりするが'''、当局は一切関知しない。
+
+<<[Python] Google コマンドラインをインストールしてみた>>
+
+* http://www.ideaxidea.com/archives/2010/06/google_cl.html{Googleコマンドラインなるツールが出たようですね… - IDEA*IDEA ～ 百式管理人のライフハックブログ}
+
+勘違いしてたけど、純Python製のツールのようですね。
+詳細はリンク先の通りですが、簡単に言うとコマンドラインから Google のサーバ側の自分のコンテンツにアクセスするツールです。
+
+Windows でのインストールの仕方は上記ページで紹介されているサイト「http://publicint.blogspot.com/2010/06/setup-googlecl-on-winxp.html{public int: Setup GoogleCL on WinXP}」にある通り。
+
++ Python をインストール
+** 省略！
++ Google Data API をインストール
+** http://code.google.com/p/gdata-python-client/{gdata-python-client - Project Hosting on Google Code} より、gdata-2.0.10.zip ダウンロード
+** zipファイルを展開
+** ``cd gdata-2.0.10``
+** ``python setup.py install``
++ Google Commandline 本体をインストール
+** http://code.google.com/p/googlecl/{googlecl - Project Hosting on Google Code}
+    より、googlecl-0.9.7.tar.gz をインストール
+** ``tar zxvf googlecl-0.9.7.tar.gz``
+** ``cd googlecl-0.9.7``
+** ``python setup.py install``
+** ブラウザが開いて認証画面が出るので、ユーザ名とパスワードを入力する。
+
+これで使えるようになったはず。
+
+サンプルにある google コマンドの実体は、
+c:\Python26\Scripts などの Python のスクリプトディレクトリの中に格納されている、
+純粋な Python スクリプトだ。
+
+が、拡張子がついていないので、NYAOS から実行する場合は、suffix 文による拡張子関連付けが効かない。ここは仕方がないので、
+
+8<
+alias google "python ""c:\Python26\Scripts\google"""
+>8
+
+とでも個別エイリアスするしかあるまい。
+なお、google コマンドの出力は UTF-8 なので、そのままではコマンドプロンプトでは化けてしまう。
+
+8<
+python "c:\Python26\Scripts\google" docs list | iconv -f UTF-8 -t CP932
+>8
+
+と iconv コマンドなどで、コンバートして使いましょう。
+
+＃ でも、これ設定とかで何とかできそうな気がするんだけどなぁ。

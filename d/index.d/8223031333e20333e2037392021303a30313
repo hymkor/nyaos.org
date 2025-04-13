@@ -1,0 +1,23 @@
+<<((title コマンドラインで必要なタイミングで UAC の権限を昇格させるには))>>
+
+組み込みアカウントの「Administrator」を 有効にして、それに対して runas を使えばよいらしい。
+
++ GUIより cmd.exe を「管理者として実行する」で起動
++ その cmd.exe 内で「``net user administrator /active:yes``」を実行して、administrator ユーザを有効にする
++ コントロール パネル\ユーザー アカウントと家族のための安全設定\ユーザー アカウント\アカウントの管理\アカウントの変更 で、administor にパスワードを設定
+
+これで
+
+8<
+runas /user:administrator "fsutil hardlink create c:\Users\Hayama\hoge.txt c:\Users\Hayama\Wiki変更案.txt"
+>8
+
+のようにピンポイントで UAC 昇格ができる。
+ダイアログは出ないが、代わりに su みたいにコマンドラインでパスワードが要求される。
+
+ただし、別セッションで起動されるため、カレントディレクトリが変わり、
+コマンドによっては表示が一瞬で消えてしまうのが難点。
+
+この辺は Lua で何とかしたいもんだ。
+
+* 参考: http://mikisky40.web.fc2.com/kohza/kohza54.html#UAC_04{やさしい講座　～第54回 Vista の機能をもっと深く知る ユーザーアカウント制御機能～}

@@ -1,0 +1,294 @@
+Oracle Call Interface。
+
+<<概要>>
+
+C言語からの Oracle へのインターフェース。
+
+関数の引数が多くて、そのままでは、とても使いにくい。
+Pro*C を使うか、C++ 使いならば、occi の利用を推奨する。
+
+<<うっかり作ってしまったラッピングクラス>>
+
+で、OCCI の存在を知らずに、作ってしまった orz 。
+もはや役に立たないけど、もったいないので引用。
+
+<<<ヘッダ>>>
+
+<pre>
+    #include <string>
+    #include <exception>
+    #include <iostream>
+    #include <vector>
+    extern "C" {
+    #include <oci.h>
+    #include <ocidfn.h>
+    };
+
+    /* エラーオブジェクト */
+    class ppoci_error : public exception {
+	sword  code_;
+	std::string detail_;
+    public:
+	ppoci_error( const ppoci_error &y )
+	    : code_(y.code_) ,detail_(y.detail_){}
+	ppoci_error(sword code , const char *what) 
+	    : code_(code) , detail_(what) , exception(){}
+	ppoci_error(sword code , const std::string &what) 
+	    : code_(code) , detail_(what) , exception(){}
+	ppoci_error(sword code , const std::string &what,OCIError *errhp);
+	
+	sword code() const { return code_; }
+	const std::string &detail() const { return detail_; }
+	const char *code_name() const;
+    };
+
+    /* 接続オブジェクト */
+    class connection_t {
+	OCIEnv    *envhp_;
+	OCIError  *errhp_;
+	OCISvcCtx *svchp_;
+    public:
+	OCIEnv    *envhp() const { return envhp_; }
+	OCIError  *errhp() const { return errhp_; }
+	OCISvcCtx *svchp() const { return svchp_; }
+	connection_t() : envhp_(0) , errhp_(0) , svchp_(0){}
+
+	void open_error_handle();
+	void close_error_handle();
+	void envinit();
+	void connect( const std::string &name ,
+		      const std::string &pwd ,
+		      const std::string &db );
+	void disconnect();
+    };
+
+    class statement_t {
+	connection_t &connection_;
+	std::string   sql_;
+	OCIStmt      *handle_;
+	std::vector<OCIBind*>   binds_;
+	std::vector<OCIDefine*> defines_;
+    protected:
+	connection_t &connection(){ return connection_; }
+	OCIStmt      *handle(){ return handle_; }
+    public:
+	statement_t( connection_t &c , const string &sql ) 
+	    : connection_(c) , sql_(sql) , handle_(0) , binds_(30){}
+
+	void open_handle();
+	void prepare();
+	void bind( const char *name , char *buffer , size_t size );
+	void into( char *buffer , size_t size );
+	void execute();
+	bool fetch();
+	void close_handle();
+    };
+</pre>
+
+<<<ソース>>>
+
+<pre>
+    #include "ppoci.h"
+
+    using namespace std;
+
+    ppoci_error::ppoci_error( sword code , const string &what , OCIError *errhp )
+    {
+	OraText buffer[ 1024 ];
+	sb4 errcode;
+
+	OCIErrorGet(errhp,1,NULL,&errcode,buffer,sizeof(buffer),OCI_HTYPE_ERROR);
+	buffer[ sizeof(buffer)-1 ] = '\0';
+	code_ = code;
+	detail_ = what ;
+	detail_ += ":";
+	detail_ += (char*)buffer;
+    }
+
+
+    #define M2S(s) case s: return #s
+
+    const char *ppoci_error::code_name() const
+    {
+	switch( code() ){
+	    M2S(OCI_SUCCESS);
+	    M2S(OCI_SUCCESS_WITH_INFO);
+	    M2S(OCI_NO_DATA);
+	    M2S(OCI_ERROR);
+	    M2S(OCI_INVALID_HANDLE);
+	    M2S(OCI_NEED_DATA);
+	    M2S(OCI_STILL_EXECUTING);
+	    M2S(OCI_CONTINUE);
+	    default:
+		return "UNKNOWN";
+	}
+    }
+
+    void connection_t::open_error_handle()
+    {
+	if( errhp_ != 0 ) return;
+
+	sword result= OCIHandleAlloc(envhp(), (dvoid**)&errhp_,
+				     OCI_HTYPE_ERROR, 0, 0 );  
+	if( result != OCI_SUCCESS )
+	    throw ppoci_error( result , "error handle allocation failed." );
+    }
+    void connection_t::close_error_handle()
+    {
+	if( errhp_ == 0 ) return;
+
+	sword result=OCIHandleFree( errhp_ , OCI_HTYPE_ERROR );
+	if( result != OCI_SUCCESS )
+	    throw ppoci_error( result , "error handle free failed." );
+	errhp_ = 0;
+    }
+    void connection_t::envinit()
+    {
+	if( envhp_ != 0 ) return;
+	// sword code = OCIEnvInit( &envhp_ , OCI_DEFAULT , 0 , &usermem_ );
+	sword code = OCIEnvCreate( &envhp_ , OCI_DEFAULT ,
+				    0 , 0 , 0, 0, 0, 0 );
+	if( code != OCI_SUCCESS )
+	    throw ppoci_error(code,"connection_t::envinit: fail to OCIEnvInit");
+    }
+    void connection_t::connect( const string &name,
+				const string &pwd ,
+				const string &dbname )
+    {
+	envinit();
+	open_error_handle();
+	sword code = OCILogon( envhp() , errhp() , &svchp_ , 
+			       (const OraText*)name.c_str() , name.length() ,
+			       (const OraText*)pwd.c_str() , pwd.length() ,
+			       (const OraText*)dbname.c_str() , dbname.length() );
+	if( code != OCI_SUCCESS )
+	    throw ppoci_error(code,"connection_t::connect: fail to OCILogon");
+    }
+
+    void connection_t::disconnect()
+    {
+	sword code = OCILogoff( svchp() , errhp() ); 
+	if( code != OCI_SUCCESS )
+	    throw ppoci_error(code,"connection_t::disconnect: fail to OCILogoff");
+	close_error_handle();
+    }
+
+
+    void statement_t::open_handle()
+    {
+	if( handle_ != 0 ) return;
+
+	sword result=
+	    OCIHandleAlloc( connection().envhp() , (dvoid **)&handle_ , 
+			    OCI_HTYPE_STMT , 0 , 0 );  
+	if( result != OCI_SUCCESS )
+	    throw ppoci_error(result,"statement handle allocation error");
+    }
+    void statement_t::close_handle()
+    {
+	if( handle_ == 0 ) return ;
+
+	sword result = OCIHandleFree( handle_ , OCI_HTYPE_STMT );
+	handle_ = 0;
+	if( result != OCI_SUCCESS )
+	    throw ppoci_error(result, "statement handle release error");
+    }
+
+    void statement_t::prepare()
+    {
+	sword result = 
+	    OCIStmtPrepare( handle() , connection().errhp() ,
+			    (const OraText*)sql_.c_str() , sql_.length() , 
+			    OCI_NTV_SYNTAX , OCI_DEFAULT );
+	
+	if( result != OCI_SUCCESS )
+	    throw ppoci_error(result, "prepare statement error");
+    }
+
+    void statement_t::bind( const char *name , char *buffer , size_t size )
+    {
+	binds_.push_back(0);
+	sword result =
+	    OCIBindByName( handle() ,
+			   &binds_[ binds_.size()-1 ] ,
+			   connection().errhp() ,
+			   (const OraText*)name , -1 ,
+			   (dvoid*)buffer , size , 
+			   SQLT_STR , NULL , NULL , NULL , 0 , NULL ,OCI_DEFAULT );
+	
+	if( result != OCI_SUCCESS )
+	    throw ppoci_error(result, "bind error", connection().errhp() );
+    }
+
+    void statement_t::into( char *buffer , size_t size )
+    {
+	defines_.push_back(0);
+	sword result =
+	    OCIDefineByPos( handle() ,
+			    &defines_.back() ,
+			    connection().errhp() ,
+			    defines_.size() ,
+			    (dvoid*)buffer , size , 
+			    SQLT_STR , 0 , 0 , 0 , OCI_DEFAULT );
+	
+	if( result != OCI_SUCCESS )
+	    throw ppoci_error(result, "define error", connection().errhp() );
+    }
+
+    void statement_t::execute()
+    {
+	sword result =
+	    OCIStmtExecute( connection().svchp() ,
+			    handle() , 
+			    connection().errhp() , 
+			    1 , 0 , 0 , 0 , OCI_DEFAULT );
+	if( result != OCI_SUCCESS )
+	    throw ppoci_error(result,
+			      "execute statement error",
+			      connection().errhp() );
+    }
+    bool statement_t::fetch()
+    {
+	sword result =
+	    OCIStmtFetch2( handle() , connection().errhp() , 1, OCI_FETCH_NEXT ,
+			    0 , OCI_DEFAULT );
+	switch( result ){
+	    case OCI_NO_DATA: return false;
+	    case OCI_SUCCESS: return true;
+	    default:
+		throw ppoci_error(result,
+				  "fetch error",
+				  connection().errhp() );
+	}
+    }
+
+    #if 1
+
+    int main()
+    {
+	char tname[ 100 ];
+	try{
+	    connection_t conn;
+	    conn.connect("ユーザ名","パスワード","DB名称");
+
+	    statement_t stmt(conn, "select tname from tab" );
+	    stmt.open_handle();
+	    stmt.prepare();
+	    stmt.into(tname,sizeof(tname));
+	    stmt.execute();
+	    while( stmt.fetch() ){
+		cout << '"' << tname << '"' << endl;
+	    }
+	    stmt.close_handle();
+
+	    conn.disconnect();
+	}catch( ppoci_error e ){
+	    cout << e.detail() << endl;
+	    cout << e.code() << endl;
+	    cout << e.code_name() << endl;
+	}
+	return 0;
+    }
+
+    #endif
+</pre>

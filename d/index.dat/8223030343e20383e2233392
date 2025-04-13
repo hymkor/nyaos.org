@@ -1,0 +1,18 @@
+
+<<((lb))Cygwin((rb)) 去年のプロセス>>
+
+ふと、Cygwin で ps -aux してみた…
+
+<pre>
+USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
+SYSTEM    1824  0.0  0.2 411264 2132 ?       S    Sep27   0:00 /sbin/cygrunsrv 
+SYSTEM     408  0.0  0.2 409204 2120 ?       S    Sep27   0:00 init ((lb))3((rb)) 
+SYSTEM    2956  0.0  0.7 410896 5640 ?       S    Sep27   0:00 /usr/bin/ipc-daem
+SYSTEM    3268  0.0  0.4 415552 3360 ?       S    Sep27   0:00 cannaserver 
+hayama    1704  0.2  0.7 435288 5568 ?       S    20:20   0:00 /usr/bin/rxvt-w11
+    :
+</pre>
+
+>> なんで、9月27日なんだろ <<
+
+教えて、お爺さん。

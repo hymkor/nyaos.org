@@ -1,0 +1,26 @@
+http://tc.tis.co.jp/laputa
+
+6<
+PJ成果物（ドキュメント、ソース）を管理するための全社レベルサービスとしての構成管理環境
+
+※現在、先端技術センターより全社サービスとして評価版提供中
+((br))業連：TC19/016（2007/9/19発行）
+>9
+
+Rainbow プロジェクトの一部らしい
+
+http://tc.tis.co.jp/bazaar/group/rainbow{Bazaar - index : Rainbowプロジェクトでは以下の3システムを構築しています}
+
+6<
+* ラピュタ(laputa)
+** オープンソースのツール(ソフトウェア)、Subversion,Redmineを前提にしたシステム
+*** Subversion：バージョン管理ツール
+*** Redmine：PJ内情報共有ツール
+** 社内全PJで使うものではなく、利用が適しているPJで利用するもの
+* 社内PJ台帳(catalog)
+** 社内の全PJの情報を一元管理するシステム
+** 各PJから生産へのファイル提出(完了報告書など)にも利用する
+⇒詳細情報はhttp://tc.tis.co.jp/bazaar/group/rainbow/page/14712{こちら}
+* 社内PJ検索(browser)
+** 社内PJ台帳、ラピュタの情報をあわせて全文検索し、その結果を表示するシステム
+>9

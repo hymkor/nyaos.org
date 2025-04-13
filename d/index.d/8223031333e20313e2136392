@@ -1,0 +1,29 @@
+<<[Windows] ちょー簡単（に作った）全手動マージ>>
+
+普通だったら、独立したライブラリで、
+バージョン管理すればいいんですけどねぇ。
+１枚、２枚のファイルだと、大仰なので。
+かといって、そのまま上書き copy はちとこわい。
+
+UNIX/Linux だったら、ハードリンク張っちゃうんだけど。
+
+8<
+@echo off
+set KBX=＜ディレクトリ１＞
+set KBF=＜ディレクトリ２＞
+
+for %%i in (
+    …ファイル名一覧…
+) do (
+    fc %KBX%\%%i %KBF%\%%i >nul
+    if errorlevel 1 (
+        echo %%i differs.
+        gvim -d %KBX%\%%i %KBF%\%%i
+    ) else (
+        echo %%i are same.
+    )
+)
+>8
+
+
+それにしても「gvim -d」による差分比較・編集機能は便利。

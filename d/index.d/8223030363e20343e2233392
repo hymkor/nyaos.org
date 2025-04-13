@@ -1,0 +1,59 @@
+* Google Reeder のウェブページへの Share 機能が IE で機能しないのは、
+  当ページが UTF8 でないからという可能性が高いことが判明した。==よって、やめ。
+  HTMLタグで「ここだけ UTF8 だお」と明示できるもんでもあれば話は別だが。==
+** ⇒ <script>タグの中に charset="utf-8" と書くと、うまいこといった！
+      でも、IE の場合、サイドバーに入れるには IEサイズがでけぇ。。
+
+<<今流行りの成果主義のせいか！>>
+
+>> この俺がこんなにしんどいのは！<<
+
+成果主義なんて、飾りです。えらい人にはそれが分からんのです。
+
+実のところ、信頼されている/実力のある人間ほど、いっぱい仕事を呼びよせて、
+忙しくて時間がねぇ！という実態になりがちなので、
+素直に従来型の時間比例の残業代でも、結構適性な評価/報酬になると思うのだが。
+
+>> だけど、わしには残業代がでない <<
+
+昇格しても何もいいこと無いじゃないか。賞与の基本額も変わるのは、冬からという話だし。
+しかも、山歩きみたいな研修も受けんといかんという話ですよ。ここは小学校ですか！
+Yes, we are!
+
+* 人が人を評価しようだなんて、おこがましいとは思わんかね(本間丈太郎先生 談)
+* 本当に適性な評価を行うのであれば、はてな式の PageRank 型評価しかないと思う。
+
+<<はてブを wifky に include する>>
+
+* http://www.moondakota.com/archives/2004/09/23/rss_javascript.html#more{moondakota:RSS FeedをJavascriptでウェブページに表示}
+
+こちらで提供されている RSS Feed を JavaScript 化してくれるサービスを利用して、
+wifky に、自分のはてブを表示させることができました。
+
+プラグインのコードは、こんな感じ(ちょっとカスタマイズの余地入れてたりして)：
+
+8<
+$inline_plugin{'hatebu2js'} = sub {
+    my ($session,$num,$titlelen,$desclen) = @_;
+    my  $account='zetamatta';
+    $num      ||=  3;
+    $titlelen ||= 40;
+    $desclen  ||= 40;
+
+qq{<script language="JavaScript" src="http://www.moondakota.com/feed/generate.ph
+p?src=http%3A%2F%2Fb.hatena.ne.jp%2F${account}%2Frss&chan=y&num=${num}&tit=${tit
+lelen}&desc=${desclen}&date=n&targ=n&oe=EUC-JP" type="text/javascript"></script>
+<noscript>
+<a href="http://www.moondakota.com/feed/generate.php?src=http%3A%2F%2Fb.hatena.n
+e.jp%2F${zetamatta}%2Frss&chan=y&num=${num}&tit=${titlelen}&desc=${desclen}&date
+=n&targ=n&oe=EUC-JP&html=y">see. RSS Feed</a>
+</noscript>};
+};
+>8
+
+でも、少々の負荷でもどうってことない Google と違い、
+個人でされているサービスなので、当サイトに組み込むのは見送りました。
+というのも、表示に時間がかかったり、表示されないことがあるというのもありますし、
+何より、迷惑をかけると申しわけないですから
+
+こら、そこ、迷惑がかかるほどのページビューじゃないとか言わない！

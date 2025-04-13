@@ -1,0 +1,29 @@
+http://blogs.atlassian.com/2012/02/mercurial-vs-git-why-mercurial/
+
+このブログ記事はGitやMercurial(Hg)のような分散バージョン管理システム(DVCS)
+にスイッチするチームにフォーカスをあてた
+アトラシアンブログのシリーズである。
+このシリーズの別の投稿は
+http://blogs.atlassian.com/tag/switch_dvcs/{「Switch to DVCS」タグ}
+で探しだせる。
+
+このゲストブログは、http://stevelosh.com/projects/{Steve Losh}によるもので、
+チームが自分たちの(分散)バージョン管理システムとして Mercurial を
+選んでもよい主たる理由にフォーカスをあてている。
+
+Steveのhttp://stevelosh.com/projects/{プロジェクト}をチェックアウトすると、
+Steveが分散バージョン管理で成してきたクールな仕事が分かるし、
+あるいは、Steveのhttp://bitbucket.org/sjl/{Bitbucket}アカウントにとんで、
+Steveの数あるプロジェクトの一つをforkさせてみてくれ。
+
+前の投稿で、
+http://blogs.atlassian.com/2012/02/2012/02/version-control-centralized-dvcs/{
+分散バージョン管理システムが集中管理システムよりよい理由}など、
+http://blogs.atlassian.com/2012/02/2012/02/version-control-diffs-patches/{バージョン管理システムの歴史と何故バージョン管理システムがよいか}について話した。
+
+今日の幅広い用途において、二つのメジャーなバージョン管理システムがある：
+http://hg-scm.org/{Mercurial(Hg)}とhttp://git-scm.org/{Git}である。
+GitかHgかを選ぶのに多くの理由(と意見)があるが、
+この理由を説明するために、当シリーズでは次の二つのブログを投稿する。
+
+!!! まともなコマンドラインインターフェイス

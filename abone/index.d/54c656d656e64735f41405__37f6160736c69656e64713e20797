@@ -1,0 +1,13 @@
+from elementsoap.ElementSOAP import SoapService , SoapRequest , SoapElement
+
+class EchoService(SoapService):
+    url = "http://localhost:65082/services/EchoUMO"
+    def __init__(self,url=None):
+        SoapService.__init__(self,url)
+    def doEcho(self):
+        request = SoapRequest("echo")
+        SoapElement( request , "text" , "string" , "UHAUHA" )
+        return self.call( "" , request ).findtext("text")
+
+print EchoService().doEcho()
+

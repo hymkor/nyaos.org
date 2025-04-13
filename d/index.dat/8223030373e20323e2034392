@@ -1,0 +1,38 @@
+* [wifky] 最近、http://wifky.sourceforge.jp{本家}より、
+  http://www.geocities.jp/scriptonwikipage/{SoWP} や
+  https://sourceforge.jp/projects/wutsecgi/{wutse cgi@sf}といった、
+  姉妹サイトの方が元気だなぁ。
+** まぁ、本家は軽々しく動いてはならんのだ(ということにしておこう)
+*** まじな話、仕様がコロコロ変わってはいかんしね（既に結構変わってるけど）
+
+* [動画] かなり、昔に評判になっていた「涼宮ハルヒの憂鬱」を今頃見る
+** ふむ、確かに面白い。
+   音楽・(ツッコミ満載の)ナレーションが実にいいね。
+   ノリは、かつての「うる星」を彷彿とさせる。
+** しかし「ハイペリオン」とは…確かに文芸部っぽい。
+** 正直、話数の数え方が分からん。
+
+* [動画]「ようつべ」はキリがないね。
+
+* [wifky] 
+  簡単リンク君(http://breeder.bk1.jp/cgi-bin/link/create.cgi) がなくなった模様。
+  そのため、bk1 プラグインが使えなくなってしまった…
+** というわけで、残念ながら「
+http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=(2007.02.04)+bk1%A5%D7%A5%E9%A5%B0%A5%A4%A5%F3%A4%F2%C7%D1%BB%DF%A4%B7%A4%DE%A4%B9{
+(2007.02.04) bk1プラグインを廃止します}」とあいなった。
+** 元々、公式の WebService ではなくて、普通の CGI が出力する HTML 
+   を無理矢理解析して使ってたからね。
+
+<<anarchy-golf 参戦>>
+
+* http://shinh.org:81/{anarchy golf}
+
+本家 codegolf も全て完遂していないうちに、こちらも id:zetamatta にて参戦。
+
+* 連邦の eban は化け物か！
+
+* vi 使いにとっては「``perl -i -pe chomp スクリプト名``」は欠かせないね！
+** Emacs なら、EOF 直前の LF を削除できるのだが…
+
+* hello.awk 25バイトの謎を問いた！
+** おれは、さいとうさんを越えたぞ、ジョジョォォォォォ

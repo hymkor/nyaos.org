@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>社員HP - キャリアデザインシート</title>
+</head>
+
+<body  bgcolor='#FFFFDD' oncontextmenu='JavaScript:return false;'>
+
+<div align='right'><img src='img/tis_logo.jpg' height=36 width=90></div>
+
+<table width="100%" border="0"><tr>
+<td align="left"><font size="-1" color="blue">前ページへはブラウザの「戻る」ボタンで戻ってください。</font></td>
+<td align="right"><font size="-1"><a href="menu.asp">メニューに戻る</a></td>
+</tr></table>
+
+<hr><br>
+
+<table width="100%" border="0"><tr>
+</tr></table>
+
+<center><font size="+2">キャリアデザインシート</font></center>
+<form name="kdesign" method="POST" action="kdesign_update.asp">
+
+<table align="center" width="60%">
+<tr><td align="right">社員番号：</td><td>198064</td><td></td><td></td><td></td></tr>
+<tr><td align="right">氏名    ：</td><td>葉山　薫</td><td align="right">かな :</td><td>はやま　かおる</td><td></td></tr>
+<tr><td align="right">職種    ：</td><td>専門職</td><td align="right">所属 :</td><td>ＩＴ基盤サービス第１事業部ＤＣアウトソーシング第１部</td><td></td></tr>
+<tr><td align="right">グレード：</td><td>G4</td><td></td><td></td></tr>
+</table>
+<br>
+
+<TABLE align=center border=1 width="45%">
+  <TR bgColor=lightcyan>
+    <TH rowspan=2><FONT size=-1>年度</TH>
+    <TH rowspan=2><FONT size=-1>キャリア宣言<BR><font size=-2>(専門職のみ)</FONT></TH>
+    <TH rowspan=2><FONT size=-1>将来のキャリア<BR><font size=-2>(専門職のみ)</FONT></TH>
+    <TH rowspan=2 noWrap><FONT size=-2>ITSS職種<BR>(専門分野)</FONT></TH>
+    <TH rowspan=2><FONT size=-1>スキルレベル</FONT></TH>
+    <TH rowspan=2><FONT size=-2>(コア)</FONT></TH>
+    <TH rowspan=2><FONT size=-2>(共テク)</FONT></TH>
+    <TH rowspan=2><FONT size=-2>(専テク)</FONT></TH>
+    <TH rowspan=2><FONT size=-2>(達成)</FONT></TH>
+    <TH colspan=3><FONT size=-1>１年間</FONT></TH>
+    <TH rowspan=2><FONT size=-1>３年間のキャリアアップの目標と計画<BR><FONT size=-1>（２５０文字以内でお願いします。<br>全角,半角ともに1文字。改行は2文字。）</FONT></TH>  </TR>
+  <TR bgColor=lightcyan>
+    <TH noWrap><FONT size=-1>目標ITSS職種<BR>(専門分野)</FONT></TH>
+    <TH><FONT size=-1>目標スキルレベル
+    <TH><FONT size=-1>キャリアアップの目標と計画<BR><FONT size=-1>（２５０文字以内でお願いします。<br>全角,半角ともに1文字。改行は2文字。）</FONT></FONT></TH>
+  </TR>
+  <TR>
+    <TD noWrap>2011</TD>
+    <TD><SELECT SIZE="1" name="career_gen" ><OPTION VALUE=''>　
+<OPTION VALUE='BP(Ex)'>BP(Ex)<OPTION VALUE='営業(G5)'>営業(G5)<OPTION VALUE='営業(G3,4)'>営業(G3,4)<OPTION VALUE='SC(Ex)'>SC(Ex)<OPTION VALUE='PM(Ex)'>PM(Ex)<OPTION VALUE='PM(G5)'>PM(G5)<OPTION VALUE='PM(G4)'>PM(G4)<OPTION VALUE='ITA(Ex)'>ITA(Ex)<OPTION VALUE='ITA(G5)'>ITA(G5)<OPTION SELECTED VALUE='ITA(G4)'>ITA(G4)
+<OPTION VALUE='APS(Ex)'>APS(Ex)<OPTION VALUE='APS(G5)'>APS(G5)<OPTION VALUE='APS(G4,G3)'>APS(G4,G3)<OPTION VALUE='ITS(Ex)'>ITS(Ex)<OPTION VALUE='ITS(G5)'>ITS(G5)<OPTION VALUE='ITS(G4,G3)'>ITS(G4,G3)<OPTION VALUE='SF(Ex)'>SF(Ex)<OPTION VALUE='SF(G5)'>SF(G5)<OPTION VALUE='SF(G3,4)'>SF(G3,4)<OPTION VALUE='OM'>OM<OPTION VALUE='AX'>AX<OPTION VALUE='SEJ'>SEJ</select>
+    <TD><SELECT SIZE="1" name="career_sho" ><OPTION VALUE=''>　
+<OPTION VALUE='BP(Ex)'>BP(Ex)<OPTION VALUE='営業(G5)'>営業(G5)<OPTION VALUE='営業(G3,4)'>営業(G3,4)<OPTION VALUE='SC(Ex)'>SC(Ex)<OPTION VALUE='PM(Ex)'>PM(Ex)<OPTION VALUE='PM(G5)'>PM(G5)<OPTION VALUE='PM(G4)'>PM(G4)<OPTION VALUE='ITA(Ex)'>ITA(Ex)<OPTION SELECTED VALUE='ITA(G5)'>ITA(G5)
+<OPTION VALUE='ITA(G4)'>ITA(G4)<OPTION VALUE='APS(Ex)'>APS(Ex)<OPTION VALUE='APS(G5)'>APS(G5)<OPTION VALUE='APS(G4,G3)'>APS(G4,G3)<OPTION VALUE='ITS(Ex)'>ITS(Ex)<OPTION VALUE='ITS(G5)'>ITS(G5)<OPTION VALUE='ITS(G4,G3)'>ITS(G4,G3)<OPTION VALUE='SF(Ex)'>SF(Ex)<OPTION VALUE='SF(G5)'>SF(G5)<OPTION VALUE='SF(G3,4)'>SF(G3,4)<OPTION VALUE='OM'>OM<OPTION VALUE='AX'>AX<OPTION VALUE='SEJ'>SEJ</select>
+    <TD>-()</TD>
+    <TD>-</TD>
+    <TD>-</TD>
+    <TD>-</TD>
+    <TD>-</TD>
+    <TD>-</TD>
+    <TD><TEXTAREA name="itss_mokuhyo" rows="20" cols="9">ITアーキテクト</TEXTAREA></TD>
+    <TD><input type="text" name=itss_mokuhyo_level size=4 font=-1 value=5></input></TD>
+    <TD><TEXTAREA name="mokuhyo1" rows="20" cols="34">■目標
+・幅広い分野で他のインフラ担当者をリードすることができる最新のシステム構築技術を獲得する。
+
+■計画
+・自己の保有資格を各種ミドルウェアの最新のものに更新する
+- Linux LPIC Lv.3
+- Java SJC-P, SJC-D
+
+・Hinemos/OTRS/DRBD の技術を修得し、これらを使うシステムを独力で構築し、問題解決できるアーキテクトを目指す。</TEXTAREA></TD>
+    <TD><TEXTAREA name="mokuhyo2" rows="20" cols="34">■目標
+・TIS・社外に対して、蓄積してきた技術・ノウハウ・成果を発信できるようになる。
+
+■計画
+
+・セミナー・研修・勉強会・社内SNSといった場を活用し、内外の TE と積極的に情報を交換することにより、ノウハウ・知識のレベルアップを図る
+
+・社内にて実績を積んだ技術を論文化し、技術誌等にて、署名記事として発表する。</TEXTAREA></TD></TR>
+<TR><TD noWrap>2010</TD><TD>-</TD><TD>-</TD><TD>-()</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD><FONT size=-1>ITアーキテク</TD><FONT><TD>5</TD><TD>■目標<br>・幅広い分野で他のインフラ担当者をリードすることができる最新のシステム構築技術を獲得する。<br><br>■計画<br>・自己の保有資格を各種ミドルウェアの最新のものに更新する<br>- Linux LPIC Lv.3<br>- Java SJC-P, SJC-D<br><br>・次世代社内システム企画に携わり、大規模システム向けの最新の要素技術を学び、今後の社内システムを企画・構築できるアーキテクトとなれることを目指す<br></TD><TD>■目標<br>・TIS・社外に対して、蓄積してきた技術・ノウハウ・成果を発信できるようになる。<br><br>■計画<br><br>・セミナー・研修・勉強会・社内SNSといった場を活用し、内外の TE と積極的に情報を交換することにより、ノウハウ・知識のレベルアップを図る<br><br>・社内にて実績を積んだ技術を論文化し、技術誌等にて、署名記事として発表する。<br></TD></TR><TR><TD noWrap>2009</TD><TD>ITA(G4)</TD><TD>ITA(G5)</TD><TD>-()</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD><FONT size=-1>ITアーキテクト</TD><FONT><TD>5</TD><TD>■目標<br>・幅広い分野で他のインフラ担当者をリードすることができる最新のシステム構築技術を獲得する。<br><br>■計画<br>・自己の保有資格を各種ミドルウェアの最新のものに更新する<br>- Linux LPIC Lv.2<br>- Oracle 11g Gold<br><br>・SOA などの最新技術を学び、社内システム間連携にどう適用するかを検討し、実践的な応用技術を身につける。<br><br>■上司観点<br></TD><TD>■目標<br>・TIS・社外に対して、蓄積してきた技術・ノウハウ・成果を発信できるようになる。<br><br>■計画<br><br>・セミナー・研修・勉強会・社内SNSといった場を活用し、内外の TE と積極的に情報を交換することにより、ノウハウ・知識のレベルアップを図る<br><br>・社内にて実績を積んだ技術を論文化し、技術誌等にて、署名記事として発表する。</TD></TR><TR><TD noWrap>2008</TD><TD>TE</TD><TD>TC(G5)</TD><TD><FONT size=-1>ＩＴアーキテクト (インテグレーションアーキテクチ)</TD></FONT><TD>3.6</TD><TD>3.5</TD><TD>3.6</TD><TD>3.6</TD><TD>3.7</TD><TD><FONT size=-1>ITアーキテクト</TD><FONT><TD>5</TD><TD>■目標<br>・他の技術者をリードし、ノウハウを開拓できる人材を育てられるだけのシステム構築技術・コーチング力を身につける<br><br>■計画<br>・実践してきた試み・成果を部内へ事例紹介として発表し、部門内への手法の展開をはかる<br><br>・外部のセミナー・研修・勉強会・ML といった場を活用(参加/企画)し、内外の TE と積極的に情報を交換することにより、部内のノウハウや知識のレベルアップに貢献する<br><br>■上司観点<br>・顧客への技術コンサルタント的な提案や論文発表等、より外部の場へ展開をできるようにする</TD><TD>■目標<br>・TIS だけでなく、社外に対して、蓄積してきた技術・ノウハウ・成果を発信できるようになる。<br><br>■計画<br>・公開されている技術の、現行業務・将来の業務への応用を検討し、社内に実例あるいは検証結果を用いて提案する。<br><br>・社内にて実績を積んだ技術を論文化し、技術誌等にて、署名記事として発表する。</TD></TR><TR><TD noWrap>2007</TD><TD>TE</TD><TD>TE</TD><TD><FONT size=-1>ＩＴアーキテクト (インテグレーションアーキテクチ)</TD></FONT><TD>3.1</TD><TD>3.2</TD><TD>3.3</TD><TD>2.7</TD><TD>3.2</TD><TD><FONT size=-1>ITアーキテクト</TD><FONT><TD>5</TD><TD>■目標<br>・他の技術者をリードし、ノウハウを開拓できる人材を育てられるだけのシステム構築技術・コーチング力を身につける<br><br>■計画<br>・自己の保有資格を各種ミドルウェアの最新のものに更新する<br>- Linux LPIC Lv.2<br>- Oracle 10g Gold<br><br>・勉強会・ML等の場を活用し、内外の TE と情報を交換することにより、部内のノウハウ・知識のレベルアップに貢献する。<br><br>■上司の育成視点<br>・単に技術を量的に伸ばすだけでなく、他へ展開・教育してゆく能力を身につける。</TD><TD>■目標<br>・TIS だけでなく、社外に対して、蓄積してきた技術・ノウハウ・成果を発信できるようになる。<br><br>■計画<br>・公開されている技術の、現行業務・将来の業務への応用を検討し、社内に実例あるいは検証結果を用いて提案する。<br><br>・社内にて実績を積んだ技術を論文化し、技術誌等にて、署名記事として発表する。</TD></TR>
+</TABLE><BR>
+
+
+
+
+
+<br>
+<center></center>
+<center>
+<input type="hidden" name="uid" value="198064">
+<input type="submit" value="登録・更新"><input type="button" value=" 閉じる " onClick="window.location.href='menu.asp'"></center>
+</center></form>
+<hr>
+
+
+
+</body>
+</html>

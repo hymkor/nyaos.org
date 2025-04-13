@@ -1,0 +1,108 @@
+<<NYAOS をユニコード対応させようと画策したが、だめだこりゃ>>
+
+内部文字列の文字コードを wchar_t なり、unsigned long なりにするのは、根性さえあれば出来るんですよ。
+問題は入力キーの取得と表示だったり。
+
+<<<入力キーの取得>>>
+
+結論から言うと、いけそうな雰囲気。
+
+昔、NYAOS で 0xE0 から始まる漢字が入力できないという問題がありまして、
+原因はコントロールコードのプリフィックスに 0xE0 が使われていたからという。
+
+で、その時にいただいた「http://d.hatena.ne.jp/lukewarm/20091204#p2{0xE0対策版 getch}」が、
+ありがたいことにワイドキャラクター対応だったので「#define BUILD_FOR_WCHAR」して試してみました。
+
+8<
+#define TEST
+#define BUILD_FOR_WCHAR
+
+/*
+  getch_msvc.c
+   :(中略…ちゅうか、元記事のコードと同じ)
+*/
+#ifdef TEST
+
+void putchw_(int k)
+{
+    wchar_t utf16[]={ k , 0 };
+    char mbcs[10];
+
+    int len=WideCharToMultiByte(
+            CP_THREAD_ACP,0,utf16,1,mbcs,sizeof(mbcs),NULL,NULL);
+    for(int i=0;i<len;i++)
+        printf("%02X,",mbcs[i] & 0xFF );
+
+    fwrite(mbcs,len,stdout);
+    for(int i=0;i<len;i++)
+        putc(mbcs[i],stdout);
+}
+
+int
+main(int argc, char **argv)
+{
+  int k;
+  
+  for(;;) {
+#ifdef BUILD_FOR_WCHAR
+    k = getwch_replacement_for_msvc();
+    putchw_( k );
+    printf("=0x%x\n", k);
+#else
+    k = getch_replacement_for_msvc();
+    printf("0x%x", k);
+    if (k >=20 && k <= 0x7e) printf(" (%c)", k);
+    printf("\n");
+#endif
+    if (k == -1 || k == 0x1b) break;
+  }
+  return 0;
+}
+
+#endif
+>8
+
+8<
+$ .\getch_msvc.exe
+61,a=0x61
+69,i=0x69
+75,u=0x75
+65,e=0x65
+6F,o=0x6f
+82,A0,あ=0x3042
+82,A2,い=0x3044
+82,A4,う=0x3046
+82,A6,え=0x3048
+82,A8,お=0x304a
+1B,=0x1b
+>8
+
+順に「ANSIコンバートした16進数(ShiftJIS)」「入力した文字」「16進ユニコード(UTF16)」。
+うん、読める、読めるよ、ララァ。
+
+<<<ユニコードテキストの表示>>>
+
+上の結果はCP932(ShiftJIS) のコマンドプロンプトで実行した結果。
+これが UTF8 のコマンドプロンプトでもうまく動作せにゃ意味がない。
+つーことでやってみました。
+
+* コマンドプロンプトを UTF8 化するには「chcp 65001」を実行すればよい。
+* '''だが、「chcp 65001」の元では、IME が起動しない。'''
+* コピペでなら、ユニコードを貼り付けることは可能(正しい UTF16 コードが取得できていた)
+* だが、UTF8コードを表示することができない。
+** WideCharToMultiByte の第一引数を CP_ACP にしていると、日本語が「?」(0x3F)になってしまう。
+** ならばということで第一引数を CP_UTF8 にすると、正しい UTF8 になる、やったね！ が、いざ表示すると、漢字1文字が英語圏のグラフィック文字3つに化けてしまう。
+** Cygwin とかで予め作っておいた UTF8 テキストファイルを type しても化ける。
+
+ググってみると、レジストリでコードページ 65001 にフォントを設定すればいいという記事が幾つか見付かる。
+が、ワタシの手元の XP マシンでは相変らず化け化け状態。
+なんか、http://www.kantenna.com/info/2011/09/cmdexe.php{バグっぽい制約}もあるようです。うーむ。
+
+<<<追記>>>
+
+まぁ、なんで「だめ」かというと、コードページ 65001 以外であれば、
+元々の NYAOS で問題なく動く「はず」なんですよ。
+そもそもが DBCS(Double Bytes Charactor System)対応なので。
+
+が、コードページ 65001 の UTF-8 は DBCS ではないのですよ。
+だから、65001 で動作しないと、ユニコード対応の意味がないと。

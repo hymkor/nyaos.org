@@ -1,0 +1,11 @@
+8<
+java -jar js.jar ahaha.js
+>8
+
+or http://builder.japan.zdnet.com/sp/scripting-on-java-kickstart/story/0,3800084107,20366909,00.htm{※}
+
+8<
+$ export CLASSPATH=$CLASSPATH:RHINO_HOME/js.jar
+$ java org.mozilla.javascript.tools.shell.Main -e "print('Hello')"
+$ java org.mozilla.javascript.tools.shell.Main -f hello.js
+>8

@@ -1,0 +1,221 @@
+<<[Cygwin][Oracle] Cygwin で Oracle 開発>>
+
+自宅で Oracle 開発したいんだけれども、
+うちで使える PC で最高のスペックのものでも
+ThinkPad X31 という貧弱さ。
+
+また、実は会社からの借り物だったりするので、
+これを Linux で上書きするわけにもいかない。
+
+そこで Oracle Express Edition(OracleXE) の Windows 版と
+Cygwin で開発環境を作ってみようと思う。
+
+<<<OracleXE の入手とインストール>>>
+
+http://builder.japan.zdnet.com/sp/oracle-db-2008/story/0,3800086786,20375936,00.htm{
+無料で使える「Oracle Database XE」をインストール - builder by ZDNet Japan}
+にダウンロードの方法から、インストールまで全て書いてある。
+
+ずばり、親切だ。
+
+<<<OCI開発のテキスト>>>
+
+Oracle 社のページ：
+http://www.oracle.com/technology/global/jp/tech/oci/index.html{Oracle Call Interface}
+に、PDF が置いてある。
+
+とりあえず
+
+* http://otndnld.oracle.co.jp/tech/db_connect/pdf/oci8.pdf{
+    OCIでの開発(入門編) -- Oracle8}
+* http://otndnld.oracle.co.jp/tech/db_connect/pdf/ocionwin.pdf{
+    OCIによるWindowsアプリケーション開発スタートアップガイド}
+
+の2点をダウンロードしておいた。
+
+全て日本語なのがありがたい。
+
+<<<サンプル用のスキーマの作成>>>
+
+これは必須ではないのだけれども、
+OCI 開発したことが無いので、デモプログラムで開発環境のテストをしたいのだが、
+そのデモプログラムはサンプルスキーマを必要とするからだ。
+
+コマンドプロンプト(NYACUS)から SQL*Plus を呼び出す。
+
+8<
+$ cd c:\oraclexe\app\oracle\product\10.2.0\server\demo\schema\human_resources
+$ sqlplus system/(パスワード)
+
+SQL*Plus: Release 10.2.0.1.0 - Production on 日 5月 10 23:29:21 2009
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production
+に接続されました。
+SQL> @hr_main
+
+specify password for HR as parameter 1:
+1に値を入力してください: HR
+
+specify default tablespeace for HR as parameter 2:
+2に値を入力してください: USERS
+
+specify temporary tablespace for HR as parameter 3:
+3に値を入力してください: TEMP
+
+specify password for SYS as parameter 4:
+4に値を入力してください: (パスワード)
+
+specify log path as parameter 5:
+5に値を入力してください: . (←カレントディレクトリを示す「.」を書いている)
+    ：(中略)
+PL/SQL procedure successfully completed.
+
+SQL> exit
+$
+>8
+
+<<<デモ・プログラムのコンパイル>>>
+
+c:\oraclexe\app\oracle\product\10.2.0\server\OCI\samples
+にあるデモファイルを開発ディレクトリへコピーする。
+
+Visual C++ とかがある場合は make_xe.bat を叩けばいいのだけれども、
+今回は Cygwin でやりたいので、make_xe.bat の内容を参考にして、
+Makefile を作ってみた。
+
+8<
+ORACLE_HOME=/cygdrive/c/oraclexe/app/oracle/product/10.2.0/server
+
+all:
+	gcc -I$(ORACLE_HOME)/oci/include -loci -o cdemo81.exe cdemo81.c -loci -L$(ORACLE_HOME)/oci/lib/msvc
+
+# vim:set ts=8 sw=8 noet:
+>8
+
+以下、Cygwin の bash 上で make する
+
+8<
+$ make
+gcc -I/cygdrive/c/oraclexe/app/oracle/product/10.2.0/server/oci/include -loci -o cdemo81.exe cdemo81.c -loci -L/cygdrive/c/oraclexe/app/oracle/product/10.2.0/server/oci/lib/msvc
+
+$ ./cdemo81
+
+Enter employee name (or CR to EXIT): HOGE
+Enter employee job: AHAHA
+Enter employee salary: IHIHI
+Enter employee dept: UFUFU
+The dept you entered doesn't exist.
+Enter employee dept:
+>8
+
+コンパイルもうまくいったし、
+デモプログラムもそれなりに動いている。
+
+とりあえずは開発環境としては出来たような雰囲気だ、
+まぁ、今日のところはこれでヨシとしよう''(そして、明日忘れる)''
+
+<<[Cygwin][Oracle][Lua] LuaSQL を Cygwin で>>
+
+LuaSQL ってのは、Lua で PostgreSQL/MySQL/ODBC/Oracle にアクセスするための
+ライブラリだ。でも、元々のソースは Windows の場合、
+Visual-C++ だけを想定していて、そのままじゃ Cygwin で利用できないんだよね。
+
+でも、世の中、Ruby/OCI8 みたいに、Cygwin で Oracle にアクセスしている例は
+数ある。上のセクションでも、Cygwin でアクセスできたしね。
+
+というわけで、がんばって挑戦してみた。
+具体的には ``config``というファイルを以下のように修正して、``make``だ。
+
+8<
+diff luasql-2.1.1-orig/config luasql-2.1.1/config
+3c3
+< #T= oci8
+---
+> T= oci8
+7c7
+< T=sqlite3
+---
+> #T=sqlite3
+30c30
+< LIBNAME= $T.so
+---
+> LIBNAME= $T.dll
+38a39,41
+> ORACLE_HOME=/cygdrive/c/oraclexe/app/oracle/product/10.2.0/server
+> DRIVER_LIBS=-L$(ORACLE_HOME)/OCI/lib/MSVC/ -llua51 -loci -lz -Wl,--exclude-libs,ALL
+> DRIVER_INCS= -I$(ORACLE_HOME)/OCI/include
+48,49c51,52
+< DRIVER_LIBS= -L/opt/local/lib -lsqlite3
+< DRIVER_INCS= -I/opt/local/include
+---
+> #DRIVER_LIBS= -L/opt/local/lib -lsqlite3
+> #DRIVER_INCS= -I/opt/local/include
+57c60
+< CC= gcc
+---
+> CC=gcc -mno-cygwin 
+Common subdirectories: luasql-2.1.1-orig/doc and luasql-2.1.1/doc
+Common subdirectories: luasql-2.1.1-orig/src and luasql-2.1.1/src
+Common subdirectories: luasql-2.1.1-orig/tests and luasql-2.1.1/tests
+Common subdirectories: luasql-2.1.1-orig/vc6 and luasql-2.1.1/vc6
+>8
+
+リンク時に oci_NULL_THUNK_DATA が見付からないというエラーが出て難儀したが、
+これはどうも外部の動的ライブラリの公開シンボルを、
+さらに公開しようとしているかららしい。
+「http://www3.atword.jp/kmgs/2008/10/28/bit-bang%E7%94%A8dll%E3%81%AE%E4%BD%9C%E8%A3%BD/{Bit Bang用DLLの作製 | PIC+R workbench}」という記事にある通り、
+``-Wl,--exclude-libs,ALL``というオプションを付けたところ解消した。
+
+さて、これを``make install`` で /usr/local/lib/lua/5.1 以下に展開したわけだが、
+わたしの環境では、cygwin と mingw が微妙にチャンポンになってて、
+``lua -e "require 'luasql.oci8'"`` としても、
+ライブラリが見付からないというエラーになった。
+汚いやり方だが：
+
+8<
+$ cd /usr/local/lib/lua/5.1/luasql
+$ ln -s oci8.dll oci8.so
+>8
+
+と名前を胡麻化したら、直った。
+さて、テストテスト：
+
+8<
+$ cat foo.lua
+require "luasql.oci8"
+
+env = luasql.oci8()
+conn = env:connect("XE","HR","HR")
+if not conn then
+    print("Can't connect Oracle Service")
+    os.exit(-1)
+end
+
+cursor=conn:execute("SELECT TNAME,TABTYPE FROM TAB")
+for tname,tabtype in cursor.fetch,cursor do
+    print(tname,tabtype)
+end
+cursor:close()
+conn:close()
+env:close()
+
+$ lua foo.lua
+REGIONS TABLE
+COUNTRIES       TABLE
+LOCATIONS       TABLE
+DEPARTMENTS     TABLE
+JOBS    TABLE
+EMPLOYEES       TABLE
+JOB_HISTORY     TABLE
+EMP_DETAILS_VIEW        VIEW
+CDEMO81_EMP     TABLE
+CDEMO81_DEPT    TABLE
+
+$
+>8
+
+うむ、いい感じだ。満足満足。
+
+でも、この LuaSQL って、バインド変数が使えないんだよね。

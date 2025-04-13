@@ -1,0 +1,24 @@
+<<おいらも Git-1.7.8-preview20111229-unicode を試してみた>>
+
+* http://d.hatena.ne.jp/nitoyon/20120221/msysgit_utf8{
+  msysGit（Git for Windows）がいよいよ公式に UTF-8 をサポート！ - てっく煮ブログ}
+
+という記事があったので、さっそく導入してみた。
+
+前に試してみたバージョンは 1.7.6 という奴だったが、
+unicode を強制的に使うように
+
+8<
+set GIT_EDITOR=gvim "+set fenc=utf8"
+set GIT_PAGER=nkf32
+>8
+
+としなければ、文字化けしてしまうという問題があった。これがどうなったか。
+
+* commitログ登録については、普通のエディタを指定しても、git側で MBCS(Multi Byte Charactor System)→unicode 変換してくれない。
+* ログ表示については、unicode→MBCS変換をちゃんとしてくれるようになった。
+* 差分表示は、要らぬ unicode→MBCS変換をしているのか、CP932(SJIS)が妙な化け方をしている。
+* ファイル名は試してねぇ(まぁ、いけるらしいけど)
+
+正直、Git はまだ Linux/UNIX のものって感じです。
+日本語をまともに使いたい人は Mercurial や Bazaar を使った方がよさそうです。

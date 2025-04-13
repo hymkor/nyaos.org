@@ -1,0 +1,10 @@
+if( $::form{a} && $::form{a} =~ /rss/ ){
+    $::block_syntax_plugin{'500_centering'} = sub{
+        my ($fragment,$session)=@_;
+        return 0 unless $fragment =~ /\A\s*\&gt;&gt;\s*(.*)\s*\&lt;\&lt;\s*\Z/s;
+
+        my $s=&preprocess($1,$session);
+        &puts('<p><center><font size="7">',$s,'</font></center></p>');
+        1;
+    };
+}

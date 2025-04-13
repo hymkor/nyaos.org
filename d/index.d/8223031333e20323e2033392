@@ -1,0 +1,54 @@
+<<[NYAOS] 内蔵Luaで「pairs(COMのコレクションオブジェクト)」ができるようにした>>
+
+Windows の特殊フォルダー名を取得することはできても、
+特殊フォルダーの一覧が取れんかったので、
+例によって Ruby の win32ole.c を見ながら、がんばってみました。
+( https://bitbucket.org/zetamatta/nyaos3000/commits/d2d545dc2ae821ff7261c6f4ae50d6e1{commit} )
+
+8<
+local shell   = assert(nyaos.create_object("WScript.Shell"))
+for object in pairs(shell.SpecialFolders) do
+    print(type(object),object)
+end
+>8
+
+8<
+$ nyaos hoge.lua
+string  C:\Documents and Settings\All Users\デスクトップ
+string  C:\Documents and Settings\All Users\スタート メニュー
+string  C:\Documents and Settings\All Users\スタート メニュー\プログラム
+string  C:\Documents and Settings\All Users\スタート メニュー\プログラム\スタートアップ
+string  C:\Documents and Settings\hayama\デスクトップ
+string  C:\Documents and Settings\hayama\Application Data
+string  C:\Documents and Settings\hayama\PrintHood
+string  C:\Documents and Settings\hayama\Templates
+string  C:\WINDOWS\Fonts
+string  C:\Documents and Settings\hayama\NetHood
+string  C:\Documents and Settings\hayama\デスクトップ
+string  C:\Documents and Settings\hayama\スタート メニュー
+string  C:\Documents and Settings\hayama\SendTo
+string  C:\Documents and Settings\hayama\Recent
+string  C:\Documents and Settings\hayama\スタート メニュー\プログラム\スタートアップ
+string  C:\Documents and Settings\hayama\Favorites
+string  C:\Documents and Settings\hayama\My Documents
+string  C:\Documents and Settings\hayama\スタート メニュー\プログラム
+>8
+
+お、おう…
+
+''(本当は「Desktop」とか「SendTo」といったキー名が欲しかった。まぁ、Excel とかだと値の方だけ取れて十分用が足りるんだけど)''
+
+<<最近、修正した部分を一時的にセーブするのに Mercurial MQ を使うようになった>>
+
+* 今やっている修正が、まだ完成じゃないけど、とりあえず「セーブ」しておきたい時
+** ``hg qnew (適当なパッチ名)``
+* 修正が前進したので「セーブ」内容を更新したい時(前のセーブは上書きされる)
+** ``hg qrefresh``
+* セーブした内容を、正式に hg の履歴として commit したい時
+** ``hg qfinish (qnewした時のパッチ名)``
+
+が、これだと qnew した時のパッチ名が commit メッセージになってしまうので、
+いつも ``hg histedit`` で修正していた。
+
+ググってみると、qfinish する前に ``hg qrefresh -m`` でメッセージを変更できるようですね。
+よしよし。

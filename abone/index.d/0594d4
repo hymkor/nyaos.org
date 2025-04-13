@@ -1,0 +1,11 @@
+Platform Independent Model の略
+
+* DA
+** CRUD表
+** 論理モデル(クラス図)
+* AA
+** 情報システム構成(ユースケース/イベントフロー)
+** 情報システム構成(パッケージ図)
+
+:See Also
+:: [[PSM]]

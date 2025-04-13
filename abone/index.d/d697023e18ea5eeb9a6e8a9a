@@ -1,0 +1,189 @@
+<<[Perl] my の復権>>
+
+よく
+
+6<
+デフォルトがグローバル変数となっている Perl はおかしい。
+ローカルをデフォルトにすべきだろう？ 常識的に考えて
+>9
+
+とか言われることがある。はたしてそうだろうか？
+'''逆に考えるんだ'''。
+
+* ローカルがデフォルトというが「どの範囲内でローカルか」不明確ではないか？
+  変数宣言が無い言語は、その範囲をコントロールできてないのではないか？
+
+このエントリは「変数に型は要らぬが宣言は必要なはずだ」という観点から、
+my の復権をねらうものである
+
+<<<クロージャの落し穴>>>
+
+Python では、変数のスコープは次のような仕様となっている。
+
+* 初回の代入を変数宣言とみなす。
+* その関数内で、代入の形跡がなく、参照されているだけの変数は
+  グローバル変数とみなす。
+* 変数の有効範囲は、その変数が使われた関数内とする。
+
+これはクロージャ利用の時に次のような「不便」をひきおこす。
+
+8<
+def foo():
+    x = 0
+    def bar():
+        x += 1
+        return x
+    return bar
+
+calc = foo()
+
+print calc()
+print calc()
+print calc()
+>8
+
+8<
+$ python area.py
+Traceback (most recent call last):
+  File "area.py", line 11, in <module>
+    print calc()
+  File "area.py", line 5, in bar
+    x += 1
+UnboundLocalError: local variable 'x' referenced before assignment
+>8
+
+関数 bar の中で foo の中の変数 x を変更しようとしようとして、失敗しているのだ。
+代入文があるため、関数 bar の中にある x は、関数 bar のものとみなされ、
+foo のものだと明示することができないのだ。
+
+もちろん回避策はある。
+
+8<
+def foo():
+    x = [ 0 ]
+    def bar():
+        x[0] += 1
+        return x[0]
+    return bar
+
+calc = foo()
+
+print calc()
+print calc()
+print calc()
+>8
+
+こちらはちゃんと動く。
+
+8<
+$ python area2.py
+1
+2
+3
+>8
+
+だが、不自然と言えば、不自然だ。バッドノウハウと言わざるを得ない。
+
+Perl では宣言文で名前の有効範囲をコントロールできるので、シンプルだ。
+
+8<
+#!/usr/bin/perl
+
+use feature ":5.10";
+
+sub foo{
+    my $x = 0;
+    sub {
+        $x += 1;
+    }
+}
+
+my $calc = foo();
+
+say $calc->();
+say $calc->();
+say $calc->();
+>8
+
+!!! 「代入」という名の宣言
+
+Ruby で、ファイルの1行目を抽出する関数を書いてみた。
+
+8<
+#!/usr/bin/ruby
+
+def shebang(fn)
+    File.open(fn,"r") do |fp|
+        line = fp.readline()
+    end
+    line
+end
+
+p shebang($0)
+>8
+
+これを実行すると
+
+8<
+$ ruby foo.rb
+foo.rb:7:in `shebang': undefined local variable or method `line' for main:Object (NameError)
+        from foo.rb:10
+>8
+
+とエラーになる。これを回避するには、ブロックの外側で line に nil を代入するとよい。
+
+8<
+#!/usr/bin/ruby
+
+def shebang(fn)
+    line = nil
+    File.open(fn,"r") do |fp|
+        line = fp.readline()
+    end
+    line
+end
+
+p shebang($0)
+>8
+
+この「``line=nil``」は、変数 line の有効範囲を明示するためにある。
+だが、直観的にその事は分かりにくい。
+なぜなら、この文自体、本来は「nilを代入する以上でも以下でもない行為」のはずだからだ。
+
+こういう場合、やはり、宣言文の存在 - my に相当するものが欲しいところだ。
+宣言文は、その対象が、その宣言以降で使えることを意味するから、
+有効範囲を明示するという意味で使うのは、それほど不自然ではないはずだ。
+
+8<
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+sub shebang{
+    my $fn=shift;
+
+    my $line;
+    if( open(my $fh,'<',$fn) ){
+        $line = <$fh>;
+        close($fh);
+    }
+    $line;
+}
+
+print &shebang($0),"\n";
+>8
+
+!! 言いたいこと
+
+要は my はそんなに悪いもんじゃないよということで。
+JavaScript の var だって、そんなに叩かれないじゃん。
+
+なお、異論はスルーの方向で
+
+!! 参考
+
+* http://www.ruby-lang.org/ja/man/html/trap_A5B9A5B3A1BCA5D7A1A2C0A9B8E6B9BDC2A4.html{
+    trap::スコープ、制御構造 - Rubyリファレンスマニュアル}
+** 曰く『while や for がスコープを作らないのに対し、
+          loop や each などのイテレータはスコープを作ります』

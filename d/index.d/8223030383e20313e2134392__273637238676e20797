@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+# -*- coding:shiftjis -*-
+
+import os,sys,re
+import awk
+
+def system(*args):
+    print "$"," ".join(args)
+    return os.spawnvp(os.P_WAIT,args[0],args)
+
+for filename in sys.argv[1:]:
+    rlog = {}
+    for block in awk.getline(src=os.popen("rlog "+filename,"r") ,
+                             rs="----------------------------\n") :
+        line = block.split("\n")
+        if not line[0].startswith("revision"):
+            continue
+        try:
+            revno = line[0].split()[1]
+        except IndexError:
+            continue
+        if not re.match(r"^\d\.\d+$",revno) :
+            continue
+        date,time = ( line[1].split() )[1:3]
+
+        rlog[ "%s %s %s"%(date,time,revno) ] = {
+            "revno": revno ,
+            "stamp": date.replace("/","-")+" "+time.strip(";") ,
+            "message":"RCS-"+block.strip() ,
+        }
+
+    system("hg","add",filename)
+    for rev in sorted(rlog.keys()):
+        p = rlog[rev]
+        rv = system("co","-r"+p["revno"],filename )
+        if rv != 0:
+            print >>sys.stderr,"RCS export error (%d)" % rv
+            sys.exit(1)
+
+        rv = system("hg","commit","-d",p["stamp"],"-m",p["message"],filename )
+        if rv != 0:
+            print >>sys.stderr,"Mercurial import error (%d)" % rv
+            sys.exit(2)

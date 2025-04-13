@@ -1,0 +1,88 @@
+<< Ruby>>
+
+<<< Ruby/OCI8 >>>
+
+<<<< ホームページ>>>>
+
+* [Ruby/OCI8 (Oracle Call Interface)|http://www.jiubao.org/ruby-oci8/index.ja.html]
+
+<<<< Cygwin での導入手順>>>>
+
+Oracle Client と Ruby/OCI8 0.1.7 (Ruby 言語から Oracle を操作する拡張ライブラリ)を入れてみた。 Oracle Call Interface は、デフォルトでは入らないので、
+明示的に指定する必要がある。
+
+* Oracle Client を「管理者」か「ラインタイム」で導入する。
+* もう一度、Oracle Universal Installer を起動し、「カスタム」インストールを選択。
+*「Oracle Call Interface」にチェックを入れ、「次へ」→「インストール」。
+* Ruby/OCI8 をコンパイル/インストールする (make → make install)
+
+最初、0.1.8pre にもトライしてみたのだが、
+SQL*Plus の認識に失敗して、そこから進めなかったので、
+あっさりと 0.1.7 へと乗り換えたのは秘密だ。
+
+<<<< 定番アクセス>>>>
+
+<pre>
+    require 'oci8'
+    conn = OCI8.new('ユーザ名','パスワード','接続エントリ名')
+    conn.exec("（参照系ＳＱＬ）") do |rs|
+	# rs[i] に各レコードの各カラムの内容が順に入る。
+    
+	conn.exec("（更新系ＳＱＬ）");
+    end
+    conn.commit
+    conn.logoff
+</pre>
+
+<<< Win32OLE/ADO 経由のアクセス>>>
+
+<pre>
+    #!/usr/local/bin/ruby
+     
+    require 'win32ole'
+     
+    ora_session = WIN32OLE.new("OracleInProcServer.XOraSession")
+    ora_db = ora_session.DbOpenDatabase(
+	"(接続エントリ名)","(ユーザ名)/(パスワード)",0)
+    ora_dynaset = ora_db.DbCreateDynaset("select count(*) AS CT from emp",0)
+     
+    print ora_dynaset.Fields("CT").value,"\n"
+     
+    ora_dynaset.close ; ora_dynaset = nil
+    ora_db.close ; ora_db = nil
+    ora_session.close ; ora_session = nil
+</pre>
+
+* [ruby-list|http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/18636]
+* [ITMediaの記事/VBScript|http://www.itmedia.co.jp/help/howto/win/win2000/0007special/complus_vb/chapa/a4.html]
+* [MSAccess 関係のTIPS|http://acvb.s19.xrea.com/main.html]
+
+<< Perl/DBI>>
+
+<<<< ホームページ>>>>
+
+この辺かな？
+
+* http://search.cpan.org/search%3fmodule=DBI
+* http://search.cpan.org/search%3fmodule=DBD::Oracle
+
+<<<< 定番スクリプト>>>>
+
+<pre>
+    use DBI;
+    my $conn = DBI->connect('dbi:Oracle:(接続エントリ名)',
+			    'ユーザ名','パスワード');
+    my $rs = $conn->selectall_arrayref("（参照系ＳＱＬ）");
+    foreach my $r (@${rs}){
+	# $r->[i] に各レコードの各カラムの内容が順に入る。
+    
+	$conn->do("（更新系ＳＱＬ）");
+    }
+    $conn->disconnect();
+</pre>
+
+* デフォルト動作がオートコミットになってしまう。
+* do はともかく、selectall_arrayref というメソッド名がダサい。
+* 一度、全て配列に入れるのでメモリ効率が悪い。
+* Ruby のように各レコードを一行ずつ取得するには、prepare とか、細かいメソッドを呼ばなくてはいけないが、覚えてられん。
+* 字サーバ上のインスタンスに接続する時は、 connect の引数から、接続エントリ名を省略し、「"dbi:Oracle:"」とすればよい。

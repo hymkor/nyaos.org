@@ -1,0 +1,24 @@
+function nyaos.command.addenv(env,value)
+    local frag={}
+    local uniq={}
+    if not env then
+        print('addenv ENVNAME AddedValue')
+        return
+    end
+    for e in string.gmatch(os.getenv(env),'[^;]+') do
+        local E=string.upper(e)
+        if not uniq[E] then
+            table.insert(frag,e)
+            uniq[E] = true
+            if not value then
+                print(e)
+            end
+        end
+    end
+    if value then
+        if not uniq[string.upper(value)] then
+            table.insert( frag , value )
+        end
+        nyaos.exec('set '..env..'='..table.concat(frag,';'))
+    end
+end

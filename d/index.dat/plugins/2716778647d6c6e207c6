@@ -1,0 +1,37 @@
+package rawhtml;
+
+# use strict; use warnings;
+
+my $pref=[];
+my %code;
+
+push( @$pref , { desc=>'Number of codes' , name=>'nhtmlcodes' , size=>2 } );
+my $maxn=($main::config{nhtmlcodes} || 3);
+$maxn > 100 and $maxn = 100;
+
+for(my $i=0 ; $i < $maxn ; ++$i ){
+    my $name="htmlname_$i";
+    my $code="htmlcode_$i";
+    push( @{$pref} , 
+	    { desc=>"No.${i} name" , name=>$name , size=>8 },
+            { desc=>"code" , name=>$code , type=>"textarea" , size=>128 }
+    );
+    $name=$::config{$name};
+    $code=$::config{$code};
+    if( $name && $code  && ! exists $::inline_plugin{$name} ){
+        $::inline_plugin{$name} = sub{ 
+            my $html=$code;
+            $html =~ s/\$([1-9])/$1<=$#_ ? $_[$1] : $&/ge;
+            $html;
+        };
+    }
+}
+$main::inline_plugin{html} = sub{
+    my $session=shift;
+    my $no=(shift || 0);
+
+    my $html=$::config{"htmlcode_$no"};
+    $html =~ s/\$([1-9])/$1<=$#_ ? $_[$1] : $&/ge;
+    $html;
+};
+$main::preferences{'Raw HTML 0.2'} = $pref;

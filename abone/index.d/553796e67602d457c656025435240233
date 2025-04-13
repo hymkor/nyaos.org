@@ -1,0 +1,27 @@
+["Using Mule ESB 3 - Mule 3.x User Guide -?mulesoft.org"
+|http://www.mulesoft.org/documentation/display/MULE3USER/Using+Mule+ESB+3]
+
+!!! Services
+
+    mule のサービスバスのアーキテクチャは、多くのシナリオにあっていて、
+    Mule をサービスのコンテナとして使って、サービスを一つないしは複数
+    のエンドポイントに公開する。
+
+    ここでは「configuration patterns」と「flows」を見ながら提案する。
+    これらは、サービスを単独に使うことができた場合よりもはるかに速く
+    多くのことをさせてくれる。
+    もし新ユーザなら、configuration patterns を見ることから始めることだ。
+
+!!! Configuration Patterns
+
+    Mule 3 は、最小限の XML で、共通した構築問題を解決するためにデザイン
+    された、多くの設計パターンを含んでいる。これらのパターンは
+    Mule でサポートされるエンタープライズ構築パターンと親和性がある。
+    // ウェブサービスプロクシーみたいな、より多くのユースケースに取り組み
+
+!!! Flows
+
+貴方が直面している構築の問題が、Mule のサービスモデルに安易にフィットしないか、あるいは、パターンの一つで扱えない場合、Flow の使用を視野に入れたい。
+この方法では、より、expressive な解放に辿りつくため、複数のメッセージプロセッサー(Configuration Building blocks)を結合することができる。
+Flows はデザインから実装までの路をより少ないストップでゆくよう、デザインされている。
+

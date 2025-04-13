@@ -1,0 +1,54 @@
+* $ で始まる行は、Linux で Oracle が使えるユーザのコマンドライン)
+* # で始まる行は、root ユーザのコマンドライン
+
+<< 1. ウェブでアーカイブをとってくる。>>
+
+* DBD-Oracle-1.14.tar.gz
+* DBI-1.38.tar.gz   
+
+という二つのアーカイブを探してきてください。
+これらを、OCI か Pro*C のコンパイルができる Linux 環境に
+ftp でBINARY転送します。
+
+<< 2. アーカイブを展開します。>>
+
+<pre>
+    $ tar zxvf DBD-Oracle-1.14.tar.gz
+    $ tar zxvf DBI-1.38.tar.gz
+</pre>
+
+<< 3. それぞれのモジュールをコンパイルします。>>
+
+<<< DBI のインストール>>>
+
+<pre>
+    $ cd DBI-1.38
+    $ perl Makefile.PL
+    $ make
+    $ make test
+    $ su  
+    Password: ← ルートのパスワード
+    # make install
+    # exit
+    $ cd ..
+</pre>
+
+<<< DBD のインストール>>>
+
+<pre>
+    $ cd DBD-Oracle-1.14
+    $ perl Makefile.PL
+    $ make
+    $ make test
+    $ su
+    Password: ← ルートのパスワード
+    # make install
+    # exit
+    $ cd ..
+</pre>
+
+<<< make test で失敗する場合>>>
+
+scott/tiger スキーマが存在しない場合は、
+どうしても、エラーになってしまうので、
+そういう場合はパスしてよろし

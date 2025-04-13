@@ -1,0 +1,118 @@
+<<[Lua] oluacle が削除されてしまったよ>>
+
+LuaForge に上げていた、oluacle (Lua for Oracle)が、
+最初から無かったかのように削除されていた。
+同様に、自分のアカウントもなくなっている。
+
+α版扱いで Up して、その後、更新してなかったせいか、
+それとも、何らかの原因でうまく動かなかったのか。
+
+とほほ
+
+<<シルバーウィークの時に引いた風邪>>
+
+なかなか治らず、結局、今週前半まで鼻をズルズル言わせる状況が続いてしまいました。
+今も100%回復したというわけではなく、まだ、調子がいいとは言いがたい状況です。
+
+* 歳をとって、回復力が落ちた
+* プロジェクトが佳境になって、ゆっくり休む間もなかった''(残業や休出もあって… orz)''
+
+つらい 2週間でした。
+
+<<[Python] 続・動的メソッド追加>>
+
+先日、知人が社内SNSで、Ruby での動的クラス変更をまとめていた。
+で、わたくしも「>>{(2009.09.05)#p1}{クラスに対して、動的にメソッドを追加すること}」
+で実験してみたけれども、「特異クラス」のことを忘れていた。
+
+特異クラスとは、Ruby の用語だが、明示的に宣言したクラスではなく、
+オブジェクト単品に対してメソッドを定義できる機能らしい。
+
+Python には、そういう機能は無い。が、同等のことは出来なくもないらしい。
+ググッてみたら、二つの方法があるようだ。
+
+* http://d.hatena.ne.jp/c-yan2/20071013/1192266189{
+    Python で特異メソッド - ぱいそにすたん!}
+
+まず、単純にオブジェクトにいきなり関数を代入することができる。
+
+8<
+class Foo(object):
+    pass
+
+def echo(self):
+    print "ahaha"
+
+foo = Foo()
+foo.echo = echo
+
+foo.echo( foo )
+>8
+
+ただし、関数は、あくまで関数として振舞うので、
+レシーバー(self)を △.foo(△) という風に二箇所に書かなくてはいけない。
+これはイケてない。
+
+そこで上記サイトでは 
+http://www.python.jp/doc/release/lib/module-functools.html{functools.partial()}を使い、
+第一引数だけ固定化した別関数を生成することで、
+事実上メソッド化している。(厳密にはメソッドにはなっていないが)
+
+8<
+import functools
+
+class Foo(object):
+    pass
+
+def echo(self):
+    print "ahaha"
+
+foo = Foo()
+foo.echo = functools.partial(echo,foo)
+
+foo.echo()
+>8
+
+* http://doloopwhile.blogspot.com/2009/07/python.html{
+    None is None is None: Pythonで特異メソッド}
+
+こちらでは、
+http://www.python.jp/doc/release/lib/module-new.html{
+new.instancemethod()} を使う。
+
+8<
+import new
+
+class Foo(object):
+    pass
+
+def echo(self):
+    print "ahaha"
+
+foo = Foo()
+foo.echo = new.instancemethod(echo,foo,Foo)
+
+foo.echo()
+>8
+
+こちらは正真正銘のメソッドオブジェクトを生成している。
+が、new というモジュールは：
+
+6<
+このモジュールはインタプリタへの低レベルインターフェイスを提供します。したがって、このモジュールを使うときには注意しなければなりません。オブジェクトが利用される時にインタプリタをクラッシュさせるような引数を与えることもできてしまいます。 
+>9
+
+とあるので、注意が必要だ。パラメータも一つ多いしなぁ。
+
+---
+
+まぁ、普通は素直に継承せいってことでしょうかねぇ。いやはや
+
+
+8<
+class Foo(object):
+    def echo(self):
+        print "ahaha"
+foo = Foo()
+foo.echo()
+>8

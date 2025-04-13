@@ -1,0 +1,18 @@
+digraph ckw_mod {
+    original [ fontsize=11,shape=box,label="ckw-0.8.10\nby Kazuo Ishii",style=filled,fillcolor="#FFFF00" ];
+    mod1 [ fontsize=11,shape=box,label="ckw-0.8.10-mod\nby id:hideden" ];
+    mod2 [ fontsize=11,shape=box,label="ckw-0.8.10-mod2\nby id:hideden"];
+    modmod [ fontsize=11,shape=box,label="ckw-0.8.10-mod-mod\nby shuujin",style=filled,fillcolor="#FF00FF" ];
+    mod3 [ fontsize=11,shape=box,label="ckw-0.8.10-mod3\nby id:bleis-tift",style=filled,fillcolor="#FF00FF" ];
+
+    nocd5_patch [ fontsize=11,label="nocd5's\npatch"]
+    s_yata_patch [ fontsize=11,label="id:yata's\npatch" ]
+    you_and_i_patch [ fontsize=11,label="@you_and_I's\npatch" ]
+
+    original -> mod1 -> mod2 -> mod3 ;
+    mod1 -> modmod ;
+    nocd5_patch -> mod2 ;
+    s_yata_patch -> mod3 ;
+    you_and_i_patch -> mod3 ;
+}
+// vim:set fenc=utf8:

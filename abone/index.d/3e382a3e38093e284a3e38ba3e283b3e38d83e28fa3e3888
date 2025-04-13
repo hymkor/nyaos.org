@@ -1,0 +1,79 @@
+!!! パスワード入力用画面
+
+https://pc2.mob-connect.com/mccore/start/start.do?C=02617&U=tetraC016&S=050
+
+((ref "mobile_connect-20110725.PNG"))
+//((ref "パスワード設定2.PNG"))
+
+!!! 手順書
+
+((ref "TETRAモバイルコネクト利用手順書(20030212）.ppt"))
+
+!!! リンク
+
+* http://mbgweb06/cgi-bin/cbag/ag.cgi?page=AGIndex{IT企画サイボウズ}
+* http://10.128.1.29/otrs/index.pl{OTRS}
+* https://www.skipaas.com/{Copla}
+
+!!! 手順書
+
+((ref "TETRAモバイルコネクト利用手順書(20030212）.ppt"))
+
+!!! プロキシーサーバ
+
+<<<
+◆設定方法(1)
+
+モバイルコネクトに接続してCoplaを使用する際に，ブラウザのプロキシ設定を以下のようにする．
+
+　プロキシサーバ= 172.16.48.25 ポート番号= 9090
+
+　CoplaはHTTPS接続なので，設定するのはHTTPSのみでもいいだろう．
+
+…最低限これだけで，Coplaが使えるようになるはず．
+
+問題は，「モバイルコネクトに接続してCoplaを使用する」以外のときには，プロキシ設定を元に戻さないといけないこと．これを解決するのが次の「設定方法(2)」．
+
+◆設定方法(2)
+
+自動プロキシ設定スクリプトを使用して，「接続先が www.skipaas.com ならプロキシを 172.16.48.25:9090 にする」という設定をする．
+
+スクリプト例(あくまで例！):
+
+function FindProxyForURL(url, host)
+{
+    //// 通常のproxy
+    proxylist  = "PROXY tisproxy:8080";
+
+    if (shExpMatch(host, "127.0.0.1") ||     // 自機上のサービスなら，
+        shExpMatch(host, "localhost"))
+     return "DIRECT";               // 直接接続
+
+    if (isPlainHostName(host) ||          // ドメイン表記でない単純ホスト名
+     shExpMatch(host, "172.16.*.*")  ||     // 社内サーバ(竹芝)
+     // shExpMatch(host, "172.??.*.*")  ||     // …その他の社内セグメントも追加
+     shExpMatch(host, "192.168.*.*"))     // プライベートIPアドレス
+      return "DIRECT";                    // 直接接続 (TIS社内のみ)
+
+    if (
+     dnsDomainIs(host, ".tis.co.jp") &&     // 社内サーバ(ドメイン表記)で，かつ，
+     ! shExpMatch(host, "www.tis.co.jp"))     // TISホームページ『以外』は，
+      return "DIRECT";                    // 直接接続 (TIS社内のみ)
+
+    if (shExpMatch(host, "*.itholdings.jp"))
+      return "DIRECT";
+
+    if (shExpMatch(host, "www.skipaas.com"))
+      return "PROXY 172.16.48.25:9090";
+
+//// 上記以外は社外サイトなので通常のPROXYを通す
+      return proxylist;
+}
+>>>
+
+\\p2fsvt02\6660\ＰＪ\０３\pj11006
+
+!!! ノーツID
+
+((ref "Is198064.id"))
+

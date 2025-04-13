@@ -1,0 +1,21 @@
+<<[NYAOS] savehist のパス>>
+
+6<
+:https://twitter.com/#!/chawatoyo/status/162895338410229760{@chawatoyo}
+::Nyaosのコマンドヒストリ機能は便利なんだけど、savehistの設定に相対パスが使えると良いな。絶対パスじゃなく、ファイル名のみの場合はNyaos.exeと同じフォルダにあると見なしてもらえるだけで良いんですが。
+>9
+
+相対パスの基点は起動時のカレントディレクトリとするのが普通で、
+例外的な処理をするとユーザが混乱する可能性があります。
+申しわけありませんが、要望は受入れられないです。
+
+NYAOS.EXE と同じフォルダに設定するには次のように設定するという方法があります。
+
+8<
+option +backquote
+set BINDIR=`lua_e "print((string.gsub(nyaos.argv[0],'\\[^\\]+$','')))"`
+option savehist %BINDIR%\_history
+>8
+
+ちょっと強引ですが、内蔵Lua なら NYAOS.EXE のフルパスが取れますので、
+そこから置かれているディレクトリを取得できます。

@@ -1,0 +1,26 @@
+<<http://mook.mook.to/MoogaOne/index.htm{MoogaOne}>>
+
+(http://d.hatena.ne.jp/hachi/20050731#p3{算数記}より)
+
+ユーザビリティーを考慮したデザインテンプレートが
+http://mook.mook.to/MoogaOne/index.htm{MoogaOne}。
+
+それを weblog に応用したものが
+http://mook.mook.to/Mooga2/index.htm{Mooga2}。
+
+>> ならば、Mooga3 は Wiki に違いあるまい <<
+
+正直言うと、物理化学の教科書を連想してしまう我がトラウマエンジン。
+そりゃ、ムーアでんがな。
+
+<<((lb))wifky((rb)) おいらも、http://scl.littlestar.jp/revwiki/view.cgi?%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3ADice{コーディングポリシー}だ！>>
+
+* 速度とサイズと移植性に固執する。常に心に【Compact and Portable】。
+* 基本的に mod_perl への対応も考えたいけど、どないしたらいいか、実は分からないｗ
+* 古き民なら、インデントは 4SPACE + TAB <tt>(:set sw=4 ts=8)</tt>
+    と相場は決まっている。
+
+というわけで、マイクロコアな Wiki とモノリシックな Wiki の対決は，
+おいらの中でだけ、勝手に盛り上がってまいりました（笑）
+
+

@@ -1,0 +1,52 @@
+<<((lb))wifky((rb)) やっぱり画面デザインが問題ですかー>>
+
+http://childs.squares.net/d/?date=20050926#p02{Sense of Dary}より
+
+<blockquote>
+    個人的に<h1>の後に wiki のメニューが出るのは不満。
+    自由に表示が出来るが正解なのかも。
+</blockquote>
+
+これ、実はちょっと気にはしてまして、
+一つのやり方として、メニューを差すコマンド
+((ll))adminmenu)) みたいなもんを作って、
+ユーザに Header の中に書いてもらうっていうのを
+考えはしたんです…。
+
+ただ、これ、下手して、ヘッダはあるのに ((ll))adminmenu)) は無いという
+状態を作ってしまうと、編集不能に陥ってしまうので、
+それをどうしたらいいのか、対応案が浮かばず、現在に至ってます。
+
+どうしようかな。
+
+<blockquote>
+    2ペインの仕方がわがんね。0.74までは今のCSSで出来てたのに。
+</blockquote>
+
+http://hpcgi2.nifty.com/hayamatta/wiki.cgi{M/H MEMO}とか、
+http://hpcgi2.nifty.com/hayamatta/sandbox.pl{サンドボックス}では、
+2ペインになってます。これは自分で CSS を書かずに、他のソフトのを
+<strike>パクッて</strike>頂戴してきたもんなんですが、CSS を見ると
+
+<pre>
+div.main {
+	margin-left: 20%;
+}
+div.sidebar {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 20%;
+	    :(中略)
+	color: #000;
+	background-color: #cfd;
+}
+</pre>
+
+とかやってますね。
+サイドバー表示で float を使わず、position:abosolute; top:0px; left:0px と、
+ブラウザ上の絶対位置を指定してやるのがミソっぽいです。
+
+>> 奥が深い <<
+
+

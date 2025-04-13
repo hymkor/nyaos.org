@@ -1,0 +1,77 @@
+<<賞与が出たという噂なので、額を確かめずに散財>>
+
+* ((bk1 1928575)) - みんなの Python を持ってるのに、つい買ってしまった。
+  だって、おもしろそうな小技がたくさん書いてあるんだもんだもん。
+** おかげで、CodeGolf-Reverse のコードを 10bytes 減らせました！
+** でも、なんで Python なのにネズミなんだ。絶望した！
+** 三項演算子がなくても and/or で同等のことはできるのねん。
+
+* ((bk1 2646258)) - 表紙と違って、光るサーベルなんか絶対持ってない。
+  そうに決まってる(← まだ前々号の髑髏列車のこと、スネてる)
+((clear))
+
+* ((bk1 2733665)) - 紙ブログまたついてきた。お得(嘘)
+
+* ((bk1 2724277)) , ((bk1 2724278)) - 勢いで買った。あまり後悔していない。
+
+<<[python] 今日もどこかで rubyco ストーカー>>
+
+!! http://d.hatena.ne.jp/rubyco/20061211/stringregex{
+   rubyco（るびこ）の日記 - String#[]に正規表現を渡す}
+
+python だと、オーソドックスなやり方しかない。
+
+8<
+>>> import re
+>>> s = "We wish you a Merry Christmas!"
+>>> print re.search("C\w+mas",s).group(0)
+Christmas
+>8
+
+でも、これでいいと思う。
+「演算子本来の意味を越えた演算子オーバーロードの多用は、
+  華麗ではあるが、可読性を失う」
+という原則は、別に C++ に限った話ではない。
+
+!! http://d.hatena.ne.jp/rubyco/20061211/nethttp{
+   rubyco（るびこ）の日記 - Net::HTTP}
+
+こっちもオーソドックスだけど、URL解析をパスしてる分、
+Ruby 版より、若干シンプルかも。
+
+8<
+>>> import urllib
+>>> s = urllib.urlopen("http://www.hyuki.com/").read()
+>>> print s
+>8
+
+!! http://d.hatena.ne.jp/rubyco/20061211/marshal{
+   rubyco（るびこ）の日記 - Marshal}
+
+python には同様のモジュールとして pickle がある。
+
+8<
+>>> a = [1, 2, { 'Alice':23, 'Bobby':17 }]
+>>> import pickle
+>>> dumped = pickle.dumps(a)
+>>> print dumped
+(lp0
+I1
+aI2
+a(dp1
+S'Alice'
+p2
+I23
+sS'Bobby'
+p3
+I17
+sa.
+>>> o = pickle.loads(dumped)
+>>> print o
+[1, 2, {'Alice': 23, 'Bobby': 17}]
+>8
+
+他、直接ファイルに読み書きする pickle.dump(オブジェクト,ファイルオブジェクト)
+ , pickle.load(ファイルオブジェクト)といった関数がある。
+通常は、今回のようにメモリ上に保持するようなことはせず、
+そちらを使うことだろう。

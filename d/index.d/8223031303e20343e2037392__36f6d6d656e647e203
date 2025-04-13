@@ -1,0 +1,2 @@
+2010/04/08 15:26:07	フジワラ	ドキュメント類が必要無いのであれば、^r^nmake install-bin 相当で事足りますので:^r^n^r^n    $ python setup.py build^r^n    $ python setup.py install --prefix="$(PREFIX)" --force^r^n^r^nで実行できる筈です(PREFIX はインストール先に応じて適宜)。^r^n^r^nそれでも問題があるようでしたら、日本語コミュニティで^r^nご相談ください。^r^n^r^nhttp://groups.google.com/group/mercurial-ja
+2010/04/08 20:32:57	はやま	いえいえ、全然、問題ありません。--force という手もあったんですね。勉強になります。

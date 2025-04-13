@@ -1,0 +1,44 @@
+8<
+----- ここから ----- ここから ----- ここから ----- ここから -----
+* OK Dovecot ready.
+0012 LOGIN tetractis1 zaq12wsx
+012 OK Logged in.
+0013 STATUS "INBOX"
+0014 STATUS "INBOX" (RECENT UNSEEN MESSAGES)* STATUS "INBOX" (MESSAGES 2 RECENT
+2 UNSEEN 2)
+0014 OK Status completed.
+0022 SELECT "INBOX"
+* FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+* OK [PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft \*)] Flags permitted.
+* 2 EXISTS
+* 2 RECENT
+* OK [UNSEEN 1] First unseen.
+* OK [UIDVALIDITY 1302159062] UIDs valid
+* OK [UIDNEXT 3] Predicted next UID
+0022 OK [READ-WRITE] Select completed.
+0023 UID SEARCH ALL
+* SEARCH 1 2
+0023 OK Search completed.
+0026 FETCH 1:2 (FLAGS UID)
+* 1 FETCH (FLAGS (\Recent) UID 1)
+* 2 FETCH (FLAGS (\Recent) UID 2)
+0026 OK Fetch completed.
+0027 UID FETCH 1 (BODY)
+* 1 FETCH (UID 1 BODY ("text" "plain" ("charset" "us-ascii") NIL NIL "7bit" 10 1))
+0027 OK Fetch completed.
+0028 FETCH0028 BAD Error in IMAP command FETCH: Invalid characters in atom
+0030 UID FETCH 1 (BODY[1])
+* 1 FETCH (UID 1 FLAGS (\Seen \Recent) BODY[1] {10}
+hogehoge
+)
+0030 OK Fetch completed.
+0036 LOGOUT
+* BYE Logging out
+0036 OK Logout completed.
+
+
+ホストとの接続が切断されました。
+[C:TIS198064]
+$
+----- ここまで ----- ここまで ----- ここまで ----- ここまで -----
+>8

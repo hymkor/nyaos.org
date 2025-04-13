@@ -1,0 +1,3 @@
+2004/11/15 16:25:10	future	だからエロい人では無い。  まあ、それはともかく、 class AAA { public:     AAA( int n = 100 ){printf( "%d" , n ); } };  って普通すると思うのだが…  
+2004/11/15 21:03:07	wo	間違ってたらすいませんが、それって一時インスタンスを作って即捨てているだけなのかと思うのですが。  class AAA {         int x;  public:         AAA( int i ) {                  x = i;                  dump_x();          }          AAA() {                 x = 1;                 AAA::AAA(9);         }          void dump_x() {                 printf("%d\n",x);         }  };  int main() {         AAA a;         a.dump_x();          return 0; }  これだと、 > 9 > 1 と表示されます。  
+2004/11/16 01:54:45	はやまだす	そ、そうか！ 言われてみれば。。。orz  

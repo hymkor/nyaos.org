@@ -1,0 +1,17 @@
+Enterprise application integration - [[ESB]]の古い呼び方とでも思って、いいかも
+
+6<
+企業内における多種多様なコンピュータシステム群や各種ビジネスパッケージ群を有機的に連携/統合(例えば、営業支援サービスと財務システム、顧客管理システムを連携させ、CRMシステムの機能を拡充させるなど)させ再構築し、より戦略的な機能や情報として提供する機能及びミドルウェア/アプリケーションパッケージや統合技術のこと
+
+各種EAI製品は、ESB機能を組み込み始めており、製品カテゴリとしてEAIとESBの区別は消滅しつつある
+
+主な製品：
+
+    * '''AquaLogic Integration Server'''（日本オラクル）
+    * ASTERIA（インフォテリア）
+    * BizTalk Server（マイクロソフト）
+    * eGate Integrator（サン・マイクロシステムズ）
+    * Netweaver XI（SAP）
+    * webMethods Enterprise Service Bus（ソフトウェア・エー・ジー）
+    * Websphere Enterprise Servise Bus（日本アイ・ビー・エム）
+>9

@@ -1,0 +1,43 @@
+<<[Lua] 続・Windows版 Lua をビルドする>>
+
+「[[Windows版 Lua をビルドする|(2009.02.28)#p3]]」にて、
+普通に make mingw でビルドすると、次のような結果となった。
+
+6<
+* 生成されるファイルは lua.exe と lua51.dll
+* だが、lua51.dll は make install でコピーされない (自分でコピーする必要あり)
+* Cygwin環境でやったせいか、実行ファイルは cygwin1.dll を必要とする。 
+>9
+
+[lua-users wiki: Building Lua|http://lua-users.org/wiki/BuildingLua]
+に書いてあった方法でビルドすると、cygwin1.dll なしにできた。
+
+6<
+To easily build Lua for Windows using Cygwin without modifying the Makefiles:
+8<
+make "CC=gcc -mno-cygwin" mingw
+>8
+>9
+
+ただ、これだと実行ファイルは lua51.dll と lua.exe のコンビとなる。
+
+8<
+$ objdump -x lua.exe | grep "DLL Name"
+        DLL Name: msvcrt.dll
+        DLL Name: KERNEL32.dll
+        DLL Name: lua51.dll
+>8
+
+いろいろ試行錯誤してみたが、lua.exe を単品の実行ファイルにするには
+
+8<
+make "CC=gcc -mno-cygwin" generic
+>8
+
+でいいようだ。
+
+8<
+$ objdump -x lua.exe | grep "DLL Name"
+        DLL Name: msvcrt.dll
+        DLL Name: KERNEL32.dll
+>8

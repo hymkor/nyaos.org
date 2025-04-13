@@ -1,0 +1,145 @@
+<<[twitter] やった、僕も OAuth できたよー>>
+
+別にウェブアプリケーションじゃなくて、
+何か作業した時にバッチで自動的にツイートできたらいいなーと思って。
+
+<<<twitter でのアプリケーション登録>>>
+
+まず、https://dev.twitter.com/apps/new から、アプリケーション登録をする。
+
+内容は適当でいいんだが、Callback URL は
+```http://127.0.0.1:7777``` を設定することにする。
+
+これは何を意図しているかというと、
+通常、非ウェブアプリケーションの場合、
+Twitter の認証後に表示される PIN コードを
+ユーザがアプリケーションにコピペするという作業が入るのだが、
+これが面倒なので、ローカルウェブサーバを立ち上げて、
+ウェブアプリみたいに、そちらで受け取らせようというわけである。
+
+Python なら、ローカルウェブサーバを立ち上げるのも、
+ウェブブラウザを立ち上げるのも簡単!
+
+さて、登録が済むと「Consumer key」と「Consumer sercret」が表示されるので、
+これは控えておく''(これは仕方がない)''。
+で、Setting タブ から Access level を「Read and Write」に変更する。
+
+<<<tweepy ライブラリのインストール>>>
+
+Python の場合、easy_install で Ok。コマンドプロンプトより次のように入力する。
+easy_install が導入されていない時は…導入してくれッ! ''(ざわざわ)''
+
+8<
+   easy_install tweepy
+>8
+
+* 参考
+** http://d.hatena.ne.jp/Number6/20100116/1263631863{twitterAPI用pythonライブラリtweepyを使えるようになるまで。 - Number6の「あーあ、俺に狐の嫁さんできねぇかなぁ！！」}
+** http://blog.kzfmix.com/entry/1266577646{tweepyでOAuthを試してみた}
+** http://d.hatena.ne.jp/Yoshiori/20100929/1285727199{やる夫と Python で学ぶ Twitter の OAuth - YoshioriのBlog}
+
+<<<んでもって、プログラム>>>
+
+8<
+import BaseHTTPServer
+import re
+import tweepy
+import webbrowser
+
+oauth_token    = None
+oauth_verifier = None
+
+class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
+    def do_GET(self):
+        global oauth_token , oauth_verifier
+
+        p = {}
+        for m in re.finditer(r"([^\&\?\/\=]+)\=([^\&\?\/\=]+)",self.path):
+            p[ m.group(1) ] = m.group(2)
+
+        out = self.wfile
+        self.send_response(200)
+        self.end_headers()
+        try:
+            oauth_token    = p["oauth_token"]
+            oauth_verifier = p["oauth_verifier"]
+        except KeyError:
+            out.write("<html><body><h1>Twitter OAuth Failure</h1>")
+            out.write("</body></html>")
+            return
+
+        out.write("<html><body><h1>Twitter OAuth Success</h1>")
+        out.write("</body></html>")
+
+def local_webserver():
+    httpd = BaseHTTPServer.HTTPServer( ('',7777),Handler )
+    httpd.handle_request()
+
+def do_auth(consumer_key,consumer_secret):
+    auth = tweepy.OAuthHandler( consumer_key , consumer_secret )
+    webbrowser.open( auth.get_authorization_url() )
+    local_webserver()
+    auth.get_access_token( oauth_verifier )
+    return tweepy.API(auth)
+
+def _test():
+    from datetime import datetime
+    consumer_key    = "(ここに consumer_key を書く)"
+    consumer_secret = "(ここに consumer_secret を書く)"
+
+    twitter = do_auth( consumer_key , consumer_secret )
+
+    twitter.update_status( 'Test-Tweet at ' + str(datetime.now()) )
+
+_test()
+>8
+
+当スクリプト「twit_batch.py」を実行すると、ブラウザが勝手に起動して、
+twitter の認証画面が出るので「連携アプリを認証する」を選択。
+すると、ローカルに立ち上げたウェブ画面に自動的に遷移して、
+アクセストークンをスクリプトがウェブサーバ経由で受け取ってくれる。
+
+その後、そのアクセストークンを使って、ツイートを投稿するというわけだ。
+
+<<<オチ>>>
+
+twitter の自分のアプリケーション一覧ページ
+(```https://dev.twitter.com/apps/…/show```)
+を見るとですねぇ、
+「Create my access token」なるボタンがあるんですよ。
+
+これ押すと、自ユーザのアクセストークンについては、その場で作れちゃうような雰囲気で。
+
+Consumer key や Consumer secret も同じ画面からコピペすることを考えると、
+自分用に作る分については、わざわざ認証のために、
+サーバとブラウザを立ち上げる必要なんてなかったんじゃね？
+
+8<
+import tweepy
+
+def do_auth(consumer_key ,
+            consumer_secret ,
+            access_token ,
+            access_secret ):
+    auth = tweepy.OAuthHandler( consumer_key , consumer_secret )
+    auth.set_access_token( access_token , access_secret )
+    return tweepy.API( auth )
+
+def _test():
+    from datetime import datetime
+    consumer_key    = "(ここにconsumer_keyを書く)"
+    consumer_secret = "(ここにconsumer_secretを書く)"
+    access_token    = "(ここにaccess_tokenを書く)"
+    access_secret   = "(ここにaccess_secretを書く)"
+
+    twitter = do_auth( consumer_key ,
+                       consumer_secret ,
+                       access_token ,
+                       access_secret )
+
+    twitter.update_status( 'Test-Tweet at ' + str(datetime.now()) )
+
+_test()
+>8
+
+ふむ、普通に出来ましたねぇ。やれやれだぜ。

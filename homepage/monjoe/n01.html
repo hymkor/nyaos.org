@@ -1,0 +1,622 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="robots" contents="noindex, nofollow" />
+<title>高速増殖ログ「もんじょ」Part1
+</title>
+    <style type="text/css">
+    <!--
+	.FIRSTLETTER{font-size:xx-large}
+	P.SAY1{color:#FF00FF;font-size:large;text-align:center}
+	P.SAY2{color:#FFFF00;font-size:large;text-align:center}
+        P.SEP{text-align:center;color:silver;font-weight:bold}
+	DIV.FOOTNOTE{font-size:x-small}
+	DIV.COMMENT{text-indent:12pt}
+	.H{font-weight:bold;font-size:large}
+.H{
+  font-size:large;font-weight:bold
+}
+H1{
+  text-align:right;
+  border-style:solid;border-width:0px 0px 4px 0px;border-color:white;
+  color:snow;
+  font-size:large;
+  clear: both;
+  width: auto;
+}
+H2{
+  border:none;
+  background-color:#444444;
+  font-size:large;
+  width:auto;
+}
+H2 SMALL{
+  font-size:small;
+  line-height:large;
+}
+H3{
+  border-style:solid;border-width:0px 0px 0px 20px;border-color:silver;
+  font-size:medium;
+  text-indent:5pt
+}
+.BOX{
+  border-style:solid;border-color:white;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  text-decoration:underbar;white-space:pre
+}
+.XOB{
+  border-style:solid;border-color:gray;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  background-color:white;color:black;white-space:pre
+}
+DT{ color:silver;font-weight:bold; }
+EM{ color:gray;font-weight:bold;font-style:normal }
+STRONG{ color:red }
+B.PLASMA{
+    color:red;background-color:#440000;font-size:xx-small;font-weight:bold;
+}
+B.DOKEN{
+    color:#FFFF00;background-color:#444400;font-size:xx-small;font-weight:bold;
+}
+DIV.D{
+    text-indent:12pt
+}
+A:hover{
+  background-color:#440000
+}
+    -->
+    </style>
+</head>
+<body text="white" bgcolor="black" link="silver" vlink="gray">
+<!--start-->
+<DIV ALIGN=RIGHT><TABLE><TR><TD><DIV CLASS="BOX"><A HREF="n02.html">次頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="/VA009797/script/m06.html">前頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="/VA009797/">扉頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="index.html">目次</A></DIV></TD></TR></TABLE></DIV>
+
+
+<!--section-->
+<H2><A NAME="2002.12.14">全開！ネガティブオーラ</A>
+<SMALL>　(2002.12.14)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.14.1" href="#2002.12.14.1"
+ style="text-decoration:none">悟</a></td></tr></table>
+りを開いた♪笑いは鬱を解消するという効能があるが、怒りもまた鬱をふっとばす効果があるようだ。ゴゴゴゴゴゴゴゴゴゴゴゴゴゴゴゴゴゴ</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.14.2" href="#2002.12.14.2"
+ style="text-decoration:none">本</a></td></tr></table>
+文書を生成しているスクリプト <A HREF="./bougen.rb">bougen.rb</A>を公開します。本スクリプトは<A HREF="./n01.mj">こんなテキストファイル</A>をごらんのような<A HREF="./n01.html">HTML ドキュメント</A>に変換します。</p>
+<p>もんじょの場合は、生成する際は<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />    ruby -Sx bougen.rb -icss ../../www/gray.css 原稿ファイル &gt; HTMLファイル<br /></pre>
+</td></tr></table>
+
+みたいに、css を include するオプションを入れてます。生成物が文書みたいにならないじゃねぇかとか言わないように。なお、使用には Ruby が必要だす。文法は RD を参考にしました。制限としては</p>
+<ul>
+<li>(<!-- -->(〜)<!-- -->)を入れ子にできない</li>
+<li>(<!-- -->(〜)<!-- -->)の中に空行は入れられない<em>(段落をまたげない)</em></li>
+<li>あまり汎用的とはいえない<em>(背景色とかね)</em>
+
+</li>
+</ul>
+
+<p>などがあります。いったい、誰が使うねん。こんなもん。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.14.3" href="#2002.12.14.3"
+ style="text-decoration:none">先</a></td></tr></table>
+日の<A HREF="#2002.12.8.1">不具合</A>が会社のマシンでも再現しない。なんでやねん。</p>
+<ul>
+<li><A HREF="http://www.imou.to/~AoiMoe/nikki-word/2002.html"
+    >2002 年版 日記界流行語の私的解説</A> (Thanks to あちゃいんさん)<div class="COMMENT">
+    <A HREF="#2002.12.8.1">前回</A>とりあげた<A HREF="http://chinmai.net/~osakana/vote/2002/">ページ</A>に関する解説…。うぅむ、奥が深い<sup style="font-size:x-small"><a href="#2002.12.14.3.1" title="はまったら出られんという意味でも" name="2002.12.14.3.1.">*1</a></sup>。</div>
+</li>
+<li><a href="http://www.geocities.co.jp/SiliconValley-PaloAlto/6736/reject_virus.html"
+    >ウイルスからメールアドレスを隠す</a>
+    (<a href="http://www.sawadaspecial.com/">sawadaspecial.com</a>より)
+    <div class="COMMENT"> めもめも φ（。。）</div>
+</li>
+<li><a href="http://pc.2ch.net/test/read.cgi/prog/1036336572/-100">( 'д')寝る！</a>
+    (<a href="http://ktplan.net/teciai/cnp/index.html">プログラマー板研究</a>より)
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre>　ワタシもやってられんので寝ます。<br />　￣￣￣￣V￣￣￣￣￣￣￣￣<br />　　　　　 ∧＿∧<br />　　　　　( ´Д⊂ヽ゛ 　<br />　　　　　/　　 _ノ⌒⌒ヽ<br />　　  (￣⊂人　　//⌒　ノ<br />　⊂ニニニニニニニニニニ⊃</pre>
+</td></tr></table></li>
+<li><a href="http://mayu.als.jp/XPcom/wxp_bat.html"
+    >WindowsXPコンソールの内部コマンド</a>
+    (<A HREF="http://znz.s1.xrea.com/t/?date=20021209">zt diary(12/09)</A>より)
+    <div class="COMMENT">ふむふむ。NYA*S でもサポートすべきものはあるかな？ちなみに NYA*S なら、option +dots で、「<TT>...</TT>」もバッチソ。</div>
+</li>
+<li><a href="http://hp.vector.co.jp/authors/VA010593/cccd.html"
+    >avex CCCD Player 完全アンインストーラ</A>
+    <div class="COMMENT">avex が CCCD に勝手にインストールされるプレイヤーソフトを仕込んでいるとのこと。で、それのアンインストーラー。</div>
+</li>
+<li><a href="http://yamaguch.sytes.net/~takuya/diary/?date=20010904#p02"
+    >mod_gzip</a>
+    <div class="COMMENT">mod-gzip で WebLogic の JSP を圧縮すると。ふむふむ。</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2002.12.14.3.1" href="#2002.12.14.3.1.">*1</a></sup>はまったら出られんという意味でも</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2002.12.8">鬱で希望も持てないワシに遂に救世主が！</A>
+<SMALL>　(2002.12.8)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.8.1" href="#2002.12.8.1"
+ style="text-decoration:none">N</a></td></tr></table>
+YACUS 2.14 <em>(未公開)</em>が、会社のマシン(Windows2000)で誤動作を起こした。</p>
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />    sub r<br />	foreach i *<br />	    echo %i%<br />	end<br />    endsub<br /></pre>
+</td></tr></table>
+
+
+
+<p>とキーボードから入力して、いざ「r」とタイプしても「foreach&gt;」というプロンプトが出てしまうのだ。ところが、自宅の Windows98,2000 では再現しない<sup style="font-size:x-small"><a href="#2002.12.8.1.1" title="大方、古いバージョンだったんだろうが…" name="2002.12.8.1.1.">*2</a></sup>。なぜだ。鬱だ。たすけて…………<A HREF="http://dempa.2ch.net/dat/2002/12/utu-1036409959.html"
+>キターーーーーーー!</A>。</p>
+<ul>
+<li><a href="http://chinmai.net/~osakana/vote/2002/"
+    >日記界 2002年流行語大賞ケテーイ投票所</a>
+    <div class="COMMENT">すみません。上の方は、ほとんど分かりました<em>(どっかで読んだことがありました)</em>。もうワシだめぽ。</div>
+</li>
+<li><a href="http://www.asahi.com/international/jc/manga/index.html"
+    >ぽってりぷぅ！</a>
+    <div class="COMMENT">国際交流を描いた漫画です。勉強になります<em>(ほんとか？)</em>
+
+</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2002.12.8.1.1" href="#2002.12.8.1.1.">*2</a></sup>大方、古いバージョンだったんだろうが…</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2002.12.7">スーパーすまそ</A>
+<SMALL>　(2002.12.7)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.7.1" href="#2002.12.7.1"
+ style="text-decoration:none">統</a></td></tr></table>
+括マネージャ<em>(部長の次に偉い人)</em>を二人も同伴して客先に謝りに…<sup style="font-size:x-small"><a href="#2002.12.7.1.1" title="うちが一方的に悪かったというわけでもなかったのですが" name="2002.12.7.1.1.">*3</a></sup>
+
+</p>
+<p align="center" class="SAY1"> どんなエラいことしてん！ </p>
+
+
+<p>えー、まぁ、そのあの。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2002.12.7.1.1" href="#2002.12.7.1.1.">*3</a></sup>うちが一方的に悪かったというわけでもなかったのですが</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.7.2" href="#2002.12.7.2"
+ style="text-decoration:none">４</a></td></tr></table>
+年前に入れた産業系の某システムがお役御免に。</p>
+<p align="center" class="SAY2">
+    １ヶ月前にシステムリニューアルした<BR />
+    ばっかりなのに…(涙)
+</p>
+
+
+<p>基本的に先方の都合であり、システムに問題があった訳ではありません。ありませんってば。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.7.3" href="#2002.12.7.3"
+ style="text-decoration:none">季</a></td></tr></table>
+節に一度となりつつある、自室のガーベッジコレクションを実施。今度はコアダンプしませんですた。</p>
+<ul>
+<li><a href="http://page.freett.com/kusoflash/flash/rootdamepo.html"
+    >クソFLASH無限公司作品 #04</a>
+    (<A HREF="http://sygnas.tv/diary/200212.htm#200212060041">RuputerFan</A>より)
+    <B CLASS="DOKEN">Flash</B>
+    <div class="COMMENT">「もうだめぽ」の起源がここに!</div>
+</li>
+<li><a href="http://maria-sv.dyndns.org/2ch/"
+    >【殺伐】モバ板山手線電波占領OFF 2周目【マターリ】</a>
+    <div class="COMMENT">東京の山の手線内でモバイラーによる殺伐とした OFF だそうです。うぉー、ワシもこういう馬鹿馬鹿しぃことしたい！</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2002.12.4">ウルトラすまそ</A>
+<SMALL>　(2002.12.4)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.4.1" href="#2002.12.4.1"
+ style="text-decoration:none">も</a></td></tr></table>
+んじょの過去分の漢字コードが、タグで「&lt;META HTTP-EQUIV=&quot;Content-Type&quot; CONTENT=&quot;text/html; charset=ISO-2022-JP&quot; /&gt;
+」が入っているにも関わらず、ShiftJIS になっていました。そのせいで、<A HREF="http://www.serina.org/~achain/bbs/ja.ynari?show=2375"
+>Mozilla では化けて読めなくなってしまっていた</A>という…もうね、アホかと、バカかと＞自分。<sup style="font-size:x-small"><a href="#2002.12.4.1.1" title="文書生成用新スクリプトに漢字フィルタ入れるの忘れてました…" name="2002.12.4.1.1.">*4</a></sup>
+
+</p>
+<A HREF="http://www.serina.org/~achain/bbs/ja.ynari?show=2375"
+>KAMUIさん</A>、<A HREF="http://www.serina.org/~achain/bbs/ja.ynari?show=2377"
+>あちゃいんさん</A>、ご指摘ありがとうございました。
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2002.12.4.1.1" href="#2002.12.4.1.1.">*4</a></sup>文書生成用新スクリプトに漢字フィルタ入れるの忘れてました…</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2002.12.3">殺伐たる打ち合せ</A>
+<SMALL>　(2002.12.3)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.3.1" href="#2002.12.3.1"
+ style="text-decoration:none">な</a></td></tr></table>
+かなか小心者のワタシには辛いものがあります。素人にはお薦めできない。玄人にもお薦めするものではありませんが。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.3.2" href="#2002.12.3.2"
+ style="text-decoration:none">現</a></td></tr></table>
+在のフラッピー進捗率。33/100面。25面だけ解けずにスキップしてしまいました。いつまで諦めずに or 飽きずに続けられるかな？</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.3.3" href="#2002.12.3.3"
+ style="text-decoration:none">今</a></td></tr></table>
+日発見したことですが、<A HREF="/VA009797/">扉ページ</A>
+に限っては JPhone で閲覧することができるようです。日本語コードを ISO-2022JP としていたので、無理かと思っていたのですが。i-mode は未確認ですが、どうなんでしょうかね。</p>
+<p>おそらく、ページサイズが大きい日はだめだとは思いますが、JPhone お使いの方は、出先での暇つぶしに一度お試ください。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.3.4" href="#2002.12.3.4"
+ style="text-decoration:none">フ</a></td></tr></table>
+リーソフトウェアを公開していることもあり、私も時々問合せや質問をメールでいただくことがあります。今のところ、利用者層に初心者が少ないせいか、<A HREF="http://aglaia.c.u-tokyo.ac.jp/~yamamoto/diary/?200212a&amp;to=200212020#200212020">「教えて君」たち</A>
+にあるような厄介な方と接触は持ったことは特にありません。</p>
+<p>が、全然、不満はないかというと、そうではなくて、たまに名前も名乗らず、唐突に質問をいただくことがあります。名無しさんへのサポートはいまいちヤリガイに欠けますので、できましたら名乗っていただきたく。ハンドル名でも構わないんですけどね。<em>(実はそういう人がウザかったので、一時期、yahoo と hotmail のメールは SPAM フィルターで読まずに削除してました…)</em>
+
+</p>
+<!--section-->
+<H2><A NAME="2002.12.2">プログラマンマーチ</A>
+<SMALL>　(2002.12.2)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.2.1" href="#2002.12.2.1"
+ style="text-decoration:none">で</a></td></tr></table>
+かいデータをダウンロードしている最中に、NYADOS を起動しようとしたら、マシンが凍ってしまいました。ADSL にする前には起きなかった＆再発バッチソであるので、回線速度の割にマシンのリソースが小さすぎるのかもしれませんね。<em>(NYADOS は、DOS アプリなので、結構リソース食いのはず)</em>
+
+</p>
+<p>Windows9x 環境の NYACUS でも日本語が入力できたらいいのですが…。あぁ、SeaShell のソースが見たい！</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.2.2" href="#2002.12.2.2"
+ style="text-decoration:none">最</a></td></tr></table>
+近の買い物：大量大量（・∀・）</p>
+<ul>
+<li><a href="http://www.bk1.co.jp/cgi-bin/srch/srch_detail.cgi/3d0b417258ac00105f73?aid=&amp;bibid=02174033&amp;volno=0000">ラブやん １</a>
+    <div class="COMMENT">2,3件書店をまわって、やっとありました。えー、解説は控えさせていただきたく。</div>
+</li>
+<li><a href="http://www.bk1.co.jp/cgi-bin/srch/srch_detail.cgi/3d0b417258ac00105f73?aid=&amp;bibid=02248287&amp;volno=0000">エンディミオンの覚醒</a>
+    <div class="COMMENT">ハイペリオンシリーズの最新刊です。このシリーズは翻訳モノであるにも関わらず、比較的読みやすくて吉！</div>
+</li>
+<li><a href="http://www.bk1.co.jp/cgi-bin/srch/srch_detail.cgi/3d0b417258ac00105f73?aid=&amp;bibid=02233506&amp;volno=0000">機動戦士ガンダム　Ｃ．Ｄ．Ａ　若き彗星の肖像（１）</a>
+    <div class="COMMENT">機動戦士ガンダムの続編です。シャアが「ア・バオア・クー」からアクシズと共に落ちのびてゆく話なのですが、巷では「<A HREF="http://www.google.com/search?hl=ja&amp;ie=Shift_JIS&amp;q=%96G%82%A6%83n%83%7D%81%5B%83%93&amp;btnG=Google+%8C%9F%8D%F5&amp;lr=lang_ja">萌えハマーン</A>」で有名。というわけで、表紙が恥ずかしくて買えませんでした。ぽ。</div>
+</li>
+<li><a href="http://www.bk1.co.jp/cgi-bin/srch/srch_detail.cgi/3d0b417258ac00105f73?aid=&amp;bibid=02238390&amp;volno=0000">装甲騎兵ボトムズ １ ウド編</a>
+    <div class="COMMENT">♪明日へ連なる今日くらい〜 <em>(JASRAC に怒られますか？)</em>
+
+</div>
+</li>
+</ul>
+
+<p>ブックマーク</p>
+<ul>
+<li><A HREF="http://channel.goo.ne.jp/news/kyodo/kokusai/20021121/20021121a3170.html"
+    >ウィンドウズ、８６％が利益　米マイクロソフト初公表</A>
+    <div class="COMMENT">でしょうなぁ。</div>
+</li>
+<li><A HREF="http://aa.2ch.net/test/read.cgi/mona/1036128289/"
+    >モナーシステム開発　Phase7</A>
+    <div class="COMMENT"><A HREF="http://aa.2ch.net/test/read.cgi/mona/1036128289/92n"
+    >&gt;&gt;92</A>の台詞が OS/2er には辛い…。</div>
+</li>
+<li><a href="http://www.dd.iij4u.or.jp/~nsym/cygwin/cygterm/"
+    >CygTerm - Yet another Cygwin console</a>
+    <div class="COMMENT">何かよさげです。そのうち、試してみませふ。</div>
+</li>
+<li><a href="http://www.geocities.co.jp/Milkyway-Lynx/9043/c-song.htm"
+    >しぃのうた</a><B STYLE="font-size:x-small;color:yellow;background-color:#444400">Flash</B>
+    <div class="COMMENT"><A HREF="http://dempa.gozans.com/">電波２ちゃんねる</A>によると、最近、中国で紹介されたとのことで。かなり有名なフラッシュだそうですが、今日初めて知りました。疲れたときに見ると、何かほっとしますね。</div>
+</li>
+<li><A HREF="http://www.geocities.co.jp/SiliconValley/2112/programmarch.html"
+    >プログラマンマーチ(programmarch)</A><B STYLE="font-size:x-small;color:yellow;background-color:#444400">Flash</B>
+    <div class="COMMENT">デスマーチを闘う戦友に捧げます。疲れたときに見ると、何か鬱になりますね。</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2002.12.01">人生ウマーあり、マズーあり</A>
+<SMALL>　(2002.12.01)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.12.01.1" href="#2002.12.01.1"
+ style="text-decoration:none">働</a></td></tr></table>
+けど働けど我が暮らし暇にならず。あたりまえです。</p>
+<p>一昔前には、一文字打つごとに血反吐を吐くほど苦痛であったMicrosoft Word を、今は<em>(上手くとは言いませんが)</em>
+それなりに使って、仕様書を書いてしまっています。極めて悲しいことです。</p>
+<p>未だに、単位が足りない！！という夢を見ます。別に留年はしていないのですが、最後の１年はギリギリのラインで、ずっと危機感を感じ続けていたもので、トラウマになってしまったようです。</p>
+<p>ネトゲをやろうと思って、<A HREF="http://gamespace24.net/game/godius/G_toppage/G_index.html">
+ソフト</A>を20分近くかけてダウンロードしたのに、動作しません。ログイン直後に終了してしまいます。で、<A HREF="http://gamespace24.net/game/godius/support/faq.html#7"
+>FAQ のところにある</A>とおり、</p>
+<ul>
+<li>DirectX を最新のものにする</li>
+<li>ディスプレイドライバを最新にする</li>
+<li>ついでに BIOS やマウスドライバもアップデート</li>
+</ul>
+
+<p>したけど状況は変わらず…。時代遅れのノートＰＣでやろうとしたのがそもそもの間違いか！？まぁ、お試期間で別段お金を払ったわけではないので、別にいいんですが…苦労が報われないのは、極めて悲しいことです。</p>
+<p>しかし、第六部再開したのはいいけど、ひたすら悲壮感漂うシリーズになってしまっていますな。</p>
+<!--section-->
+<H2><A NAME="2002.11.27">きし麺ウマー</A>
+<SMALL>　(2002.11.27)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.27.1" href="#2002.11.27.1"
+ style="text-decoration:none">ス</a></td></tr></table>
+レッガーさん、<STRIKE>早い</STRIKE>速い、速いよ。ということで、うかれています。<sup style="font-size:x-small"><a href="#2002.11.27.1.1" title="でもね、この反動は大抵強烈になんですよね。。。" name="2002.11.27.1.1.">*5</a></sup>
+
+</p>
+<p>とりあえず、自室とモジュラージャックが遠い件については、きし麺状の LAN ケーブルを買って解決しました。最初、無線ルータを買ってしまおうかと思ったのですが、いざ、電気屋へ行ってみたら、 財布に 4000円しか入っていない罠。カードも忘れたし、今からとりに戻るのも屈辱だし、１日、せっかくのブロードバンドを我慢するのも、さらなる屈辱。お前は“<A HREF="http://homepage1.nifty.com/gigamoto/">大河原上</A>”か。</p>
+<p>いや、しかし、こんなにブロードバンドな環境にすぐなるとは思いませんでした。これで、<A HREF="http://www.nosferatu-non.com/"
+>活動漫画館</A> のアニメーションGIFの Get もスムースにできるというものじゃよ。</p>
+<P ALIGN=CENTER>：</P>
+
+
+<p>が、しばらくすると、何か思ったよりも速度が出ていないような気がしてきた。ファイルをダウンロードしてみると…57 KB/秒(〜0.4 Mbps)。うーん。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2002.11.27.1.1" href="#2002.11.27.1.1.">*5</a></sup>でもね、この反動は大抵強烈になんですよね。。。</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.27.2" href="#2002.11.27.2"
+ style="text-decoration:none">J</a></td></tr></table>
+-Phone の<A HREF="http://www.bothtec.co.jp/mobile/j-sky/game_d/index.htm"
+>Javaアプリのフラッピー</A>にハマる。なつかしーし、おもしろいし、電車の中でもできる(笑)。こういうちまちましたゲームの方がワタシに似合ってますね。</p>
+<p>思えば、このゲームって、十数年前に 8 ビットゲーム機で開発されたんですよね。10年,20年経っても、おもしろさはちっとも色あせていないように思う。これはすごいことですぜ。今あるゲームははたして10年後も語り継がれるものが、どれほどあるだろうか。</p>
+<p>ワタシはゲームプログラマーではないけど、10年、20年経っても人の記憶に残っている/使ってもらえているプログラムを作りたいものだねぇ<em>(しみじみ)</em>。すぐ消えうせた方が、保守が無くて楽ではあるんだけれども。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.27.3" href="#2002.11.27.3"
+ style="text-decoration:none">気</a></td></tr></table>
+がつくと、11月祭終わっていた…先週だったんだね。鬱だ。2,3年前まで、ＹのＧ、<A HREF="http://www.future-ta.com/future/"
+>Darth Future</A>と毎年行っていたのだが…、<A HREF="http://homepage2.nifty.com/himagination/"
+>Dr.H</A>が真のドクターになって卒業しちゃったからねぇ。</p>
+<p>そういえば、そのＹのＧがここ最近音信不通。生きてるかー！！</p>
+<!--section-->
+<H2><A NAME="2002.11.24">Nyahoo！BB キター！</A>
+<SMALL>　(2002.11.24)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.24.1" href="#2002.11.24.1"
+ style="text-decoration:none">Y</a></td></tr></table>
+ahoo!BB キタ━('∀')━( '∀)━(　')━(　 )━('　)━(∀' )━('∀')━!!!!!
+<BR />
+確かに速い。通常の３倍は速い<em>(注意：それだと遅いです)</em>。角を付けて、赤く塗装したいくらいだ！</p>
+<p>実を申しますと、うちの電話は親の所有物なので、ADSL の導入は二の足を踏んでいたのですが、ひょんなことから、うちの親が電話で騙されて、おためしキャンペーンを許諾してしまったことから、一気にブロードバンドの世界に足を踏み込んでしまうことになつたのですた。</p>
+<p>だが、電話のモジュラージャックと自室が遠すぎる上に、LAN ケーブルを通すと、扉がしまらなくなる罠。細めのケーブルか、無線ルータ？を購入するか、まだ少しは近い、今は亡き兄貴<em>(←別居してるだけ、死んでません！)</em>の部屋に引っ越すか、検討が必要だ。どうしたもんかな。</p>
+<p>というわけで、実は今日のところは、まだ AirH”しているのです。もったいねー。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.24.2" href="#2002.11.24.2"
+ style="text-decoration:none">人</a></td></tr></table>
+事部に行く書類で「別の部に代わってもいい」という選択肢を選んだら、偉いさんに問い詰められてしまった罠。「単に別の水が飲みたいだけで不満とかはないですよ」でかわす。話の過程で、適当におだててはもらったけれども、タワシの市場的価値は、実はそんな高くないことくらいは自覚している。だからこそ、研修を無理に受けたりしたのだが…。結果的にメインの仕事にかなり支障が出た。難しいね。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.24.3" href="#2002.11.24.3"
+ style="text-decoration:none">小</a></td></tr></table>
+うるさい端末を、<A HREF="http://hp.vector.co.jp/authors/VA016875/try17.html#10-22"
+>NYA*=Sにて実現する</A>のは、NYACUS では可能であるかと。逆に NYADOS , NYAOS2 は、それぞれの環境で使えそうな API は用意されてはいるものの、いまいち不確実です。OS/2 の場合は、起動アイコンのプロパティーのタイトル欄が優先されてしまいますし、DOS の場合も拡張APIは失敗するケース・しないケースの切り分けさえ謎です。</p>
+<p>さて、NYACUS 限定ということで実装についてですが、後方一致の辞書構造を作るのが面倒だなぁと。あれって「m」と入力した時点で「make」へのツッコミが出るんでしょうかね。完全一致なら、ハッシュなんで簡単なのに。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.24.4" href="#2002.11.24.4"
+ style="text-decoration:none">ぶ</a></td></tr></table>
+っくまーく</p>
+<ul>
+<li><A HREF="http://pc.2ch.net/test/read.cgi/os/1037851076/"
+    >OS/2って？　【WARP3】</A>
+    <div class="COMMENT">２ちゃんねるのＯＳ板にて、新スレが立ちました。引き続き、マターリといきましょう。</div>
+</li>
+<li><a href="http://i386.s15.xrea.com/interlink/fighting.html"
+    >InterLink FAQ <div class="COMMENT"> [外伝] JVCとの闘いの日々・・・</a>
+    </div>
+<div class="COMMENT">ふむ…。他の購入者の話も聞いてみたいですね。上の話とは関係なしに、キーボードが微妙に小さすぎるので、ワタシは購入候補から外してしまったのですが。</div>
+</li>
+<li><A HREF="http://www.gpara.com/news/02/11/news200211220913.htm"
+    >水木一郎氏がPS2『ボボボーボ・ボーボボ』の声優に！</A>
+    <div class="COMMENT">快挙か無謀か！？なんとなく、合うような気はする。</div>
+</li>
+</ul>
+
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.24.5" href="#2002.11.24.5"
+ style="text-decoration:none">リ</a></td></tr></table>
+ンク切れの<A HREF="http://www.asahi-net.or.jp/~SU2N-NI/nikkj/0211.htm#d23"
+>ご指摘</A>、ありがとうございます＞nii.n 様さっそく直してみましたが…直ったかな？</p>
+<p>今回から、もんじょの置き場所を nifty に移動したのに伴い、生成スクリプトを大改装したのですが、まだいろいろバグが出てしまったようです。いやはや。(^^;;;;
+
+</p>
+<!--section-->
+<H2><A NAME="2002.11.22">真紅の暇伝説</A>
+<SMALL>　(2002.11.22)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.22.1" href="#2002.11.22.1"
+ style="text-decoration:none">単</a></td></tr></table>
+にしばらく日記(もんじょ)を停止していただけなのに、なぜに、こう登校拒否と言いましょうか、ひきこもり感を味わわなければならぬのでしょう。</p>
+<p align="center" class="SAY1">
+    このタワシにプレッシャーを与える<BR />
+    プログラマーとはいったい何者なのだ。</p>
+
+
+<p>前の「モン=ジョー」の最終更新が 7月20日ですから、およそ、４ヶ月のお休みになりますか。精神状態はあいかわらず劇鬱街道まっしぐらで、痛くなければ速やかかつ迅速に天に召されたい今日この頃ではありますが、書かなきゃ余計鬱濃度が高くなる懸念もございまするので、精神のリハビリ活動の一環という位置付けにおいて、本文書を再開することについて脳議会の承認を得ました。<em>(文章長いです。減点)</em>
+
+</p>
+<p>まぁ、ここ最近、ウェブ全体のレイアウトをジョジョに、もとい、徐々に変更していたので、うすうす、再開が近いと感づかれていたのではなかとは思いますが、第６部：「高速増殖ログ もんじょ」、とりあえず、はまじりはまじり！</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.22.2" href="#2002.11.22.2"
+ style="text-decoration:none">O</a></td></tr></table>
+racle の研修に行ってきたよー！3.5日ほど！</p>
+<p align="center" class="SAY2">
+    4-3.5=0.5 が何かは聞くな！</p>
+
+
+<p>遅刻したんじゃないぞ。しくしく。<sup style="font-size:x-small"><a href="#2002.11.22.2.1" title="もしも貴方がプログラマーならば、察するのが義務である。" name="2002.11.22.2.1.">*6</a></sup>
+
+</p>
+<em>(気をとりなおして)</em>
+9i用のバックアップ・リカバリ研修を受けて来ました。ちょっと今回とんでもない案件があるので、それに備えて勉強し直したかったのもあるし、9i での新機能もチェックしたかったというのもあり、無理を言って参加させてもらいました。久しぶりに勉強したねぇ、うん。<em>(つーことは今まで勉強してなかったんですか？)</em>
+
+
+<p>しかし、Oracle、互換性あまり考えてませんね。デフォルト動作が、8→8i→9i で変わっているものが、どんどこあります。バグなどは意図しないものにしても、これはちょっといただけない。結局、苦労するのは、我々SI業者ですだ。</p>
+<p>さて、習ったことを忘れんうちに試験でも申し込んでおくかな<em>(とか言ってみるテスト)</em>。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2002.11.22.2.1" href="#2002.11.22.2.1.">*6</a></sup>もしも貴方がプログラマーならば、察するのが義務である。</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.22.3" href="#2002.11.22.3"
+ style="text-decoration:none">フ</a></td></tr></table>
+ォームの１行テキスト入力欄で[Enter]を押したときに、submit するのではなく、JavaScript の関数を呼ばせたいという<A HREF="http://www.asahi-net.or.jp/~SU2N-NI/nikkj/0211.htm#d10">件</A>ですが、下手に改行コードをトラップするのではなく、単純に submit 先自体をJavaScriptの関数にするんじゃ駄目でしょうか？<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />    &lt;FORM action=&quot;JavaScript:judgeEnter()&quot;&gt;<br /></pre>
+</td></tr></table>
+
+ボタンを押したときの動作と、Enter を押したときの動作を変えたいのであれば、ボタンの方を type=&quot;submit&quot; ではなくtype=&quot;button&quot; に変えた方が早いような気がします。しかし、そうすると、関数の中で別ページに実際に submit したい時、面倒になるな。ならば、submit 先を JavaScript 内で動的に変更しますか。</p>
+<p>書けば書くほど、どんどん外しているような気がする今日このごろですだ。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2002.11.22.4" href="#2002.11.22.4"
+ style="text-decoration:none">ぶ</a></td></tr></table>
+っくまーく</p>
+<ul>
+<li><a href="http://www.alpha-net.ne.jp/users2/knight9/m.htm"
+    title="Go to 無限回廊 endless loop">無限回廊 endless loop</a>
+    <div class="COMMENT"><a href="http://www.alpha-net.ne.jp/users2/knight9/j.htm" 
+	title="Go to 殺人事件 murder case">殺人事件 murder case</a>
+	が恐ろしい…きゃあ。</div>
+</li>
+<li><a href="http://www.rals.net/yonigeya/index.html" 
+    title="Go to ★夜逃屋事件簿★(函館不動産情報・札幌不動産情報・不動産裏情報など)"
+    >★夜逃屋事件簿★</a>
+    <em>(<A HREF="http://taro.haun.org/log/200208.html#03">Taro's Page</A>より)</em>
+    <div class="COMMENT">う〜ん、目を覆いたい画像が多いな…。</div>
+</li>
+<li><a href="http://www.barcodesinc.com/generator/" title="Go to The Barcode Printer - Free Online Barcode Generator">The Barcode Printer - Free Online Barcode Generator</a>
+    <div class="COMMENT">バーコードを印刷してみよう！コード39にはお世話になってます。</div>
+</li>
+<li><a href="http://www.hirax.net/index.html#dekirukana-day" title="Go to hirax.net">hirax.net</a>
+    <div class="COMMENT">できるかな？がサイコーですね。実のところ「超ひま理論」は、こういうのを目指していたのですが…才能が足りませんでした。</div>
+</li>
+<li><a href="http://www.ztv.ne.jp/tomochan/" title="Go to Ruins−廃墟探訪−">
+    Ruins−廃墟探訪−</a>
+    <div class="COMMENT">素人にはお薦めできない…</div>
+</li>
+<li><a href="http://www.hi-ho.ne.jp/akios/seashell/">SeaShell</a>
+    <div class="COMMENT">Windows 用のコマンドラインシェルです。もう少し登場が早くて、フリーソフトウェアだったら、NYA*=S を開発する必要はなかったのですが。Windows9x でも日本語入力が普通にできるというのが驚きです。どうやっているんでしょうか。</div>
+</li>
+<li><a href="http://download.desk.ne.jp/win/1/00012/5888.html">
+	Download ASCII -- Nihongo Yet Another --</a>
+    <div class="COMMENT">Download ASCII に収録していただきましたが…な、名前が。単なる「ＮＹＡ」にでも改名しませうか。</div>
+</li>
+</ul>
+
+
+<!--section-->
+<!--index:2002.12.14:全開！ネガティブオーラ-->
+<!--index:2002.12.8:鬱で希望も持てないワシに遂に救世主が！-->
+<!--index:2002.12.7:スーパーすまそ-->
+<!--index:2002.12.4:ウルトラすまそ-->
+<!--index:2002.12.3:殺伐たる打ち合せ-->
+<!--index:2002.12.2:プログラマンマーチ-->
+<!--index:2002.12.01:人生ウマーあり、マズーあり-->
+<!--index:2002.11.27:きし麺ウマー-->
+<!--index:2002.11.24:Nyahoo！BB キター！-->
+<!--index:2002.11.22:真紅の暇伝説-->
+</body>
+</HTML>

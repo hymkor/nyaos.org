@@ -1,0 +1,45 @@
+-- Own Cache Object
+local hosts={
+    hash={} ,
+    add=function(self,name)
+        if self.hash[ name ] then return end
+        self.hash[ name ] = true
+        table.insert( self , name )
+    end ,
+}
+
+-- etc/hosts
+for line in io.lines( os.getenv('windir')..[[\system32\drivers\etc\hosts]]) do
+    line = string.gsub(line,"#.*$","");
+    local ip,hostname = string.match(line,"^%s*([%d+\.]+)%s+(%w+)")
+    if hostname then
+        hosts:add( ip )
+        hosts:add( hostname )
+    end
+end
+
+-- DNS Cache ---
+local fd=io.popen("ipconfig /displaydns","r")
+if fd then
+    for line in fd:lines() do
+        local m=string.match( line , "Record Name.-: ([%-%w%.]+)%s*$" )
+        if m and not string.match(m,"in%-addr%.arpa%.$") then
+            hosts:add( m )
+        end
+    end
+    fd:close()
+end
+
+--- Extend Complete ---
+function nyaos.complete()
+    return unpack(hosts)
+end
+
+--- Show List
+function nyaos.command.show_hosts()
+    for i=1,#hosts do
+        print(hosts[i])
+    end
+end
+
+-- vim:set ft=lua: --

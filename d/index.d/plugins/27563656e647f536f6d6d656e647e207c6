@@ -1,0 +1,54 @@
+$::inline_plugin{recent_comment} = sub {
+    shift;
+    my $maxcomments=shift || 5;
+
+    my $pattern = '__'.unpack('h*','comment.');
+    my @commented_page;
+    foreach my $nm ( &::directory() ){
+        if( index($nm,$pattern) >= 0 ){
+            push( @commented_page , $nm );
+        }
+    }
+    @commented_page = sort {
+        &mtimeraw($a) cmp &mtimeraw($b)
+    } @commented_page;
+    splice(@commented_page,0,-$maxcomments) if scalar(@commented_page) > $maxcomments;
+
+    my @comments;
+    foreach my $fn (@commented_page){
+        local *FP;
+        my $title = pack('h*',( split(/__/,$fn) )[0] );
+        if( open(FP,$fn) ){
+            my @buffer;
+            while( <FP> ){
+                # title,dt,who,say
+                chomp;
+                push( @buffer , [ $title , split(/\t/,$_,3) ] );
+                if( scalar(@buffer) > $maxcomments ){
+                    shift(@buffer);
+                }
+            }
+            close(FP);
+            push( @comments , @buffer );
+        }
+    }
+    @comments = sort{ $a->[1] cmp $b->[1] } @comments;
+    splice(@comments,0,-$maxcomments) if scalar(@comments) > $maxcomments;
+    my $last_title = '';
+    my $result=qq{<dl class="recent_comment">\n};
+    foreach my $p (@comments){
+        if( $p->[0] ne $last_title ){
+            $result .= qq{<dt class="commented_page">}.
+                &::anchor($p->[0],{p=>$p->[0]})."</dt>\n";
+            $last_title = $p->[0];
+        }
+        $result .=  qq{<dd><span class="commentator">}.
+                    &::enc($p->[2]).
+                    qq{</span>\n<span class="comment_body">}.
+                    &::deyen(&::enc($p->[3])).
+                    qq{</span>\n<span class="comment_date">(}.
+                    &::enc($p->[1]).
+                    qq{)</span></dd>\n};
+    }
+    $result . "</dl>\n";
+};

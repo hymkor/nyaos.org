@@ -1,0 +1,14 @@
+User-agent: baiduspider
+disallow: /
+
+User-agent: BecomeJPBot
+disallow:/
+
+User-agent: dotbot
+Disallow: / 
+
+User-agent: Slurp
+Disallow: / 
+
+User-agent: Fasterfox
+Disallow: /

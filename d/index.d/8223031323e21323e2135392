@@ -1,0 +1,32 @@
+<<SAKURA Internet に nyaos.org を戻した>>
+
+http://rackhub.net/{rackhub} に nyaos.org を置いていたんだけど、
+よく考えると、そうすると Apache 上でのテストができない
+''(してもいいんだけど、この「にっき」が見られなくなるおそれがある)''。
+
+ということで、http://www.sakura.ne.jp/{SAKURA Internet} に戻した。
+
+mod_perl の設定とか簡単に出来るかなと思っていたが、ちょっと甘かったなぁ。
+きちんと設定できるようになってから再び移行しよう。
+
+<<<覚書き>>>
+
+* http://www.sakura.ne.jp/{SAKURA Internet} では同一サーバ利用の他のユーザから書き替えられることを防ぐため、
+  g+w されているディレクトリでは CGI は実行できない。
+* http://www.sakura.ne.jp/{SAKURA Internet} 
+  のネームサーバは「ns1.dns.ne.jp」「ns2.dns.ne.jp」。http://rackhub.net/{rackhub} にはコンパネ付きのネームサーバはないので、別途ネームサーバが必要 ''(わたしはムームードメインのネームサーバを使った)''
+
+<<<午前5時現在>>>
+
+nyaos.org の方は SAKURA に切り替わったみたいだけど、
+www.nyaos.org の方は、DNS ルックアップでエラーが発生して、
+新旧ともに参照できなくなっちゃった。何が悪いんだろう。
+
+<<<昼過ぎ>>>
+
+www.nyaos.org も問題なく参照できるようになった。
+
+<<<残作業>>>
+
+* バックアッププログラムを修正
+* rackhub をどうするか (一旦解約するか、継続するか、データ消すか)

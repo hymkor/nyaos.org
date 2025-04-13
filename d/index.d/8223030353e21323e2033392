@@ -1,0 +1,130 @@
+* 電器ストーブのコードが熱くなってて、かなり怖かった。
+
+<<Firefox 1.5 へ UP>>
+
+プラグインのほとんどが消えちまったヨ！
+デフォルト状態では、かなり使えない Firefox で、コレは辛い。
+しかも、個人的なインストールメモもどっかにやっちまった。
+だめじゃん。
+
+ということで、一から入れ直しメモ。
+
+!! mozex 
+
+http://www.cas.cmc.osaka-u.ac.jp/~paoon/OriginalDoc/{
+1.5 向けUTF8 対応版}を公開されている人がいた！
+しかも、show old extensions を使わなくてもイイ！
+ありがたや。
+
+mozex があるから、Firefox 使ってようなもんです。
+これが無ければ、躊躇なく Opera + w3m ですよ。
+
+!! Tabbrowser Preferences
+
+1.5 では、オプション 
+→ タブ 
+→「新しいウィンドウを開くリンクは次の場所に開く」にチェック 
+→「新しいタブ」
+という設定で、```target="_blank"``` によるリンクを
+タブオープンに出来る模様なので、
+Tabbrowser Preferences は一応、御役御免。
+
+!! https://addons.mozilla.org/extensions/moreinfo.php?id=10&application=firefox{
+    Adblock}
+
+オプション →拡張機能 → 新しい拡張機能を入手→search で、入手。
+
+!! https://addons.mozilla.org/extensions/moreinfo.php?id=12&application=firefox{
+    All-in-One Gestures}
+
+同じく「新しい拡張機能で入手」でゲット。
+All-in-One Gestures 日本語化されていてビビる。
+新規タブと新規ウインドウのジェスチャーを入れ変えようとしたら、
+前の設定がきちんと残っていた。えろい、もとい、えらい。
+
+!! http://www.hatena.ne.jp/tool/firefox{Hatenabar}
+
+はてなトップ → 便利なツール → Hatenabar でゲット。
+お隣のhttp://www.hatena.ne.jp/tool/greasemonkey{Greasemonkey}とかいう
+ツールもちょっと気になるな。
+ユーザスクリプトを Firefox に組み混むものらしい。
+
+!! http://mixitools.hp.infoseek.co.jp/toolbar/mixitoolbar.html{mixi toolbar}
+
+よくよく考えると、Mixi へのログインにしか使っていないので、
+普通のブックマークで十分。やめ。
+
+---
+
+比較的短期間で、元の環境を修復できた…
+
+>> む、修復？ <<
+
+そもそも、Firefox を 1.5 に上げて、何が良かったんだろう。
+正直、分からん。
+
+ソフトウェア製作に携わる人は、
+ユーザにそれだけの手間をかけさせるだけの何を提供できているのか、
+常に意識しておく必要があると思う。
+
+でも、こんな偉そうなこと言って、実は「自分のオペミス」で、
+1.0.7 の拡張機能が off になってしまっただけだったら、恥ずかしいなぁ。
+
+<<Browser 界での Kitchen sink と Tool box>>
+
+結果的ではあるけれども、
+IE の使わわれ方と Firefox の使われ方を比較すると、
+かつての UNIX 世界での vi と Emacs に似てきたような気がする。
+
+||| エディタ | ブラウザ | スタイル
+|| vi | IE | 他のプログラムから、パーツとして使われる。(Tool box?)
+|| Emacs | Firefox | 強力なカスタマイズ機能を背景に、
+    全てを自分自身の中で解決しようとする。(Kitchen sink?)
+
+他にも名前の流さとか OS 標準/非標準とか、共通点が多いな。
+どちらかというと、前者の方が趣味なんだけど、
+IE はいろいろ不安なんだよなー。
+
+<<http://www.infomaker.jp/readerlite/{RSSリーダー Headline-Reader Lite}>>
+
+SharpReader 同様の、Windows クライアントサイド RSS リーダー。
+
+* 記事単位での未読管理が可能
+* RSS Description は事前読み込み
+
+なので、サクサク読める。ただ、
+
+* ショートカットキーがよく分かんね。
+** SharpReader みたいに、ワンキーたたけば、次々読める
+    …というわけではなさそう。
+* バックグラウンドでの更新チェック…ちゃんとやってるのかな？
+** そういう設定は ON にしてるんだけれども…なんか気配が…
+    SharpReader の更新発見時の激しいリアクションの影響かな。
+
+総じて、微妙なんだけれど、その微妙っぽさは、SharpReader とて、
+勝るとも劣らないので、もうちょっと使ってみよう。
+
+正直言うと、Opera 内蔵 RSS Reader 結構いい感じなんだけれども、
+OPML のインポートができんのよ。
+一つ一つ登録してもいいんだけれども、
+ダメダメだった時の精神的ダメージははかりしれず、
+そのリスクを冒す勇気が湧かない今日この頃。
+
+そういえば、この「にっき」の RSS 対応前に教えていただいた RSS.jp の
+http://blog.myrss.jp/{管理人ブログ}に、
+http://blog.myrss.jp/archives/2005/12/rss_200511.html{
+RSS Reader の利用率が載っていた}。
+上から順番にちょっとずつ試してみてもいいな。
+
+<<[wifky] 互換性が問題になって始めて、ソフトウェアは一人前>>
+
+と思いたいところ（←さっきと言ってることが違いますが）。
+誰も使わないプログラムだと、変更し放題ですからね。
+
+0.79.0 では、<pre>タグ、nikky プラグインの非互換性でご迷惑をおかけしました。
+http://hpcgi2.nifty.com/hayamatta/wifky.pl?p=0.79.1+%A4%F2%A5%EA%A5%EA%A1%BC%A5%B9%A4%B7%A4%DE%A4%B7%A4%BF%A1%A3(2005%2F12%2F03){0.79.1}
+にて、完全に同じというわけではありませんが、ページの互換性が
+維持されるような形になったかと思います。
+
+ただ、ちょっと不要な仕様が増えすぎだな。
+我がポリシー Compact & Portable に反するな…。

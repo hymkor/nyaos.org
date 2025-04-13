@@ -1,0 +1,12 @@
+* ALFATECH
+* hayama@alfatech.co.jp
+* NK4L%mGa
+* サーバ
+** POP3
+** 受信用サーバ fujiko.alfatech.co.jp
+** SMTPサーバ(送信) 同上
+** SSL を使用しない
+* 社内サーバ(ドメイン)
+** denki_develop\hayama
+
+<<{img022.jpg}

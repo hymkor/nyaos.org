@@ -1,0 +1,65 @@
+<<[C++][Python] nm を使って、使ってない関数を洗い出そうとした>>
+
+けど、仮想関数の参照が出てこないので、あきらめた。
+
+8<
+#!/usr/bin/python
+
+import sys
+import os
+
+referer = {}
+
+for arg1 in sys.argv[1:] :
+    nm = os.popen("nm --demangle "+arg1,"r")
+    for line in nm :
+        p = line.split()
+        if len(p) < 2:
+            continue
+        mark = p[-2]
+        name = p[-1]
+        if mark == 'U' :
+            referer[ name ] = referer.get(name,0) + 1
+        elif (mark=='t' or mark=='T') and name not in referer :
+            referer[ name ] = 0
+    nm.close()
+
+for name,count in referer.iteritems():
+    if count == 0 :
+        print( name )
+>8
+
+!! 説明せねばなるまい
+
+「nm *.o」とすると、そのオブジェクトモジュールで定義されているシンボル(関数・変数)は「T」とか「t」、参照されているシンボルは「U」と表示されるのだ！
+
+その情報使ってるだけ
+
+<<NYAOS-3000 2.91_0 Released.>>
+
+<<<ダウンロード>>>
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{
+    Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.91_0-win.zip{
+    nyaos3k-2.91_0-win.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.91_0-os2.zip{
+    nyaos3k-2.91_0-os2.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.91_0-src.zip{
+    nyaos3k-2.91_0-src.zip}
+
+<<<変更点>>>
+
+* (all)
+** ls に色出力制御オプション --color を追加
+*** --color=always : 常にカラー出力する 
+*** --color=never : カラーを抑制する
+*** --color=auto : 出力先に応じて、カラー出力を判断する
+** _nya や source で読み込まれるファイルの中身が「--」で始まっていたら、全て Lua コードと解釈するようにした。
+** 内蔵コマンドの print を echo へ改名
+** xptest , list(lsの旧名) , echoerr の廃止
+** nyaos 本体起動時のパラメータを nyaos.argv で取得できるようにした(Lua)
+* (Windows)
+** コンソールの直接コントロールを抑制し、ANSIエスケープシーケンスを 出力するオプション -t を追加
+
+-t オプションが付けられたら、_nya の中で ls の設定を調整するようになっているので、nyaos.exe と合わせて、nyaos.exe と同ディレクトリの _nya も更新するようにしてください。(ls のエイリアスと、ls の色合いなどを調整します)

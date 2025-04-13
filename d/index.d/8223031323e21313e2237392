@@ -1,0 +1,138 @@
+<<#Lua で each_slice>>
+
+* http://blog.livedoor.jp/dankogai/archives/51838970.html{
+     404 Blog Not Found:Perl & JavaScript - 万能配列操作関数spliceを覚えておこう}
+* http://d.hatena.ne.jp/wonderful_panda/20121126/1353950886{
+     Pythonでeach_slice - wonderful_pandaの日記}
+
+slice関数自体のエミュレーションは比較的簡単
+
+8<
+function slice(n,tab)
+    local j=1
+    return function()
+        local tmp={}
+        for i=1,n do
+            if j > #tab then break end
+            tmp[i] = tab[j]
+            j = j + 1
+        end
+        return tmp[1] and tmp or nil
+    end
+end
+
+local tab = { 1,2,3,4,5,6,7,8,9,10 }
+for t in slice(3,tab) do
+    print( table.concat(t,",") )
+end
+>8
+
+8<
+$ lua slice.lua
+1,2,3
+4,5,6
+7,8,9
+10
+>8
+
+table.remove , table.insert を使った方が見かけかっこいいけど遅くなるので、
+地道に配列アクセスさせるようにした。
+
+slice は配列前提だけど、Ruby みたいにイタレータをパラメータとして取れないだろうか。
+やってみた。
+
+8<
+function each_slice(n,  iter,stat,var)
+    return function()
+        local tmp={}
+        for i=1,n do
+            if not var then break end
+            var,tmp[i] = iter(stat,var)
+        end
+        return tmp[1] and tmp or nil
+    end
+end
+
+local tab = { 1,2,3,4,5,6,7,8,9,10 }
+for t in each_slice(3, ipairs(tab) ) do
+    print( table.concat(t,",") )
+end
+>8
+
+8<
+$ lua slice2.lua
+1,2,3
+4,5,6
+7,8,9
+10
+>8
+
+受け取れるイタレータは pairs , ipairs みたいに (key,val) 形式の戻り値を返すもののみ。
+しかし、分かりにくい。
+Lua は yield 文がないから、1:1で対応しないイタレータをフィルターするのが面倒だ。
+あれ、前にもっと簡単な方法があったような気がしたんだが…
+
+思い出した、コルーチンだ。よく忘れる。
+
+8<
+function each_slice(n, iter,stat,val)
+    local co = coroutine.create( function()
+        local tmp={}
+        for key,val in iter,stat,val do
+            table.insert(tmp,val)
+            if #tmp >= n then
+                coroutine.yield(tmp)
+                tmp = {}
+            end
+        end
+        return tmp[1] and tmp or nil
+    end)
+    return function()
+        local status,rv=coroutine.resume(co)
+        return status and rv or nil
+    end
+end
+
+local tab = { 1,2,3,4,5,6,7,8,9,10 }
+for t in each_slice(3, ipairs(tab) ) do
+    print( table.concat(t,",") )
+end
+>8
+
+8<
+$ lua slice3.lua
+1,2,3
+4,5,6
+7,8,9
+10
+>8
+
+一応動くけど、返って分かりにくくなった気がしないでもない…。
+まぁ、もっと複雑な yield を使う場合などは coroutine は使わずにはいられないだろうな。
+
+<<<追記>>>
+
+coroutine.create ではなく、coroutine.wrap を使ってみたら、より簡単になった。
+
+8<
+function each_slice(n, iter,stat,val)
+    return coroutine.wrap( function()
+        local tmp={}
+        for key,val in iter,stat,val do
+            table.insert(tmp,val)
+            if #tmp >= n then
+                coroutine.yield(tmp)
+                tmp = {}
+            end
+        end
+        if tmp[1] then coroutine.yield(tmp) end
+    end)
+end
+
+local tab = { 1,2,3,4,5,6,7,8,9,10 }
+for t in each_slice(3, ipairs(tab) ) do
+    print( table.concat(t,",") )
+end
+>8
+
+うむ、分かりやすい

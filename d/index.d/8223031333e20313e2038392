@@ -1,0 +1,56 @@
+<<続・MinGW のライブラリのために MSVCRT.DLL の free を最近の VC++ から使う>>
+
+6<
+やっぱLoadLibrary("msvcrt.dll")してfreeをGetProcAddressが確実でしょうか
+>9
+
+とnocd5さんに教えてもらったので、さっそく試してみました。
+
+8<
+static void mingwfree(void *p)
+{
+	static void (*free_)(void *)=NULL;
+
+	if( free_ == NULL ){
+		HMODULE handle = LoadLibrary( _T("MSVCRT.DLL") );
+		if( handle == NULL ){
+			OutputDebugString(_T("LoadLibrary('MSVCRT.DLL') failed\n"));
+			return;
+		}
+		free_ = (void (*)(void*))GetProcAddress(handle,"free");
+		if( free_ == NULL ){
+			OutputDebugString(_T("GetProcAddress(handle,'free') failed\n") );
+			return;
+		}
+	}
+	(*free_)(p);
+	OutputDebugString(_T("mingwfree called\n"));
+}
+>8
+
+これで mingwfree.dll とか mingwfree.lib が要らなくなりました。ありがとうございました。
+
+<<OutputDebugString を何回も書くのがうざい>>
+
+VisualStudio 上で動かしている時だけ、
+VisualStudio 内の窓にテキストを出力してくれる OutputDebugString 関数。
+でも、printf のように複数の引数を書けないから、使い勝手が悪い。
+
+こんなん作ったら、怒られるかな。
+
+8<
+class DebugStream {
+        void (__stdcall *func)(LPCTSTR s);
+public:
+        DebugStream( void (__stdcall *f)(LPCTSTR) ) : func(f){}
+        DebugStream &operator << ( LPCTSTR s )
+        {  (*func)(s); return *this; }
+} DebugOutput(OutputDebugString);
+>8
+
+8<
+   DebugOutput << _T("hogehoge") << _T("\n");
+>8
+
+:(2013.01.09) 追記
+:: ダサかったクラス名、インスタンス名を修正。会社のソースにこっそり組み込んだのは秘密だ。

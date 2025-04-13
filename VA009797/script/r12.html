@@ -1,0 +1,649 @@
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+    <TITLE>The dark forced Hayamatta Script 〜 魔界葉山文書</TITLE>
+    <LINK REL="stylesheet" TYPE="text/css" HREF="../iyahaya.css" />
+    <LINK REL="stylesheet" TYPE="text/css" HREF="./r.css" />
+    <META NAME="ROBOTS" CONTENTS="NOINDEX, NOFOLLOW" />
+</HEAD>
+<BODY BGCOLOR="#000000" TEXT="#FFFFFF" LINK="#00FFFF" VLINK="#00CCCC">
+<DIV CLASS=MENU ALIGN=RIGHT>
+    ▼<A HREF="./r13.html">次頁へ</A>
+    ▼<A HREF="./r11.html">前頁へ</A>
+    ▼<A HREF="./index.html">目次へ</A>
+    ▼<A HREF="../index.html">扉ページへ</A>
+</DIV>
+
+<HR />
+
+<H2><A NAME="20010729">むしゃ×むしゃ</A>
+    <SPAN>(2001/07/29)</SPAN>
+</H2>
+
+<P><BIG>こ</BIG>のページ(<A HREF="../index.html">いやはやまった</A>)は、
+    何のページかと言うと、本来、プログラムサイトであるわけで、
+    文書がメインというわけではないです。
+    が、最近はどうも変にテキストサイトを意識して、
+    なんとか週刊更新を維持しようとしてしまった結果、
+    少々無理をしてしまったようです。
+</P>
+<P>やはり、ここいらで、日本語が下手な輩<EM>(=ワタシ)</EM>は、それらしく、
+    フリーソフトウェアを地道に書くのが道というものでしょう。
+    あまり、調子に乗って、日記ばかり書いていると、
+</P>
+<P ALIGN=CENTER CLASS="SAY2">
+    職場でさらしものにされます
+</P>
+<P>だから、言いたくなかったんだよ
+    <EM>(←とここで書く自体もうハマっているような気もするが)</EM>。
+    あ、言っておきますが、職場で書いているわけではないですよ！
+    たまたま、サンプル用 PNG 画像が必要だったんで…
+</P>
+
+<P>ということで、本来の道へ帰るべく、
+    <A HREF="http://homepage2.nifty.com/hayamatta/windows/nya.html"
+    >NYADOS/NYAGOS</A> を Ver.UP しました。
+    NYADOS では NYAOS のころからの念願だった単独シェル化を実現しました。
+    が、dir や type が使えなくなったり、まだ不安定でもあったりしますので、
+    <TT>option standalone 1</TT>とした時のみ有効です。
+    また、NYAGOS では実現できていません。
+    CMD.EXE だと、パイプはメモリ上のバッファを介して実現されるので、
+    NYAGOS でもそう実装しようとしているのですが、うまくいかないんですよね。
+    ちなみに NYADOS ではテンポラリファイルを使っています。
+    他には、入れ子可能な foreach とか set +=,-= とか、
+    NYAOS で実現していた機能も一部実現しました。
+    あ、-= は実現してないか。
+</P>
+<P> こうして、NYAOS の機能を NYADOS で復活させてゆくと、
+    NYAOS ではいかにプログラムを細かく書きすぎて、
+    いらぬ苦労をしていたのかが実感させられますね。
+    具体的には NYAOS では文字列は極力 char配列でやっていたわけですが、
+    NYADOS , NYAGOS では自前の文字列クラスを使ってます。
+    また、可変長配列クラスを活用した結果、
+    realloc とか、リスト構造の維持で要した手間が全くなくなりました。
+</P>
+<P>と、つらつら思うに、NYAOS 作成当時は、結局のところ、たいていの
+    C言語出身者にありがちな実行効率至上主義に陥ってしまい、
+    開発効率やソースの見とおしを台無しにしておりましたなー。
+    少々ヒープが断片化したところで、今日のマシンだと
+    蚊にさされたほどの実行効率のダウンもないというに。
+    よくこんな書き方でシェルが作れたもんだと、逆に感心したりなんかして。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>鬼</BIG>武者。鎧を初期バージョンにしたまま、闘い続けてました。
+    どうりで、ダメージが大きいはずだ。
+</P>
+<P>あと、かえで、よわすぎ。</P>
+<BR CLEAR />
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><A HREF="http://www.f8.dion.ne.jp/~torakun2/butubutuushin.htm"
+    ><BIG>1</BIG>m しか届かないリモコン</A>というのは、
+    私が後から別途買ったサードパーティ製のものであって、
+    最近の PS2 付属のリモコンの到達距離がどうだかはわかりません。
+    ということで、そのあたりはカタログなどを参照されるのがよいかと。
+</P>
+<P>PS2 というと、<A HREF="http://www.jp.playstation.com/"
+    >Playstation.com</A> からの広告メールがとまりません。
+    解除するにもパスワードを忘れてしまいました。
+    こういう場合、普通、そういうお馬鹿さん<EM>(←儂)</EM>のための機能が
+    ウェブにありがちなんですが、どうやら、電話をかけなくてはいけないようです。
+    一応、自分で申しこんだんで、SPAMフィルターかけるのもちょっとアレだし。
+    ということで、結局受け取りっぱなしです。とほほ。さっさと電話かけねば。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>最</BIG>近の買い物：</P>
+
+<UL>
+    <LI>Rubyを256倍使うための本 網道編</LI>
+    <LI>月刊アフタヌーン</LI>
+    <LI>Linux Japan 9月号</LI>
+    <LI>OPEN DESIGN 9月号</LI>
+</UL>
+<P>最近、漫画は雑誌だけで、全然単行本を買いませぬ。
+    というのも、置く場所に困るから。
+    雑誌はすぐ捨ててしまうんですけどねぇ。
+</P>
+<P>Linux Japan。薄くなって、何か安物くさくなってしまいました。
+    CD-ROM いらないから、太って欲しい。
+</P>
+<P>OPEN DESIGN。サーブレット・JSP 特集。<!--
+    -->仕事でやっているものの、<!--
+    -->前のプロジェクトの時は開発リーダーの<!--
+    -->作ったテンプレートを元にやっていたため、<!--
+    -->技術的に深いところが分からないままでしたので、復習がてら。<!--
+    -->実は、最近、自分自身で久しぶりに JSP を書く機会がありましたが、<!--
+    -->思った以上に手軽にかけたので、結構感動しました。<!--
+    -->今の開発モデルというのは、たいていサーブレット＋JSP<!--
+    -->のセットで組んでいるが、<!--
+    -->複雑な内容でなければ、別に JSP 単独でいいぢゃんと思うのでした。<!--
+    -->自分のページでもやってみたいな。eRuby でもいいし。
+</P>
+
+<BR />
+<HR />
+
+<H2><A NAME="20010722">風雲 嫌葉山城</A>
+    <SPAN>(2001/07/22)</SPAN></H2>
+
+<P><BIG>夏</BIG>の３連休といえば、普通</P>
+<P ALIGN=CENTER CLASS="SAY2">
+    どっかでかける
+</P>
+<P>のが普通であろうが<EM>(そんなことない？)</EM>、<!--
+    -->わたくし葉山の休日の過ごし方は、<!--
+    -->大方の予想通り、結局屋内で、ブラウン管か液晶を<!--
+    -->眺めているという次第でございます。<!--
+    -->しかしながら、ちーと違う。<!--
+    -->いつもなら、ウェブを書いているか、ウェブを読んでいるか、<!--
+    -->プログラムを書いているところだが、今回は
+</P>
+<P ALIGN=CENTER CLASS="SAY1">
+    PS2の「鬼武者」で遊んでいた。
+</P>
+<P>ゲシゲシゲシ<EM>(しかも何故に今ごろ)</EM></P>
+
+<P>しかし、なかなか、たまにやるとゲームは結構ストレス解消になりますね。
+    ゲームはやった後に時間だけが消費されて何も残らないという気がするので、
+    あまりやる気がおきないんですが、やはり、それなりに<!--
+    -->売れているゲームはやっぱり違うなと
+    <EM>(これはこれで安易な発想)</EM>。
+</P>
+<P>それにしても、何か、ワタシって、グロいゲームが好きだなぁ。
+    DOOM とか QUAKE とか、あぁいうオドロオドロしいゲームは怖いのに何故か好き。
+    しかし、遊園地などにある絶叫マシンなどは怖いけど、やっぱり嫌い。
+    う〜ん、普通逆なんでしょうがね。
+</P>
+
+<P>さて、PS2 といえば、<A
+    HREF="http://www.f8.dion.ne.jp/~torakun2/butubutuushin.htm"
+    >曲がりシッポさん</A>が、PS2 はそのまま DVD プレイヤーに<!--
+    -->なるか？とおっしゃってますが、結論を言うと Ok です。
+    画質については、目の肥えていない私レベルの目では、<!--
+    -->あまり悪くなさそうに見えます<EM>(つーか分からん;-)</EM>
+    難があるとすれば、ゲーム用コントローラでの操作がちょっと<!--
+    -->ウザいというくらいでしょうか。
+    ということで、私は専用赤外線リモコンを買ったのですが、<!--
+    -->到達距離が短い…(1meter)
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>な</BIG>んか、プログラムの一つでも書けば、本ページの品があがるかなー
+    ということで、他の UNIX系サイトのようにシェルスクリプトの一つでも書いてみやふ。
+    ちなみに、これは昨日書いて喜んでいた、
+    DBデータを select した結果を CSV に落とすスクリプトの基本骨格を<!--
+    -->あいまいな記憶を元に今復元<EM>(お〜い)</EM>
+</P>
+<TABLE BGCOLOR="silver"><TR><TD>
+<FONT COLOR="black">
+<PRE>
+    #!/bin/sh
+    grep -v '^#' &lt;&lt;__EOF__ | sqlplus hoge/hoge | nawk '
+        /CVS:/{
+            print substr($0,5)
+            ++count
+        }
+        END{
+            printf &quot;%d&quot;,count
+        }
+    ' &gt; table_list.cvs
+        set heading off
+        # linesize は間違っているかも
+        set linesize 1024
+        # SQL だよ〜ん
+        select  'CVS:'||o1.column1||','||o2.column2||','||o2.column3
+          from  our_table1 o1 , out_table2 o2
+         where  o1.column4 = '1'
+           and  o1.serial = o2.serial;
+    __EOF__
+</PRE>
+</FONT>
+</TD></TR></TABLE>
+<P>
+    SQL が複雑な場合でも使える最も手軽な方法はこれかなーと勝手に思っているけど、
+    もっと簡単な方法があったら、誰か教えて欲しい。
+    こんなん載せても喜ぶのは、同僚だけのような気がしないでもないが。
+    まぁ、全ての我が自己満足のため。
+    <EM>(読まされる方はたまったもんではない;-)</EM>
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>ま</BIG>ぁワタシのことだから、C++ Builder をどうのこうの<!--
+    -->する以前に挫折するに決まっているので、実のところ、<!--
+    -->議論するほどのことではないのですけれども＞
+    <A HREF="http://hp.vector.co.jp/authors/VA016875/try11.html#07-21"
+    >Averageさん</A>。
+</P>
+<P>「言語がサポートできる情報もむりやりプログラマ側が管理する形」<!--
+    -->となっているのは、C++ が C 言語から受け継いでいる思想<!--
+    -->「プログラマを信頼して実行コードの効率をあげる」ためですから、<!--
+    -->別にそれはそれでいいと思いますけどねぇ。<!--
+    -->ただ、それが日常的 GUI プログラミングに良いかというと、<!--
+    -->それは異議ありで、そういうのには C++ は不向きだと思います。<!--
+    -->だから、C++ Builder を食わず嫌いしていると。
+</P>
+<P ALIGN=CENTER CLASS="SAY2">
+    おぉ、なんか知らんが<BR />
+    一見、理屈があってそうに見えるぞ
+</P>
+<P> C++ は余り富豪的プログラミング向き言語ではないですからね。<!--
+    -->どっちかというと、スクリプト言語が一番いいでしょう、こういうのは。
+    <EM>(我ながら、ちょっと定義に誤解がある可能性大)</EM>
+</P>
+
+<P>と、以上、自分の都合のいいところだけ<EM>(つーか書きたいことだけ)</EM>、<!--
+    -->反応してみました。
+    Pascal については、ワタシよー分からんので、きっとおっしゃる通りなのでしょう。
+    でも、0.1秒のコンパイルが0.01秒になってるご時世ですから、
+    速さのメリットは段段小さくなってゆく可能性も無きしもあらず…
+    <EM>(と嫌なことを書いてみる奴…友達減るぞ！＞自分)</EM>
+</P>
+
+<HR />
+
+<H2><A NAME="20010719">出るφは打たれる</A>
+    <SPAN>(2001/07/19)</SPAN></H2>
+
+<P><A HREF="http://hp.vector.co.jp/authors/VA016875/try11.html#07-16"
+    ><BIG>A</BIG>verageさん</A>にいろいろとご指導いただいているわけで<!--
+    -->ございますが、<!--
+    -->C++ Builder とか Visual C++ では Delphi や VisualBasic での<!--
+    -->GUI アプリ作成の手軽さはおそらくないだろうと思われるのですね。<!--
+    -->ということで、半年ほど待って、C++ Builder のフリー版を待ってはという<!--
+    -->ご意見は却下します。
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    つーか、実は Visual C++ <BR />
+    だいぶと前に買ってたりするし
+</P>
+<P>余りにもデカブツなので、結局、<!--
+    -->ハードディスクから追い出したりしてますが<EM>(もったいねー)</EM></P>
+
+<P>あと、<B>余談</B>ですが、イタリックに&lt;em&gt;を使うべからずと<!--
+    -->ご指摘されていますが、それ、私の文書でしょうか？<!--
+    -->私は &lt;em&gt;はスタイルシートで、灰色ボールドに変えておりまして、<!--
+    -->イタリックのつもりで使っているつもりは全くないのですが<!--
+    --><EM>(意味的にも暗に強調してるという使い方だし;-)</EM>。<!--
+    -->あと、&lt;B&gt;を使わず、&lt;STRONG&gt;を本当は使うべきですが、<!--
+    -->えー、&lt;STRONG&gt;は長くてタイプが面倒だから不許可。
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    却下や不許可が多いなぁ
+</P>
+<P>趣味の問題ですし。</P>
+
+<P>まぁ、それはともかく、ふと思ったのですが、Pascal って、そもそも、<!--
+    -->それほど良い言語なんでしょうかね？<EM>(爆弾発言)</EM>。<!--
+    -->いや、ワタクシは Pascal を全く知らないので、<!--
+    -->判断しちゃいかんと思うのですが、<!--
+    -->Lisper による Lisp の薦め方とか、<!--
+    -->オブジェクト指向信者の Ruby , Eiffel , Smalltalk の薦め方などに比べると、<!--
+    -->何か押しが弱いような印象があるんですよね…。なんでだろ。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>久</BIG>しぶりに、仕事でコーディングしました。<!--
+    -->いや〜楽しい楽しい。最近、書くのは日本語ばかりでしたからな。<!--
+    -->今回は日本語ではなく、Bourne Shell + nawk + SQL*Plus 。
+</P>
+<P>SQL*Plus が入っているということは、データベースプログラミングですな。<!--
+    -->そうなんですよ。スクリプトレベルでのＤＢプログラミングというのは<!--
+    -->Pro*C とか Java+JDBC とは違って非常に手軽で、楽しいですね。<!--
+    -->今後もこういう仕事がしたいなぁ。
+</P>
+<P>スクリプトといえば、前々から企画はすれど、忙しくて延期になっていた、<!--
+    -->会社でのUNIXスクリプト勉強会をようやっと開催することができた。<!--
+    -->どうも、研修っぽいスタイルで講師をやる勉強会だと、<!--
+    -->みなさん、静聴してしまうので、<!--
+    -->リアルタイムで分かっているのか、分かっていないのか、<!--
+    -->説明が足りないのか、くどいくらい多いのか、<!--
+    -->手応えがないので辛いですのー。<!--
+    -->まぁ、後から聞くと、どうやら好評だったようなので、ヨシとするか！
+</P>
+
+<HR />
+
+
+<H2><A NAME="20010715">老人よ妄想をいだくな</A>
+    <SPAN>(2001/07/15)</SPAN></H2>
+
+<P><BIG>市</BIG>長、まだ敗因を認識できてないよ。<!--
+    -->勝利を確信していたという時点でもう終わってるよ。<!--
+    -->嫌な情報には見事に目を背けていたみたいだよ。<!--
+    -->これぢゃあ、落ちて当たり前。<!--
+    -->つーか、それ以前に
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    他力本願になっている時点で<BR />
+    終わってるような気もするけど
+</P>
+<P>一応、府民としては、大阪には栄えてほしいんですけどね。<!--
+    -->それはそうと、「大阪」を別の身近な某単語に置換しても意味が通じ…<!--
+    -->いや、なんでもないです、はい<!--
+    --><EM>(えてして、分かって欲しい人には分からないから問題ないか？)</EM>。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>B</BIG>orland Delphi がフリーに。<!--
+    -->これで私も GUI の世界へ旅立てるか？
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    無理だって
+</P>
+<P>Java でも Ruby でも GUI は投げ出したからねー。面倒だから。<!--
+    -->でも、昔は VisualBasic ちょっとやったんですよ。<!--
+    -->何故、今やらないのかって？ それは、
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    持っているのが Windows 3.1 用だから
+</P>
+<P>問題はエディターになじめるかということだね。<!--
+    -->まぁ、なんとかなるでしょう。<!--
+    -->早く公開日が来ないかなー。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>こ</BIG>こ、最近、葉山文書が荒れてますねー、というメールを</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    まだ誰も送ってくれないんだけれども
+</P>
+<P>どうなんでしょ<EM>(そういうメールが欲しいのか？)</EM>。
+    なーんか、人の悪口、つーか愚痴が異様に多くなったような(笑)。
+    いかんね。生産的な話しなきゃ。と思いつつ、
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    こんな＊＊、やってられるかー
+</P>
+<FORM>
+<P>と酒をあおる日々<EM>(嘘)</EM>。
+    こんな儂をきっと、
+    <SELECT>
+    <OPTION SELECTED>?????</OPTION>
+    <OPTION>Delphi</OPTION>
+    <OPTION>貴方</OPTION>
+    <OPTION>会社</OPTION>
+    <OPTION>あの娘</OPTION>
+    <OPTION>IBM</OPTION>
+    <OPTION>OS/2</OPTION>
+    <OPTION>神様</OPTION>
+    <OPTION>Beer</OPTION>
+    </SELECT>
+    が救ってくれるに違いない
+    ---- とか何とか思っている間に何もせぬまま、<!--
+    -->人は老いていったり、信じる者に騙されたりするもんだけどね、現実は。
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    お前はカイさんか
+</P>
+<P>悲しいけど、これ＊＊なのよねー。</P>
+</FORM>
+
+<HR />
+
+<H2><A NAME="20010713">老人よ大志をいだくな</A>
+    <SPAN>(2001/07/13)</SPAN></H2>
+
+<P><BIG>オ</BIG>リンピック開催都市 大阪落選。</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    よしよし
+</P>
+<P>行政がこういうことに手を出すと、<!--
+    -->ロクなことにならないことは歴史が証明しており、<!--
+    -->また自治体の負債が増えるだけではないかと危惧していたのだ。<!--
+    -->大阪市民ではなく、(一応関係ない)大阪府民だけど、声を大にして言いたい。</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    市長よ、住民の金でいらんことすな
+</P>
+<P>何かを興したいなら、血税ではなく、自分の資金でやりなさい。正直</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    USJ も潰れないか、<BR />
+    ひやひやしているというのに
+</P>
+<P>心配のあまり、2回も行ってしまったではないか<EM>(←いつ?)</EM></P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>親</BIG>から「お前は会社の奴隷か」と言われました。</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    何も言い返せませんでした
+</P>
+<P>とほほ。世の中にはもっと過酷な環境の方もいるというのにね。</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><BIG>最</BIG>近、むしょーに欲しくなったもの。</P>
+<UL>
+    <LI>「できるか、ぼけー」「時間ないんじゃ、こらー」とか本音を適当に<!--
+        -->入力すると、自動的に失礼がなく、それでいて意図したことを<!--
+        -->盛り込んだ内容に直してくれるメールエージェント
+    </LI>
+</UL>
+
+
+
+<BR CLEAR />
+<HR />
+
+<H2><A NAME="20010707">兄ちゃん寝る</A>
+    <SPAN>(2001/07/07)</SPAN>
+</H2>
+
+<P><BIG>そ</BIG>ういえば、前に
+    <A HREF="http://hp.vector.co.jp/authors/VA016875/try10.html#06-20"
+    >Average さんが行数のことをおっしゃっていた</A>ので、<!--
+    -->ちょっと、自分の三大代表作の行数を計ってみた。
+</P>
+
+<TABLE BORDER ALIGN="CENTER" BGCOLOR="#222222">
+<TR><TH>No.</TH>
+    <TH>名前</TH>
+    <TH>行数</TH>
+    <TH>最終Ver.(Rel回数)</TH>
+    <TH>積極的Ver.UP期間</TH>
+</TR>
+<TR><TD>1</TD><TD>NYAOS    </TD>
+    <TD ALIGN="RIGHT">33230</TD>
+    <TD ALIGN="RIGHT">1.64 (55回)</TD>
+    <TD ALIGN="LEFT">1996/12〜1999/10 : 2年10ヶ月</TD>
+</TR>
+<TR><TD>2</TD><TD>eff      </TD>
+    <TD ALIGN="RIGHT">33284</TD>
+    <TD ALIGN="RIGHT">1.34 (45回)</TD>
+    <TD ALIGN="LEFT">1998/08〜2000/12 : 2年4ヶ月</TD>
+</TR>
+<TR><TD>3</TD><TD>NYA[DG]OS</TD>
+    <TD ALIGN="RIGHT">9194</TD>
+    <TD ALIGN="RIGHT">0.22 (22回)</TD>
+    <TD ALIGN="LEFT">2001/01〜現在 : 5ヶ月</TD>
+</TR>
+</TR>
+</TABLE>
+<P ALIGN=CENTER CLASS=SAY1>
+    どうやら、私のポインタのサイズは short相当らしい
+</P>
+<P>それに 2年経つと、そのソフト自体に飽きるみたいですね。
+    この調子だと、NYADOS/NYAGOS は後１年半は楽しめる計算になりますが、
+    これはせいぜい半年くらいにしとくべきでしょうね。
+    それ以上やると、作者がユーザの望まない機能まで載せたくなってしまいます。
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    現にもうそうなってるし
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>修</BIG>羅場は続くよ、どこまでも。
+    顧客の絶え間ない運用/調査依頼に、
+    先週の不始末の報告書さえ書く時間がない。
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    つーか、先方もその件忘れてそうなんだけど (^^<BR />
+</P>
+<P>元々、それほど気にしてなかった<EM>(怒っていなかった)</EM>みたいだしネ。</P>
+
+<P>それにしたって、一番難儀なのは、窓口が一元化していない点ですな。
+    直接担当となっている人以外からも時々突発的に調査依頼が飛んでくるのが
+    一番かないまへん。あまりにどんどこ来るもんだから
+    「現在、２件の調査依頼を抱えており、そちらを優先せねばならない都合、
+    ご提示の期限を守れない可能性があります」と切り出した
+    <EM>(いや、実際本当に守れそうもなかったんだけど)</EM>。
+</P>
+<P>そしたら、直の上司が援護射撃。可能な期限を比較的先にしてくれて、
+    窓口一本化の件も言ってくれて、非常にたすかりましたバイ。
+    こういう人にはついてゆく気になれるヨナー。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>た</BIG>だ今、NYADOS を command.com なしに実行できるよう改造中。
+    リダイレクトも実装したし、パイプも一時ファイルによるものであるが、
+    何とか実装した。
+</P>
+<P>今、問題となっているのは、文字数。128バイト以上になったときに、
+    spawnXX() だと、何も実行しなくなるだけでなく、何か不安定になる。
+    これちょっとまずいっすよ、師匠<EM>(←誰?)</EM>。
+</P>
+<P>ちなみに NYA[DG]OS自身は、char[] による文字列操作は文字列クラスの中で
+    しか使っていないので、基本的に文字列がらみのバッファオーバーラン
+    <EM>(だっけ？)</EM>は皆無のはず。
+</P>
+<P ALIGN="CENTER" CLASS="SAY1">
+    ということで Turbo C++ が悪い
+</P>
+<P ALIGN="CENTER" CLASS="SAY2">
+    オマエモナー
+</P>
+<P>う゛…<EM>(なんか最近覚えたフレーズらしい↑)</EM>。
+    ま、まずは Digitalmars C++ でも試してみよう。
+    しかし、Digitalmars C++。全然話題にあがりませんなー。
+    他に誰か使ってないのかな。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>こ</BIG>こ、最近というのは、死兆星を見る日が多くて、
+    晩飯を<EM>(時には昼飯も)</EM>抜いてしまうことが多いんですが、
+    不思議と体調は悪くないんですな。
+    むしろ、頭が澄み切った感じがして、冴える冴える。
+</P>
+<P><A HREF="http://hp.vector.co.jp/authors/VA016875/"
+    >Averageさん</A>が<A
+    HREF="http://hp.vector.co.jp/authors/VA016875/try10.html#06-23"
+    >6月23日にその辺の解説</A>をしてくださっていますが、
+    かつて<EM>(大学時代)</EM>の体調不良や、意識/記憶の混濁はまさに
+    それが原因だったわけです。
+    その反省から、今は徹底的に砂糖を取らないようにしているんですけど、
+    もうちょっと早く<EM>(10年くらい?)</EM>そういうことが分かっていたら
+    今頃、私は…
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    こんなところにいない
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    こんなところとは失礼な
+</P>
+<P>で、砂糖をとらないようにした結果、反動で激辛好きになってしまいました。
+    これはこれで問題あるヨナー。
+    そのうち、内臓いためまっせ。
+</P>
+<P ALIGN="CENTER" CLASS="SAY1">
+    そりゃ、ないz…いや、げほっごほっ
+</P>
+<P><A HREF="../gag.html">奴</A>が憑依してきたみたいです。
+    気をつけましょう。</P>
+
+<HR />
+<DIV CLASS=MENU ALIGN=LEFT>
+    ▼<A HREF="./r13.html">次頁へ</A>
+    ▼<A HREF="./r11.html">前頁へ</A>
+    ▼<A HREF="./index.html">目次へ</A>
+    ▼<A HREF="../index.html">扉ページへ</A>
+</DIV>
+</BODY>
+</HTML>

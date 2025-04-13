@@ -1,0 +1,31 @@
+<<[Lua][Oracle] 念願のワンライナーが書けるようになったぞ>>
+
+テーブルの内容を CSV に落とすコードをワンライナーで書けるようになった。
+
+8<
+./olua -e 'for rs in olua.new("HR","HR","XE",{null=""}):exec("select * from foo") do print(table.concat(rs,",")) end'
+>8
+
+デフォルトでは NULL は false として得られるが、
+そうすると1行に join する(=table.concat)時にエラーになるので、
+コネクションオブジェクトを作成する時に、
+オプション引数で NULL 用オブジェクトを指定できるようにした。
+(なお、nil には出来ない。配列の末尾と誤認識されたり、メリットもないので)
+
+ということで、それなりに使える状態になってきたので、
+そろそろ Mercurial のレポジトリを公開してみよう。
+
+* http://forgot.uh-oh.jp/hg-olua.cgi
+
+* ビルドには Oracle 環境と、Lua のソースの双方が必要
+* まだ、Cygwin でしかテストできてないが、Linux で出来ない理由は無いだろう
+* ライセンスは Lua に準じて MIT License とする
+* ビルド方法・関数仕様など、ドキュメントを全然書いてない(さーせん)
+* 機能は出来たが、エラー処理がまだまだ甘い
+  ((br))(企業業務で使うなら、どこの SQL で、どういう Oracle エラーが出たか、
+   そのあたりのリポート機能を充実せねばなるない)
+
+最近、この話ばかりですみませんねぇ。はまってるもんで
+
+:(追記)
+:: 公式ページ作った →http://forgot.uh-oh.jp/doc/index.cgi?p=oluacle{forgot.uh-oh.jp ! - oluacle}

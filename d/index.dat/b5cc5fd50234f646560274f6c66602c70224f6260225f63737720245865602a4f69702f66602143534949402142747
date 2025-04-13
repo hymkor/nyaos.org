@@ -1,0 +1,33 @@
+* http://codegolf.com/bob-ross-the-joy-of-ascii-art{Code Golf | Bob Ross' The Joy of ASCII Art}
+
+めんどいので、要約のみ：
+
+* 標準入力から 『(桁位置)□(行位置)□(ASCIIコード)』という行形式で指示の入力が与えられるので、80桁×40行の枠内で出力する。
+* 桁位置・行位置は 0 から始まる。
+* 空のマスは空白文字(0x20)で。ただし、行末の空白は取り除く。
+  (葉山注：明示されていないが、空行は構わないようだ)
+
+入力例：
+
+8<
+1 0 65
+2 1 66
+1 1 67
+0 1 68
+>8
+
+これに対する出力例：
+
+8<
+ A
+DCB
+>8
+
+* [Run 1 - YOU!|http://codegolf.com/competition/run/24/1]
+* [Run 2 - Big Bunny.|http://codegolf.com/competition/run/24/2]
+* [Run 3 - Small Bunny.|http://codegolf.com/competition/run/24/3]
+* [Run 4 - Castle.|http://codegolf.com/competition/run/24/4]
+* [Run 5 - Skull.|http://codegolf.com/competition/run/24/5]
+* [Run 6 - Tux.|http://codegolf.com/competition/run/24/6]
+* [Run 7 - Planet.|http://codegolf.com/competition/run/24/7]
+* [Run 8 - Who you gonna call?|http://codegolf.com/competition/run/24/8]

@@ -1,0 +1,232 @@
+<<処理系について>>
+
+:vi
+:: オリジナル vi のこと。厳密には Linux 上には存在しない。
+:http://www.vim.org/{vim}
+:: Vi IMproved。vi clone の一つ。
+   vi がわりにデフォルトで採用しているLinuxディストリビューションも多い。
+:http://hp.vector.co.jp/authors/VA003457/vim/index.html{jvim}
+:: vim の 日本語対応版。
+   vim 3 ベースだが、軽く、かつ日本語の対応がよいので、重宝されている。
+   筆者の身内には「ji」と呼ばれている（コマンド名が長いので、
+   その名前にリネームしたら定着してしまった）。
+:http://www.kaoriya.net/{gvim}
+:: vim の日本語対応版。
+   vim 6 ベースで、高機能だが、ちと==重い==重かった
+
+<<定番のオプション設定>>
+
+: ``sw=4``
+:: インデント幅４桁
+: ``ts=8``
+:: タブは８桁扱い
+: ``ai``
+:: オートインデントON
+: ``nobk``
+:: バックアップファイルを作らない
+: ``et``
+:: タブを空白に自動展開させる(Makefile を編集することが無い環境のみ)
+: ``clipboard=unnamed`` (gvimのみ)
+:: デフォルトでクリップボードアクセス
+
+<<<オプションの設定方法>>>
+
+共存を気にしない場合は環境変数 EXINIT に定義。
+
+:Windows(NYAOS)
+:: set EXINIT=set sw=4 ts=8 ai nobk
+:Linux(bash)
+:: export EXINIT='set sw=4 ts=8 ai nobk'
+
+jvim と gvim を共存させる場合は、設定ファイル名を微妙に変更する。
+
+||| 処理系 | 設定ファイル
+|| jvim | ~/.jvimrc
+|| gvim | ==~/_vimrc== ~/.gvimrc
+
+<<<D言語のファイルだけ、UTF-8 で記述する>>
+
+~/.vimrc.d に ``set jcode=t`` と書く
+
+<<ブラウザ連携>>
+
+<<<w3m>>>
+
+gvim の場合：
+
+8<
+    /cygdrive/d/usr/gvim/gvim `cygpath -w %s`
+>8
+
+しかしながら、jvim on Cygwin の方がよろしいと思う。
+
+<<<Firefox + mozex>>
+
+Directory for temporary files に適当なディレクトリを記述の上、
+Textareas の欄に
+
+: jvim
+:: ``d:\usr\bin\jvim.exe -k t -K t %t``
+: gvim
+:: ``c:\usr\vim-6.4.006-w32j\gvim.exe -c "set fenc=utf8" %t``
+
+gvim について各所では ``enc=utf8`` と記載されているが、
+既存テキストがある場合化けてしまう。何故だろう。
+
+<<<<参考>>>>
+
+* http://zunda.freeshell.org/d/20060702.html#p02{
+    [memo] mozexとgvimを日本語で使う - おまぬけ活動日誌 (2006-07-02)}
+* http://taka.no32.tk/diary/20061010.html#p02{
+    mozexによるテキストエリア編集 - 32nd diary (2006-10-10)}
+
+<<[gvim] 日本語コード判定機能追加>>>
+
+とりあえず、iconv.dll と iconv.exe を PATH の通ったディレクトリに入れておく。
+結果、UTF-8 は自動認識してくれた。
+
+<<[gvim] クリップボード連携>>
+
+<<<デフォルトのヤンクバッファをクリップボードにする>>>
+
+8<
+set clipboard=unnamed
+>8
+
+<<<TeraTerm 互換のバインド>>>
+
+8<
+    set winaltkeys=no
+    map <M-x> "+d
+    map <M-c> "+y
+    map <M-v> "+P
+    imap <M-v> ^["+P
+>8
+
+と定義すると
+
+||ALT-X|クリップボードへのカット 	
+||ALT-C|クリップボードへのコピー 	
+||ALT-V|クリップボードからのペースト
+
+とバインドされる。
+
+ただし、jvim と違い、入力モード時に使った場合の
+文字列の挿入箇所が、カーソルの前か後か、下か上か、
+適切にいかない。
+
+<<コード変換 TIPS >>
+
+<<<改行コード>>>
+
+FTP での転送にミスって、Linux なのに改行コードを 
+CRLF にしてしまった場合、vim で改行コードを変換できる。
+
+8<
+    $ vim ファイル名
+    :set notextmode
+    :wq
+>8
+
+名称が不適切だが、
+「notextmode」は 改行コード=LF , 
+「textmode」は改行コード=CRLF に相当するようだ。
+(Linux なのに notextmode = LF なのってどうよという気がするが)
+
+<<<[jvim] 日本語変換>>>
+
+||| 変換先コード    | コマンド
+|| EUC             | ``:set jcode=E((br)):wq`` 
+|| SJIS            | ``:set jcode=S((br)):wq``
+|| JIS(ISO-2022JP) | ``:set jcode=J((br)):wq``
+
+<<[gvim] フォントの変更>>
+
+編集(__E__)→フォントの設定(__N__)で、フォントを選択する。
+この設定は次回起動時に反映されないようなので、
+``:set`` で設定テキストで確認し、それを .gvimrc に転記する。
+
+<<<(例)>>>
+
+8<
+set guifont=ＭＳ_ゴシック:h9:cSHIFTJIS
+>8
+
+<<[gvim] howm の設定>>
+
+* 配布先 → http://sworddancer.funkyboy.jp/howm_vim/
+
+独りWiki とバッティングしそうだが、
+外部に漏れるとまずいメモを Wiki に書くわけにもいくまい。
+というわけで、仕事のメモは howm の方がよいかもー。
+
+<<<インストール例：>>>
+
+: howm 展開ディレクトリ
+:: ``c:\usr\howm_vim``
+: howm ドキュメント置き場所
+:: ``c:/Documents and Settings/hayama/howm``
+: grep や find
+:: ``c:\cygwin`` にインストールした Cygwin の grep や find
+
+の場合、_vimrc に
+
+8<
+set runtimepath+=c:\usr\howm_vim
+let g:howm_dir     = "c:/Documents and Settings/hayama/howm"
+let g:howm_grepprg = "c:/cygwin/bin/grep"
+let g:howm_findprg = "c:/cygwin/bin/find"
+>8
+
+と記載する。'''``.gvimrc`` だと駄目らしい'''。
+''(設定ファイルロードの都合？)''
+
+<<<キーバインド>>>
+
+本家 Emacs 版が C-c c とかあるので、勘違いしそうだが、
+プリフィックスは基本的にカンマ二つである。注意。
+
+|| ``,,c`` | 新規メモ作成
+|| ``,,g`` | 全文検索モード
+|| ``,,a`` | メモファイルの全一覧
+|| ``,,t`` | TO DOの一覧
+|| ``,,y`` | 予定一覧
+
+<<<文法>>>
+
+: ``>>> hogehoge`` (gotoリンク)
+:: ``>>>``移行の文字列を検索するリンク。ファイル名を直接書いてもよい。
+: ``<<< hogehoge`` (come-from リンク)
+:: 他のページで hogehoge という単語があったら、自ページに自動リンクする
+: ```[[ページ名]]``` (Wiki風リンク)
+:: 文字通り
+
+<<<<TO DO管理>>>>
+
+メモ中の任意の箇所(標題ではない)に
+``[2003-11-10]●`` と書くと、TO DO と認識される。
+●の部分には、以下の文字が入る。
+
+|| `` @ `` | 予定   | 予定表(``,,y``)に表示される。
+|| `` - `` | 覚書き | タスク表(``,,t``)に表示され、その日を過ぎると落ちてゆく
+|| `` + `` | TO DO  | タスク表(``,,t``)に表示され、その日を過ぎると上がってゆく
+|| `` ! `` | 締切り | タスク表(``,,t``)に表示され、日付の一週間前から上昇する。
+
+* http://howm.sourceforge.jp/TUTORIAL.ja.rd{チュートリアル}
+
+<<[gvim] エラー>>
+
+テキストファイルに関連付けて、
+エクスプローラーからテキストファイルを
+ダブルクリックして起動するようにすると、
+下記のようなエラーになった。
+(その後の動作には支障はない)
+
+<<{gvimのエラー.jpg}
+((clear))
+
+原因はよく分からないが、ファイルと拡張子との関連付けがおかしいらしい。
+一度、関連付けを削除してから、再設定すると直った。
+
+環境変数などは関係なさそう。
+(直った後、VIM,VIMRUNTIME の設定を削除しても影響がなかった)

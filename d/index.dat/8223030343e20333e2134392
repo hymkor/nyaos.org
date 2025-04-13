@@ -1,0 +1,141 @@
+
+<<続・浅田農産会長の自殺を考える>>
+
+関連リンク
+
+* ((lb))2ch((rb))
+    http://news5.2ch.net/test/read.cgi/newsplus/1078558411/{
+    【鳥インフルエンザ】感染疑い解剖か 浅田農産会長、発覚直後に兵庫県職員に説明}
+* http://amrita.s14.xrea.com/d/?date=20040314#p01{
+    気になるカキコ＠圏外からのひとこと(2004-03-14)}
+
+浅田農産よりも前に広島で感染が発見されてたけど、揉み消されたってことかな？
+まぁ、よくあることです。
+
+<<NYA*S のビルドスクリプト移植>>
+
+http://homepage2.nifty.com/hayamatta/nya/{
+NYA*S シリーズ}は、各環境用の Makefile をテンプレートから作成するのに、
+ifdoc.rb という Ruby スクリプトを使ってきた。
+だが、Ruby がインストールされていない環境もあるので、
+REXX 版と VBScript 版を作成した。
+
+: 説明しよう！((fn 「解説せねばなるまい」というバージョンもあったような…))
+:: REXX は OS/2 が標準で装備しているスクリプト言語なのだ。
+
+これらの言語は共に 非UNIX系であり、やや BASIC ライクであることから、
+なんとなく似ているような気がする。
+よって、一方を作れば、もう片方への移植も比較的楽なのではないだろうか。
+と甘いことを考えた。
+
+REXX版：
+
+<pre>
+printFlag = 1
+do while lines() > 0
+    line = linein()
+    if left(line,3) = "---" then do
+        if length(line) <= 4  then do
+            printFlag = 1
+        end
+        else do
+            printFlag = 0
+            do i=2 to words(line)
+                do j=1 to arg()
+                    if arg(j) = word(line,i) then
+                        printFlag = 1
+                end
+            end
+        end 
+    end
+    else if printFlag = 1 then
+        say line
+end
+/* vim:set ft=rexx */
+</pre>
+
+VBScript版：
+
+<pre>
+Set argv  = WScript.Arguments
+Set stdin = WScript.stdin
+printFlag = true
+Do Until stdin.AtEndOfStream
+    line = stdin.ReadLine
+    if left(line,3) = "---" then
+        if len(line) <= 4  then
+            printFlag = true
+        else
+            keywords = split(line)
+            printFlag = false
+            for each e in keywords
+                for i=0 to argv.count-1
+                    if argv(i) = e then
+                        printFlag = true
+                        exit for
+                    end if
+                next
+            next
+        end if
+    elseif printFlag then
+        WScript.Echo line
+    end if
+Loop
+Set stdin = nothing
+Set argv  = nothing
+</pre>
+
+<p>
+<big>全然似てねぇ！</big>(ような気がする)
+</p>
+
+文法が混ざって、混乱するということはないけど、
+やっぱ違うわ（あたりまえ）。
+でも、標準入出力に限っては、たいていの言語は
+OPEN/CLOSE がいらないのが幸いだす。
+
+しかし、せっかく作ったところで、誰も使わない(ビルドしない)から、
+あんまり意味ないんだけどね
+(http://www.h3.dion.ne.jp/~moeoka11/torepan.html{松田達郎}調)。
+しくしく。
+
+<<C言語っぽさ(UNIXっぽさ)を嫌う言語の特徴>>
+
+REXX,VBScript,PL/SQL などに見られる傾向。
+全てあてはまるわけではないが。
+
+* 文字列連結に<code>+</code>を使わない。<code>||</code> とか＆が多い。
+* 中括弧を嫌う。
+* 代入は <code>:=</code> 、等価比較は <code>=</code>。
+* 予約語 do が大好き
+* 文字列抽出に left とか mid かいう関数がある。
+* 行指向か、あるいは命令のターミネータの位置が分かりにくい。
+* インタプリタがおしゃべり。起動時に余計なロゴを吐く。
+* エスケープ文字や行継続文字が<code>\</code>でない
+    (<code>_</code>やら<code>,</code>やら<code>^</code>やら) 
+* コメントに「#」記号なんて、もってのほか！
+
+まぁ、本当は「嫌」っているのではなく、
+別の文化圏から発祥した言語だから、
+違って当然なんだろうけど。
+
+<<うろうろ>>
+
+* http://natumi-2.hp.infoseek.co.jp/{いちごぷりん 〜なつみの部屋〜}
+    (http://dayomon.fc2web.com/{それゆけ！！だよもん星}より)
+    :: いかん！ファンになってしまいそうだ(くらくら)
+* ((lb))Flash((rb)) http://annai.2log.net/nanashi777/kibounooka.swf{希望の丘陵}
+    (http://annai.2log.net/nanashi777/archives/blog74.html{
+        ちゃんねる暴打ダゼイ}より)
+    :: 日本ブレイク工業の萬Ｚ氏のもう一つの曲の FLASH。
+        なかなか、いい唄です。
+* http://www.matsusaka-u.ac.jp/~okumura/texfaq/install-win32.html{
+    Tex - Windows へのインストール}{
+    (http://www.alles.or.jp/~spiegel/200403.html#d14_t1{辺境から戯れ言}より)
+    :: (La)TeX は、もはや使わなくなったけどメモ。
+        もうちょっとインストールが楽だったらなぁ。
+        猿でも使える統合インストーラ希望！
+* http://www.yomiuri.co.jp/national/news/20040309ic27.htm{
+    砂漠のキツネ、東京・品川で保護}
+    (http://news.2log.net/siiko/archives/blog766.html{詩子さんち}より)
+    :: ふっ、かわいい奴だぜ。

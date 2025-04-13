@@ -1,0 +1,10 @@
+!!! プリンターへ lpr
+
+8<
+$ lpr -S 172.30.35.18 -P FXDocuCe 10100_90013_CHECK1_00016_00001_CHECK1_OMO_1_92.1736.34.30_20120514_131825.ps
+>8
+
+8<
+Run the SQL scripts located in C:\app\ql099664\product\11.2.0\client_1\ASP.NET\SQL directory for a new installation or an upgrade of Oracle Providers for ASP.NET.
+>8
+<<{20120515_Oracle.DataAccessが見つかりませんでした.PNG}

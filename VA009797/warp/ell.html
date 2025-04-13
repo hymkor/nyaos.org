@@ -1,0 +1,449 @@
+<!-- vim:set sw=2 ts=8 ai nobackup: -->
+<HTML>
+<HEAD>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+  <LINK REL="stylesheet" TYPE="text/css" HREF="../gray.css" />
+  <TITLE>ELL and the other softwares for Warp</TITLE>
+</HEAD>
+<BODY bgcolor="black" text="white" link="silver" vlink="gray" alink="red" >
+
+<DIV ALIGN="RIGHT">
+<TABLE>
+<TR>
+  <TD><DIV CLASS="BOX"><A HREF="nyaos.html">NYAOS</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../../homepage/warp/eff.html"
+      >eff</A></DIV></TD>
+  <TD><DIV CLASS="XOB">ELL &amp; etc</DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="port.html">移植物</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../rexx/index.html">REXX</A></DIV></TD>
+</TR>
+</TABLE>
+</DIV>
+
+<H1>ELL と愉快な仲間達</H1>
+
+<P>拙作の OS/2 のプログラムを紹介します。
+    これらを使用するためには、emx/gccのランタイムパッケージ emxrt.zip
+    <a href="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+    >(Download: 552,318 bytes)</a>に含まれる DLL ファイル：<!--
+    -->
+</P>
+<P ALIGN=CENTER STYLE="text-align:center;font-weight:bold;color:#FF00FF">
+    emx.dll , emxlicm.dll , emxwrap.dll
+</P>
+<P>を CONFIG.SYS の LIBPATH の示すディレクトリに置いておかなければいけません。
+    以下のプログラムはフリーソフトウェアであり、配布・転載は自由です。
+</P>
+
+<H2><a name="ELL">ELL</a>(える)</H2>
+
+<P>コマンドラインで動作する、LHMTN 的な、Info-ZIP や LHA , tar
+   などの書庫を閲覧するツールです。
+</P>
+
+<TABLE ALIGN=CENTER BORDER=0><TR><TD BGCOLOR="white">
+<TABLE CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="black">
+    <TD ROWSPAN=2>1.15</TD>
+    <TD>バイナリ</TD>
+    <TD><A HREF="http://www.vector.co.jp/pack/os2/util/arc/ell115.lzh"
+    STYLE="text-indent:1ex"
+    >36,939 Oct 24 21:22 ell115.lzh</A></TD>
+</TR>
+<TR BGCOLOR="black">
+    <TD>ソース</TD>
+    <TD><A HREF="./ell-1.15.tar.gz" STYLE="text-indent:1ex"
+    >32,450 Oct 24 21:22 ell-1.15.tar.gz</A></TD>
+</TR>
+<TR BGCOLOR="black">
+    <TD COLSPAN=2>emx 0.9d FIX02</TD>
+    <TD><A HREF="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+    >549,675 Feb 07 01:49 emxrt.zip</A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+<P>ELL の特徴として</P>
+
+<UL>
+  <LI> VIO(コマンドライン−テキスト)画面で動作。</LI>
+  <LI> 書庫のタイプに依存しない。</LI>
+  <LI> 書庫中の書庫も閲覧できる。</LI>
+  <LI> 書庫中のファイルに対して、&lt;┘キーで任意のプログラムを起動可能。</LI>
+  <LI> 自己展開書庫にも対応</LI>
+  <li> 簡易ファイラー機能で、CD-VIEWERにもなる。</LI>
+</UL>
+
+<P>などがあります。使用には、DLLの他にページャーや使用する
+  書庫のアーカイバが必要です。</P>
+
+<H3>変更履歴</H3>
+
+<UL>
+  <LI>1.14 → 1.15 : ('99 10/24)
+  <UL>
+    <LI>ディレクトリ構造を無視して、ファイルを展開できるようにした。
+      <BR>(「<TT>lha e</TT>」や「<TT>unzip -j</TT>」に対応)</LI>
+    <LI>「_tar.bz2」や「_tar.gz」も、そのまま扱えるようにした(ell.cfg の変更のみ)
+      </LI>
+  </UL>
+  <LI> 1.13 → 1.14 : ('99 8/28)
+<UL>
+<LI>左右へスクロールして、画面桁数が短くても全情報を<!--
+-->確認できるようにした。<!--
+--><LI>ページャで表示する際に、標準エラー出力を捨てさせるようにした。<!--
+--></UL>
+<LI> 1.12 → 1.13 : ('99 5/23)
+<UL>
+<LI>ファイル名の項目の位置を右から数えられるようにした。<!--
+--></UL>
+<LI> 1.11 → 1.12 : ('99 5/17)
+<UL>
+<LI>-lh6-対応の(非公式)<SUP>2</SUP>OS/2版 lha 1.14d for unix への対応。<!--
+--><LI>ELL.CFG の nkf コマンドについて、ドキュメント追加。<!--
+--></UL>
+<LI> 1.10 → 1.11 : ('99 3/28)
+<UL>
+<LI>展開先ディレクトリ名の中の「~」を%HOME%へ置換するようにした。<!--
+--><LI>ELL.CFGで、キーワードの存在位置を一点のみならず、範囲指定<!--
+-->できるようにした。<!--
+--><LI>ELL.CFGで、範囲指定した拡張子と、そうでない拡張子を同じ <!--
+-->archive 文で指定できるようにした。<!--
+--><LI>「i」「o」を、ENTER、q と同じ機能とした。<!--
+--><LI>終了時のカーソル位置が狂わないようにした。<!--
+--><LI>gcc -Wall の際の Warning を極力減らした。<!--
+--><LI>emx 0.9d 以降が必要となってしまった。<!--
+--></UL>
+<LI> 1.05 → 1.10 : (99 1/1)
+<UL>
+<LI> コンフィギュレーションファイルの文法の大幅な変更<!--
+-->(ELL.PRM→ELL.CFG)
+<LI> 同じ拡張子でも、書庫内のキーワードからある程度判別<!--
+-->できるようにした。<!--
+--><LI> コンフィギューレションファイルから、ページャーや<!--
+-->シェルを指定できるようにした。<!--
+--><LI> 書庫内ファイル名の「/」を「￥」へ置換するようにした。<!--
+--></UL>
+<li> 1.04 → 1.05 : (98 1/30)
+<ul>
+<li> ファイラーモードの拡張<!--
+--><ul>
+<li> 起動スクリプト ELF.CMD を用意。<!--
+--><li> 00_index.txt 表示とディレクトリ表示の<!--
+-->切り換え可能になった(数字の0キー)。<!--
+--><li> 起動ディレクトリより上位へ移動できるようになった(BS,^H)。<!--
+--><li> 色を変えた！<!--
+--></ul>
+<li> ALT+Z で suspend できようになった。<!--
+--><li> ZキーでEXE型自己解凍型圧縮ファイルのアーカイバの<!--
+-->種類を指定できるようになった。<!--
+--><BR>(厳密には、ちょっと違いますが...)
+<li> bzip2 + tar に対応。<!--
+--></ul>
+<li> 1.03 → 1.04 : (97 10/8)
+<ul>
+<li> 簡易ファイラー機能を強化(サブディレクトリにも移動可能)
+<li> -lzh,-zip オプション<!--
+--><li> 書庫のリストの取得中に END キーを押すと、総ファイル数が<!--
+-->狂うバグを除いた。<!--
+--></ul>
+<LI>1.02 → 1.03 : (97 9/19)
+<UL>
+<LI> アーカイブの総ファイル数が一つ少なく表示されるのを修正。<!--
+-->また表示位置を右上に変えた。<!--
+--><LI> 再帰的に自分自身を呼び出せないバグを除いた。<!--
+--><LI> ell.prm で cat --&gt; type , rm --&gt; del に変更<!--
+--></UL>
+<LI>1.01 → 1.02 :
+<ul>
+<li> アーカイブの総ファイル数と、現在差しているファイルの位置の表示<!--
+--><LI> ファイル名の検索機能<!--
+--><LI> ヘルプ機能<!--
+--><LI> unzip 5.2以降に対応。(ell.prm と ell.doc だけの変更)
+</ul>
+<LI>1.00 → 1.01 : DLLの全面利用でサイズが小さくなった。<!--
+--></UL>
+
+<H2><a name="karl">karl</a>(かぁる)</H2>
+
+<P>VIO 専用で軽いフリをしているページャーです。</P>
+
+<TABLE ALIGN=CENTER BORDER=0><TR><TD BGCOLOR="white">
+<TABLE CELLSPACING=1 BORDER=0>
+<!-- 1.15 -->
+<TR BGCOLOR="black">
+    <TD ROWSPAN=2>1.15</TD>
+    <TD>バイナリ</TD>
+    <TD><A HREF="./karl115.lzh"
+    >44,800 Nov 13 23:24 karl115.lzh</A></TD>
+</TR>
+<TR BGCOLOR="black">
+    <TD>ソース</TD>
+    <TD><A HREF="./karl-1.15.tar.gz">62,641 Nov 13 23:24 karl-1.15.tar.gz</A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+<P>
+コンパイルには、本ソースの他に0.21以降の<!--
+--><a href="http://www.t3.rim.or.jp/~zodiac/"
+>上野博さん</A>作のかんなインポートライブラリが必要です。<!--
+--></P>
+<H3>変更履歴</H3>
+<UL>
+<LI>1.15 (99.11.13)
+<UL>
+<LI>EUCファイルで、(画面幅-1桁)目に日本語文字が入っていると、<!--
+-->以降の漢字が化けてしまうバグを修正。<!--
+--><LI>EOF を含む最終行が読めなくなっていたのを修正。<!--
+--><LI>emx のリビジョンチェッカプログラムを付属させた。<!--
+--></UL>
+<LI>1.14 (99.07.03)
+<UL>
+<LI>英語罫線の変換がおかしくなっているのを修正。<!--
+--></UL>
+<LI>1.13 (99.06.19)
+<UL>
+<LI>パイプ入力が終了しないうちに、karl を終了すると出る Warning
+を出ないようにした。<!--
+--><LI>ちょうど画面桁数と同じ文字数の行が二行にならないようにした。<!--
+--></UL>
+<LI>1.12 (99.06.12)
+<UL>
+<LI>起動直後に「&gt;」や「/」を実行すると落ちるバグを修正<!--
+--><LI>画面右下に、(EUC)などと表示するようにした。<!--
+--></UL>
+<LI>1.11 (99.05.23 15:00)
+<UL>
+<LI>画面を乱れる不具合を除いた。<!--
+--></UL>
+<LI>1.10 (99.05.23 9:59)
+<UL>
+<LI>EUC対応(自動判別)
+<LI>キーバインド に i(選択),o(脱出)を追加<!--
+--></UL>
+<LI>1.03 (98.12.29)
+<UL>
+<LI>カーソルキーが効かないバグを修正<!--
+--></UL>
+<LI>1.02 (98.12.27)
+<UL>
+<LI>かんな入力対応(検索にしか使わんけど… cannamt.dll が必要)
+<LI>bzip2 で圧縮したファイルに対応(ただし、bzip2.exe が必要)。<!--
+--><LI>改行マークの表示をオプションにした<BR>
+(PMのコピー＆ペーストには邪魔な場合が多い)
+<LI>日本語を検索できないバグを修正<!--
+--><LI>ファイラーの表示を ELL ライクへ変更<!--
+--></UL>
+<LI>1.01 (96.09.17)
+<UL>
+<LI>DLLの全面利用でサイズが小さくなった。<!--
+--></UL>
+</UL>
+
+<H2><a name="rmclone">RMCLONE</a>(りむ〜ぶくろ〜ん)</H2>
+
+<P>ディスク上の同じ内容のファイルを検出・削除するプログラムです。</P>
+
+<TABLE ALIGN=CENTER BORDER=0><TR><TD BGCOLOR="white">
+<TABLE CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="black">
+    <TD>v2.3 OS/2専用C++版</TD>
+    <TD><A HREF="rmclone23.zip" STYLE="white-space:pre"
+	> 11,274 Dec  3 02:01 rmclone23.zip </A></TD>
+</TR>
+<TR BGCOLOR="black">
+    <TD>v3.0 Java Application</TD>
+    <TD><A HREF="rmclonej.zip" STYLE="white-space:pre"
+	>  5,757 Aug  7  1999 rmclonej.zip </A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+<P>
+REXXで記述された RMCLONE.CMD と異り、名前・サイズだけでなく、<!--
+-->内容も自動で比較を行います。<!--
+-->3.0 は Java で記述されているだけで、機能的には 2.0 と同じです。<!--
+-->従って、最新バージョンは C++ の 2.x ということになります(ややこしー)。<!--
+--></P>
+<P>
+なお、ver.2.x シリーズ使用の際には emx 0.9d FIX<B>3</B>の DLL が必要となります。<!--
+--></P>
+<H3>変更履歴</H3>
+<UL>
+<LI>2.3 (2000.12.03)
+<UL>
+<LI>オプション -1 (0バイトファイルの無視)を追加<!--
+--><LI>オプション -r (書込保護ファイルの強制削除)を追加<!--
+--><LI>NYAOS のソースを不要とした(その代わり、xf86環境では動かなくなった)
+</UL>
+<LI>2.2 (99.08.28)
+<UL>
+<LI>同じ内容のファイルが n 個あり、それらを削除しない場合、n(n-1)/2<!--
+-->回問い合わせされていたが、それを (n-1) 回になるようにした。<!--
+-->(3個={A,B,C}の場合、AとB、AとC の比較・問い合わせだけ行い、<!--
+-->BとC の問い合わせはしない=削除対象にしないワケ)
+<LI>オプション -t (異なるディレクトリツリーのファイルのみを比較)を追加<!--
+--><LI>オプション -q (問い合わせ無しモード) を追加<!--
+--></UL>
+<LI>2.1 (99.08.14)
+<UL>
+<LI>リードオンリーファイルも削除できるようにした。<!--
+--><LI>コアファイルも検出するようにした。<!--
+--><LI>名前のみの比較(-f)もサポートした。<!--
+--><LI>必要な NYAOS ライブラリをちょいと減らした。<!--
+--><LI>ファイル名だけでなく、日付・時間・サイズも表示するようにした。<!--
+--></UL>
+<LI>3.0 (RMCLONEJ.CLASS)
+<UL>
+<LI>Java 化した。<!--
+--><LI>問い合わせの際に Enter の入力も必須となった。<!--
+--><LI>ファイル名だけでなく、ファイルの最終更新日付も表示するようになった<!--
+--></UL>
+<LI>2.0 (98.05.03)
+<UL>
+<LI>C++ 化した。<!--
+--><LI>ファイルの内容も自前で比較するようにした。1.0 まででは、<!--
+-->ファイルの名前とサイズが一致するものをとりあえず列挙し、<!--
+-->問い合わせで「[c]厳密に比較」を選択して始めて、OS/2 の <!--
+-->comp.com(ファイル比較プログラム) を呼び出して、<!--
+-->内容も比較するという手続きになっていた。<!--
+--></UL>
+<LI>1.0
+    <UL>
+	<LI>REXX にて作成</LI>
+    </UL>
+</LI>
+</UL>
+
+<H2><A NAME="easido">EAs,I do!</A>(いえす！あい、どぅ)</H2>
+
+<P>
+単一/複数ASCII タイプの拡張属性 .SUBJECT , .LONGNAME , .COMMENTS ,<!--
+-->.HISTORY , .KEYPHRASES を個別にコマンドラインより操作するツールです。<!--
+-->基本的に<!--
+--></P>
+<OL>
+<LI> 標準拡張属性の内容の列挙。<TT>(easido FILENAME)</TT>
+<LI> 拡張属性の内容を標準出力へ出力。<TT>(easido FILENAME EATYPE)</TT>
+<LI> 引数の内容を拡張属性に設定。<TT>(easido FILENAME EATYPE VALUE)</TT>
+<LI> 標準入力の内容を拡張属性に設定。<!--
+--><TT>(COMMAND | easido FILENAME EATYPE)</TT>
+<LI> 拡張属性を削除。<TT>(easido -r FILENAME EATYPE)</TT>
+<LI> 拡張属性に値(行)を追加。<TT>(easido -a FILENAME EATYPE VALUE)</TT>
+</OL>
+<P>などの操作ができます。
+本領はバッチファイルやパイプラインで他のプログラム(あるいは自分自身)と
+組み合わされた時に発揮されます、多分。</P>
+
+<TABLE ALIGN=CENTER BORDER=0><TR><TD BGCOLOR="white">
+<TABLE BORDER=0 CELLSPACING=1>
+<TR BGCOLOR="black">
+  <TD>v1.02</TD>
+  <TD><A HREF="./easido12.lzh">25,084 Apr 09 00:08 easido12.lzh</A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+<P>本プログラム使用の際には emx 0.9d FIX03 の DLL が必要となります。</P>
+
+<H3>変更履歴</H3>
+
+<UL>
+    <LI>1.02 ('01.04.09)
+        <UL>
+            <LI>ファイルが存在しない場合、エラーを表示するようにした。</LI>
+            <LI>エラーコードを整備した。</LI>
+        </UL>
+    </LI>
+    <LI>1.01 ('99.08.28)
+        <UL>
+            <LI> -a (追加)オプションを追加。</LI>
+            <LI> 引数が足り無い時にコアダンプするバグを修正</LI>
+        </UL>
+    </LI>
+    <LI>1.00 ('99.08.15)
+        <UL>
+            <LI>初版</LI>
+        </UL>
+    </LI>
+</UL>
+
+<H2><A NAME="PMJOBS">pmjobs</A>(ぴぃえむじょぶず)</H2>
+
+<P>Nihongo Yet Another Os/2 Shell の内蔵コマンド jobs , fg , bg を独立させて<!--
+-->一つの実行ファイルにしたものです。コマンドラインから、PM プログラムを<!--
+-->一覧・アクティブ・最小化することができます。REXX から使うと便利かも<!--
+-->しれません。<!--
+--></P>
+
+<DIV ALIGN=CENTER>
+  <SPAN CLASS="O">
+    <A HREF="./pmjobs.lzh">3,772 Dec 13 1998 pmjobs.lzh</A>
+  </SPAN>
+</DIV>
+
+<H2><A NAME="open">open</A>(お〜ぷん)</H2>
+
+<P>Nihongo Yet Another Os/2 Shell の内蔵コマンド open を独立させて<!--
+    -->一つの実行ファイルにしたものです。コマンドラインから、ファイルや<!--
+    -->ワークプレイスオブジェクトを開く(＝関連アプリケーションを起動)<!--
+    -->することができます。<!--
+    -->
+</P>
+<DIV ALIGN=CENTER>
+  <SPAN CLASS="O">
+    <A HREF="./open.lzh">3,307 Dec 13  1998 open.lzh</A>
+  </SPAN>
+</DIV>
+
+<H2><A NAME="elwakt">elwakt</A>(えるわくと)</H2>
+
+<P>Palm シリーズのデータベースの内容を<!--
+--><A HREF="#ELL">ell</A>/<A HREF="eff.html">eff</A> で閲覧するための<!--
+-->プラグイン</STRONG>です。使用には、拙作の汎用書庫閲覧プログラム<!--
+--><A HREF="#ELL">ell</A> <!--
+-->あるいは ファイラー <A HREF="eff.html">eff</A> と<!--
+-->Pilot-link、および、それらを動作させるために emx.dll , <!--
+-->emxlibcs.dll , emxwrap.dll(emx 0.9d FIX <B>3</B>以降) 、<!--
+-->ページャなどが必要となります。</P>
+
+<P>本プログラムは、現在、</P>
+<UL>
+    <LI>MemoPad.pdb     (メモ帳)</LI>
+    <LI>Todo.pdb        (To Do リスト)</LI>
+    <LI>AddressDB.pdb   (住所録)</LI>
+</UL>
+<P>にのみ対応しています。</P>
+
+<TABLE ALIGN=CENTER BORDER=0><TR><TD BGCOLOR="white">
+<TABLE CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="black">
+  <TD>1.01</TD>
+  <TD><A HREF="./elwakt101.zip"
+      >62,068 2000/08/26 15:06 elwakt101.zip</A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+<H3>変更履歴</H3>
+
+<UL>
+  <LI>1.01
+    <UL>
+      <LI>ファイルとしての出力・展開をサポート(従来は標準出力への出力のみ)</LI>
+      <LI>STL の全面採用(つーても、stream だけだども)</LI>
+      <LI>emx 0.9d FIX 3 が 必要 となった(それまでは FIX 2 でよかった)。</LI>
+    </UL>
+  </LI>
+  <LI>1.00
+    <UL>
+      <LI>初版</LI>
+    </UL>
+  </LI>
+</UL>
+
+<DIV>
+  <FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><A HREF="../index.html">ホームへ</A>
+</DIV>
+
+</BODY>
+</HTML>

@@ -1,0 +1,102 @@
+
+<<((lb))OS/2((rb))
+[ 思えば遠くへ来たもんだ？|http://www.nackworld.com/nikki/200406.shtml#20040612]>>
+
+Nack さんて、自分(葉山)より年上の人だと勝手に思ってました
+（←かなり莫大に失礼なお話）。
+OS/2 user(以下 /2erと表記)は余り若くないという思い込みが… orz。
+
+そういえば、沈黙状態になった /2er も増えてきましたねぇ。
+いつか更新があるかもしれないと、アンテナに登録しつつも、
+1年近く、変化がないところもあり、寂しい限りです。
+
+<<((lb))tDiary((rb)) Client(仮称) エラー処理>>
+
+認証エラー処理をようやく実装。
+
+しかし「Are you sure?」的なダイアログを出すメソッドは VisualuRuby
+にはなかったのかなぁ。
+messageBox っぽいものがあればいいんだが、
+ドキュメント中から見付けられない(汗)。
+
+:(追記)
+:: messageBox 自体に上記機能が含まれていました。
+:(参考)
+:: http://www.geocities.co.jp/Technopolis/9587/rubyillustrator/memo.html{
+    ActiveScriptRubyでIllustrator 10}
+
+<<((lb))ぼそ((rb)) VirtuaPC >>
+
+Virtual PC を、つい“VirtuaPC (バーチャピーシー)”
+と呼んでしまう私は、かなりカコワルイですか？ねぇ？
+
+<<((lb))ぼそ((rb)) robots.txt>>
+
+あ、Google 除けに robots.txt を置いたら、
+はてなアンテナで警告が出ているではないですか。
+
+Google は相変らず読み出しとるようだし、外しちまうかな。
+
+<<((lb))おさんぽ((rb)) 夜更し>>
+
+* http://www108.sakura.ne.jp/~fun_bolt/bbsnote.cgi?fc=repost&l=1693{
+    糞ボルト＠落描道場「モータヘッド お父さん」}
+    :: モータヘッド祭りはどこまで行くんだろう。
+* http://homepage3.nifty.com/kazano/200406a.html#10_t2{
+    読冊日記 - 「ぱど厨」}
+    (http://www.alles.or.jp/~spiegel/200406.html#d11_t1{辺境から戯れ言}より)
+    :: 気がつかないところで、リアル小学生がどんどんネット上で発言し、
+	そして、トラブルを起こしていたというわけですか。頭痛い問題ですねぇ。。
+* http://blogs.sqlpassj.org/yamaken/archive/2004/06/08/2658.aspx{
+    ((lb))雑感((rb)) システムドライブに Program というファイルを作ると…}
+    (http://apollo.u-gakugei.ac.jp/~yoshiki/chalow/2004-06-11.html#2004-06-11-9{
+	Y's Memo} →
+    http://the-trickster.com/news/news_200406.html#09{TricksteR News}より)
+    :: おぉ、これは気をつけないと。
+* http://www.worth1000.com/cache/contest/contestcache.asp?contest_id=2944&display=photoshop#entries{機械化動物}
+    (http://homepage3.nifty.com/kazano/200406b.html#12_t2{読冊日記}より)
+    :: ここは素晴しい惑星メーテルですね。
+* http://www.t3.rim.or.jp/~raeva/diary/?200406a&to=200406061S1#200406061S1{
+    g++ の name mangling を demangle する方法}
+    (Good Wrappers For People Who Love Bad Know-Hows@2004.06.06) 
+    :: name mangling とは、コンパイル時に引数情報をシンボル名に
+	付加すること(でよかったかな)。勉強になるなぁ。
+
+<<((lb))ぼそ((rb)) 時代遅れ>>
+
+安定していて、実績があるからと言って、
+6年前と同じ技術を未だ使い続けているのって、
+会社的にはそれでいいんかもしれないけど、
+一技術者としては、だんだん時代遅れになっていって、
+市場価値が下がるだけなので、やだなーという不満。
+会社と心中するんならいいんですが、そんなつもり、あまりないし。
+
+結局、OS が Linux になったのと、Oracle のバージョンくらいしか
+変わっとらんのよ。ぶつぶつ。
+いい加減、C言語で、いつまでも文字列の末尾の \0 の位置を
+気にしなくちゃいかんのって、まずかねーかという話。
+
+Oracle よ、D言語に興味はないですか？
+Pro*D なんか、出来たら、かなり嬉しいんですが。
+そしたら「よーし、こうなったら布教しちゃうぞー」って感じですが、
+
+<<((lb))ぼそ((rb)) 出社やめ>>
+
+しんどいし、もう昼だし、やる気足りんし、そもそも日曜だし、来週でもいいし…。
+ぐだぐだぐだぐだぐだぐだぐだぐだと自分に対して言い訳。
+
+<<((lb))魂の叫び((rb)) しもたーーーーー>>
+
+同じ本を二冊も買ってしもうたぁぁぁ。
+こないだは、逆に一巻飛ばして買ってしまったし。
+
+<p class="big">
+    脳が腐ってやがる。遅すぎたんだ。
+</p>
+
+もうだめぽ。
+
+<<((lb))tDiary((rb)) [tDiaryClient(仮称) 0.02|../p/tdClient/]こうかい >>
+
+そろそろ、正式名称、考えなくちゃね。無論、
+http://d.hatena.ne.jp/uno/searchdiary?word=%2a%5b%be%e5%b8%cd%ba%cc%a5%e1%a5%bd%a5%c3%a5%c9%5d{上戸彩メソッド}を活用せねばなるまい。

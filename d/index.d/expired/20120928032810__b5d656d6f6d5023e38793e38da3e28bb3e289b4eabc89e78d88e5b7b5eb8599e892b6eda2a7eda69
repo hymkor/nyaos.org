@@ -1,0 +1,32 @@
+そのユーザ内で、該当シェルスクリプトが二重に起動することを防止したい。
+今までは、『ps -auxw | grep 自スクリプト名』で検出していたが、
+とあるスクリプトでは、どうも誤検出しやすい。
+
+ということで、/proc ファイルシステムとシンボリックリンクを利用して、
+下記のような二重起動防止の仕組みを考えてみた。
+
+8<
+#!/bin/bash
+
+errlog(){
+    echo $*
+}
+
+### ロック実施 ###
+LOCKFN=/tmp/OFFLINE_LOCKFILE.${UID}
+if ! ln -s /proc/$$/cmdline $LOCKFN >/dev/null 2>&1 ; then
+    ### 先にロックされていた！
+    if fgrep $0 $LOCKFN >/dev/null 2>&1 ; then
+        ### オフライン復旧プログラム起動中 ###
+        errlog 3 "$0 IS RUNNING NOW.."
+        exit 0
+    else
+        ### ゴミのロックファイルが残っていただけ ###
+        errlog 3 "remove trash lock: $LOCKFN"
+        ln -s -f /proc/$$/cmdline $LOCKFN >/dev/null 2>&1
+    fi
+fi
+errlog 3 "start action"
+sleep 10
+rm $LOCKFN
+>8

@@ -1,0 +1,69 @@
+<<[wifky] 公式 tweet ボタンが内部仕様的に微妙な件について>>
+
+6<
+http://twitter.com/zetamatta/status/21057089127{@zetamatta}
+ほぉ ≫ Twitter公式のツイートボタンがついに登場、誰でも簡単に設置可能 - GIGAZINE http://t.co/xd3z0DJ via @gigazine
+>9
+
+6<
+http://twitter.com/zetamatta/status/21057165077{@zetamatta}
+twitter 公式のツイートボタン。これはそのうち導入せねば / Twitterブログ: ツイートボタンでリンクを簡単に共有しよう http://htn.to/msPh5g
+>9
+
+6<
+http://twitter.com/zetamatta/status/21099743741{@zetamatta}
+どうも、この公式ツイートボタンは EUC-JP のタイトルではうまく動かんような気がしますぞい。どうしたらいいのかな ≫ ツイートボタンでリンクを簡単に共有しよう http://t.co/zfc00nB via @twj
+>9
+
+最初 UTF-8 化した当ページには簡単に設置できたので嬉しがっていたのだが、
+いざ、EUC-JP 状態の wifky.sourceforge.jp に設置してみたところ、
+
+>> ボタンを押下しても全然ポップアップが出ない！ なんでだ！ <<
+
+なんでだろう。
+
+<<<解説>>>
+
+ボタンの HTML は以下のような構造となっている。
+
+8<
+<a href="http://twitter.com/share"
+ class="twitter-share-button"
+ data-url="%s"
+ data-text="%s"
+ data-count="%s"
+ data-via="%s"
+ data-lang="ja">Tweet</a>
+ <script type="text/javascript"
+  src="http://platform.twitter.com/widgets.js"></script>
+>8
+
+JavaScript タグの前に a タグがあって、そこに独自の属性がいろいろ足されていて、それはそれで規約違反でどうなのよ状態なのだが、説明しよう
+
+:data-url
+:: リンク先URL。twitter 側で t.co 形式の短縮 URL に変換して、tweet のドラフトの中に格納される。
+:data-text
+:: ページタイトル。tweet のドラフトの中に格納される
+:data-count
+:: クリックカウンターの表示位置指定。"vertical"(上に表示),"horizontal"(右に表示),"none"(表示しない)
+:data-via
+:: Twitter-ID。「@」マークを付けて、tweet のドラフトの中に格納される。
+:data-lang
+:: 言語。アイコンが変わるようだ。
+
+ここで、当初、わたしは data-text が EUC-JP だから、ボタンが機能しないと思い込んだ。直接 EUC-JP が入るのは、ここだけだからだ
+(もちろん &→&amp; < → &lt; > → &gt; という変換はかますよ)。
+だが、実際は data-text は EUC-JP のままで構わなかった。おかしいのは data-url の方で、こちらは %xx 形式にエンコードされているにも関わらず、その %xx への変換前の元文字列を UTF-8 にする必要があったのだ。
+
+>> おかしいだろ、それ！ <<
+
+だって、URLそのものは ``[-:/a-zA-Z'.*_+%]`` といった文字列だけで構成していて、それはそのまま扱えばよいものを、なぜ、わざわざデコードする！
+
+あと、URLの中に「+」を書くと誤動作する(そこで URL が切れる)。URL 文字列としては空白は + にするというルール(あるいは慣習)があるのだが、それをちゃんと取り扱えていないように見えるのだ。
+
+もしかして、```http://`` を含めて全部 %xx 化する必要があるかと思って試してみた。
+結果はポップアップは出てが、短縮されないどころか、http%3A%2F…と続く URL になっていない文字列が表示されただけだった。
+
+仕方がないので、とりあえず、EUC-JP動作時は「``utf8p=``」というパラメータを用意して、UTF-8化したページ名を %xx 形式で受渡しするようにしてみた。だが、どう考えても、筋がおかしい。パラメータでテキスト化されたバイナリコードを送る時だってあるだろうに。
+
+なんというか、twitter社は規格とか標準とか、そういうの分かってるのかなぁ。なんだか疑問に感じてきたぞ。

@@ -1,0 +1,697 @@
+<HTML>
+<HEAD>
+    <META NAME="ROBOTS" CONTENTS="NOINDEX, NOFOLLOW" />
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+    <TITLE>The HAYAMA Script Part-XII</TITLE>
+    <STYLE TYPE="text/css">
+    <!--
+	.X{background-color:white ; color:black ; font-weight:bold }
+    -->
+    </STYLE>
+</HEAD>
+<BODY	bgcolor="#000000" text="#FFFFFF" link="#00FF00" vlink="#00AA00"
+	alink = "#FF0000">
+<DIV ALIGN=RIGHT>
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><a href="13.html">未来へ</A>　
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><a href="11.html">過去へ</A>　
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><a href="./index.html">目次へ</A>　
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><A HREF="../index.html">扉頁へ</A>
+</DIV>
+<HR>
+
+<H3><A NAME="unhappybirthday"><FONT COLOR="#00FFFF"
+><I>Unhappy Birthday to 俺！</I></FONT></A> (5/30)</H3>
+
+<FONT SIZE=7>と</FONT><BR>
+はいっても、もはや昨日のこと(5/29)だったりするんですな。
+これで、もう 27歳だよ。27歳というと、
+<UL>
+  <LI>クワトロ=バジーナ
+  <LI>キャプテン=ハーロック
+  <LI>Romy さん <TT>;-)</TT>
+</UL>
+と、結構、格好いい人が多いので、それ自体はいいのだが、
+来年には 28歳が待ち受けているのだな。トホホ。
+事を起こすなら、さっさとしなきゃいけないね(謎)
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>我</FONT><BR>
+々の知ってる(作ってる？)和製 OS/2 ツールが、全然、
+割弐世界誌に載らないのはなんでぢゃー！
+と、某所で話題となった（どこかは、ひ・み・つ）。
+<P>
+まぁ、結局は Nifty や Hobbes, LEO へ up されていないツールというのは、
+Nifty の人達は全然知らないのではないのではないかというのが、
+結論っぽくなった。そう、Nifty の人々というのは、
+Nifty の外の OS/2 フリーソフト世界を余り御存知でないに違いないのだ。
+<P ALIGN=CENTER>
+	<FONT COLOR="#FF00FF" SIZE=+1
+	>それは言い過ぎぢゃないか、ジョニー</FONT>
+<P>
+（無視して）というわけで、わたし、ちょっと最近、
+状況を改善すべく、暗躍している。
+何をしてるかって？ ふふふふふふふ。
+（いや、単に不躾なメイル出してるだけだけどね）
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>Ｇ</FONT><BR>
+nspool で、オフラインのメイル・ニュース環境を構築していて、
+結構快適ではあるのだが、一つ困ったことがある。
+Nifty の forum の方は nntp でしっかり get できるのだが(postもできたー)、
+fj とかが署名エラーとなってしまうのだな。何故か。
+<UL>
+  <LI>	forum の方は forum-nntp.nifty.ne.jp、
+	他の国内NetNews の方は news-jp.nifty.ne.jp
+	と異なるサーバーとなっている。
+  <LI>	Netscape News では両方ともちゃんと読める。
+  <LI>	別のプロバイダ(YYYネット)なんかだと、fj もオッケーよ。
+</UL>
+前の時にも、メイルで似たような問題があったが、
+gnspool のバージョンを上げることで解決した(ありがとう上野さん)。
+今回も同様かなと思って(考えが甘い)、
+<A HREF="http://www.goo.ne.jp/">goo</A> とかのサーチエンジンで、
+GN関係のページを探したが、別に 1.40 より新しいバージョンも、
+解決方法の載ったページもなし。
+<P>
+で、まぁ、gnspool にこだわりすぎるのもアレなんで、
+別のもう一つの選択肢として changi に挑戦してみた。
+そう、ローカルな NewsServer を上げちまう奴だな。
+ドキュメントは英語で(x_x)だったが、
+書いてある通りにやってみると、なんとかうまくいった。
+Netscape で 127.0.0.1 で、fj.os.os2 が読めた！
+なかなかいいぞ。いいかも。
+<P>
+でも、これだと forum は GNUS で、NetNews は Netscape でちょっと嫌。
+操作を統一するためにも、forum も NetNews も changi でローカルにコピーして、
+GNUS で読むようにしたいものだ。
+ということで、チャレンジしたが…、forum の記事の量が多すぎて、
+途中で Ctrl-C 押してしまった (^-^)ゞ。
+NetNews の時は fj.os.os2 だけにしていたから、比較的短時間に済んだんだっけ。
+<P>
+というわけで、単なる根性枯渇で断念してしまったが、
+二つの隣接サーバーからニュースを読み込んで、共存させるって、
+changi で出来るんだろうか。
+出来た人「出来るぞ！」とどっかで騒いでくれると嬉しい(ぉぃぉぃ)。
+う〜む、またも見事な他力本願である。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>最</FONT><BR>
+近に限ったことではないのだが、どうも身体のだるさがとれなくて、
+困ったもんだ。簡単に言うと、しんどいはずがないのに、しんどいのだな。
+（残業も少ない方だし。睡眠も不足していないのに）
+いつも、頭がスッキリしないか、身体がダルいかの、どちらかの状態ばっか。
+<P>
+ただの運動不足かなとも思うが、年々ひどくなっているような気も…。
+このせいで、最近、何をするにも意欲が湧かね〜！！
+来週あたりに病院に行こうかな。
+<P>
+みなさんも身体には気をつけましょうね。
+
+<HR>
+
+<H3><A NAME="zerotester"><FONT COLOR="#00FFFF"
+><I>♪ ゼロテスタ〜</I></FONT></A> (5/16)</H3>
+
+<A HREF="http://www.jks.is.tsukuba.ac.jp/~uno/diary/index.html#990512"
+><FONT SIZE=7>誤</FONT><BR>解してしまったぁ〜</A>。<TT>(^^;;;;</TT>
+というわけで、汚名挽回・名誉返上…ぢゃなかった、名誉挽回
+(それとも、名誉新規作成？)すべく、-lh6-を展開できるとかいう<A
+HREF="http://www.aist-nara.ac.jp/~tsuneo-y/soft/lha/lha-114d.ty.html"
+>LHa for UNIX 1.14d</A>を、emx/gcc 0.9d にてコンパイルしてみました。
+<P ALIGN=CENTER>
+	<A HREF="../warp/lha-114d.ty2-os2.zip"
+	>66,212 May 16 03:14 lha-114d.ty2-os2.zip</A>
+</P>
+本アーカイブは gpatch -p0用差分と実行ファイルだけですので、
+オリジナルの
+<A HREF="http://www.aist-nara.ac.jp/~tsuneo-y/soft/lha/lha-114d.ty2.tar.gz"
+>http://www.aist-nara.ac.jp/~tsuneo-y/soft/lha/lha-114d.ty2.tar.gz</A>
+を別途取得してください(クリックすりゃいいだけだけど)。
+<P>
+本差分は、試しにコンパイルしたら、なんとかできたよ〜っていうだけのもんなんで、
+拡張属性とか、OS/2 固有の機能には対応してません。
+使用については Own your risk でお願いします。
+一応、普通の LZH ファイルについて解凍がうまくゆくのは確認はしたんですが、
+肝心の -lh6- 形式が手元になくてテストできてません。
+誰かうまいこといったら、教えて〜。
+うまいこといったら、「ELLと愉快な…」に加えようかしら。
+その為には /bin/sh 無しでコンパイルできるようにしなくちゃいけないなぁ〜。
+<P>
+あ、そうそう、くれぐれも原作者の方々へ
+本差分＆実行ファイルについて問い合わせないように。
+なんせ、非公式バージョンの無断porting ですからね。
+<FONT COLOR="#888888">
+<DL>
+<DT>(補足＠5/17)
+<DD>本 lha は、-lh6-形式も展開できるようです。
+ですが、パス区切文字として「￥」が使えないので
+(圧縮では「//」に化け、展開では認識自体されない)、
+「/」だけをお使い下さい。
+ELL は、本日公開の 1.12 で、上記仕様に対応しました。
+<DT>(補足＠5/18)
+<DD>本 lha で作成された書庫には、UID/GID として 0/0 がついてしまいます。
+シングルユーザー環境で作成された書庫だから、UID/GID は空白になって
+いなければいけないところなんですが…。
+で、さらに ELL 1.12 のデフォルトのELL.CFG では、
+この UID/GID が表示されているのを
+前提としてしまっているので、そのままでは Windowsで作った書庫が扱えません。
+ELL.CFG の archive 文の fnamepos の値を一つ減らすとうまくゆきますが、
+そうすると、こんどは UID/GID 付きがうまく扱えなくなってしまうんですよね〜。
+そのうち、何とかします。
+</DL>
+</FONT>
+
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>Ｖ</FONT><BR>AIO のユーザー登録をしたら、
+マウスパッドと名刺入れが送られてきた。
+これはこれで嬉しいが、肝心の VAIO は RC564 を動かしているだけで、
+あまり使っていない。やはり、Warp が動いていないからだろう。
+ここは、VAIO で Warp ：WAIO 計画を発動すべきなんだろうか…。
+でも、多分、VGA になってしまうんだろうなぁ。
+まぁ、1024x480 が 640x480 になるだけだから、対した損失ではないかもしれないが。
+いざとなれば XFree86 である(Linux Japan でやってたし)。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>Ｎ</FONT><BR>YAOS-II。
+いわゆる、CMD.EXE よりの独立計画である。
+長年「あてにならない予告」であったが、
+「もしかしたら、万が一にもあてになるかもしれないけど、
+ちょっと保証はしかねるなぁ程度に予告可能」に格上げである。
+<P ALIGN=CENTER>
+	<FONT COLOR="#FFFF00" SIZE=+1>それ格上げになってません。</FONT>
+</P>
+今、一応、CMD.EXE を呼び出しているところの system関数 の代替関数が
+半分くらいできている。
+何が出来ていないかというと、リダイレクトがまだちょっとアレだし
+(パイプは出来てんだけどね)、
+REXX やらバッチファイルが駄目だったりする
+(goto とか for とかどないせーちゅーねん)。
+それに＆の処理が、どっちかというと、tcsh に近くなってるのと、
+PM プログラムが(＆を付けなくとも)必ず別セッションで起動されたりするのが
+アハハハハ〜である(何じゃそれは)。
+<P>
+ちなみに、そのルーチン。現NYAOS とは別個に作っているので、
+NYAOS 1.xx シリーズのバージョンアップとは別です。
+(またぁ、こうやって、期待だけあおる〜<TT>...</TT>誰も期待してない？)
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>起</FONT><BR>きてみれば、16:00。
+また、日曜を無駄にしてしまった。
+まぁ、その分、土曜夜更しをしているので、しゃーないといえば、しゃーないのだが。
+<P>
+で、今週はまた研修。データベースのチューンナップ講座なんだが… う〜ん。
+結局、上野さんとちゃんと会えそうもないなぁ…。トホホ。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>Ｐ.Ｓ.</FONT><BR>
+ゼロテスターが洒落にならなかったら、すみません
+＞ 我がソフトの使用者のみなさま。
+<BR>一応、テストゼロではないんですけどね<TT>...</TT>
+はっ
+<P ALIGN=CENTER>
+	<FONT COLOR="#FF00FF" SIZE=+1
+	>きょうび、ゼロテスターなんか誰も知らないかも</FONT>
+</P>
+ふ、墓穴だけを掘ったか…。確か水爆なみの威力のビームを出せるとかいう、
+三体合体の飛行機もんのアニメだったはずだが…あってるかな。
+
+<HR>
+
+<H3><A NAME="leo"><FONT COLOR="#00FFFF"
+><I>LEO,LEO パンジャの子〜</I></FONT></A> (5/11)</H3>
+
+<FONT SIZE=7>知</FONT><BR>らぬ間に、NYAOS が LEO 進出。めでたい。
+<SMALL>
+<PRE>
+99/05/02 20:50  121175    shells/nyaos149.zip (contents)<!--
+-->   CMD shell like YAOS, but supports DBCS
+</PRE>
+</SMALL>
+ちなみに知らぬ人はいないとは思いますが、
+LEO とは、ウルトラマンでも、パンジャの子でもなく、独逸の ftp サイトっす。
+海外で put したのは Hobbes だけというに、さすが独逸人。
+機動性もパワーも段違いだ。
+<P ALIGN=CENTER>
+  <FONT SIZE=+1 COLOR="#FF00FF">ザクとは違うのだよ、ザクとは</FONT>
+</P>
+ご連絡ありがとうございました ＞ 松村さん。
+<P>
+その NYAOS、スナップショットなどというものを公開してたりします。
+やはり、ちょっと自分ではテストしきれないところがあるので
+(本当は面倒なだけ？)、
+こいつで、みなさまからバグリポートをいただければうれし〜な〜などと
+蟲のいいことを考えていたりします。
+<P>
+とはいえ、現在のスナップショット(5/10)版で、やったことといえば、
+バグフィックスのみ。
+おいおい、それぢゃあ、正式版より安定してるぢゃねーか。
+いや、でも、その〜、それでも、さらにバグが出るかもしんないし…。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>e</FONT><BR>mx に FIX 1 が出ましたね。
+さっそく、落としてしまいました。
+まだ使ってないけど、軽くなってるとか。本当かなぁ〜。
+<P>
+そうそう、ベクターの方で、emxrt 等が 0.9d に上がってます。
+ありがとう、ベクターさん。
+でも、CD-ROM に反映されるの、冬なんだよね。
+
+<HR>
+
+<H3><A NAME="saga"><FONT COLOR="#00FFFF"
+><I>ニャーロック=サーガ</I></FONT></A> (5/8)</H3>
+
+<FONT SIZE=7>予</FONT><BR>告通り、
+松本零士の世界を堪能した。
+といっても、レンタルビデオで
+「ハーロック=サーガ」の1,2と「ダナサイト9999」を観ただけだが。
+両方とも、Release からだいぶと経っているが、まぁいいぢゃないか。
+<P>
+<B>ハーロック=サーガ</B>:<BR>
+　いわゆる「スペースファンタジー」とは
+こういう奴なんだろうか。ハーロックサーガは、
+舞台が宇宙なだけで、宇宙を海にしちまうと、
+本当、ファンタジーになっちまうような。
+一言で言うと
+「わぁ、宇宙を統べる指輪の原料となる黄金が盗まれたちゃったよぉぉぉ。
+たすけてぇ〜、ハーロック」という話であった(元も子もないね)。
+<P>
+ハーロックの姿をとったアングルのほとんどが、
+左斜め前だけだったので、
+なんか、素人漫画のような気がしたのは秘密だ！
+ちょっと、CG が浮いてたような気もするが、それも言ってはいけない！
+結局、1,2巻では余り話が見えなかったので、3巻以降に期待しよう。
+<P>
+<B>ダナサイト9999</B>:<BR>
+　進化生命体(だったかな)というと、
+ゲッター線を浴びたインベーダーを想像してしまうのは私だけであろうか。
+そして、精神生命体と聞くと、精神攻撃にヨワいのでは、と思った貴方は
+スレイヤーズ読者に違いない。
+なお、猫のミー君に林原を起用したのは大正解である。
+<P>
+うっかり、新999 を借りるのを忘れたので、近々借りることにしよう。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>1.51</FONT><BR>
+を出した直後で恐縮だが(←全然恐れ入っているように見えない)、
+多分、近々、1.52 を出すであろう。
+<P>
+バグもあるけど(あるんかい)、久しぶりにリクエストが来たので、
+これは出さずにはいられないと。
+内容は、マークに色を付けたのと、補完関係と、ディレクトリスタック関係ね。
+<P>
+ちなみに、バグとは、空入力すると、直前のコマンドが再実行されてしまうという…
+えっ？ 致命的ですか？ （＾＾;;;;
+
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>仕</FONT><BR>
+事の都合上、Windows を使うが、
+Internet でない、Explorer って結構便利な気がする。
+普段、邪魔っけな、Windowsキー＋Ｅで起動できるのも、くやしいが便利だ。
+コマンドラインシェルが貧弱な分、余計に多用してしまう。
+<P>
+Warp には、ああいう、左にツリー、右にディレクトリ内容が表示されるような
+シェルはあるのだろうか。あっても、Shareware だろうなぁ。
+え゛、eff でサポートせい？
+いや、その、VIO の場合はああいう体系はかえって…(むにゃむにゃ)
+<P>
+それはさておき(置くなぁ!)、その Windows キーについて、
+最近、思想的には悪くないと思い始めたが、
+やはり、位置が悪すぎるだろう。
+思うに、ESC と F1 の間とか、カーソルキーとか、
+テンキーの周辺とかにすべきなんだよな。
+ALT キーや CTRLキーが打ちにくくなるのはたまらん。
+<P>
+思うに、英語キーボードの場合、スペースバーの周辺は比較的余裕があるので、
+Windows キーを入れても狭っくるしくなかったのであろう。
+それを無理矢理日本語キーボードへ導入したから…なんだろうな。
+やれやれ。
+<P>
+ところで、ノートパソコンのアプリケーションキーだけは謎だ。
+右ボタンがすぐ近くにあるんですけど…。
+
+<HR>
+
+<H3><A NAME="renkyu"><FONT COLOR="#00FFFF"
+><I>レンキューベリマッチ</I></FONT></A> (5/5)</H3>
+
+<FONT SIZE=7>連</FONT><BR>休でしたねぇ。
+この連休に出来たこと：
+<UL>
+  <LI>ページをリニューアルした。
+  <LI>NYAOS を ver.up した。
+  <LI>eff を ver.up した。
+  <LI>LAN 環境、および、Twin RC-564 クラッキングモードを整えた。
+  <LI>部屋をガーベッジコレクションしようとして、core dump した。
+  <LI>COWBOY BEBOP の5巻目を見た。
+  <LI>友人とカラオケでアニソンを唄いまくった。
+  <LI>友人と天地無用の映画を見に行った。
+  <LI>Linux(98)で有名な井伊氏と久しぶりに電話でおしゃべりした。<BR>
+	(実は知り合いなのだ、すごいっしょ〜
+	<FONT SIZE=-1 COLOR="#888888">←田舎もんか俺は</FONT>)
+</UL>
+<P ALIGN=CENTER>
+<FONT SIZE=+1 COLOR="#FF00FF">おぉぉぉぉ、(一部を除いて)一見、不毛だ！！！</FONT>
+</P>
+しかしながら、基本的に、どうも Out Door つーのは疲れるだけで…
+In Door だと落着くのよね〜。
+当初は、どっか行くつもりだったけど、
+いざ行くとなると、どっか行ってどうするのって感じだし。
+<P ALIGN=CENTER>
+	<FONT SIZE=+1 COLOR="#FFFF00">ま、俺それぞれだからいいかな</FONT>
+</P>
+それはさておき、実はやっておかなくてはならないこともある。
+<UL>
+  <LI>会社の宿題をやる。
+  <LI>大学の仕事をやる。
+  <LI>免許の更新に行く。
+  <LI>部屋を再フォーマットする。
+  <LI>松本零士の世界に浸る。
+  <LI>研修で習った DB のことを復習する。
+</UL>
+「やらなくてはならないこと」の定義については問わないように。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>ど</FONT><BR>
+こだけの話。emxlibc[sm].dll すなわち、ライブラリ全部を含んだ DLL
+の方には、時々、入っていない関数があって困りもの
+(正確に言うと、リンクエラーが起きるから、インポートライブラリって
+奴の不備かも)。
+Dynamic Link ぢゃなくて、Static Link だと、ちゃんとリンクできるんですよね〜。
+一例を上げると、
+<UL>
+<LI>_nls_is_dbcs_lead(c) … c が DBCS の第1バイトか判別する関数。
+<LI>unexpected()
+	… C++ の例外で、最後までどの catch 節にも引っかからなかった場合に
+	呼び出される関数。
+<LI>throw NULL … なんか、変な名前のラベルが undefined だと怒られる。
+<LI>v_vprintf の下請け関数
+<LI>exception のコンストラクタ
+	… インラインだから、無くて当たり前なのだが、
+	なんでか、コンパイラが勘違いする。あ、-g 付けた時だけかも。
+</UL>
+こういうことになるって、何がいけないんでしょうねぇ。
+作者のチェック漏れかなぁ、やっぱし。
+私の無知から来るものだったら、逆にいいんだけど。
+
+<HR>
+
+<H3><A NAME="hotos2"><FONT COLOR="#00FFFF"
+><I>熱きOS/2の伝説</I></FONT></A> (5/3)</H3>
+
+<A HREF="http://hp.vector.co.jp/authors/VA014690/Links.html#OS/2"
+><FONT SIZE=7>熱</FONT><BR>き想いをプログラムに転換させ公開しよう</A>!!!
+<P>
+うぅ〜、いつ提唱したか覚えていないぃぃぃ。
+でも、タワシの脳は揮発性だからな、書いてて忘れている可能性もありうる。
+書いてなくとも、そのうち書きそうな気もする。そんなわけだから、
+<P ALIGN=CENTER>
+	<FONT SIZE=7 COLOR="#FFFF00"><B>まぁ、よし！</B></FONT><BR>
+	<FONT COLOR="#FFFF00">ｄ(^_^)</FONT>
+</P>
+みんなぁ〜、黙って、俺のプログラムを使えぇ〜！(ナニカチガウ)
+<BR><FONT SIZE=-1 COLOR="#888888"
+>(うぅ、昔は温厚で真面目でおとなしぃーとみんなが言ってくれたのに…)</FONT>
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>再</FONT><BR>び、emx の話。
+うみゅ〜、<A
+HREF="http://village.infoweb.ne.jp/%7Efwje3068/os2/diary/9905.html#990502"
+>確かに</A>シングルＣＤに入りそうなサイズ…
+(でも、シングルＣＤって、容量どれだけなんしょ)
+<BLOCKQUOTE><PRE>
+-rw-a--e      2,562 Jan 26 09:53 00index.txt
+-rw-a--e     20,632 Dec 22  1998 INSTALL.DOC
+-rw-a--e     10,746 Dec 22  1998 README.DOC
+-rw-a--e  1,360,246 Dec 22  1998 emxdev1.zip
+-rw-a--e    195,407 Dec 22  1998 emxdev2.zip
+-rw-a--e    549,675 Feb  7 01:49 emxrt.zip
+-rw-a--e  1,075,274 Dec 22  1998 gnudev1.zip
+-rw-a--e    732,747 Dec 22  1998 gnudev2.zip
+-rw-a--e  1,340,670 Dec 22  1998 gnudoc.zip
+-rw-a--e    233,364 Dec 22  1998 gnuinfo.zip
+-rw-a--e  1,135,362 Dec 22  1998 gppdev1.zip
+-rw-a--e    399,932 Dec 22  1998 gppdev2.zip
+</PRE></BLOCKQUOTE>
+7 MBくらいかな。これでもだいぶと要らん奴入ってますからねぇ。
+でも、今日、これくらいならダウンロードもがんばれば大丈夫かな…
+という気もしないでもない(ぉぃぉぃ)。
+<P>
+この程度ならば、ベクターさんが収録してくれたって…。
+ということで、/incoming に実は emxrt.zip (0.9d)他を放り込んだんだけど…。
+put した後、ベクターさん宛てにメイルを書く段階で、
+著作者の承諾を得てなかったことに気付く。
+GPL 配布物だから、その必要は無いはずだけど、
+ベクターさん、頭が固かったら駄目かも。
+<P ALIGN=CENTER>
+	<FONT SIZE=+1 COLOR="#FF00FF">まぁ、怒られたら謝ればいい</FONT>
+</P>
+こうやって、人の権利はないがしろにされるわけだな。
+<P>
+それはともかく、bitmicro だったかな。
+CD-ROM 通信販売しているみたいだけど、あれって emx 0.9d 入っているのだろーか。
+って、もしかして Hobbes OS/2 の最新 CD-ROM が売られてないの、大阪だけ？
+もし、大阪(日本橋)で売られているところ御存知だったら一報ください。
+といいつつ、必要なもんは、ほとんど Download 済みだったりして…。
+あぁ、こんなこと書いたら誰も教えてくれないはず。
+だが、正直者のあっしは書かずにはいられない。
+どうすればいいのだ、親父！ ガガッぷしゅ〜。
+
+<HR>
+
+<H3><A NAME="hobbes-nama"><FONT COLOR="#00FFFF"
+><I>Hobbes 生！</I></FONT></A>(5/1)</H3>
+
+<FONT SIZE=7>ま</FONT><BR>ずは、すみません。
+11連休なんぞとっている超不届き者です。
+というわけで、せっかく予告いただいたのに、30日もお会いに行けず、
+申し訳ありません ＆ 出張、お疲れ様でした ＆
+カウンタ 10000 GET ありがとうございました
+<A HREF="http://www.t3.rim.or.jp/~zodiac/tokui/199904.html#19990429"
+>＞ 上野様</A>。
+(ちなみに、5/12〜14もちょっと微妙な雰囲気… また外出している可能性が…
+すみません)
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>Ｃ</FONT><BR>D-R を買いました。
+しかも、OS/2 上から焼けたので大満足。
+使用したソフトは、UNIX系である、CDRecord/2 。
+<P>
+最初、(CD-ROMのイメージファイルを作る)mkisofs.exe が Segmentation Fault 
+を起して、頭が煙を出してしまいました。
+が、ウェブによると最新のmkisofs はちょっと buggy とのこと。
+version down してみたら、見事解決。
+さぁ焼いてみよう。
+<P ALIGN=CENTER>
+	<FONT SIZE=+1 COLOR="#FF00FF">あ、SCSI ID 忘れた…</FONT>
+</P>
+こういう時は、端から順番に指定するべし。
+間違えたら恐いって、どこにも書いてないし(おい！)。
+4…駄目だ、5…駄目だ、6…おっ、プロンプトが出ない。
+書き始めとる、よし、うまくいってるようだ。いってるようだ、
+いってるようだ…が…
+<P ALIGN=CENTER>
+	<FONT SIZE=+1 COLOR="#FFFF00">え〜い、まだ終わらんのか！！</FONT>
+</P>
+CD-R 自体は 4倍速書きこみが可能なのだが、念の為、2倍速でやったのは
+やはり間違いだったようだ。今度から素直に 4倍速指定するとしよう。
+まぁ、それはともかく、他のアプリを起動させるのも恐いし、
+やることがなくなってしまったので、本屋へ時間つぶしに行ってこようっと。
+<P ALIGN=CENTER>
+	<BIG>… 一時間経過 …</BIG>
+</P>
+よしよし、書き込みランプ消えとるし、プロンプトも出とる。
+平和に終わったようだ。では、さっそく見てみよう…
+あらら、ファイル名がみんな大文字になって、長いファイルも
+適当に改名されちゃってるなぁ。
+Joliet を指定したつもりだったんだけど、ちょっちオプションが足りなかったかな
+(CDFS.IFS は入れかえてもだめだった)。
+まぁ、今回はテスト兼バックアップだし。まぁよし。
+<P>
+てなわけで、￥26,000-で買った Panasonic CD-R : CW-7502B/C は
+立派な OS/2 対応であった。めでたい！
+しかし、ドライブベイが満タンになって、CD-ROM(2倍速)を追い出すはめに
+なったのはちと残念。そう、一時
+<P ALIGN=CENTER>
+	<FONT COLOR="#FF00FF" SIZE=+1>CD(-R) のドライバーは CD の中〜</FONT>
+</P>
+になって困ったのは秘密である！
+(結局、OS/2 は boot floppy で認識、Windows95 は、VAIO の力に頼った)
+マザーがＡＴだからなぁ。箱を買い換えようとすると、
+結構の規模になってしまふ… SCSI-BOX 買おうかな。
+
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>Ｃ</FONT><BR>D-R といえば、
+OS/2 ユーザーの間で ××特製CD-Rを作ろうとか、
+話は出てもすぐ流れていっちゃいますねぇ。
+(というか丁重に無視されてしまう?)
+<P>
+OS/2 mag. が休刊になってから、emx 0.9d はネット経由でしか GET
+できなくなっているので、何らかの手を打ちたいところなんです。
+OS/2 World が載せてくれたら一番てっとり早いんですけど、
+その気配は全くなさそうだし。やはり、ここはベクターかな。
+誰かが、put してくれればいいんですが…って、こういうことは
+言い出しっぺがやる法則が適用されるんだろうか。
+でも、ベクターって、CD-ROM が発売されるの年二回だから、
+今、put しても冬になっちまうかしら。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>つ</FONT><BR>いに、Hobbes に NYAOS を置いてしまった…。
+1.49 だけど。英語のメイルが来ないかドキドキドキドキ。
+（書類不備で却下になったりして;-）
+<P>
+ちなみに、最新の NYAOS は、クリップボードからのカット＆ペーストが<!--
+-->可能となっている。これも全て、KashEDIT のおかげ。SukiSuki-OS/2 での
+質疑応答を参考にさせていただきました。ありがとうございます。m(__)m
+<P>
+が、今、ソース全体のオーバーホール、すなわち、要らんコード消したり、
+重複コードをまとめたりつーのをやり始めてしまったために、
+すぐに公開できなくなってしまった。
+ということで、もうちょっとお待ちくださいませませ。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>友</FONT><BR>人から電話ありけり。
+メイルで済む用事だったそうですが、なんか、
+<SPAN CLASS=X>削除</SPAN>@ijk.com でははねられてしまったとのこと。
+何故だ、ijk.com！(今さっき、自分でメイル出したが、問題なかったけどなぁ)
+<P>
+というわけで、一応、扉ページにも記しておきましたが、
+私のメイルアドレスをちゃんと解説しますと(するほどのもんかい)
+
+<DIV STYLE="margin-left:10%;margin-right:10%;background-color:#444444">
+    (2002年10月)
+    <BR />　自己防衛のため、ここに記述のメールアドレスは全て削除しました。
+</DIV>
+
+<DL>
+<DT><SPAN CLASS=X>削除</SPAN>@ijk.com
+<DD>私の代表メイルアドレス。メイル転送サービスで、Nifty へ転送されている。
+100KB以上のメイルは受けつけないので注意。
+
+<DT><SPAN CLASS=X>削除</SPAN>@nifty.ne.jp(<SPAN CLASS=X>削除</SPAN>@nifty.ne.jp)
+<DD>自宅から利用している Nifty のアドレス。これが現在のメイン。
+From: にもついちゃっている
+(本当は From: <SPAN CLASS=X>削除</SPAN>@ijk.com にしたいのだが、
+せっかく From を変更しても、Nifty が無視しくさっている)
+
+<DT><SPAN CLASS=X>全面削除</SPAN>
+<DD>会社のアドレス。平日の緊急時とか、上記のアドレスが駄目な場合、
+    こっちへ送ってください(なお休日は読めないすよ)。
+    昔は ijk.com から転送させていたが、今は止めている。
+    そう、会社で private なメイルは書かないようにしたのだ
+    (読むとつい書いちまうので)。
+
+<DT><SPAN CLASS=X>削除</SPAN>@<SPAN CLASS=X>削除</SPAN>.yyy.or.jp ,
+    <SPAN CLASS=X>削除</SPAN>@<SPAN CLASS=X>削除</SPAN>.ac.jp ,
+    <SPAN CLASS=X>削除</SPAN>@<SPAN CLASS=X>削除</SPAN>.ac.jp
+<DD>現在は使っていないし、転送もされないので注意！
+</DL>
+てなわけです。まぁ、普通は<SPAN CLASS=X>削除</SPAN>@ijk.com 。
+バイナリ送る時とか、ijk.com ではねられた時は、Nifty でお願いします。
+
+<HR>
+<FONT COLOR="#EEEEAA">▼</FONT><a href="13.html">未来へ</A>　
+<FONT COLOR="#EEEEAA">▼</FONT><a href="11.html">過去へ</A>　
+<FONT COLOR="#EEEEAA">▼</FONT><a href="./index.html">目次へ</A>　
+<FONT COLOR="#EEEEAA">▼</FONT><A HREF="../index.html">扉頁へ</A>
+</BODY>
+</HTML>

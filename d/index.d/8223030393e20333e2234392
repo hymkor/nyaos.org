@@ -1,0 +1,29 @@
+* 首相秘書が同じようなことをしたら、民主党はどういう要求をするんだろうね。
+  その要求を自らに課すべきだと思う。
+
+* コンサル要らん。間違ったことは言ってないが、仕事のペースが狂わされる。
+  早い目、早い目って、勝手に優先順位を上げるなッ！
+
+* SAKURA に Mercurial を導入するという記事を書けばよかった。
+  今となっては、すっかり忘れている。
+
+<<いや、待て、その計算はおかしい>>
+
+* [TopHatenarが全ドメインのブログに対応しました - kaisehのブログ|http://d.hatena.ne.jp/kaiseh/20090322/1237669665]
+
+はてな以外のサイトもサポートになったので、
+http://tophatenar.com/view/http://nyaos.org/d/index.cgi{
+nyaos.org/d を集計登録}してみた：
+
+<<{20090324_tophatenar.png}
+
+<<{100friends.png}
+
+アクセスログを見た
+
+8<
+…"GET /d/index.cgi?a=rss HTTP/1.1" 304 - "-" "livedoor FeedFetcher/0.01 (http://reader.livedoor.com/; 9 subscribers)"
+…"GET /d/?a=rss HTTP/1.1" 304 - "-" "livedoor FeedFetcher/0.01 (http://reader.livedoor.com/; 100 subscribers)"
+>8
+
+あー、そういうことか。どうしたらいいのかな、これ。

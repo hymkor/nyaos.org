@@ -1,0 +1,24 @@
+<<ckwwwwwwwwwwwwwwwwwwwwwww(シーケーわらわら)>>
+
+体調悪いので、手短かに
+
++ 職場の PC に ckw 入れてなかったので、ダウンロードしようと思って、
+   https://github.com/deflis/ckw-mod/downloads{GitHub} 見に行ったが、
+  バイナリなかった。
++ ソースはあったので、帰ってから自前でビルドした。
+  せっかくなので、自分のhttp://www.nyaos.org/index.cgi?p=Where+is+ckw+%3F#p2{ckw 情報ページに Up しといた}。
+  欲しい人は勝手に持ってって。
++ GitHub は汎用ファイルアップロード機能がなくなったみたいだし、
+  sourceforge.jp の ckw プロジェクトの方にバイナリアップすればいいんじゃねと思って、
+  プロジェクトの参加申請した。ま、多分、承認も拒否もされず、放置プレイだろうなぁという気がするが。
++ ふと、さっきのhttps://github.com/deflis/ckw-mod/downloads{ダウンロードページ}の右上を見ると
+  「Fork 18」とか出ていて、「えぇっ！」と思ってクリックすると、
+  https://github.com/deflis/ckw-mod/network{また派生が爆発}していて、絶望した！
++ ところで、家でビルドした ckw を会社で動かそうとしたらウンともスンともしない。
+  ckw.cfg を見たら「Ckw*chdir:」が存在しないディレクトリになっていて、
+  正しいディレクトリにしたら直った。
+  これ不親切じゃね？エラーダイアログくらい出そうぜ。
++ 今ソース見たら、カレントディレクトリの存在チェックせずに、CreateProcessA にそのままぶちこんで、
+  エラー終了しているっぽい。(main.cpp の create_child_process関数内)
+
+しんどいから寝ます。じゃね

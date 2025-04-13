@@ -1,0 +1,86 @@
+<<#Lua のイタレータは慣れたら簡単だけど、慣れるまでが難しいよなぁ>>
+
+暇つぶしに Lua 版 itertools をチマチマと作ってたり。
+
+<<<準備>>>
+
+8<
+itertools = itertools or {}
+local unpack_=(unpack or table.unpack)
+>8
+
+まずは「``itertools``」という名前空間を作る。
+``itertools or {}`` としておけば、既存の``itertools``のテーブルが宣言されていたら、
+そちらをそのまま、さもなければ新規にテーブルを作るという感じ。
+
+``unpack``関数は Lua 5.2 になって、``table.unpack`` という形になった。
+ここでは、どちらでも使えるように存在する方を使うようにした。
+
+なお、ここまで書いてたら分かると思うが、Lua は未宣言の変数を使ってもエラーにならない。
+静かに nil が返ってくるだけだ。
+スピードワゴンのようにクールな仕様だ。
+
+<<<一発目>>>
+
+8<
+function itertools.pack(func,stat,...)
+    return function(stat,vars)
+        local vars = { func(stat,unpack_(vars)) }
+        if vars[1] then
+            return vars
+        end
+    end,stat,{...}
+end
+>8
+
+まずは ``itertools.pack`` という関数を作った。
+これは通常 n 個の値が返されてくるイタレータを、
+n個の値を含むテーブル1個を返すように変換するフィルターだ。
+
+こんな感じで使う。
+
+8<
+local foo={ a="A",b="B",c="C" }
+for pair in itertools.pack(pairs(foo)) do
+    print(pair[1].."="..pair[2])
+end
+>8
+
+これ自体は使うシーンは限られてくると思うが、
+どんな値のセットを返すイタレータが渡されるか分からないシーンなどに利用できるかなと思って作った。
+だけど、いい使用例が思いつかないなぁ。
+
+<<<二発目>>>
+
+さて、itertools.pack を見ると、イタレータの作成が非常に分かりにくいし、デバッグしにくい。
+イタレータを実際に利用する「汎用http://milkpot.sakura.ne.jp/lua/lua52_manual_ja.html#3.3.5{for文}」
+のロジックも非常に分かりにくい。
+それでいて、クロージャーの機能を使ってそうで、実は使ってなさそうで、
+「すみません、使ってました」という何とも中途半端な実装だ。
+
+そんな中途半端なやり方は放り出して、コルーチンを使ってみると、少し分かりやすい。
+例として、Ruby とかにある enumerate を作ってみた。
+
+8<
+function itertools.enumerate(func,stat,var0)
+    return coroutine.wrap( function()
+        local vars = { func(stat,var0) }
+        local count = 1
+        while vars[1] do
+            coroutine.yield( count , unpack_(vars) )
+            count = count + 1
+            vars = { func(stat,unpack_(vars)) }
+        end
+    end)
+end
+>8
+
+8<
+for i,key,val in itertools.enumerate(pairs(foo)) do
+    print(i,key,val)
+end
+>8
+
+こっちは真面目に実用的だ。ただ、Python や Ruby の yield 文とは違って、
+コルーチンを意識して使わないといけないという点で、ちょっとハードルが高いかもしれない。
+つーか、これでもゴッチャリしてるなぁ。

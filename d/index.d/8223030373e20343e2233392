@@ -1,0 +1,36 @@
+* 日付がずれてるけど、気にしない。
+
+* 先日の√2。C言語に焼き直したら、普通にオーバーフローした。
+    自動で多倍長型へ変換してくれる Python えらい。(まぁ、Ruby もそうだけど)
+
+* livedoor Reader での Feed 。
+    ``nyaos.org/d/monjoe.cgi?a=rss`` で 9件くらい登録があったのが 1件になって、
+    ``nyaos.org/d/?a=rss`` が 30件くらいあったのが 40件になった。
+    何かのタイミングで集約されたのかな？
+
+* 最近の若いもんは MALOR を知らない。
+  しかも、石の中へテレポートしてしまう件をつかまえて、
+  「バグちゃいます？」だなんて…
+  (ついでに年長者の話を最後まで聞かないし)
+  とりあえず、絶望しとく。
+
+* わしは、せいぜい便利な老婆知識袋なんだよ、所詮
+
+<<kill -0 $pid 2>/dev/null || break>>
+
+http://pc11.2ch.net/test/read.cgi/tech/1112553783/586-588{
+シェルスクリプト相談室}より：
+
+8<
+man 2 kill
+The kill() system call sends the signal given by sig to pid, a process or
+a group of processes. The sig argument may be one of the signals speci-
+fied in sigaction(2) or it may be 0, in which case error checking is per-
+formed but no signal is actually sent. This can be used to check the
+validity of pid.
+
+プロセスが存在してそのプロセスにシグナルを送る権限があれば正常終了。
+それ以外はエラー。つまり、プロセスの生存確認に使用できる。
+>8
+
+へー。``ps -ef | grep $pid``より、よっぽどマトモそうだ。

@@ -1,0 +1,58 @@
+<<[Lua] 囲まれた文字列の置換を Lua で書いてみた>>
+
+* http://pc11.2ch.net/test/read.cgi/linux/1215431118/33{awk ファンクラブ}
+* http://gauc.no-ip.org/awk-users-jp/blis.cgi/DoukakuAWK_143{AWK Users JP :: 囲まれた文字列の置換}
+
+awk の後継であると信じる Lua で書いてみた。
+
+8<
+#!/usr/local/bin/lua
+
+local t={}
+for line in io.lines() do
+    print(
+        string.gsub(
+            line,
+            "@<.-@>",
+            function(m)
+                local new_str = ""
+                for i=1,10 do
+                    new_str = new_str .. string.char(math.random()*26+65)
+                end
+                t[m] = new_str
+
+                return new_str
+            end
+        )
+    )
+end
+
+for key,val in pairs(t) do
+    io.stderr:write(key.." "..val.."\n")
+end
+>8
+
+* string.gsub には置換文字列を生成する無名関数を渡すことができて、表現が自然
+** RSTART,RLENGTH などの特殊変数を参照するといったことをしなくてよろしい
+* Lua には正規表現はなく、「パターン」という簡易表現しかないが、それでも最短一致など、必要最小限の仕様がある
+* ファイル名をパラメータで受け取るのはダサい。標準入力、標準出力、標準エラー出力でいいじゃん(標準エラー出力をエラー以外の出力に出すのはイレギュラーだが)
+* オーソドックスな文法なので、上の動きが、Lua を知らずとも、雰囲気的にだいたい分かる(よね？)
+
+8<
+$ lua random_char.lua < random_char.in >out 2>err
+
+$ cat out
+APFVPMJXVTbbb   1
+cccFWSNIACJEE   1
+eee[MDAAKOPQQggg        1
+hhhERMJBQUVOIjjjXTZYOEMGWFlll   2
+
+$ cat err
+@<fff@> [MDAAKOPQQ
+@<aaa@> APFVPMJXVT
+@<kkk@> XTZYOEMGWF
+@<ddd@> FWSNIACJEE
+@<iii@> ERMJBQUVOI
+>8
+
+ふむ

@@ -1,0 +1,91 @@
+!!! ((title [IronPython] IronPython から .NET のイタレータを呼ぶ))
+
+VB.net で作ったイタレータのテストを IronPython から手軽にできないかなーと思ったんじゃが…
+
+8<
+$ ipy
+IronPython 2.7.3 (2.7.0.40) on .NET 4.0.30319.296 (32-bit)
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from System.Collections.Generic import *
+>>> foo = List[str]()
+>>> foo.Add("ahaha")
+>>> foo.Add("ihihi")
+>>> for e in IEnumerable[str].GetEnumerator(foo):
+...    print(e)
+...
+ahaha
+ihihi
+>>>
+>8
+
+ううむ、思った以上に面倒くさいのぉ。
+
+* 参考
+** http://stackoverflow.com/questions/6081127/how-to-use-a-specific-interface-on-a-c-sharp-object-in-ironpython#{How to use a specific interface on a C# object in IronPython - Stack Overflow}
+** http://ironpython.net/documentation/dotnet/dotnet.html{IronPython .NET Integration}
+
+!!! [IronPython] Dictionary でもやってみた。
+
+8<
+from System.Collections.Generic import *
+
+foo = Dictionary[str,str]()
+foo["ahaha"] = "ihihi"
+foo["ufufu"] = "ehehe"
+
+for e in IEnumerable[KeyValuePair[str,str]].GetEnumerator(foo):
+    print e.Key,e.Value
+>8
+
+8<
+$ ipy foo.py
+ahaha ihihi
+ufufu ehehe
+>8
+
+これはひどい。動的言語の良さが死んでいる。
+
+!!! [IronPython] (4/18)追記：あぁ、これでよかったのか
+
+8<
+# encoding:cp932
+
+from System.Collections.Generic import *
+
+foo = Dictionary[str,str]()
+foo["ahaha"] = "ihihi"
+foo["ufufu"] = "ehehe"
+
+for e in foo.GetEnumerator():
+    print e.Key,e.Value
+>8
+
+これでこそ、動的言語。あー、入門書一冊買った方がいいのかな
+
+8<
+# encoding:cp932
+
+from System.Collections.Generic import *
+
+foo = Dictionary[str,str]()
+foo["ahaha"] = "ihihi"
+foo["ufufu"] = "ehehe"
+
+for e in iter(foo):
+    print e.Key,e.Value
+>8
+
+8<
+# encoding:cp932
+
+from System.Collections.Generic import *
+
+foo = Dictionary[str,str]()
+foo["ahaha"] = "ihihi"
+foo["ufufu"] = "ehehe"
+
+for e in foo:
+    print e.Key,e.Value
+>8
+
+これでもいけた。あれ？なんで、最初、これで駄目じゃったんだろ

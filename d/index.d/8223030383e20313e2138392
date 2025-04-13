@@ -1,0 +1,85 @@
+<<[Linux] chroot を使ってみた>>
+
+ルートディレクトリにディレクトリやら、シンボリックリンクを張りまくる
+シェルをテストしたいんだが、
+そのまま使うと危なっかしくて仕方ねぇ。
+
+ということで、ルートディレクトリを変更してしまうという
+chroot コマンドを「素」で使ってみた。
+
++ 新/bin に、bash + 使いたいコマンドをコピー。
++ 上のコマンドで利用される共有ライブラリを ldd で確認。
++ 新/lib に共有ライブラリをコピーする。
++ chroot ゴーゴー
+
+8<
+$ su
+Password:
+# mkdir jail
+# cd jail/
+# mkdir bin
+# cp /bin/bash ./bin/.
+# cp /bin/rmdir ./bin/.
+# cp /bin/rm ./bin/.
+# cp /bin/mv ./bin/.
+# ldd ./bin/*
+./bin/bash:
+libtermcap.so.2 => /lib/libtermcap.so.2 (0x40021000)
+libdl.so.2 => /lib/libdl.so.2 (0x40025000)
+libc.so.6 => /lib/i686/libc.so.6 (0x40029000)
+/lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x40000000)
+./bin/mv:
+libc.so.6 => /lib/i686/libc.so.6 (0x40021000)
+/lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x40000000)
+./bin/rm:
+libc.so.6 => /lib/i686/libc.so.6 (0x40021000)
+/lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x40000000)
+./bin/rmdir:
+libc.so.6 => /lib/i686/libc.so.6 (0x40021000)
+/lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x40000000)
+# mkdir lib
+# cp /lib/libtermcap.so.2 ./lib/.
+# cp /lib/libdl.so.2 ./lib/.
+# cp /lib/libc.so.6 ./lib/.
+# cp /lib/ld-linux.so.2 ./lib/.
+# /usr/sbin/chroot .
+bash-2.05# ls
+
+>8
+
+/dev の以下にデバイスファイルを作らんといかんのかなと思ったが、
+シェルを動かすだけなら、それには及ばないんだねぇ。
+(ターミナルとのパイプは既に open 済みで dup2 するだけだからかな)
+
+さて、これで、わたしが何をやりたいのかは秘密
+
+
+<<[Cygwin] 猿でも分からなくなる X-Window の起動方法>>
+
+Oracle for Linux の DB インスタンス作成手順書を作りたいのだが、
+そのツール dbca は X-Window を必要とする。
+が、寒いサーバルームで作業したくねぇ。
+ということで、手元の Windows デスクトップを Cygwin で X-Server にしようかなと
+思ったわけだ。
+
+最近の Cygwin は setup.exe で X-Window を入れてくれるので、
+インストール自体は簡単だが、いざ起動させるのに難儀した。
+
+*  Windows のスタートメニューに起動アイコンらしきものがない。
+*  なんでじゃろ(わしのインストールの仕方が悪いのか？)
+*  Cygterm の中から起動できない。
+*  なんでじゃろ(多分、環境変数未設定とか、ターミナルのせいじゃろ。面倒なので深追いはせん)
+
+結局「スタート」→「プログラム」→「Cygwin」→「Cygwin Bash Shell」の方で、
+真面目に起動したコマンドラインより、普通に「startx」とコマンドを発行すれば
+よろしいようだ。
+
+これで起動すると、ウインドウの枠は Windows のフレームをそのまま使う体裁となった。これはこれで構わんのだが、
+「ssh -X oracle@(LinuxServer)」で、Oracle サーバにログインした先から、
+dbca の画面をこちらへ出すことができなかった
+(ウインドウは出るのだが、ノッペラボーになってしまう)。
+
+「startx /usr/X11R6/bin/wmaker -- -fullscreen」で、
+全画面モードにすると、無事 dbca の画面を出すことができた。
+
+が、自宅でやると、なんだか、dbca 以前にフォントが化けまくり。何故だ！？

@@ -1,0 +1,224 @@
+作成中のフレームワーク
+
+<< でけた>>
+
+* DB 問い合わせを Ruby なみにシンプルな I/F で実施する ⇒ 問い合わせ自体をオブジェクト(Query)というオブジェクトとした。
+* SQL エラーが出ても、exception を catch するだけで、エラー処理となる。
+
+<< 課題>>
+
+* 引数付きの問い合わせの引数をどういう I/F で渡すべきか
+* テキスト通信入出力の I/F
+**	カード型 読み書き
+**	ロギイング
+**	トランザクション管理 
+* エラーログ
+
+<< ソースペタペタ>>
+
+d33.h
+
+<pre>
+    /* d33.h
+     *   アプリケーションフレームワーク標準ヘッダ
+     */
+    #include <occi.h>
+    #include <string>
+    
+    namespace D33 {
+	using namespace oracle::occi;
+	using namespace std;
+    
+	class D33Err : public std::exception{
+	    string info_;
+	public:
+	    D33Err( const string &info ) : info_(info){}
+	    D33Err( const D33Err &y ) : info_(y.info_){}
+	    virtual ~D33Err() throw() {}
+	    const char *what()  const throw(){ return info_.c_str(); }
+	};
+	class D33SQLErr : public D33Err{
+	public:
+	    D33SQLErr( const string &info ) : D33Err(info){}
+	    D33SQLErr( const D33SQLErr &y ) : D33Err(y){}
+	    ~D33SQLErr(){}
+	};
+    
+	class D33Appl {
+	    int          argc_;
+	    char       **argv_;
+	    Environment *env_;
+	    Connection  *conn_;
+	    
+	    /* 複写を禁止する。参照のみ許可 */
+	    D33Appl( const D33Appl &y ){}
+	public:
+	    /* 標準コンストラクタ */
+	    D33Appl( int argc , char **argv )
+		: argc_(argc) , argv_(argv) , env_(0) , conn_(0){}
+	    /* 通常のDBログイン */
+	    Connection *login(  const string &user,
+				const string &passwd ,
+				const string &dbname );
+    
+	    /* 環境変数 D33ORA を参照した DB ログイン */
+	    Connection *login();
+	    Connection *connection() { return conn_; }
+    
+	    const char *operator[](int no) const
+		{ return argv_[no]; }
+	    int argc() const { return argc_; }
+    
+	    ~D33Appl(){ if( conn_ ){ env_->terminateConnection(conn_); } }
+	};
+    
+	class Query {
+	    string sql_;
+	    Connection *conn_;
+	    Statement *stmt_;
+	    ResultSet *rs_;
+	public:
+	    Query( Connection *conn ) : conn_(conn) , stmt_(0) , rs_(0) {}
+	    Query( D33Appl &appl ) 
+		: conn_(appl.connection()),stmt_(0),rs_(0){}
+	    void exec( const string &sql_ );
+	    Query( Connection *conn , const string &sql );
+	    Query( D33Appl &appl , const string &sql );
+    
+	    bool next(){ return rs_->next(); }
+	    ResultSet *operator->(){ return rs_; }
+	    ~Query();
+	};
+    }
+</pre>
+
+d33.cc
+
+<pre>
+    #include "d33.h"
+    
+    using namespace oracle::occi;
+    
+    Connection *D33::D33Appl::login(
+	const string &user ,
+	const string &passwd ,
+	const string &dbname )
+    {
+	try{
+	    if( env_ == 0 )
+		env_ = Environment::createEnvironment( Environment::DEFAULT );
+	    if( conn_ )
+		env_->terminateConnection(conn_);
+	    conn_ = env_->createConnection( user , passwd , dbname );
+	}catch( SQLException &e ){
+	    conn_ = 0;
+	    throw D33SQLErr(
+		"can not login oracle db [" +
+		user + "/.../" + dbname + "] : " +
+		e.what() 
+	    );
+	}
+	return conn_;
+    }
+    
+    Connection *D33::D33Appl::login()
+    {
+	const char *orainfo=getenv("D33ORA");
+	if( orainfo == NULL ){
+	    throw D33Err( "Not found information to "
+			    "login oracle-instance in $D33ORA");
+	}
+	int c1= strspn(orainfo         ,":");
+	if( c1 < 0 ){
+	    throw D33Err( "Not found passwd in $D33ORA" );
+	}
+	int c2= strspn(orainfo+c1+1,":");
+	if( c2 < 0 ){
+	    throw D33Err( "Not found dbname in $D33ORA" );
+	}
+	string user( orainfo           , c1-1) ;
+	string pwd ( orainfo+c1+1      , c2-1) ;
+	string dbn ( orainfo+c1+1+c2+1 );
+    
+	return login( user , pwd , dbn );
+    }
+    
+    void D33::Query::exec( const string &sql )
+    {
+	if( stmt_ ){ 
+	    if( rs_ ){ stmt_->closeResultSet(rs_); }
+	    conn_->terminateStatement( stmt_ );
+	}
+	try{
+	    stmt_=conn_->createStatement( sql_ = sql );
+	    rs_=stmt_->executeQuery();
+	}catch( SQLException &e ){
+	    throw D33SQLErr( "On SQL:[" + sql_ + "]," + e.what() );
+	}
+    }
+    D33::Query::Query( Connection *conn , const string &sql )
+	: conn_(conn) , stmt_(0) , rs_(0)
+    {
+	exec( sql );
+    }
+    D33::Query::Query( D33::D33Appl &appl , const string &sql )
+	: conn_( appl.connection() ) , stmt_(0) , rs_(0)
+    {
+	exec( sql );
+    }
+    
+    D33::Query::~Query()
+    { 
+	if( rs_ ){ stmt_->closeResultSet(rs_); }
+	if( stmt_ ){ conn_->terminateStatement( stmt_ ); }
+    }
+</pre>
+
+tstd33.cc
+
+<pre>
+    #include <iostream>
+    #include <iomanip>
+    #include "d33.h"
+    
+    int main(int argc,char **argv)
+    {
+	D33::D33Appl appl(argc,argv);
+	try{
+	    appl.login("******","**","*************");
+    
+    
+	    vector<string> tname;  /* 表の名前を入れる可変長配列 */
+	    vector<string> tsname; /* 表領域の名前を入れる可変長配列 */
+    
+	    for(D33::Query q(appl,
+			"select  table_name,tablespace_name "
+			"  from  all_tables")
+		; q.next() ; )
+	    {
+		tname .push_back( q->getString(1) );
+		tsname.push_back( q->getString(2) );
+	    }
+    
+	    /* 一行目に、テーブルの総数を出力する */
+	    cout << setw(5) << tname.size() << endl;
+    
+	    /* 二行目以降に、配列の保持しているテーブル名を順に出力する */
+	    for( int i=0 ; i < tname.size() ; ++i ){
+		/* c_str() を付けて、char* 型にわざわざ変換しているのは、
+		 * gcc 2.97 のライブラリのバグで、setw が string 型を
+		 * 無視してしまう為
+		 */
+		cout << setiosflags(ios::right) << setw(5) << i << " ";
+		cout << setiosflags(ios::left) << setw(30) << tname[i].c_str() ;
+		cout << setiosflags(ios::left) << setw(20) << tsname[i].c_str() ;
+		cout << endl;
+	    }
+	}catch( exception &e ){
+	    cerr << e.what() << endl;
+	}
+	return 0;
+    }
+</pre>
+
+

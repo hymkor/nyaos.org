@@ -1,0 +1,52 @@
+package wifky::export;
+
+if( &::is_signed() ){
+    if( exists $::menubar{'300_Edit'} && exists $::form{p} ){
+        push( @{$::menubar{'500_Tools'}} , 
+                &::anchor('Export',
+                    { a=>'export',p=>$::form{p} },
+                    { rel=>'nofollow'}
+                )
+        );
+    }elsif( exists $::form{tag} ){
+        push( @{$::menubar{'500_Tools'}} , 
+            &::anchor('Export',
+                { a=>'export',tag=>$::form{tag} },
+                { rel=>'nofollow' }
+            )
+        );
+    }elsif( exists $::form{a} && ($::form{a} eq 'index' || $::form{a} eq 'recent' )){
+        push( @{$::menubar{'500_Tools'}} , 
+            &::anchor('Export', { a=>'export' },{ rel=>'nofollow'})
+        );
+    }
+
+    $::action_plugin{export} = sub{
+        my @filenames;
+        if( exists $::form{tag} ){
+            foreach my $fn ( @{$::label_contents{$::form{tag} }} ){
+                push( @filenames , $fn );
+                if( exists $::contents{$fn} ){
+                    push( @filenames , map{ $fn.'__'.$_} @{$::contents{$fn}} );
+                }
+            }
+        }elsif( exists $::form{p} ){
+            foreach my $p (@{$::forms{p}}){
+                my $fn=&::title2fname($p);
+                push( @filenames , $fn );
+                if( exists $::contents{$fn} ){
+                    push( @filenames , map{ $fn.'__'.$_} @{$::contents{$fn}} );
+                }
+            }
+        }else{
+            @filenames = map{ /^([_0-9a-f]+)$/ ? $1 : () } &::directory;
+        }
+
+        print "Content-Type: application/x-gzip\r\n";
+        print "Content-Disposition: attachment; filename=export.tgz\r\n";
+        print "\r\n";
+        $ENV{PATH} = '/bin:/usr/bin:/usr/local/bin';
+        exec('tar','zcvf','-',@filenames);
+        exit(0);
+    };
+}

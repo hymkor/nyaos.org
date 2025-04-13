@@ -1,0 +1,41 @@
+import requests
+
+class AuthError(StandardError):
+    pass
+
+class BadURL(StandardError):
+    pass
+
+def upload(baseurl,pagename,fname,password=None):
+    if password :
+        r = requests.post( baseurl , 
+                data={ "a":"signin" , "password":password , "signing":"Enter" }
+                )
+        if r.status_code < 200 or r.status_code >= 300:
+            raise BadURL()
+        if len(r.cookies) <= 0 :
+            raise AuthError()
+        cookies = r.cookies
+    else:
+        cookies = {}
+
+    r = requests.post( baseurl ,
+            files={ "newattachment_b":open(fname,"rb") } ,
+            data= { "a":"Upload" , "p":pagename } ,
+            cookies=cookies
+            )
+    if r.status_code < 200 or r.status_code >= 300:
+        raise BadURL()
+
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) < 3:
+        print("usage: %s BASEURL PAGENAME FNAME [PASSWORD]" % sys.argv[0])
+    else:
+        try:
+            upload(*sys.argv[1:])
+            print("%s: %s: Upload success fully" % (sys.argv[0],sys.argv[3]))
+        except BadURL:
+            print("%s: %s: Bad URL" % (sys.argv[0],sys.argv[1]))
+        except AuthError:
+            print("%s: Authentication Error" % sys.argv[0])

@@ -1,0 +1,155 @@
+<<[python] 動悸で眠れぬ夜に楽しむプログラミング>>
+
+胸がバクバクして眠れなかったので、朝方まで Python のプログラムを書こうと思った
+(そろそろ御陀仏の悪寒？)。
+
+いつも気になっていたのだが、RSSリーダー経由も含めた当ページの真の読者数はいかほどのものなのだろう。で、ある日たまたまログを見ていたら、RSS へアクセスするボットの中に、登録ユーザ数をユーザエージェント名に入れてくれるものがあった。これ調べればええやん。
+
+というわけことで、アクセス頻度の確認も兼ねて書いてみた。
+
+8<
+#!/usr/bin/env python
+
+import fileinput
+import re
+
+counter={}
+re_onlyrss=re.compile('a=rss')
+re_encode=re.compile('"[^"]*"')
+re_decode=re.compile('\a(\\d\\d\\d)')
+for line in fileinput.input() :
+    if re_onlyrss.search(line) :
+        tsv = [
+            re_decode.sub( lambda mo: "%c" % int(mo.group(1).lstrip("0")) , c )
+            for c in re_encode.sub(
+                lambda mo: "".join( [ "\a%03d" % ord(c) for c in mo.group(0) ] ) ,
+                line ).split()
+        ]
+        agent = tsv[9].strip('"')
+        counter[ agent ] = counter.get( agent , 0 ) + 1
+
+all_subscriber=0
+for list in reversed(sorted(
+        [ "%3d : %.74s" % (counter[agent],agent) for agent in counter ] )):
+    print list
+    subscriber=re.search(r'(\d+)\s+subscriber',list)
+    if subscriber :
+        all_subscriber += int(subscriber.group(1))
+
+print "\nAll Subscriber=%d" % all_subscriber
+>8
+
+* Pythonの正規表現は、ちとめんどい。
+* 今回使用を諦めた、struct モジュールの pack/unpack 、
+  フォーマット文字列にアスタリスクが使えぬ。''''絶望した''''
+* リスト内包表記 ―― 無理矢理多用すると、さすがに可読性落ちるね。
+* lambda 使うとは思ってなかった。でも、sub{…}より名前がカコイイね。
+* 本当は csv モジュールで今回の件、扱いたかったんだけどな。
+
+まぁ、上記のような感想はさておき、ログを読み込ませてみた：
+
+8<
+ 69 : CEEK-RSSbot/0.3
+ 36 : Feedfetcher-Google; (+http://www.google.com/feedfetcher.html)
+ 35 : GreatNews/1.0
+ 30 : Feedpath/1.0 (http://feedpath.jp; 1 subscribers)
+ 30 : Bloglines/3.1 (http://www.bloglines.com; 7 subscribers)
+ 28 : Bloglines/3.1 (http://www.bloglines.com; 5 subscribers)
+ 19 : MagpieRSS/0.72 (+http://magpierss.sf.net)
+ 19 : Feedpath/1.0 (http://feedpath.jp; 3 subscribers)
+ 18 : Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.8.0.8) Gecko/20061107 Fedora/1.5
+ 18 : FreshReader/1.0.06053100 (id: 98d3ee79; http://www.freshreader.com/; 1 sub
+ 17 : SharpReader/0.9.7.0 (.NET CLR 1.1.4322.2032; WinNT 5.1.2600.0)
+ 16 : Mozilla/5.0 (Windows; U; Windows NT 5.0; ja; rv:1.8.1) Gecko/20061010 Fire
+ 15 : Mozilla/5.0 (X11; U; Linux i686; ja; rv:1.8.1) Gecko/20061028 Vine/2.0-0vl
+ 13 : Mozilla/5.0 (Windows; U; Windows NT 5.1; ja; rv:1.8.1) Gecko/20061010 Fire
+ 13 : Mozilla/5.0 (OS/2; U; Warp 4.5; en-US; rv:1.8.1) Gecko/20061021 PmW-Fx/2.0
+ 12 : RssBar/1.28
+ 10 : Mozilla/5.0 (Sage)
+  7 : Java/1.4.2_08
+  5 : RssFwd (compatible; MSIE 6.0; Mozilla/4.0; http://www.rssfwd.com/; 1 subsc
+  5 : -
+  4 : NewsAlloy/1.1 (http://www.NewsAlloy.com; 1 subscribers)
+  4 : Mozilla/5.0 (Windows; U; Windows NT 5.1; ja; rv:1.8.0.8) Gecko/20061025 Th
+  4 : FEEDBRINGER/0.1 (http://feedbringer.net/; 2 subscribers)
+  2 : Y!J-BSC/1.0 (http://help.yahoo.co.jp/help/jp/blog-search/)
+  2 : Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1) Gecko/20061010 F
+  2 : Mozilla/5.0 (Windows; U; Windows NT 5.0; ja; rv:1.8.0.8) Gecko/20061025 Th
+  2 : Mozilla/4.0 (compatible;)
+  2 : Hatena RSS/0.3 (http://r.hatena.ne.jp; 2 subscribers)
+  1 : livedoor FeedFetcher/0.01 (http://reader.livedoor.com/; 7 subscribers)
+  1 : livedoor FeedFetcher/0.01 (http://reader.livedoor.com/; 20 subscribers)
+  1 : YahooFeedSeeker/2.0 (compatible; Mozilla 4.0; MSIE 5.5; http://publisher.y
+  1 : Mozilla/5.0 (compatible; MSIE6.0) rAntenna 0.0.6
+  1 : Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727
+
+All Subscriber=48
+>8
+
+コロンの左側が24時間内のアクセス回数。一番下は提示された subscriber数の合計。
+同じボットが2回表示されるのは、/d?a=rss と /d/monjoe.cgi?a=rss の違いだから、
+subscriber は合計をとってよいと判断している。感想：
+
+>> CEEK-RSSbot 回数多杉！ <<
+
+20分に一度くらいのアクセス？ Hatena が少ないのが意外だな。
+subscriber総数48人というのは多いような少ないような…微妙な数字だなぁ。
+
+まぁ、どっちみち、まだ、何かしなければいけない…ってほどではなさそうだな。
+
+<<lolipop って、RAID もバックアップもしてなかったのか>>
+
+テープへのバックアップくらいしてると思ったんだが、練乳のように甘かった。
+データが失われたサーバがあったようだ。
+
+http://lolipop.jp/?mode=info&state=obsta&info_month=200611#1520
+
+8<
+今回、なるべくディスクの損傷を防ぐため、迅速にサーバー内のハードディスクデータのバックアップならびに復旧を試みましたが、ハードディスク本体の損傷が激しく、サーバー内のデータが消失しております。
+
+大変申し訳ございませんが、ホームページデータの再転送をお願い致します。
+
+※今回消失した内容は以下の通りとなります。
+
+　・FTPサーバー上に保存されていたホームページ等のデータ
+　・メールボックス内に残っていたメールデータ
+　・11月24日午前4時からメンテナンス終了までのアクセスログ
+
+この度は大変ご迷惑をお掛けいたしまして誠に申し訳ございません。
+
+弊社では、利用規約に基づきデータのバックアップは行っておりませんが、
+これからも障害に対し、出来る限りの対処を行って参ります。
+
+今回の障害により、お客様には多大なご迷惑をお掛け致しました事を、謹んで
+お詫び申し上げます。
+>8
+
+ノートPC のハードディスクなんかより、データセンターにあるサーバの方が
+信頼性が高いなどと、ついうっかり盲信してしまうところだった。やばやば。
+さっそく、ローカルにバックアップよ。
+
+しかし、月額 263円ぢゃ、こういうところまでコストを削らなきゃ、
+サービス提供できないんですね。。やはり、値段相応なんだなぁ。
+利用規約をちゃんと読まなくちゃいけませんね。
+でも、データを保障するとか書いてるサービスは
+多分どこにも存在しないから、読むだけ無駄という気もしますが。
+
+まぁ、ともかく、ちょうど来年２月で契約が切れるから、移転先を検討しましょう。
+自分でバックアップが大切なのは分かるんだけれども、
+少々費用高め or 容量少なめでもいいので、その辺の手間暇を省きたいわけだ。
+ただ、でも、ドメイン「nyaos.org」がロリポップ名義になっているのが痛いなぁ。
+''''いっそのこと、気にせず、捨てちゃう？''''
+
+<<<追記：ドメイン管理サービスとホスティングサービスは別管理だった>>>
+
+https://muumuu-domain.com/?mode=faq&state=answer&id=000229 :
+
+8<
+Ｑ．　取得したドメインをロリポップレンタルサーバー以外でも運営できますか？
+ドメインの持込に対応したサービスでしたら問題なく運営が可能です。
+その際は、ご利用予定レンタルサーバーのネームサーバー名(DNSサーバー名)をご確認の上、コントロールパネルでご設定ください。
+>8
+
+ロリポップとムームードメインは別ということね。
+
+よしゃ！ 真面目に考えよ！

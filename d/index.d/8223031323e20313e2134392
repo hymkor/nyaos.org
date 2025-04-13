@@ -1,0 +1,49 @@
+<<lv for Windows を手順に従って、ビルドするなど>>
+
+http://github.com/deflis/ckw-mod{ckw}(ターミナル)
+- http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS}(シェル)
+- http://www.piedey.co.jp/softs/ntuxtl.html{NT版UNIX-like tools}(コマンド群)
+のコマンドラインスタックにも穴があって、ページャーが含まれていない。
+
+一瞬、自前で作ろうかとも思ったけど、
+どうせ既存で良いものがあるだろうと思って探したら、
+案の定 Windows 版 lv があった。
+
+* http://mattn.kaoriya.net/software/20111031104749.htm{
+   Big Sky :: 日本語ページャlvをwindowsにポーティングした。}
+
+なぜか、ビルド済みの実行バイナリが配布されていないようなので、
+次のページに従って、ビルドしてみるなど。
+
+* http://iishikawa.blogspot.com/2011/11/mingw-msys-windows-lv.html{
+   MinGW で Windows 版 lv をビルド}
+
+git の使い方も github もよく分からんのだが
+((fn Mercurial と bitbucket をもっぱら使ってるもんで))、
+何故か手順の中で https → http に変更する必要があった
+((fn github にアカウントないせいですかね？))。
+
+8<
+git clone https://github.com/mattn/lv421-windows.git
+  ↓
+git clone http://github.com/mattn/lv421-windows.git
+>8
+
+あとは問題なくでけた。
+
+8<
+$ objdump.exe -x lv.exe | grep DLL
+ vma:            Hint    Time      Forward  DLL       First
+        DLL 名: KERNEL32.dll
+        DLL 名: msvcrt.dll
+        DLL 名: msvcrt.dll
+>8
+
+依存DLLも特に無いようだ。せっかくなので、作ったバイナリを置いとく。
+
+* <<{lv421-windows.zip}
+
+もし、環境に依存してて、動かなかったら、ごめんなさい。
+
+:(2012.01.15) 追記
+:: 案の定、Windows7 + Console2 + nyaos 環境だと動かないそうです。うまくいかんもんですね

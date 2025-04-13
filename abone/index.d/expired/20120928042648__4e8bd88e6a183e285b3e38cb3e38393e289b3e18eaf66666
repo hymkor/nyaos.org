@@ -1,0 +1,28 @@
+8<
+chkconfig xfs off
+chkconfig sendmail off
+chkconfig portmap off
+chkconfig nfslock off
+chkconfig netfs off
+chkconfig kudzu off
+chkconfig iptables off
+chkconfig ip6tables off
+chkconfig cups off
+chkconfig bluetooth off
+chkconfig avahi-daemon off
+chkconfig autofs off
+chkconfig atd off
+chkconfig anacron off
+chkconfig yum-updatesd off
+chkconfig acpid off
+chkconfig apmd off
+chkconfig mdmonitor off
+chkconfig rpcidmapd off
+chkconfig rpcgssd off
+chkconfig lm_sensors off
+chkconfig postfix on
+chkconfig heartbeat on
+chkconfig drbd off
+chkconfig heartbeat off ※HeartbeatはOS起動後に手動で設定する。
+chkconfig syslog-ng on ※offになっていたら設定する。
+>8

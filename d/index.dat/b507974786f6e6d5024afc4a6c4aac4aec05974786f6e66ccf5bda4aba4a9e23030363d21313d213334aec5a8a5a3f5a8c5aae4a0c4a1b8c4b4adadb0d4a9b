@@ -1,0 +1,43 @@
+http://pc8.2ch.net/test/read.cgi/tech/1163339504/{Pythonのお勉強 Part15}より：
+
+8<
+#!/usr/bin/env python
+# -*- coding: shift-jis -*-
+
+import urllib
+def hatena():
+    return urllib.urlopen("http://d.hatena.ne.jp/keyworddiary/Python?mode=rss")
+
+import xml.dom.minidom
+dom = xml.dom.minidom.parse(hatena())
+for elem in dom.getElementsByTagName("item"):
+    if elem.getElementsByTagName("dc:date")[0].firstChild.nodeValue == "2006-11-13":
+        print elem.getElementsByTagName("title")[0].firstChild.nodeValue \
+            .encode("shift-jis")
+>8
+
+Cygwin環境だと、codec エラーになったので、
+print の前に shift-jis にencode した。
+
+!!! MBCS を unicode 化する
+
+8<
+print unicode("あいうえお","shift-jis")
+>8
+
+
+
+!!! 元々、utf8 のスクリプトで、unicode リテラルを書く
+
+8<
+print u"あいうえお"
+>8
+
+!!! unicode を MBCS 化する。
+
+8<
+print u"あいうえお".encode("shift-jis")
+>8
+
+unicode() は関数なのに、encode() はメソッド。
+なんでだろ

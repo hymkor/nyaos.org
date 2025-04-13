@@ -1,0 +1,106 @@
+!!! ((title できる！日本語入力 #golang))
+
+testing パッケージを使うと、標準入力がhttps://twitter.com/mattn_jp/status/341690835873718272{リダイレクトされてしまうらしい}ので、普通にテスト用の main を作ってテストしてみるようにした。
+だいたい想定どおり動くようになった。よしよし。
+
+ソースはそのまま TEXTAREA へコピペすると、4桁想定のタブがブラウザ上で8桁に展開されてしまってみっともないので、
+expand コマンドで4桁にコンバートしてみた。
+
+ライブラリ本体：
+
+8<
+$ expand -4 conio\getch.go
+package conio
+
+/*
+#include <windows.h>
+KEY_EVENT_RECORD* getKeyEvent(struct _INPUT_RECORD *input) {
+    return &(input->Event.KeyEvent);
+}
+char getAsciiChar(struct _INPUT_RECORD *input) {
+    return input->Event.KeyEvent.uChar.AsciiChar;
+}
+WCHAR getUnicodeChar(struct _INPUT_RECORD *input) {
+    return input->Event.KeyEvent.uChar.UnicodeChar;
+}
+*/
+import "C"
+
+var ch chan C.WCHAR = make(chan C.WCHAR)
+
+func init(){
+    go func(ch chan C.WCHAR){
+        hConin := C.GetStdHandle( C.STD_INPUT_HANDLE )
+        for{
+            var numberOfEventsRead C.DWORD
+            var events [10]C.struct__INPUT_RECORD
+            var orgConMode C.DWORD
+
+            C.GetConsoleMode(hConin,&orgConMode)
+            C.SetConsoleMode(hConin,0)
+            C.ReadConsoleInputW(hConin ,
+                                &events[0] ,
+                                C.DWORD(len(events)) ,
+                                &numberOfEventsRead )
+            C.SetConsoleMode(hConin,orgConMode)
+            for i:=C.DWORD(0) ; i < numberOfEventsRead ; i++ {
+                if events[i].EventType == C.KEY_EVENT && C.getKeyEvent(&events[i]).bKeyDown != C.FALSE {
+                    ch <- C.getUnicodeChar( &events[i] )
+                }
+            }
+        }
+    }(ch)
+}
+
+func GetchW() uint16 {
+    return uint16(<-ch)
+}
+>8
+
+チャネルを使うと、下手なバッファリングとかをしなくていいのが、たすかる。
+
+テストプログラム：
+
+8<
+[C:src]
+$ expand -4 conio_tst\conio_tst.go
+package main
+import "../conio"
+import "fmt"
+import "unicode/utf16"
+
+func main(){
+    fmt.Println("Start!")
+    for{
+        ch := conio.GetchW()
+        if ch == 3 {
+            return
+        }
+        if ch == 0 {
+            continue
+        }
+        cp := utf16.Decode([]uint16{ch})
+        fmt.Printf("%c[%04x]",cp[0],ch)
+    }
+}
+[C:src]
+$
+>8
+
+動かしてみた：
+
+8<
+C:src]
+$ cd conio_tst\
+[C:conio_tst]
+$ go run conio_tst.go
+Start!
+a[0061]b[0062]c[0063]わ[308f]た[305f]し[3057]日[65e5]本[672c]語[8a9e]入[5165]力[529b]可[53ef]能[80fd]で[3067]す[3059].[002e]a[0061]x[0078]z[007a][C:conio_tst]
+$
+>8
+
+IMEでタイプ中だけど、まだ確定していないという時は、WCHAR 0 が返ってくるので、それは読み飛ばすようにしなくちゃいけないようだ。ただ、カーソルキーとか文字コードを持っていないキーなども WCHAR 0 で来るはずなので、一行入力関数を作るためには、そこもいずれきちんと実装しなくちゃいけないな。
+
+裏で動かしている goroutine だけど、APIコールをひたすら回しているいるのでCPU負荷を食うのではないかと心配したが、
+タスクマネージャーで見たところでは、さすがゴックだ何ともないぜ。
+まぁ、NYAOS もキーが入力されるまでは同じようなことをしているんですが。

@@ -1,0 +1,103 @@
+<<[wifky] エラー・警告に対するトレースバック機能>>
+
+@nifty(@homepage)で動作することに配慮して、リリース時には外しているんだけれども、開発中は use strict;use warnings; を有効にしている。
+こうすることのメリットは各所で語られているので今更だが、
+一つ挙げると、初期化されぬ変数が使われている時に警告してくれるのだ。
+
+が、たまには困るのが &::title2fname などの wifky 本体内蔵関数での警告。
+この関数自体は引数を右から左へ処理しているだけなので、
+まず'''100% 呼び出し元が悪い'''んだが、それがどこか分からんのよね。
+
+ということで、Perl の組み込み変数/関数の
+
+*  $SIG{__DIE__}
+*  $SIG{__WARN__}
+*  caller
+
+などを使って、die やら warn を実行された時に、
+次のような Traceback 情報を表示するようにしてみた。
+
+8<
+Use of uninitialized value in sprintf at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 320.
+on main::__ANON__ at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 320.
+on main::putenc at taskbar.pl line 77.
+on wifky::taskbar::__ANON__ at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 1496.
+on main::plugin at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 1571.
+on main::preprocess_plugin at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 1588.
+on main::preprocess at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 1775.
+on main::block_normal at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 1657.
+on main::call_block at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 1649.
+on main::syntax_engine at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 1226.
+on main::print_page at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 1128.
+on main::action_view at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 50.
+on (eval) at c:\cygwin\home\hayama\cgi-bin\wifky.pl line 22.
+>8
+
+出力のされ方だが：
+
+*  die の時は、それまでの HTML の出力は破棄されて、このメッセージのみ表示する
+*  warn の時は、表示が乱れないように、HTML の最後(</body>の直前)に表示する。
+
+という風にした。これで、プラグインのデバッグが楽になるに違いない。
+次のバージョン(1.3.2)に組み込むのはもちろんだけれども、
+待てん人はMercurial の http://forgot.uh-oh.jp/repository/{リポジトリ}
+から Get してくださいませ。
+
+ちなみに、こういう機能って、標準モジュール CGI::Carp が持っているので、
+'''本来はユーザがこういう機能を実装するのはナンセンスだ'''。
+だが、wifky はどこでも動く、ライブラリがなくても動くを標榜しているので、
+まぁ仕方無いということで御理解よろしく。
+
+<<[Perl] Encode の謎の警告メッセージ>>
+
+さて、トレースバック機能を実装したのはいいんだが、
+なんだか、Encode が謎の警告を出している。
+なんだこりゃ。
+
+8<
+Wait or Click Here
+Can't locate Encode/ConfigLocal.pm in @INC (@INC contains: /usr/lib/perl5/5.8/cygwin /usr/lib/perl5/5.8 /usr/lib/perl5/site_perl/5.8/cygwin /usr/lib/perl5/site_perl/5.8 /usr/lib/perl5/site_perl/5.8 /usr/lib/perl5/vendor_perl/5.8/cygwin /usr/lib/perl5/vendor_perl/5.8 /usr/lib/perl5/vendor_perl/5.8 .) at /usr/lib/perl5/5.8/cygwin/Encode.pm line 52.
+on Encode::main::__ANON__s at /usr/lib/perl5/5.8/cygwin/Encode.pm(52)
+on Encode::(eval)s at /usr/lib/perl5/5.8/cygwin/Encode.pm(52)
+on wifky::rssreader::(eval)s at rssreader.pl(6)
+on main::wifky::rssreader::BEGINs at Encode/ConfigLocal.pm(0)
+on main::(eval)s at Encode/ConfigLocal.pm(0)
+on main::(eval)s at c:\cygwin\home\hayama\cgi-bin\wifky.pl(42)
+on main::(eval)s at c:\cygwin\home\hayama\cgi-bin\wifky.pl(22)
+>8
+
+ググッてみたところ、
+<a target="_blank" href="http://epi.fm.senshu-u.ac.jp/%7Ene140065/archives/2006/04/post_156.html">http://epi.fm.senshu-u.ac.jp/~ne140065/archives/2006/04/post_156.html</a> の記事に、
+「enc2xs というコマンドを発行すればよい」という指摘を確認。
+さっそくやってみる。
+
+8<
+$ enc2xs -C
+Checking /usr/lib/perl5/5.8/cygwin/Encode...
+require Encode/Byte.pm;
+require Encode/CJKConstants.pm;
+require Encode/CN.pm;
+require Encode/EBCDIC.pm;
+require Encode/Encoder.pm;
+require Encode/Guess.pm;
+require Encode/JP.pm;
+require Encode/KR.pm;
+require Encode/Symbol.pm;
+require Encode/TW.pm;
+Checking /usr/lib/perl5/5.8/Encode...
+$Encode::ExtModule{'ascii-ctrl'} =      "Encode::Byte";
+$Encode::ExtModule{'null'} =    "Encode::Byte";
+$Encode::ExtModule{'utf-8-strict'} =    "Encode::Byte";
+/usr/lib/perl5/5.8/Encode
+Generating /usr/lib/perl5/5.8/cygwin/Encode/ConfigLocal.pm...
+>8
+
+このあと、wifky.pl をリロードしてみたところ、発生しなくなった。
+正直、なんだかよく分からんが、まぁ、ヨシ！ 解釈は識者に任せる。
+
+なお、CGI::Carp は NG で、Encode は Ok という理由については、
+Encode を使っているのは wifky.pl 本体ではなく、
+rssreader.pl や nikky.pl といった特定のプラグインだけという
+ことで御容赦願いたい。
+(例えば、@nifty ユーザは、これらのプラグインは使えないが、
+wifky.pl 本体は問題なく利用できるのだ!)

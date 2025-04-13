@@ -1,0 +1,29 @@
+!!! ((title #golang で C言語関数を呼ぶ))
+
+'''hoge.go''' :
+8<
+package main
+
+// 参考：http://golang.org/cmd/cgo/
+// 「//#include」 は import "C" の直前の行にないといけない
+
+//#include <stdio.h>
+import "C"
+
+func main(){
+	cs := C.CString("ahaha\n")
+	C.puts(cs)
+}
+>8
+
+8<
+[C:tmp]
+$ go run hoge.go
+ahaha
+
+>8
+
+最終的には <windows.h> の ReadConsoleInputW を呼びたいのが、できるだろうか。
+<windows.h> まで呼べるか、構造体のポインタ渡しが出来るか、だな…。
+
+それが出来れば go 版NYAOSが作れるんだがなぁ。

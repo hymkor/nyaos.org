@@ -1,0 +1,105 @@
+<HTML>
+<HEAD>
+<TITLE>eff マクロ集</TITLE>
+<STYLE TYPE="text/css">
+<!--
+    H1{color:#EEEEAA;text-align:right}
+    H2{background-color:#444444}
+-->
+</STYLE>
+</HED>
+<BODY BGCOLOR="black" TEXT="white" LINK="silver" VLINK="gray" ALINK="red" >
+
+<H1>effマクロ集 ＆ メモ</H1>
+
+<P>ユーザの方よりいただいたマクロや、標準で組み込まれていない
+    機能を実現するマクロをここで紹介したいと思います。
+</P>
+
+<H2>PM系エディタを eff で利用する</H2>
+
+<P>内蔵しているエディター起動機能は、使用する API の都合、
+    VIO 系のものしか起動できません。
+    が、下記のマクロを _eff に組み込むことで、
+    e.exe を始めとするＰＭ系エディタも、利用することができます。
+</P>
+<PRE>
+    bindkey &quot;e&quot; rexx &quot;
+        call print 'Editor&gt;'
+        cmdline = readline('e.exe '||arg(1)||' ')
+        if length(cmdline) &gt; 0 then
+            address cmd cmdline
+    &quot;;
+</PRE>
+<P>bindkey に REXX コマンドを組み込む場合、
+    カーソル上にあるコマンドのファイル名は arg(1) で取得できます
+    （複数マークされていたら arg(n) で）。
+    一行入力を行う場合は、readline(デフォルト文字列)、
+    一行表示は print , println といった関数を使用することができます。
+    シェルコマンドについては、通常の REXX と同様、
+    address cmd コマンド文字列で実行できます。
+</P>
+
+<H2>ファイル名を大文字だけにする・小文字だけにする（標準マクロ）</H2>
+
+<P>原形は、故 日下部憲一さんより送っていただきました
+    （ご冥福をお祈りいたします）。
+    これに、ディレクトリ一覧画面でしか実行できないよう、
+    viewtype関数でチェックを入れたものを、標準の _eff に加えてあります。
+</P>
+
+<PRE>
+    bindkey &quot;ALT_S&quot; rexx &quot;
+        if viewtype() &lt;&gt; 'DIRECTORY' then do
+            call print '本コマンドはディレクトリ表示でのみ有効です.'
+            exit 0
+        end
+        do i=1 to arg()
+            newname = translate(arg(i),xrange('a','z'),xrange('A','Z'))
+            address cmd 'ren' arg(i) newname
+        end
+    &quot;;
+
+    bindkey &quot;ALT_U&quot; rexx &quot;
+        if viewtype() &lt;&gt; 'DIRECTORY' then do
+            call print '本コマンドはディレクトリ表示でのみ有効です.'
+            exit 0
+        end
+        do i=1 to arg()
+            newname = translate(arg(i),xrange('A','Z'),xrange('a','z'))
+            address cmd 'ren' arg(i) newname
+        end
+    &quot;;
+</PRE>
+
+<H2>１行コマンド実行</H2>
+
+<P>我澤賢之さんより送っていただきました。
+    小文字の x で終了後 PAUSE がなく、
+    大文字では PAUSE します。
+</P>
+
+<PRE>
+    # 一行コマンド実行（終了後 pause なし）
+    bindkey &quot;x&quot; rexx &quot;
+        call print 'Command&gt;'
+        cmdline = readline(arg(1))
+        if length(cmdline) &gt; 0 then
+            address cmd cmdline
+    &quot;;
+
+    # 一行コマンド実行（終了後 pause あり）
+    bindkey &quot;X&quot; rexx &quot;
+        call print 'Command-pause&gt;'
+        cmdline = readline(arg(1))
+        if length(cmdline) &gt; 0 then
+            address cmd cmdline
+        address cmd pause
+    &quot;;
+</PRE>
+
+<A HREF="./eff.html">eff ホームページへ</A>
+
+
+</BODY>
+</HTML>

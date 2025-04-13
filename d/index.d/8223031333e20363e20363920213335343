@@ -1,0 +1,47 @@
+!!! ((title [VB.net] フォームの Load メソッド内で Me.Close すると死ぬ))
+
+>> TopMost = True の時だけ！ <<
+
+こんなスタックトレースが出るよ！
+
+8<
+System.ObjectDisposedException はハンドルされませんでした。
+  Message=破棄されたオブジェクトにアクセスできません。
+オブジェクト名 'EnglishTest' です。
+  Source=System.Windows.Forms
+  ObjectName=EnglishTest
+  StackTrace:
+       場所 System.Windows.Forms.Control.CreateHandle()
+       場所 System.Windows.Forms.Form.CreateHandle()
+       場所 System.Windows.Forms.Control.get_Handle()
+       場所 System.Windows.Forms.ContainerControl.FocusActiveControlInternal()
+       場所 System.Windows.Forms.Form.SetVisibleCore(Boolean value)
+       場所 System.Windows.Forms.Control.set_Visible(Boolean value)
+       場所 System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+       場所 System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+       場所 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnRun()
+       場所 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.DoApplicationModel()
+       場所 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.Run(String[] commandLine)
+       場所 GENEPORTAL.My.MyApplication.Main(String[] Args) 場所 17d14f5c-a337-4978-8281-53493378c1071.vb:行 81
+       場所 System.AppDomain._nExecuteAssembly(RuntimeAssembly assembly, String[] args)
+       場所 System.AppDomain.ExecuteAssembly(String assemblyFile, Evidence assemblySecurity, String[] args)
+       場所 Microsoft.VisualStudio.HostingProcess.HostProc.RunUsersAssembly()
+       場所 System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+       場所 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean ignoreSyncCtx)
+       場所 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+       場所 System.Threading.ThreadHelper.ThreadStart()
+  InnerException: 
+>8
+
+偶然にも、TopMost = True にしたタイミングと、
+IDisposable なクラスを初めて作ったタイミングが重なったのが同じだったので、
+明後日の箇所ばかり調べてて、原因が全然分からず、1日悩んでしまった。
+
+* http://dobon.net/vb/bbs/log3-10/5704.html{
+  FormLoadでFormCloseを行いたい: DOBON.NETプログラミング掲示板過去ログ}
+
+この記事がなければ死んでいた。
+
+暫定的に TopMost = False にするけど、
+そもそも Load で Close することがアウトっぽいので、
+タイミングを見て、直さなくては…。

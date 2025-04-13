@@ -1,0 +1,26 @@
+!!! ((title [.net] DataGridView で行の高さを変えんでほしい時))
+
+行ヘッダがある場合の高さ変更禁止は
+8<
+    DataGridView.RowTemplate.Resizing = False
+>8
+だけでなく
+
+8<
+    DataGridView.RowsHeadersWidthSizeMode = DisableResizing
+>8
+も必要。
+
+さらに、行データ(DataGridViewRow)を予め内部に溜め込む方式だと、
+GUIのプロパティーでの設定が無視されてしまうので、
+ コードで１行ごとに逐一設定しなければいけない。
+
+8<
+            Dim r As New DataGridViewRow
+            r.CreateCells(Me.DataGrid_Sheet,
+                    pageEnumerator.Current.Name,
+                    dt,
+                    pageEnumerator.Current.Db.Title1,
+                    pageEnumerator.Current.Db.Title2)
+            r.Resizable = DataGridViewTriState.False
+>8

@@ -1,0 +1,65 @@
+!!![Perl] tie の勉強
+
+8<
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Foo;
+
+tie my $foo,'Foo';
+
+$foo = "hogehoge\n";
+>8
+
+実行結果：
+
+8<
+hogehoge
+>8
+
+代入しただけで表示される。なんというフリーダム言語。
+
+Foo.pm の中身は以下のとおり：
+
+8<
+package Foo;
+
+sub TIESCALAR{
+    my $class=shift;
+    bless {value=>''},$class;
+}
+
+sub STORE{
+    my ($self,$value)=@_;
+    print $value;
+    $self->{value} = $value;
+}
+
+sub FETCH{
+    my ($self)=@_;
+    $self->{value};
+}
+
+1;
+>8
+
+!!![Perl] しかし Perl の恐しいところは
+
+Perl 4 の時の「そんな機能、言語に組み込むなよ！」っていう仕様を、
+Perl 5 で互換性を損ねないような形で「より汎用な機能」
+に置き換えているところがスゴイねぇ。
+
+* dbmopen
+** dbm ファイルをハッシュにバインドする機能。
+   tie という、「変数のインターフェイスを関数でバインドする汎用機能で
+    置き換えられている。
+   互換性のためだけに dbmopen という名の関数だけラッパーとして残している
+* map とか grep
+** 同等の表現を関数プロトタイプで実現可能。タイムリーなことに、
+   関連記事http://perl-mongers.org/2009/01/map.html{(1)}
+   http://perl-mongers.org/2009/01/re_map.html{(2)}あり。
+
+たぶん、他にもイロイロあるんだろうけれども、今ぱっと書けるのは
+こんなところか。
+梵天丸もかくありたい

@@ -1,0 +1,22 @@
+push(@::copyright , <<"SCRIPT" );
+<script type="text/javascript"><!--
+    var currentPage=document.location.href.split(/#/)[0];
+    function hash2title(hash){
+        var el=document.getElementById(hash.substr(1));
+        if( el ){
+            document.title 
+                = "$::config{sitename} - " 
+                + el.innerHTML.replace(/<[^>]*>/g, '');
+        }
+    }
+    var lnk=document.links;
+    for(var i=0 ; i<lnk.length ; i++ ){
+        if( lnk[i].href && lnk[i].href.split(/#/)[0] == currentPage ){
+            lnk[i].onclick = function(){ hash2title( this.hash ); };
+        }
+    }
+    var hash=document.location.hash;
+    if( hash ){ hash2title( hash ); }
+// -->
+</script>
+SCRIPT

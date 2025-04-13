@@ -1,0 +1,248 @@
+<<[Lua] Lua のイタレータは、チョー汎用的なんだけど、今一、分かりにくいなぁ>>
+
+というか、必要な関数仕様が覚えられないので、ちょっとまとめてみる。
+
+!! 汎用版 の for 文の仕様
+
+8<
+for p1,p2,p3 in ITERFUNC,TABLE,startP1 do
+    ;
+end
+>8
+
+* TABLE は[マニュアル|http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html]
+では「状態」と称しているが、要はテーブル相当のオブジェクト
+(繰り返しの最中に変化しない)
+* startP1 は「繰り返し変数：つまり、カウンタなりポインタ」の初期値
+* ITERFUNC は次の要素をとってくる関数：イタレータ関数
+
+!! イタレータ関数の仕様
+
+8<
+function ITERFUNC( TABLE , prevP1 )
+    ;
+    return P1,P2,P3…
+end
+>8
+
+* '''前のカウンタ(prevP1)から、次のカウンタ「等」を得る関数'''
+* 次のカウンタ(P1)だけでなく、値など(P2,P3)も同時に返してもよい
+* next っていう標準関数は、この仕様に準拠している
+* 実は prevP1 とか使わなくてもよい
+** ITERFUNC はクロージャーでも構わないから
+
+!! イタレータビルダー関数(わしの造語)
+
+* for文に必要な3パラメータを用意する関数
+* pairs,ipars という標準関数は、この仕様に準拠している
+* イタレータは、イタレータビルダーが作るクロージャでもよい
+
+!! next(イタレータ) と pairs(イテレータービルダー) の関係
+
+「テーブルの全てのキーと値を表示する」という命題を
+
+* pairs で書いてみる
+* pairs を使わず、next で等価な表現を書いてみる
+
+8<
+$ cat foo.lua
+
+t={ foo="ahaha" , bar="ihihi" , goo="gogogo" }
+
+print("pairs(t):")
+for key,val in pairs(t) do
+    print( "  "..key.."=>"..val )
+end
+
+print("next,t,nil:")
+for key,val in next,t,nil do
+    print( "  "..key.."=>"..val )
+end
+
+$ lua foo.lua
+pairs(t):
+  goo=>gogogo
+  bar=>ihihi
+  foo=>ahaha
+next,t,nil:
+  goo=>gogogo
+  bar=>ihihi
+  foo=>ahaha
+>8
+
+<<言葉は変化する、えぇ、フリーダムに>>
+
+* http://oku.edu.mie-u.ac.jp/~okumura/blog/node/2371{
+    言葉の乱れ｜Okumura's Blog}
+* http://d.hatena.ne.jp/tetsutalow/20090302#p4{
+    [雑] 言葉の乱れ - 2009-03-02 - Tetsu=TaLowの雑記}
+
+まぁ、専門家はどうしても正しい呼び方にこだわりますけど、
+そうでない人は ついつい言葉を、いい易いように省略したり、
+自分の理解が及んでいる既存の言葉に置きかえたりしてしまいますよね。
+
+わたくしも「ポリ塩化ビニル」以外の合成樹脂の袋が「ビニール袋」と呼ばれるのに、
+日々、違和感を感じていて…おりません、まったくもって。
+
+ということで、自分の線引きがどの辺か、調べてみませふ。
+
+||| 正しい名称 | 誤称 | 俺的にどうよ
+|| ポリ袋 | ビニール袋 | SAFE
+|| ハッシュテーブル | ハッシュ | SAFE
+    ((fn ハッシュテーブル自体を知らん人が多いので「連想配列」と呼ぶようにしてる))
+|| ウェブ | インターネット | OUT
+|| IPアドレス | IP | SAFE
+|| Wikipedia | Wiki | OUT
+|| http | httpプロトコル | SAFE((fn 「p」が気になるけどね))
+|| USBメモリー | USB | DEADBALL((fn おいらもうっかり使っちまうんだ))
+|| ハードディスク | ハード | OUT
+|| 携帯電話 | 携帯 | SAFE
+|| 携帯電話 | ケータイ | SAFE
+|| ウィルス対策ソフト | ウィルスソフト | OUT
+|| Microsoft Word | ワード | SAFE
+|| セキュリティーのための対策 | セキュリティー対策 | SAFE
+|| セキュリティーホールについての警告 | セキュリティーホールが公開 | OUT
+|| 貴方だけの常識 | 常識 | SAFE
+
+正直、気にならないというと嘘になるんですが、
+言葉の乱れとか言い出すとなんだか年寄く聞こえてしまうので
+ここは目をつぶるのが正解でしょう。
+
+<<[Lua] なぜ、イテレータ関数の仕様は、こんなに複雑なのか？>>
+
+前のエントリで勉強したのを実践してみようと思う。
+まずは、grep っぽいイテレータを書いてみる。
+
+* 配列から指定した条件を満たした要素のみを取り出すイタレータを作成する。
+* 例では、条件として「200 より上である」というものを与える。
+
+律義にイテレータの仕様に従って書くと以下のとおりとなる。
+
+8<
+function grep_(status,key)
+    local val
+    repeat
+        key,val = next(status.t , key)
+    until key == nil or status.p(key,val)
+    return key,val
+end
+function grep(proc,table)
+    return grep_,{ t=table , p=proc } , nil
+end
+
+testable = {
+    100,200,300,400
+}
+
+for key,val in grep( function(key,val) return val > 200; end , testable ) do
+    print(key.."=>"..val)
+end
+>8
+
+次に、クロージャを駆使して、引数を諸々省略した書き方をしてみる。
+
+8<
+function grep(proc,table)
+    local key,val
+    return function()
+        repeat
+            key,val = next(table,key)
+        until key == nil or proc(key,val)
+        return key,val
+    end
+end
+
+testable = {
+    100,200,300,400
+}
+
+for key,val in grep( function(key,val) return val > 200; end , testable ) do
+    print(key.."=>"..val)
+end
+>8
+
+こっちの方が、シンプルで分かりやすい気がする。
+
+なぜ、標準のイテレータの仕様は、クロージャー前提になっていないのだろうか。
+
++ クロージャーが無い時期に実装された仕様だから
++ lua 向けにC言語で実装した関数などでは、クロージャーが使えないから。
++ クロージャは遅いのか？
+
+気になるのは 3. だ。ここはベンチしかあるまい。
+
+8<
+function grep_(status,key)
+    local val
+    repeat
+        key,val = next(status.t , key)
+    until key == nil or status.p(key,val)
+    return key,val
+end
+function grep1(proc,table)
+    return grep_,{ t=table , p=proc } , nil
+end
+
+function grep2(proc,table)
+    local key,val
+    return function()
+        repeat
+            key,val = next(table,key)
+        until key == nil or proc(key,val)
+        return key,val
+    end
+end
+
+---
+
+testable = {}
+for i=1,100000 do
+    testable[i] = i*10
+end
+
+---
+
+for i=1,5 do
+    start=os.clock()
+    for key,val in grep1( function(key,val) return val > 200; end , testable ) do
+    end
+    print(i..":Standard Iterator Version:"..(os.clock()-start))
+
+    ---
+
+    start=os.clock()
+    for key,val in grep2( function(key,val) return val > 200; end , testable ) do
+    end
+    print(i..":Iterator with closure Version:"..(os.clock()-start))
+end
+>8
+
+8<
+$ lua grep12.lua
+1:Standard Iterator Version:0.07
+1:Iterator with closure Version:0.07
+2:Standard Iterator Version:0.09
+2:Iterator with closure Version:0.08
+3:Standard Iterator Version:0.08
+3:Iterator with closure Version:0.07
+4:Standard Iterator Version:0.1
+4:Iterator with closure Version:0.09
+5:Standard Iterator Version:0.101
+5:Iterator with closure Version:0.07
+>8
+
+なんと、クロージャーを使ってる方が速いではないか。
+なぜだろうか？
+
+* クロージャを使わないと、パラメータ受渡しは繁雑に感じるが、
+    それは実はインタプリタにとっても同様
+* クロージャーという仕組みを導入した時点で、
+    全ての関数コールに既に一定のコストが積まれてしまっている
+    
+ということかもしれない。つまり、
+
+* 元々のイテレータのパラメータは、互換性と、
+    C言語で実装する関数のためのもの
+* クロージャ便利なんだから、使わにゃ損々！
+
+と考えてよさそうだ。

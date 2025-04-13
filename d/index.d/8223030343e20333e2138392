@@ -1,0 +1,38 @@
+
+<<だめだ、わしは>>
+
+<pre>
+    select  A.id , B.name
+      from  A,B
+     where  B.key (+) = A.key 
+       and  B.del_flg = '0'
+</pre>
+
+やっぱり、わし、SQL だめだ。
+だって、どう動くか、マシンコードが想像できないんだもん。
+
+テキストファイル相手だったら、そこそこ自信はあるんだがなぁ。
+SQL となったら、へろへろ。パフォーマンス、ボロボロ。
+そろそろ、わしをクビにした方がいいですよ＞ BOSS
+
+* http://www.cis.upenn.edu/~bcpierce/unison/{Unison File Synchronizer} 
+    (http://sho.tdiary.net/20040318.html#c{ただのにっき(2004-03-18)}より)
+    :: φ(。。)
+* ((lb))COMIC((rb)) http://www.amazon.co.jp/exec/obidos/ASIN/4063289230/ref=pd_bxgy_text_1/249-9984633-9643520{頼むから静かにしてくれ}
+    :: モーニング誌で最終回。なんでやねん！
+* http://www.geocities.jp/bouasan2004/{某Aさんのエロゲクリエーター体験記}
+    (http://homepage1.nifty.com/maname/log/0403/index.html#0318r1{
+	maname house}より)
+    :: 社長がメインプログラマしてちゃいかんよなぁ、と最初の数話を見て思った。
+* http://softs.laas.fr/openrobots/libs/editline.php{editline ライブラリ}
+(http://www.t3.rim.or.jp/~raeva/diary/?200403b&to=200403182S1#200403182S1{
+    The diary formerly known as Go ahead make my day.}より)
+    :: 日本語サポートはどうかな…。
+	なかなか、独立性の高い一行入力を作るのは難しいです。
+* http://d.hatena.ne.jp/TomoMachi/20040314{「千と千尋」はなぜ「湯女」なのか}
+    :: 『千と千尋の神隠し』が娼館を舞台にした物語であるというのは、
+	わたくしも監督のどっかのインタビューで聞いたことがあります。
+	引用元の記事はなかなか納得させられる考察です。う〜む。
+* http://motoyuki.bsdclub.org/d/d200403b.html#16-1{
+    オリンピックのマラソン選手選考}
+    :: なるほど！ そうだったのか…。

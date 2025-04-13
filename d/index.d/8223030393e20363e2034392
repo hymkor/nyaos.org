@@ -1,0 +1,78 @@
+<<[Lua] この世で最も役に立たない関数>>
+
+* http://labaq.com/archives/51206442.html{らばQ:「え？なに？なんなの？」この世で最も役に立たないマシンが完成していた（動画）}
+* http://blog.livedoor.jp/dankogai/archives/51219921.html{404 Blog Not Found:js/scheme/perl/ruby/C - この世で最も役に立たない関数}
+* http://d.hatena.ne.jp/takkkun/20090603/1243976972{"この世で最も役に立たない関数"をRubyのメソッドで - make for h @ppy_things;} (Ruby,Python)
+* http://emasaka.blog65.fc2.com/blog-entry-620.html{本を読む シェルスクリプトで自殺関数} (bash)
+
+スイッチを On にすると、Off にする機械のプログラム版をみなさんお作りあそばしているので、自分も心のリハビリを兼ねて、Lua で try してみる
+
+8<
+count=0
+function pointless()
+    count = count + 1
+    print("Turning off myself",count)
+    pointless = nil
+end
+
+pointless()
+pointless()
+>8
+
+これはちゃんと動く(標準出力・標準エラー出力のバッファフラッシュのタイミングの差で、前後関係が変な出力なのは御容赦)
+
+8<
+C:\cygwin\usr\local\bin\lua.exe: pointless.lua:9: attempt to call global 'pointless' (a nil value)
+stack traceback:
+	pointless.lua:9: in main chunk
+	[C]: ?
+Turning off myself	1
+>8
+
+だが、関数を local 化すると、名前空間から消えるから、さすがに無理。
+
+8<
+count=0
+local pointless=function()
+    count = count + 1
+    print("Turning off myself",count)
+    pointless = nil
+end
+
+pointless()
+pointless()
+>8
+
+8<
+Turning off myself	1
+Turning off myself	2
+>8
+
+<<きんきょう>>
+
+「いいものを作れば多くの人に使ってもらえる」ってのは誤りで、
+「多くの人に使ってもらえるから、いいもの」なんですねぇ。
+言葉は昔からよく聞きますが、最近になってようやく実感した気がします。
+
+---
+
+ここ最近、台帳記入ばかりやってるような気がします。
+
++ Mozilla Sunbird で、15分単位の勤務状況を記録する。
+** 少々のズレはいいが、忘れてはいけないので、だいたい二時間起きにやる
++ その日の終わりに、これを以下に転記
+** チーム規定の保守実績台帳(Excel)
+** 各案件毎に設けられた保守実績台帳(Excel)
+** LotusNotesの勤怠実績入力
+
+うざいなーと思ってたんですが、慣れるとそうでもありませんね。
+昔はルーチンワークなんて馬鹿みたいに思えて、
+とてもやってられなかったものですが。
+
+で、ふと見返したんですよ。
+気がつくと、今月って、会社では一度もコードの読み書きしてないんです。
+驚きました。
+
+いや、サーバには触りますよ。設定見たりね。
+でも、プログラムコードは読んでいない。
+これで技術者とか言うんだから(ry

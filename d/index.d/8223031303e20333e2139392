@@ -1,0 +1,159 @@
+<<[Lua] 続・strict.lua の仕様を調べてみた>>
+
+>>{(2010.03.18)#p2}{昨日の続き}：
+カウントを取るだけのプログラムで例を書いてみる。
+
+<<<((# ex)). strict.lua を使わない>>>
+
+8<
+function count()
+    counter = (counter or 0)+1
+
+    return counter;
+end
+
+for i=1,10 do
+    print( count() )
+end
+>8
+
+⇒ エラーにならない。
+
+8<
+[c:strict_test]
+$ lua ok0.lua
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+>8
+
+<<<((# ex)). strict.lua を使う>>>
+
+8<
+require 'strict'
+
+function count()
+    counter = (counter or 0)+1
+
+    return counter;
+end
+
+for i=1,10 do
+    print( count() )
+end
+>8
+
+⇒ エラーになる
+
+8<
+$ lua ng1.lua
+lua: ng1.lua:4: variable 'counter' is not declared
+stack traceback:
+        [C]: in function 'error'
+        C:\Program Files\Lua\5.1\lua\strict.lua:31: in function <C:\Program Filelua\strict.lua:29>
+        ng1.lua:4: in function 'count'
+        ng1.lua:10: in main chunk
+        [C]: ?
+>8
+
+<<<((# ex)). チャンク(ソース)のメイン部で、事前に代入しておく>>>
+
+8<
+require 'strict'
+
+counter = nil
+function count()
+    counter = (counter or 0)+1
+
+    return counter;
+end
+
+for i=1,10 do
+    print( count() )
+end
+>8
+
+⇒ エラーは消える (つまり、'''代入する場所が重要''')
+
+8<
+$ lua ok1.lua
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+>8
+
+<<<((# ex)). 関数内部から global 宣言をする>>>
+
+8<
+require 'strict'
+
+function count()
+    global 'counter'
+    counter = (counter or 0)+1
+
+    return counter;
+end
+
+for i=1,10 do
+    print( count() )
+end
+>8
+
+8<
+$ lua ok2.lua
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+>8
+
+こちらもエラーにならない。global 関数は、どちらかというと C言語の extern 修飾子みたいなものだから、普通はメイン部に書くものなのでしょうねぇ。
+global 関数使っちゃうと、require 'strict' を外すと動かなくなっちゃいますし。
+
+<<<その他>>>
+
+* strict.lua は Lua の標準仕様ではなくて、Lua for Windows の添付ライブラリです。
+* でも、Pure Lua だから、そのまま Linux とかに持っていっても使えると思います。
+* このグローバル変数のリストは、getmetatable(_G).__declared というテーブルに格納されているみたいです。
+* 使うと、グローバル変数を参照する度に関数が呼ばれるので、それなりのコストかかります。(local 宣言していたら、大丈夫)
+
+<<[NYAOS] 2.90_1 Released.>>
+
+OS/2 で PM アプリケーションを起動できなかった点を修正したのみでございます。
+(Windows版は、まーたく変わっとりません)
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.90_1-win.zip{
+nyaos3k-2.90_1-win.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.90_1-os2.zip{
+nyaos3k-2.90_1-os2.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.90_1-src.zip{
+nyaos3k-2.90_1-src.zip}
+
+emxランタイムレスとするのは、当面先かなぁ。
+
+* spawn がPM起動に対応していないから、かわりに OS/2 の API を直接たたく
+* ライブラリアンがうまく動かんので、Lua の Makefile 無視して、オブジェクトファイルをリンクするようにする
+
+などの対応が必要となってきますから。
+そこまでやる意義/必要性も感じられませんし。

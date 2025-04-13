@@ -1,0 +1,106 @@
+<HTML>
+<HEAD><TITLE>WhyPic for OS/2</TITLE></HEAD>
+<BODY bgcolor="#000000" text="#FFFFFF" link="#00FF00" vlink="#00AA00">
+<P ALIGN=RIGHT>
+<FONT COLOR="#FF0000" SIZE=6>第二系統用何故画像之秘密</FONT><BR>
+<FONT COLOR="#FF0000" SIZE=4>WhyPic for OS/2 Warp</FONT>
+<HR>
+
+<H3><FONT COLOR="#00FFFF"><A NAME="intro"><I>WhyPic とは</I></A></FONT></H3>
+
+WhyPic は葉山の友人の可逆圧縮狂 山地 治氏が作成してしまった画像圧縮<!--
+-->ツールです。その特徴として、次のような点があげられます。
+<UL>
+  <LI> 可逆圧縮としては、多分世界一、圧縮率が高い。
+  <LI> 可逆圧縮でなくとも、多分世界一、遅い。
+  <LI> メモリを莫大に消費する。(640x400x16 でも 10MBytes要るらしい)
+  <LI> 対象は 16色・256色画像のみ。それ以上の解像度では、<!--
+	-->アルゴリズム上、高い圧縮率が期待できないので対応する予定はない
+	(山地氏談)
+</UL>
+オリジナル WhyPic は<P ALIGN=CENTER>
+<A HREF="http://www-lab25.kuee.kyoto-u.ac.jp/member/yamaji/freesoft.html"
+>http://www-lab25.kuee.kyoto-u.ac.jp/member/yamaji/freesoft.html</A><BR>
+</P>
+にて、Windows95版、FreeBSD版が公開されています。
+<P>
+今回、山地氏の許可を得て、この OS/2 版を公開させていただきます。
+本パッケージは対 ＢＭＰ形式コンバーターのみです。
+ＰＭで直接閲覧するには、
+<A HREF="http://www.geocities.co.jp/SiliconValley-SanJose/2457/"
+>Sofiyaさん</A>が画像ビューア「水」のプラグインとしてサポート<!--
+-->されてますので、そちらをご利用ください。<BR>
+(現在は 1.1 までですが… 1.2 の方よろしくお願いします &gt; Sofiyaさん ;-)
+
+<H3><FONT COLOR="#00FFFF"><A NAME="download"
+><I>ダウンロード</I></A></FONT></H3>
+
+<CENTER>
+<TABLE BORDER=4 CELLSPACING=0 CELLPADDING=2 BGCOLOR="#000044">
+  <TR>	<TD>WhyPic 1.2 for OS/2 R2</TD>
+	<TD><A HREF="./ypc12os2r2.lzh">ypc12os2r2.lzh</A></TD>
+	<TD ALIGN=RIGHT>(113,990 bytes)</TD>
+
+  <TR>	<TD>WhyPic 1.1 for OS/2 R2</TD>
+	<TD><A HREF="./ypc11os2r2.lzh">ypc11os2r2.lzh</A></TD>
+	<TD ALIGN=RIGHT>(85,401 bytes)</TD>
+</TABLE>
+</CENTER>
+1.2 は圧縮率は変わりませんが、圧縮速度がかなり改善されています。
+
+<H3><FONT COLOR="#00FFFF"
+><I>1.2 for OS/2 のリリースが遅れた言い訳</I></A></FONT></H3>
+
+<A HREF="http://www-lab25.kuee.kyoto-u.ac.jp/member/yamaji/freesoft.html"
+>オリジナルの方</A>では、FreeBSD-gcc と Windows-Visual C++ での<!--
+-->浮動小数点の扱いが違う為、gcc 版の方で、FPU のレジスタを変更<!--
+-->する処理が山地氏によって加えられました。
+これによって、FreeBSD-gcc版と VC++版で全く同じ処理をするようになりました。
+<P>
+ところが OS/2-emx/gcc では、解凍に失敗する画像が多数発生しました。
+その上、不思議なことに標準エラー出力をリダイレクトすると、
+その不具合が消えてしまうのです。
+<P>
+いろいろ、考えましたが、どうも、OS/2 あるいは emx/gcc では、
+画面出力を行うとFPUのレジスタが初期化されてしまうと解釈するしかなさそうです。
+そうであるならば、プログラムの前の方と後の方で同じ計算の結果が変わってしま<!--
+-->って、ベリファイ/解凍結果に不整合が起きるのも無理はありません。
+<P>
+これに対し、WhyPic のアルゴリズム自体、さっぱり分からない私は、結局、
+画面出力の度に、FPUのレジスタを再設定するというベタベタな手法で回避しました。
+20個ばかりの画像でテストしたところ、生成ファイルもWindows版と一致<!--
+-->しましたので、おそらく互換性も問題無いと思われます。
+<P>
+遅ればせながら、ここに再公開させていただきます。
+御協力いただきました、原作者の山地氏、汎用画像ビューア「水」の作者 Sofiya 
+様にこの場を借りて、お礼申し上げます。m(__)m
+<P>
+<FONT COLOR="#00FFFF">(余談)</FONT><BR>
+　これで、WhyPic は、Windows , FreeBSD , OS/2 Warp という３プラットフォーム
+に対応したことになる(djgpp の DOS版もありましたっけ？ &gt;山地氏)。
+しかし、これが最後であろうか？ とても僕はそう思えない。
+きっと、将来、WhyPic for Linux 、WhyPic for BeOS、
+WhyPic for Netscape Navigator などが現れるに違いない。
+その時、我々はいったいどうすればいいのだろうか。
+
+
+<H3><FONT COLOR="#00FFFF"><I>WhyPic のワ行上一段活用</I></FONT></H3>
+
+WhyPic の使い道としては、山地氏御自身がおっしゃっているように
+<UL>
+  <LI> 滅多に使わない画像(そもそもどう使うんだ？)をアーカイブして長期保存
+  <LI> フロッピーや遅い回線で転送する際に、極力サイズを減らしたい
+</UL>
+の他に
+<UL>
+  <LI>	圧縮の際の標準出力を眺めながら、ディスクが節約された快感にうち震える。
+  <LI>	謎の暗号文を16色画像にしたため、WhyPic形式でメイルで送る。
+	敵はきっと解読できまい。
+</UL>
+などの使い方ができるでしょう。
+さぁ、貴方も WhyPic で貴重な時間を無駄にして、時の涙を見てみませんか？
+<HR>
+<FONT SIZE=-1 COLOR="#EEEEAA">▼</FONT>
+<A HREF="../index.html">やっぱり帰る…</A>
+</BODY>
+</HTML>

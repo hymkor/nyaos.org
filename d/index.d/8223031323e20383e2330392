@@ -1,0 +1,71 @@
+<<俺が社会復帰できないのは、Mercurialが天下をとってないせい>>
+
+'''追記あり'''
+
+git が unicode に対応したとか言ってるけど、
+unicode のファイル名にしか対応していないことに注意。
+commit-logに unicode を使う場合は、
+エディターやページャー側で対応しなければいけない。
+
+8<
+GIT_EDITOR=gvim "+set fenc=utf8"
+GIT_PAGER=nkf32
+>8
+
+Mercurial は、環境変数 HG_ENCODING で文字コードを指定しておけば、
+別に文字コード変換機能のついたエディターや変換ツールを用意する必要はない。
+が、逆にファイル名はどうしようもない。
+
+win32mbcs エクステンションを使えば回避できるが、
+unicode ではないため、日本語ファイル名をそのまま bitbucket
+(Mercurial対応のホスティングサービス)に上げたりするのはためらわれる。
+
+Cygwin の Mercurial を使うと、Cygwin の機能でファイル名が unicode に自動変換される。
+が、バージョン管理のためだけに、Cygwin を入れるのは牛刀を以て鶏を割くようなもので、
+手間などを考えると、あまり人に強いることができない方法だ。
+
+Mercurial 本体が unicode 対応してくれるのが一番いいんだがなぁ。
+いや、その前に(Mercurialの記述言語である)Python が言語自身でファイル名を
+unicode で扱うようにすべきなのか？
+
+というわけで、この問題が解決しないと、
+日本語ファイル名が余裕で存在しうる日本の SIer で安心してバージョン管理できず、
+わたしの社会復帰は困難なものとなるのだ。
+
+<<<追記1>>>
+:http://twitter.com/shimizukawa{shimizukawa}
+:: Pythonがファイル名をUnicodeで取り扱えるのは意外と知られてない気がする。os.listdir(u'.') [http://twitter.com/shimizukawa/status/241147257825685504]
+
+あー、ほんとだ
+8<
+[c:My Documents]
+$ cat foo.py
+import os
+
+for e in os.listdir(u'.'):
+    print type(e),e.encode('cp932')
+[c:My Documents]
+$ ./foo.py
+<type 'unicode'> Access Connections
+<type 'unicode'> API32WH
+<type 'unicode'> API32WH.zip
+<type 'unicode'> ax_files.xml
+<type 'unicode'> Bluetooth 交換フォルダ
+<type 'unicode'> desktop.ini
+<type 'unicode'> Downloads
+<type 'unicode'> EPSONPXA640.iso
+    :
+>8
+
+<<<追記2>>>
+
+:http://twitter.com/flyingfoozy{flyingfoozy}
+::@zetamatta #mercurialjp Python が云々よりも、Python/OS/filesystem のそれぞれの層で対応可能な Unicode の版が微妙に違っていることや、文字コード混在状態の許容とかに対しての作者である Matt のこだわりが大きいと思います [http://twitter.com/flyingfoozy/status/241183651226865664]
+:http://twitter.com/flyingfoozy{flyingfoozy}
+::@zetamatta #mercurialjp 細々とながらですが、Win での Unicode 対応に向けて修正作業は継続中ですので、気長にお待ちください(笑) [http://twitter.com/flyingfoozy/status/241183815429681152]
+
+ちゃんと動いてくださっている方がいらっしゃったようです。
+ありがたいことです。気長にお待ちしております。
+
+いえ、決してあわてる必要はございません。
+なぜなら、すぐに実現されると、わたしもすぐ社会復帰しなくちゃいけn…

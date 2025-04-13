@@ -1,0 +1,35 @@
+Optis チーム：
+
+|| 担当者 | テーマ
+|| 溝口 | OSSミドルウェアを対象とした性能品質と可用性確保の対策ガイド
+|| 森　 | NoSQL の実システムへの適用
+|| 中西 | 可用性向上のためのPostgreSQLクラスタ構築技術調査
+|| 山本 | 先駆けビジネスを支えるOSSスタックの実現に向けて
+|| '''木村'''  | '''Message Oriented Middlewareの評価'''
+|| 東條 | OSS-HAクラスタソフトの機能比較、可用性検証
+|| 小林 | JBossとPostgreSQLを組み合わせた検証
+|| 坊ノ下 | MySQLの性能・信頼性検証
+
+VALID チーム：
+
+|| '''佐伯''' |  Hadoopとの同期・非同期処理連携に関する検証(ESB経由でのonline実行)
+|| '''平井''' |  OSS Enterprize Service Bus技術
+|| '''竹澤''' |  ESB Muleを用いた環境の構築及び検証　　　
+|| '''朝香''' |  ESB Muleを介したHadoop利用の検証（仮）
+
+8<
+TC 葉山さん
+
+TC 平井です。お疲れさまです。
+ESB Muleに関する情報共有です。
+
+TCの部門として、以下の本（『Mule in Action』）を買いました。
+http://www.amazon.co.jp/dp/1933988967
+どこかの本棚に転がっていますので、ご自由にご参照ください。
+＃ 出現確率が一番高そうなのは、平井横の本棚かと思われます。
+
+また、本の購入特典でPDFが入手できたので、こちらも展開いたします。
+http://tc.tis.co.jp/user/is302807/files/MuleinAction.zip
+
+以上です。
+>8

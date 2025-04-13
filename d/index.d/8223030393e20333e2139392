@@ -1,0 +1,44 @@
+<<[Lua] 「use strict;」相当のことが出来た!>>
+
+8<
+$ cat strict.lua
+local strict={
+    __newindex = function(t,i,v)
+        error("** you can not assign global variable '"..i.."' **")
+    end
+}
+setmetatable(_G,strict)
+
+--- Test ---
+
+local foo="use local variable:OK"
+print(foo)
+
+bar="use global variable"
+print(bar)
+
+$ lua strict.lua
+use local variable:OK
+lua: strict.lua:3: ** you can not assign global variable 'bar' **
+stack traceback:
+        [C]: in function 'error'
+        strict.lua:3: in function <strict.lua:2>
+        strict.lua:13: in main chunk
+        [C]: ?
+>8
+
+書籍を買ったカイがあったというものだ。
+
+メタテーブルを使えばいいのかなとは想像してたんだけれども、
+メタテーブルの設定の仕方が間違ってて、
+できないものと思ってしまっていたのでした。
+
+これで、一応「不用意にグローバル変数を使うことを警告させる」
+という要件を満たせたわけだ。
+でも、Perl の``use strict;`` と全く同じというわけではないことに注意。
+
+上は動的な監査なので、チェックできるのはあくまで動いたコード限定となる。
+Perl の ``use strict;`` の場合、静的に監査するので、
+起動時に即エラーにしてくれるという違いがある。
+まぁ、Lua には、グローバル変数のフルパスみたいなものはないし、
+そこまで望むのは酷というものだろう。これで十分だ。

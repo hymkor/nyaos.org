@@ -1,0 +1,173 @@
+働き口が見付かりそうなんだけど、朝が相当早い & まだ働きたくないでござる、
+というわけで今一気持ちが乗らないでござる。
+
+<<勉強したいんだけど、今いちやる気が起きないもの>>
+
+<<<テスト自動化>>>
+
+Jenkins とか Hudson とかいうテスト自動化ツールをよく聞く。
+テストを自動化するってのは合理的で、やってみたくはあるんだけれども、
+いろいろ疑問があってですねぇ。
+
+* 普通、粒度はどれくらいなの？
+** 関数単位？モジュール単位？ウェブアクセス単位？
+* 動的にモジュールをロードできるインタープリタ系でないと駄目？
+** たとえば、NYAOS は C++ だけど、自動テストは難しいような気がするんだ。
+
+Python だと、Pythonコードの中の組み込みドキュメントの中に、
+テストコードを埋め込めたりして、
+「あぁ、これが自動単体テストなんだな」って分かるんだけどねー。
+
+これ、一回、誰かとペアプログラミングさせてもらわないと、
+わっかんねーのかなぁ。
+
+<<<git/github>>>
+
+単純に Mercurial/Bitbucket で十分用が足りてるし、
+乗り換えるメリットも見当たらないので、
+やる気が起きないでござる。
+
+無理矢理、Bitbucket と並行運用すりゃいいのかなぁ。
+
+<<<Eclipse>>>
+
+客観的に考えると、エディター+コマンドラインより、統合環境(IDE)の方がいいはずなんだ。
+ただ、重そうなのと、vim とコマンドラインで満足してしまっていて、今一やる気が起きないでござる。
+
+<<[NYAOS] PATH の「末尾」にパスを重複なく追加する>>
+
+NYAOS では、PATH の「先頭」にパスを重複なく追加するには
+
+8<
+  set PATH+=x:\path\to
+>8
+
+とすればいいが、PATH の「末尾」にパスを重複なく追加するコマンドがなかった。
+
+vimscript だと、前者は「``^=``」、後者は「``+=``」で二種類あったんだが、
+NYAOS では ``+=`` を先頭にくっつける演算子にしてしまったので仕方がない。
+
+まぁ、普通は ``+=`` で十分用が足りるんだけれども、
+NYAOS から Cygwin のコマンドを使う時、
+デフォルトではネイティブのコマンドを使って、
+なかったら Cygwin のコマンドを使いたいという時、困った。
+
+というわけで、Lua でさくっと書いてみた。
+
+8<
+function nyaos.command.addenv(env,value)
+    local frag={}
+    local uniq={}
+    if not env then
+        print('addenv ENVNAME AddedValue')
+        return
+    end
+    for e in string.gmatch(os.getenv(env),'[^;]+') do
+        local E=string.upper(e)
+        if not uniq[E] then
+            table.insert(frag,e)
+            uniq[E] = true
+            if not value then
+                print(e)
+            end
+        end
+    end
+    if value then
+        if not uniq[string.upper(value)] then
+            table.insert( frag , value )
+        end
+        nyaos.exec('set '..env..'='..table.concat(frag,';'))
+    end
+end
+>8
+
+<<<使い方>>>
+
+「``source <<{addenv.lua}``」してから、「``addenv PATH c:\cygwin\bin``」みたいに使ってください。
+
+<<Windows の Mercurial/vim 使いが git を使い始めてみる>>
+
+Cygwin のじゃなく、msysgit を使ってみます。
+
+<<<vim の設定を変更>>>
+
+``~/.vimrc`` に ``set autochdir`` が入っている場合は ``autochdir`` を外す
+  ((br))(``autochdir`` が入っていると ``git commit`` が誤動作する)
+
+<<<コミットログが化けちゃうので>>>
+
+エディターに vim を指定して、UTF-8 で開くようにします 
+(https://twitter.com/#!/tkuro11/status/170762369075650561{@tkuro11}さん、ご教示感謝)
+
+8<
+set GIT_EDITOR=gvim "+set fenc=utf8"
+>8
+
+⇒ ``~/_nya`` に追記
+
+<<<ログが UTF-8 で出ちゃう>>>
+
+iconv のフィルターを通すようにします
+
+8<
+set GIT_PAGER=iconv -f UTF-8 -t CP932
+>8
+
+⇒ ``~/_nya`` に追記
+
+<<<<※追記1>>>>
+
+これやっちゃうと、ShiftJIS ソースをつっこんだ時、git diff でエラーになってしまう模様。だめだこりゃ
+
+<<<<※追記2>>>>
+
+http://www.vector.co.jp/soft/dl/win95/util/se295331.html{Windows版nkf}を使って
+
+8<
+set GIT_PAGER=nkf32
+>8
+
+として、元の文字コードを自動判断させるようにした結果、一応、問題なく読めるようになりました。
+
+<<<エスケープシーケンスのゴミが出ちゃう>>>
+
+iconv を通したためですが、どうせ色なんかいらないので、カラー出力を抑制してしまいます。
+
+8<
+git config --global color.ui false
+git config --global color.diff false
+git config --global color.status false
+git config --global color.branch false
+git config --global color.interacive false
+>8
+
+⇒ 1回だけ実行すれば、git の設定ファイルに記録される
+
+本当は ``color.ui`` だけで良さそうなものなのですが、
+``color.ui`` だけだと、``git log`` で相変わらず、
+エスケープシーケンスが出ていたので、
+``git config -l`` で出てきたカラーっぽい項目を全て指定してしまいました。
+
+<<<Mercurial の直近のファイルを登録>>>
+
+全部移行なんて面倒なだけなので、最新の ChangeLog に登録されたファイルだけ登録します。
+
+8<
+git init
+git add `hg locate | grep .hg`
+git commit
+>8
+
+----
+
+まぁ、今日のところは、こんなところでしょうか。
+もっとよい方法があったら、教えてください >> 皆の衆
+
+しかし、ここまで手を尽さないと、日本語でログ書けないというのは、ちょっとなぁ…。
+なんか間違えてるのかなぁ。Mercurial だと
+
+8<
+set HGENCODING=cp932
+>8
+
+だけで済む話なのに

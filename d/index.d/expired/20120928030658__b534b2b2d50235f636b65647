@@ -1,0 +1,84 @@
+[gimite氏のライブラリ|http://gimite.ddo.jp/gimite/cppmess.htm]
+を使えば、簡単にソケット通信が！
+
+<<<< サーバ側>>>>
+
+クライアントから受け取った電文を鸚鵡がえしに返すだけのプログラム。
+
+<pre>
+    #include <string>
+    #include <iostream>
+    #include "socket.h"
+    
+    using namespace std;
+    
+    int server()
+    {
+	gimite::server_stream_socket server(12345);
+	if (!server){
+	    std::cerr << "Failed to bind socket." << std::endl;
+	    return -1;
+	}
+	for(;;){
+	    gimite::socket_t s=server.accept();
+	    gimite::socket_stream sst(s);
+    
+	    string line;
+	    while( getline(sst,line) ){
+		cout << "Received \"" << line << '"' << endl;
+		sst << "Reply \"" << line << '"' << endl;
+	    }
+	}
+	return 0;
+    }
+    
+    int main()
+    {
+	gimite::startup_socket();
+	int rc=server();
+	gimite::cleanup_socket();
+	return rc;
+    }
+</pre>
+
+Linux でまじめなサーバを作るなら、fork とかの処理を組み込む必要があるが、
+１クライアントだけなら、これでも一応要を為す…かな
+（いや、デッドロック対策も必要ですぜ）
+
+<<<< クライアント側>>>>
+
+サーバへ 1〜100 の数を送信して、受信した返答を画面に表示するだけ。
+
+<pre>
+    #include <string>
+    #include <iostream>
+    #include <iomanip>
+    #include "socket.h"
+    
+    using namespace std;
+    
+    int client()
+    {
+	gimite::socket_stream sst("127.0.0.1", 12345);
+	if (!sst){
+	    std::cerr << "Failed to connect." << std::endl;
+	    return -1;
+	}
+	std::string recv;
+	for(int i=0 ; i < 100 ; i++ ){
+	    sst << setw(10) << i << endl;
+	    if( std::getline( sst , recv ) ){
+		cout << "Get reply \"" << recv << "\"" << endl;
+	    }
+	}
+	return 0;
+    }
+    
+    int main()
+    {
+	gimite::startup_socket();
+	int rc=client();
+	gimite::cleanup_socket();
+	return rc;
+    }
+</pre>

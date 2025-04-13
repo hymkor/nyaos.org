@@ -1,0 +1,99 @@
+<HTML>
+<HEAD><TITLE>eff 稼動状況アンケート</TITLE></HEAD>
+<BODY>
+
+<H1>OS/2 用コマンドライン用ファイラー eff <BR />稼動状況アンケート</H1>
+<HR />
+
+<TABLE ALIGN="CENTER" WIDTH="70%" CELLPADDING="10" BGCOLOR="black" />
+<TR><TD>
+<FONT COLOR="white">
+eff は現在 emx 0.9d fix4 をご使用の方より、
+使用中に落ちるというご報告をいただいています。
+ところが、同じく fix4 環境でありながら、
+落ちないという環境も存在しているようです。
+本アンケートは、eff が安定して動作している環境・
+落ちる環境の特定を目的とするものです。
+</FONT>
+</TD></TR>
+</TABLE>
+
+<FORM METHOD="post" ACTION="http://mdec.nifty.com/cgi-bin/ahpmdec.cgi">
+    <INPUT TYPE="hidden" NAME="ok_page"
+        VALUE="http://homepage2.nifty.com/hayamatta/warp/effanswered.html" />
+    <INPUT TYPE="hidden" NAME="to_mail" VALUE="ZXH02315@nifty.com" />
+    <INPUT TYPE="hidden" NAME="sub" VALUE="eff アンケート" />
+
+    <DL>
+    <DT><B>お名前</B></DT>
+    <DD><INPUT TYPE="text" NAME="name" SIZE="30" MAXLENGTH="40" /></DD>
+    <DT><B>メールアドレス</B></DT>
+    <DD><INPUT TYPE="text" NAME="from" SIZE="25" MAXLENGTH="60" /></DD>
+
+    <DT><B>eff のバージョンはどれをお使いですか？</B></DT>
+    <DD>
+        <INPUT TYPE="radio" NAME="eff-version" VALUE="1.35" />1.35
+        <INPUT TYPE="radio" NAME="eff-version" VALUE="1.34" />1.34
+        <INPUT TYPE="radio" NAME="eff-version" VALUE="1.33" />1.33
+        <INPUT TYPE="radio" NAME="eff-version" VALUE="1.32" />1.32
+        <INPUT TYPE="radio" NAME="eff-version" VALUE="1.31" />1.32以前
+    </DD>
+    <DT><B>Warp のバージョンはどれをお使いですか？</B></DT>
+    <DD>
+        <INPUT TYPE="radio" NAME="os2-version" VALUE="xrjm015"
+            />Warp コンビニエンスパック
+        <INPUT TYPE="radio" NAME="os2-version" VALUE="xrjm014" />Warp4 + XRJM014
+        <INPUT TYPE="radio" NAME="os2-version" VALUE="fx00505" />Warp4 + FX00505
+        <INPUT TYPE="radio" NAME="os2-version" VALUE="fx00002" />Warp4 + FX00002
+        <INPUT TYPE="radio" NAME="os2-version" VALUE="warp4" />素Warp4
+        <INPUT TYPE="radio" NAME="os2-version" VALUE="warp3" />Warp3
+    </DD>
+    <DT><B>emx のバージョンはどれをお使いですか？</B></DT>
+    <DD>
+        <INPUT TYPE="radio" NAME="emx-version" VALUE="0.9d-fix4" />0.9d fix4
+        <INPUT TYPE="radio" NAME="emx-version" VALUE="0.9d-fix3" />0.9d fix3
+        <INPUT TYPE="radio" NAME="emx-version" VALUE="0.9d-fix2" />0.9d fix2
+        <INPUT TYPE="radio" NAME="emx-version" VALUE="0.9d-fix1" />0.9d fix1
+        <INPUT TYPE="radio" NAME="emx-version" VALUE="0.9d-nofix" />素0.9d
+        <INPUT TYPE="radio" NAME="emx-version" VALUE="0.9c" />0.9c
+        <INPUT TYPE="radio" NAME="emx-version" VALUE="0.9" />0.9b以前
+    </DD>
+    <DT><B>かんなは使ってられますか？</B></DT>
+    <DD>
+        <INPUT TYPE="radio" NAME="canna" VALUE="yes" />使っている
+        <INPUT TYPE="radio" NAME="canna" VALUE="no"
+            />使っていない or かんなってなんですか？
+    </DD>
+    <DT><B>その環境で eff は安定動作していますか？</B></DT>
+    <DD>
+        <INPUT TYPE="radio" NAME="stable" VALUE="yes" />安定している
+        <INPUT TYPE="radio" NAME="stable" VALUE="no" />おもしろいほどよく落ちる
+        <INPUT TYPE="radio" NAME="stable" VALUE="others" />たまに落ちる
+        （<INPUT TYPE="checkbox" NAME="coredump" VALUE="yes"
+        />しかも core まで吐いたりするし）
+    </DD>
+    <DT><B>下記の中で該当するケースがありますか？</B></DT>
+    <DD>
+        <INPUT TYPE="checkbox" NAME="case1" VALUE="readline" />
+        何らかの一行入力でキーを入力すると落ちる。
+    </DD>
+    <DD>
+        <INPUT TYPE="checkbox" NAME="case2" VALUE="adrive" />
+        A ドライブへコピーすると落ちる
+    </DD>
+    <DT><B>よく落ちる場合は、落ちるケースについて記述ください</B>。
+        emxrev.cmd の結果などもあればありがたいです。
+        安定している場合は、適当に感想をどうぞ。</DT>
+    <DD><TEXTAREA NAME="body" ROWS="10" COLS="60"></TEXTAREA>
+    </DD>
+    </DL>
+    <INPUT TYPE="submit" VALUE="送信">
+    <INPUT TYPE="reset" VALUE="クリア">
+</FORM>
+<HR />
+<DIV ALIGN="right">
+その他、連絡事項などありましたら、<A
+HREF="mailto:iyamatta.hayama@nifty.com">こちら</A>へ
+</DIV>
+</BODY>
+</HTML>

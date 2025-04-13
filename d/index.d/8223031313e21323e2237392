@@ -1,0 +1,127 @@
+<<[Lua] Lua 5.1～5.2 の非互換性>>
+
+'''(タイトルを「[Lua] Lua 5.1～5.2 の変更点」から変更しました)'''
+
+Lua 5.2 がリリースされた！ でも、Lua 5.1.4 との差が分からない(英語だから)。
+というわけで、Lua マニュアルの http://www.lua.org/manual/5.2/manual.html#8{8 – Incompatibilities with the Previous Version}を超訳してみました。
+
+<<<8.1 - 言語の変更>>>
+
+* 「環境(environment)」の概念が変更された。
+    Lua 関数だけが「環境」を持つ。
+    Lua 関数の環境を設定するためには、変数 _ENV か、
+    関数 http://www.lua.org/manual/5.2/manual.html#pdf-load{load} を使う。
+    ((br))((br))
+    C関数は、もはや「環境」を持たない。
+    C関数数個で共有された状態を維持する必要がある場合、
+    共有テーブル(shared table)で、==upvalue=={上位値} を使う
+    (共通 ==upvalue=={上位値}を共有する関数で Cライブラリをオープンするためには、
+    http://www.lua.org/manual/5.2/manual.html#luaL_setfuncs{luaL_setfuncs}を使ってもよい)。
+    ((br))((br))
+    userdata(今は「user data」と呼ぶようになっているが)の「環境」を操作するには、
+    新関数 http://www.lua.org/manual/5.2/manual.html#lua_getuservalue{lua_getuservalue} 
+    と http://www.lua.org/manual/5.2/manual.html#lua_setuservalue{lua_setuservalue} を使う
+    ((br))((br))
+* Lua の識別子は、ロケールに依存する文字は使えない。
+* ガベージコレクターのステップ実行ないしはフル実行は、
+    停止するまで再実行されない。
+* weak key を持つ weak table は、短命な(ephemeron)テーブルのように評価されるようになった。
+* デバッグフックのイベント「tail」は削除された。
+    かわりに、tail の呼び出しは、特別な新イベント tail call を生成するので、
+    デバッガは対応するリターンイベントがあることが分かる。
+* 関数値の等価性が変更された。
+    現在、関数定義は新しい値を生成しないかもしれない。
+    新関数との識別できる違いが無い場合、前の値が再利用されるかもしれない。
+
+[訳注] upvalue がよく分かりません。切り上げ？にしては文脈が合わない。そのうち訂正するかも
+((br))[追記] いただいたコメントに従って、upvalue ⇒ 上位値にしました。
+
+<<<8.2 - ライブラリの変更>>>
+
+* 関数 module が非推奨になった。通常の Lua コードでモジュールをセットアップするのが簡単だ。
+    モジュールは、グローバル変数を設定することを期待されない。
+* 関数 setfenv と getfenv は「環境」の変更により削除された。
+* 関数 math.log10 は非推奨になった。かわりに第二引数に 10 を与えた
+    http://www.lua.org/manual/5.2/manual.html#pdf-math.log{math.log} を使う
+* 関数 loadstring は非推奨になった。かわりに load を使う。
+    現在、文字列の引数を受け入れるようになっており、厳密に loadstring 相当になっている。
+* 関数 table.maxn は非推奨になった。本当にそれが必要になった場合は、Lua でそれを書く。
+* 関数 os.execute は、コマンドが正常終了した時に true 、
+    さもなければ nil + エラー情報を返すようになった。
+* 関数 unpack は table ライブラリに移動したので、
+    http://www.lua.org/manual/5.2/manual.html#pdf-table.unpack{table.unpack}
+    として呼ばなくてはいけない。
+* \0 が通常キャラクターに含めてもよいため、パターンでの文字クラス %z は非推奨になった。
+* テーブル package.loaders は package.searchers に改名された。
+* Lua バイトコードの検証をもやは行わない。そのため、コードをロードする全ての関数
+    (http://www.lua.org/manual/5.2/manual.html#pdf-load{load} と
+    http://www.lua.org/manual/5.2/manual.html#pdf-loadfile{loadfile}
+    )は、信頼できないバイナリデータを呼ぶ時に潜在的に安全ではない。
+  (実際、検証アルゴリズムでの弱点により、それらの関数は既に安全でなくなっている)。
+  疑いがある場合、テキストのチャンクのロードを制限するため、それらの関数の
+  mode 引数を使う。
+* 公式配布物の標準パスは、バージョン間で変わるかもしれない。
+
+<<<8.3 - API の変更>>>
+
+* 擬似インデックス LUA_GLOBALINDEX は削除された。
+    registry からグローバル環境を取得しなくてはいけない
+    (http://www.lua.org/manual/5.2/manual.html#4.5{§4.5}参照)
+* C関数はもはや「環境」を持たないため、擬似インデックス LUA_ENVIRONINDEX と
+    関数 lua_getfenv/lua_setfenv は削除された。
+* 関数 LuaL_register は非推奨となった。
+    モジュールは globals を作成しなくなったので、
+    http://www.lua.org/manual/5.2/manual.html#luaL_setfuncs{luaL_setfuncs}を使う。
+    (モジュールはグローバル変数を設定することはもはや期待されない)
+* allocation 関数のosize 引数新規ブロックを作成する時、
+    すなわち ptr が NULL (http://www.lua.org/manual/5.2/manual.html#lua_Alloc{lua_Alloc}参照)
+    の時、ゼロであってもよい。
+* userdata の Finalizer (メタメソッド ```__gc```)は、
+    それらが作成された順ではなく、
+    ファイナライゼーションでマークされたのと逆順に呼び出される
+    (http://www.lua.org/manual/5.2/manual.html#2.5.1{§2.5.1}参照)。
+    (ほとんどの userdata は作成されてから即マークされる)
+    さらに、メタテーブルは設定された時に ```__gc``` フィールドを持っていない場合、
+    後から設定された場合でさえ、ファイナライザーは呼ばれない。
+* luaL_typeerror は削除された。必要な場合、自分のバージョンを書く。
+* 関数 lua_cpcall は非推奨となった。
+    単純に http://www.lua.org/manual/5.2/manual.html#lua_pushcfunction{lua_pushfunction}で
+    関数を push して、http://www.lua.org/manual/5.2/manual.html#lua_pcall{lua_pcall}
+    で呼び出すことができる。
+* 関数 lua_equal と lua_lessthan は非推奨になった。
+    かわりに、適切なオプションで http://www.lua.org/manual/5.2/manual.html#lua_compare{lua_compare}
+    を使う。
+* 関数 lua_objlen は http://www.lua.org/manual/5.2/manual.html#lua_rawlen{lua_rawlen} に改名された。
+* 関数 http://www.lua.org/manual/5.2/manual.html#lua_load{lua_load} は追加パラメータ mode を持った。
+    古い振舞いをシミュレートするためには、NULL でとばす。
+* 関数 http://www.lua.org/manual/5.2/manual.html#lua_resume{lua_resume} は追加パラメータ from
+    を持った。古い振舞いをシミュレートするためには NULL でとばす。
+
+意味も分からず、訳しているところもあるので、そのうち訂正するかも。
+
+<<pairs と ipairs は？>>
+
+前どこかの記事で読んだ pairs と ipairs 向けのメタメソッドが非互換性一覧に記述されていない。
+が、マニュアルでは記述されているようだ。
+
+<<<http://www.lua.org/manual/5.2/manual.html#pdf-pairs{pairs(t)}>>>
+
+6<
+If t has a metamethod ```__pairs```, calls it with t as argument and returns the first three results from the call.
+   :
+>9
+
+t がメタメソッド ```__pairs``` を持っている場合、t を引数に呼び出して、呼び出しからの最初の3つの結果を戻す。(以下略)
+
+<<<http://www.lua.org/manual/5.2/manual.html#pdf-ipairs{ipairs(t)}>>>
+
+6<
+If t has a metamethod ```__ipairs```, calls it with t as argument and returns the first three results from the call.
+>9
+
+t がメタメソッド ``__pairs``` を持っている場合、t を引数に呼び出して、呼び出しからの最初の3つの結果を返す。
+
+---
+
+「非互換性一覧」に記述されているのは、文字どおり互換性を損ねるような変更だけなのようだ。
+他にも互換性を損ねていない拡張はいろいろありそうだ。

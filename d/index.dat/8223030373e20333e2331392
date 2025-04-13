@@ -1,0 +1,189 @@
+<<[メモ] find に関する一連の議論>>
+
+みんな find 好きだなぁ。わしもだけど。
+せっかくなので、スレッド風にまとめてみる。
+
+* http://labs.unoh.net/2007/03/post_78.html{
+  ウノウラボ Unoh Labs: コマンドラインで作業する上で知っておくといいテクニック}
+  ((br))ルートとなる記事。find の活用方法を説く。
+** http://blog.livedoor.jp/dankogai/archives/50797631.html{
+   404 Blog Not Found:勝手に添削 - find(1)}
+  ((br))
+   「``find -exec rm {}``」は、rm を何回も呼び出すのでコスト的に不利。
+   「``|xargs rm``」か「``| perl -nle unlink``」とパイプでつなげるとよい。
+*** http://68user.blog27.fc2.com/blog-entry-39.html{
+   無精で短気で傲慢なプログラマ | find には sh!}
+   ((br))コストよりも「確実性」を重視し、
+   sh に渡すコマンドラインを sed で生成すると良い。
+**** http://blog.livedoor.jp/dankogai/archives/50797739.html{404 Blog Not Found:あわてるな ディスクはそんなに 速くない}
+    ((br))ファイル数が数万、数十万ともなると、
+    そのコストは見過ごせないものとなる。
+*** http://d.hatena.ne.jp/k3c/20070330/p1{18 til i die - findの用法あれこれ}
+   ((br))バックスラッシュによるエスケープではなく、
+   シングルクォートの方が分かりやすい。
+*** http://d.hatena.ne.jp/nak2k/20070330/p1{
+    nak2kのメモ帳 - xargsのオプションって環境によるのね}
+    ((br))xargs って何回も呼ばれるというが、引数は join される
+          (ので、そう多くない)
+** http://www.otsune.com/diary/2007/03/29/1.html#200703291{
+   void GraphicWizardsLair( void ); // いまどきfindとxargsを使う時は-print0と-0を忘れずに}
+((br))空白を含むファイルが存在する場合、誤動作が発生しうるので、
+   ``-print0`` を使うとよい。
+*** http://ya.maya.st/d/200703c.html#s20070330_1{どさにっき}
+((br)) ``-print0`` を使うのはよいが、
+    NULで終わるのを前提としないコマンドがあることを認識すべき。
+* (追記:4/3)
+  http://d.hatena.ne.jp/odz/20070403/1175592254{odz buffer - findのあれとか}
+  ((br))ファイル名に * や ? があって死ぬのが恐いなら xargs に -e オプション
+
+個人的には、68user さんの考え方を支持したい。
+誤って大切なファイルを損失させるくらいであれば、
+一時の負荷を取るくらいでもよいと思う。
+==出力にワイルドカード文字が含まれると危険という話があるが、
+* とか ? とか、そもそもファイル名に含むことができないので、
+心配する必要はないだろう。==
+<INS>(UNIX/Linux では普通に使えました。m(__)m)</INS>
+
+もっとも、両立させて
+
+8<
+$ find . -name '*.bak' -print | perl -nle 'print "unlink q($_);"' > go.pl
+$ less go.pl
+$ perl go.pl
+>8
+
+という方法もあるが、正直、ここまでするのってもどうかとも思う。
+手の混んだことをすると「策士、策の溺れる」ってことになりかねないからね。
+
+あと、dankogai氏は何かというと煽り過ぎ & Perlを持ち出し過ぎ。
+
+<<livedoor Reader において「Floating Log」の記事本文へのリンクがおかしくなっている件について>>
+
+livedoor Reader での
+http://lowlife.jp/mft/weblog/{Floating Log}の記事本文へのリンクが
+おかしくなっている。
+「元記事」のリンク先が ``href=""``、すなわち「空」になっている時があるのだ。
+結果として ```http://reader.livedoor.com/reader/``` へ遷移しようとして、
+事実上リロードするので
+
+>> あれ、今、どこまで読んだんだっけ <<
+
+になってしまふ。
+
+http://www.kt.rim.or.jp/~kbk/zakkicho/07/zakkicho0703.html#D20070328-5{
+ときどきの雑記帖 リターンズ}での指摘をきっかけに、
+筆者の Fe<sup>2+</sup>さんが、
+http://lowlife.jp/mft/stories/25.html{RSS 出力について}
+に解説を書いてくださっているようだけれども
+
+>> 正直、まだ分からない。 <<
+
+なぜなら、明らかにウェブログ本体の記事だと思われる、
+「http://lowlife.jp/mft/weblog/2007/03/31.html#P1313{
+NZMATH Development Log}」でも同現象が再現しているからだ。
+それに、仮に他所のページへのリンクだったとしても、
+フィードへはそちらへの URL が出力されていなければならないはずで、
+リンク切れになるのはおかしい。
+また、過去のバックナンバーについても一件も出ていないのも、
+どうしてなんだろ。
+
+実際に RSSフィードの XML ソースを見たところ：
+
+8<
+  :略
+<item>
+<title>…タイトル…</title>
+<description>…要約…</description>
+<guid>…URL…</guid>
+<category domain="http://lowlife.jp/mft/weblog/">PyDS</category>
+<category domain="http://lowlife.jp/mft/weblog/">python</category>
+<ent:cloud ent:href="http://lowlife.jp/mft/weblog/">
+<ent:topic ent:id="PyDS" ent:href="http://lowlife.jp/mft/weblog/PyDS/">PyDS</ent:topic>
+<ent:topic ent:id="python" ent:href="http://lowlife.jp/mft/weblog/python/">python</ent:topic>
+</ent:cloud>
+<pubDate>Sat, 31 Mar 2007 13:34:56 GMT</pubDate>
+</item>
+   :略
+>8
+
+というような形式になっていた。
+URL は guid要素に記載されているようだ。
+「最新WebサービスAPIエクスプローラ Amazon はてな Google Yahoo!」によると、
+guid 要素は isPermalink="false" という属性がついていなければ
+URL が入るということなので、記載としては全く正しいようだ。
+実際、Firefox の内蔵 RSS Reader だと、
+ちゃんと本文URLを見付けて、本文記事リンクを正しく張れている。
+
+ただ、URL を示す要素としては別に link要素というのものもあり、
+我が wifky の「にっきプラグイン」もそれを使っているが、
+たいていの RSS Reader で認識してくれる。
+いったいどちらが正しいのだろうか。
+
+よく分からんので、とりあえず、
+「PyDS RSS guid」でググってみたところ、
+英語圏の PyDS の ML で興味深い記事を見付けた。
+あちらの RSS Reader (Buzz?っていうのかな?)でも同様の現象があったようですな。
+
+http://www.westfalen.de/pipermail/pyds-dev/2003-October/000400.html{
+[Pyds-dev] Re: Buzz RSS feed}：
+8<
+Bill - The permalink finding algorithm should look like this:
+
+	if a <guid> element exists and it doesn't have an attribute
+	isPermalink="false", use its contents as the link.
+
+	otherwise, use the contents of the <link> element.
+>8
+
+:訳：永続リンクを見付けるアルゴリズムは、このように見えるべきだ
+:: guid要素があって、isPermalink="false" という属性がなければ、
+    その中身をリンクとして用いるべきだ。
+    さもなければ、link要素の中身を用いるべきだ。
+
+こうする背景としては、link要素には、RSS 0.92 と 2.0 で意味が違っているなど、
+いろいろ問題があるからのようだ。
+
+えーと、調べ出したらキリがないので、これくらいにしときたいのだが…
+結局、livedoor Reader の方がおかしい…でいいのかな？
+
+<<<追記>>>
+
+livedoor に以下のとおり、問い合わせを投げてみた。回答来るかな！？
+
+:標題
+::「元記事」へのリンクが、空になっている時がある
+
+標題のとおり、とあるブログ(http://lowlife.jp/mft/weblog/)に関して、「元記事」へのリンクが、そのブログ記事の本文リンクではなく、空(0文字)になってしまっている時があります。
+
+元記事の RSS 出力を確認しましたところ、本文記事の URL が link要素ではなく、guid要素の中のみに記載されていました。
+
+もし、link要素しか見ないような仕様となっているようであれば、guid要素を参照するようにしていただけないでしょうか。
+
+真偽についてはよく分からないのですが、その RSS を出力するウェブアプリケーション：PyDS の開発MLの過去の記事を見ると「guid要素があって、isPermalink="false" という属性がなければ、 その中身をまずリンクとして用いるべきで、さもなければ、link要素の中身を用いるべき」との記述もありました。(http://www.westfalen.de/pipermail/pyds-dev/2003-October/000400.html)
+
+おそれいりますが、以上、よろしくお願い致します。
+
+<<<追記２：はてブへの回答>>>
+
+"" 2007年04月01日 poolmmjp livedoorReader, RSS 例えリンクが正しくても
+    「あれ、今、どこまで読んだんだっけ」
+    とはなるような気するけど。
+
+>> あ、間違えた。<<
+
+今回症状出た時、寸止め状態で現場を保全して html ソースを確認してたので、
+リンクを辿った時の弊害は、過去のあいまいな記憶を頼りに書いてました。
+
+アンカーには ``target="_blank"`` がついてますから、
+リンク先 URL があってもなくても、livedoor Reader 自体の
+ウインドウはそのまま残ってましたね。
+
+ただ、リンクが今回のように空だった場合、
+新ウインドウ側で livedoor Reader がリロードされてしまうので、
+旧ウインドウ側の livedoor Reader はサーバから見て古い状態となってしまい、
+使えなくなってしまう…というのが正しい症状でした。
+
+最初の頃は、別のウインドウに移ったことに気がついてなくて、
+普通の遷移したものだと思い込んでいて、その時の印象が強かったため、
+上記のように書いちゃったのだと思います。
+えーと、とりあえず、すみません。

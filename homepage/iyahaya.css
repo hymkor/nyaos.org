@@ -1,0 +1,71 @@
+/* サイズ */
+.LL{font-size:xx-large;font-family:helv}
+.LLFLOAT{font-size:xx-large;font-family:helv;float:left}
+.SS{font-size:xx-small;font-family:helv}
+
+/* リンク関係 */
+/* A:LINK{color:#00FF00}
+A:VISITED{color:#CCFF00} */
+
+/* 見出し */
+.TRI{color:#EEEEAA;font-size:small}
+.VIOLET{color:violet;font-style:italic}
+.GOLD{color:#EEEEAA}
+.RED{color:red;font-style:italic}
+.AQUA{color:aqua;font-style:italic}
+.KAKKO{margin-left:1cm;margin-right:1cm;
+	color:#AAAAAA;font-size:x-small;text-indent:-10pt}
+
+/* 見出しの中で、日付けなど目立たせない部分は SPAN タグで囲む */
+H2 SPAN{
+	color:white;
+	font-style:normal;
+	font-size:small;
+	position:absolute;
+	left:80%;z-index:1}
+H3 SPAN{
+	color:white;font-style:normal;font-size:small;
+	position:absolute;left:80%;z-index:1
+}
+
+.O{BORDER:OUTSET}
+.I{BORDER:INSET}
+
+
+/* 葉山文書のツッコミ用 */
+.SAY1{color:#FF00FF;font-size:large;text-align:center}
+.SAY2{color:#FFFF00;font-size:large;text-align:center}
+.SAY3{color:#000088;font-size:large;text-align:center}
+.SAY4{color:#008800;font-size:large;text-align:center}
+.SAY1M{color:#FF00FF;font-size:medium;text-align:center}
+.SAY2M{color:#FFFF00;font-size:medium;text-align:center}
+.SAY3M{color:#000088;font-size:medium;text-align:center}
+.SAY4M{color:#008800;font-size:medium;text-align:center}
+
+/* プラズマディスプレイ調（[New!]マークなど）*/
+.PLASMA{color:red;font-size:x-small;background-color:#440000;
+	font-weight:bold}
+.DOKEN{color:gold;font-size:x-small;background-color:#333300;
+	font-weight:bold}
+
+STRIKE{color:red}
+
+/* ダウンロードテーブル */
+TABLE.DOWNLOAD{	background-color:#000055 ; padding:0pt }
+TABLE.DOWNLOAD A{font-family:monospace;font-size:10pt}
+DIV.DOWNLOAD{border:outset;background-color:#000055;text-align:center}
+
+/* その他 */
+/* LI{color:#EEEEAA} */
+DL B,UL B,OL B{color:#FF00FF}
+BIG{float:left;font-size:xx-large;font-family:helv}
+EM{color:navyblue;font-style:normal}
+B{color:#FF00FF}
+TT{white-space:pre}
+
+/* ジャンプバー用 「▼______」というのを作るためのもの */
+DIV.JUMPBAR {color:#EEEEAA;font-size:x-small}
+DIV.JUMPBAR A:LINK{color:#00FF00;font-size:small}
+DIV.JUMPBAR A:VISITED{color:#CCFF00;font-size:small}
+
+.HOGE{margin-left:20%;margin-right:20%;list-style-postion:inside}

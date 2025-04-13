@@ -1,0 +1,866 @@
+!!! Nihongo Yet Another OSes Shell Tiny Manual
+
+>> (This document is under the construction) <<
+
+* NYADOS - DOS Shell for DOS,Windows95,98,Me
+* NYACUS - CUI Shell for WindowsNT,2000,Xp
+* NYAOS2 - OS/2 Shell for OS/2 Warp
+
+These are the commandline-shell which run on DOS,Windows,OS/2 Warp.
+
+* Command-line Editing like tcsh
+* Filename completion optimally for Windows-filesystem.
+** ignore case of filename.
+** append double-quotation to filename which has a space.
+** select '/' or '\' automatically to append as path demilitor .
+
+for instance:
+
+8<
+    cd /prog --[Type TAB]--> cd "/Program Files/"
+    cd \prog --[Type TAB]--> cd "\Program Files\"
+>8
+
+* colored ls
+* history
+* alias
+* key customizing
+* back-quote
+* copy from/to clipboard
+
+!!! How to use
+
++ Put NYACUS.EXE on the directory pointed %PATH%.
++ Put _nya to
+** the current directory
+** or the directory pointed %HOME%
+** or the root directory of the current drive.
+
+_nya is read when NYACUS.EXE start.
+
+In _nya , your script read NYACUS's parameter with %1,%2...
+
+!!! Options
+
+: <tt>-f SCRIPTFILENAME ARG1 ...</tt>
+:: Execute SCRIPTFILENAME by NYA*S. It does not begin an
+    interactive cui-shell. It is the same as `source SCRIPTFILENAME'
+    in NYA*S but not to load configuration file. ( %HOME%/_nya )
+: <tt>-r SCRIPTFILENAME</tt>
+:: Execute SCRIPTFILENAME instead of %HOME%/_nya and begin an
+    interactive cui-shell.
+: <tt>-e "COMMAND"</tt>
+:: execute SCRIPTFILENAME. It does not begin an interactive cui-shell.
+: <tt>-o VAR=VALUE</tt>
+:: let VALUE to shell variable VAR.
+: <tt>-more-unix</tt>
+:: enable history expansion(= 'option +history' ),
+    enable brace expansion(= 'option +bracexp' ),
+    enable command substitution(= 'option +backquote' ),
+    and set prompt like bash(= 'option prompt "[\w] $ "' ).
+    if environment variable HOME is not defined,
+    do '<tt>set HOME=%HOMEDRIVE%%HOMEPATH%</tt>'
+: <tt>-futils-alias</tt>
+:: emulate mv and cp with CMD.EXE build-in command and aliases.
+    This option equals to execute commands below :
+
+8<
+    alias mv "move /-Y $@"
+    alias cp "copy /-Y /B /V $@"
+    alias rmdir "rmdir $@"
+    alias rm "del $@"
+    alias grep "findstr $@"
+>8
+
+: <tt>-chdir DIRNAME</tt>
+:: startup with changing directory to DIRNAME.
+
+!!! Key-binding
+
+:^A Home
+:: move cursor to beginning of the line. [beginning-of-line]
+:^B Left
+:: move cursor to a left charactors. [backward-char]
+:^C
+::  cancel string you typed [abort]
+:^D
+::  delete a charactor on cursor, complete a filename or terminate NYA*S
+    [erase-list-or-bye]
+:^E End
+::    move cursor to the end of the line [end-of-line]
+:^F Right
+::    move cursor one charactor right. [forward-char]
+:^H Bs
+::    delete the left charactor of the cursor. [backward-delete-char]
+:^I Tab
+::    complete the filename. [complete-or-list]
+:^K
+::    delete after cursor [kill-line]
+:^L
+::    clear screen and repaint line [clear-screen]
+:^M Enter
+::    finish to input [accept-line]
+:^N DOWN
+::    insert strings you input in the next.  [next-history]
+:^P UP
+::    insert strings you input in the past.  [previous-history]
+:^T
+::    swap the charactors near cursor [swap-char]
+:^U
+::    delete charactors between beginnning of the line and cursor
+    [unix-line-discard]
+:^V
+::    insert any charactor you type int the next [quote]
+:^W
+::    delete the left word of cursor [unix-word-rubout]
+:^Y
+::    paste string of clipboard. [yank]
+:^Z
+::    terminate NYA*S [bye]
+:Del
+::    delete charactor on cursor [delete-char]
+:Esc
+::    delete the whole charactors in the line [kill-whole-line]
+:^O ^TAB
+::    complete the file name one by one. [complete-next]
+: ''(NYACUS)''
+:^UP
+::    start the scroll-mode [xscript:start]
+:^RIGHT
+::    move cursor to the head of the next word [forward-word]
+:^LEFT
+::    move cursor to the tail of the previous word [backward-word]
+: ''(not NYACUS)''
+: ^RIGHT ALT-F
+::    move cursor to the head of the following word [forward-word]
+: ^LEFT ALT-B
+::    move cursor to the tail of the previous word [backward-word]
+
+At completing the filename with ^O or ^TAB
+
+:DOWN ^TAB ^O ^N
+::    the next filename which matches the pattern you type
+    [complete-next,(vzlike-)next-history]
+:UP ^P
+::    the previous filename
+    [complete-previous,(vzlike-)previous-history]
+:TAB ^I ^D
+::    list the filenames
+:Enter ^M
+::    fix the filename
+:Others
+::    fix the filename and do function the key has.
+
+!!! Built-in commands
+
+!! alias
+
+: <tt>alias NAME "DEFINITION"</tt>
+:: define the alias NAME as DEFINITION.
+: <tt>alias NAME</tt>
+:: display the definitiion of the alias NAME.
+: <tt>alias</tt>
+:: display the all definition.
+
+Macros you can use in DEFINITION.
+
+|||mark	|what is this
+||$*	|all parameters
+||$n	|N-th parameter
+||$n*	|parameters after N-th.
+||$$	|`$'
+||$B	|`|'
+||$L	|`<'
+||$G	|`>'
+||$Q	|'`'
+||$@	|Same as $` but convert letters like belows.
+
+! $@'s convert table.
+
+|| from | to
+|| / | \
+|| -WORD | /WORD
+|| WORD/ | WORD\.
+|| WORD\ | WORD\.
+|| "...""..." | ..."...
+
+for instance
+
+8<
+    alias ll "ls -l $*"
+>8
+
+! IMPORTANT 
+
+put right values of macro definition into ".." because mark '$'
+is the prefix charactor for environment variable when you executed
+"option +prefixdollar" or "nyacus -more-unix".
+
+!! bindkey
+
+8<
+    bindkey KEYNAME FUNCNAME
+>8
+
+KEYNAME is one of these.
+
+8<
+CENTER          CTRL_A          CTRL_AT         CTRL_B
+CTRL_C          CTRL_CENTER     CTRL_D          CTRL_DEL
+CTRL_DOWN       CTRL_E          CTRL_END        CTRL_F
+CTRL_F1         CTRL_F10        CTRL_F11        CTRL_F12
+CTRL_F2         CTRL_F3         CTRL_F4         CTRL_F5
+CTRL_F6         CTRL_F7         CTRL_F8         CTRL_F9
+CTRL_G          CTRL_H          CTRL_HOME       CTRL_I
+CTRL_INS        CTRL_J          CTRL_K          CTRL_L
+CTRL_LEFT       CTRL_M          CTRL_N          CTRL_O
+CTRL_P          CTRL_PAD_ASTERISK               CTRL_PAD_MINUS
+CTRL_PAD_PLUS   CTRL_PAD_SLASH  CTRL_PAGEDOWN   CTRL_PAGEUP
+CTRL_PRTSC      CTRL_Q          CTRL_R          CTRL_RIGHT
+CTRL_S          CTRL_SPACE      CTRL_T          CTRL_TAB
+CTRL_U          CTRL_UP         CTRL_V          CTRL_W
+CTRL_X          CTRL_Y          CTRL_Z          DEL
+DOWN            END             ENTER           ESCAPE
+F1              F10             F11             F12
+F2              F3              F4              F5
+F6              F7              F8              F9
+HOME            INS             LEFT            PAGEDOWN
+PAGEUP          RETURN          RIGHT
+SHIFT_F1        SHIFT_F10       SHIFT_F11       SHIFT_F12
+SHIFT_F2        SHIFT_F3        SHIFT_F4        SHIFT_F5
+SHIFT_F6        SHIFT_F7        SHIFT_F8        SHIFT_F9
+SPACE           TAB             UP
+>8
+
+Instead of keyname, you can write asciicode or scancode+256
+
+about Function-names, refer key-bindings.[xxxx] is FUNCNAME
+
+for instance
+
+8<
+    bindkey ctrl_h back_and_erase
+    bindkey ctrl_s previous xscript:previous
+>8
+
+!! cd
+
+8<
+    cd [--basedir] [DIRECTORY-NAME]
+>8
+
+* When DIRECTORY-NAME has a drive-letter, change drive to there.
+* Forward-slash is same as back-slash.
+* Without DIRECTORY-NAME, change the current directory to the home directory.
+* '-' means the previous directory.
+* Postfix '/' or '\' is ignored.
+* 'cd --basedir XXX' same as 'cd `basedir XXX`'
+* able to change directory pointed shortcut(*.lnk) file.
+
+<<<dirs>>>
+
+Display the directory-stack.
+
+<<<eval>>>
+
+Execute parameters as command line.
+
+<<<folder>>>
+
+bind direcotory as ~xxxxx.
+
+8<
+    folder SPECIAL-FOLDER-NAME REAL-DIRECTORY-NAME
+>8
+
+for instance:
+
+8<
+    [c:\] folder prog "C:\Program files"
+    [c:\] cd ~prog
+    [c:\Program Files] pwd
+    c:\Program Files
+>8
+
+Default:(Only NYACUS)
+
+||REPLACE FROM|TO
+||~desktop|Your desktop
+||~sendto|Your Sendto
+||~startmenu|StartMenu root
+||~startup|StartUp in StartMenu
+||~mydocuments|Your 'My Document'
+||~favorites|Favorites
+||~programs|Program Menu in StartMenu
+||~program_files	|Program Files
+||~appdata|Application Data
+||~allusersdesktop|All Users' Desktop
+||~allusersprograms|All Users' Program Menu
+||~allusersstartmenu|All Users' StartMenu
+||~allusersstartup|All Users' Startup in StartMenu.
+
+<<<foreach ... end>>>
+
+8<
+    foreach var X1 X2 X3
+       echo $var
+    end
+>8
+
+To
+
+8<
+    echo X1
+    echo X2
+    echo X3
+>8
+
+<<<history>>>
+
+8<
+    history [N]
+>8
+
+command-line history.
+
+<<<if>>>
+
+8<
+    if CONDITION COMMAND
+>8
+
+or
+
+8<
+    if CONDITION then
+	:
+    [else]
+	:
+    endif
+>8
+
+CONDITION :=
+
+* arg1 == arg2
+* not arg1 == arg2
+* arg1 -eq arg2 ( arg1 == arg2 as number )
+* arg1 -ne arg2 ( arg1 != arg2 as number )
+* arg1 -lt arg2 ( arg1 < arg2 )
+* arg1 -gt arg2 ( arg1 > arg2 )
+* arg1 -le arg2 ( arg1 <= arg2 )
+* arg1 -ge arg2 ( arg1 >= arg2 )
+* errorlevel N
+* not errorlevel N
+
+<<<ls>>>
+
+built-in ls(list)
+
+8<
+    ls [OPTION] [FILENAMES]
+    list [OPTION] [FILENAMES]
+>8
+
+||option|usage
+||-a|all files including files begin with dot.
+||-l|long format
+||-1|1 file per 1 line.
+||-R|recursively
+||-t|sort by update-date.
+||-r|sort reversely
+||-S|sort by size.
+
+Colors are customized with the environment variable LS_COLORS.
+
+    set LS_COLORS=x1=v1:x2=v2:x3=v3…
+
+||x1|usage|default
+||fi|Plane file|37;1
+||di|Directory|32;1
+||sy|System File|31
+||ro|Read Only File|34
+||hi|Hidden File|33;1
+||ex|Executable File|35;1
+||ec|Screen Initiate code|0
+
+for instance:
+
+8<
+ set LS_COLORS="fi=37;1:di=32;1:sy=31"
+>8
+
+<<<open>>>
+
+    open -/+ACTION FILENAME
+
+''(NYACUS)''
+
+|||option|usage
+||-o OR +open
+    |Open FILENAME with default application.
+||-e OR +explore
+    |Open FILENAME with Explorer.
+||-p OR +property
+    |Open Shortcut's property.
+
+''(NYAOS2)''
+
+|||option|usage
+||-o OR +default
+    |Open FILENAME with default application.
+||-p OR +settings
+    |Open Property
+||+icon
+    |Open ICON view
+||-e OR +tree
+    |Open TREE view
+||+detail
+    |Open DETAIL view
+
+<<<option>>>
+
+8<
+    option VARNAME VALUE
+>8
+
+set VALUE into variable VARNAME
+
+8<
+    option VARNAME
+>8
+
+print the value of VARNAME
+
+8<
+    option +VARNAME
+>8
+
+set "(set)" into variable VARNAME
+
+
+8<
+    option -VARNAME
+>8
+
+erase VARNAME
+
+:backquote
+::    'option +backquote' enable to command substitution with backquote.
+:bracexp
+::    'option +bracexp' enable to expand brace expansion.
+:debug
+::    debug option
+:dots
+::    For DOS and OS/2. Its enabel to substitute below :
+::	...  -> ..\..
+::	.... -> ..\..\..
+:keep_bottom_line (NYACUS)
+::    Optin for Japanese IME.
+:lnkexp
+::    At filename completion, substitute shortcut to the linked target.
+:mineditwidth
+::    When (the size of screen) - (the length of prompt) is less
+::    than this value, output CRLF before prompt.
+:multilinequote
+::    With this, you can insert CRLF between double-quotes.
+:nullcomplete
+::    With this, you can complete filename with 0-charactor.
+:nyatype
+::    set SHELLNAME. NYADOS , NYACUS or NYAOS2.
+:history
+::    history substitution.
+:historyfilesize
+::    size of the number of history to save. Empty means all.
+:prompt
+::    equals to environment variable's.
+:prefixdollar
+::    enable to substitute $VAR and ${VAR} to its value.
+:savehist
+::    filename to save history.
+:standalone
+::    not use CMD.EXE/COMMAND.COM as possible.
+:tilde
+::    substitute '~' to the value of the environment variable HOME.
+::    When %HOME% == c:\foo,
+::	~/bar -> c:/foo/bar
+::	~\bar -> c:\foo\bar
+:uncompletechar
+::    At filename completion, nyacus recognize the letter included
+::    %uncompletechar% not used in filename like white spaces.
+:width
+::    If you change screen width, please set it into this option.
+
+<<<popd>>>
+
+8<
+    popd
+>8
+
+change the current working directory to the top one of the
+directory stack.
+
+8<
+    pop +N
+>8
+
+change the current working directory to the N-th one of the
+directory stack.
+
+<<<print>>>
+
+= echo
+
+(NYACUS)
+
+able to write ESCAPE SEQUENCE.
+
+<<<pushd>>>
+
+: pushd DIRNAME
+:: save the current working directory to the directory stack
+    and move to DIRNAME.
+: pushd +N (N is number)
+:: exchange the current working directory with the N-th of
+    the directory stack.
+: pushd -h DIRECTORY
+:: If the directory stack is empty, and DIRECTORY is not given,
+    do the same behavior with 'push .'
+:pushd -H DIRECTORY
+:: If  DIRECTORY is not given, do the same behavior with 'push .'
+
+<<<pwd>>>
+
+print current working directory.
+
+<<<set>>>
+
+: set ENVNAME=VALUE
+:: set environment variable ENVNAME the value of VALUE.
+: set ENVNAME=
+:: erase variable ENVNAME. same as CMD.EXE/COMMAND.COM
+: set ENVNAME+=VALUE
+:: If %ENVNAME% does not have VALUE, do 'set ENVNAME=VALUE;%ENVNAME%'.
+
+for instance:
+
+(1)
+
+8<
+    [C:\] set PATH=C:\Windows;C:\Borland\bcc55
+    [C:\] set PATH+=C:\lsic\bin
+    [C:\] set PATH+="C:\Program Files\bin"
+    [C:\] echo %PATH%
+    C:\Program Files\bin;C:\lsic\bin;C:\Windows;C:\Borland\bcc55
+>8
+
+(2)
+
+8<
+    [C:\] set PATH=C:\Windows;C:\Borland\bcc55
+    [C:\] set PATH+=C:\Borland\bcc55
+    [C:\] echo %PATH%
+    C:\Borland\bcc55;C:\Windows
+    ('set' replaced the position of 'C:\Borland\bcc55'.)
+
+    set ENVNAME-=VALUE
+>8
+
+Remove VALUE from %ENVNAME%.
+
+for instance.
+
+8<
+    [C:\] set PATH=C:\Windows;C:\Borland\bcc55
+    [C:\] set PATH-=C:\Windows
+    [C:\] echo %PATH%
+    C:\Borland\bcc55
+>8
+
+<<<source>>>
+
+8<
+    source FILENAME
+>8
+
+Read and execute commands from FILENAME.
+
+8<
+    source -h FILENAME
+>8
+
+Read commands from FILENAME and insert them into the history list.
+
+<<<suffix>>>
+
+8<
+    suffix SUFFIX INTERPRETOR
+>8
+
+Associate SUFFIX with INTERPRETOR.
+
+8<
+    [C:\] suffix pl perl
+    [C:\] hoge.pl
+=> equals to 'perl hoge.pl'
+>8
+
+* SUFFIX must not have period.
+* Files whose name has .SUFFIX are put into list for the command name completion.
+
+<<<unalias>>>
+
+8<
+    unalias ALIAS
+>8
+
+Remove ALIAS from the aliases list.
+
+<<<unsuffix>>>
+
+8<
+    unsuffix SUFFIX
+>8
+
+Remove SUFFIX from the suffixes list.
+
+<<<unoption>>>
+
+8<
+    unoption
+>8
+
+Remove OPTION from the option list.
+
+<<COMMAND SEPARETORS>>
+
+<<<' ;' (one space and semicolon)>>>
+
+8<
+    A.exe ; B.exe
+>8
+
+Execute A.exe and B.exe sequentially.
+
+<<<'&'>>>
+
+8<
+   A.exe & B.exe
+>8
+
+Execute A.exe on the other window, and B.exe on the current window.
+
+8<
+    [C:\] start A.exe
+    [C:\] B.exe
+>8
+
+<<HISTORY EXPANSION>>
+
+Command 'option +history' enable this expansion.
+
+|||mark|usage
+||!!|previous commandline string all.
+||!N|the N-th commandline of the history.
+||!-N|the N-th previous commandline of the history.
+||!str|string beginning with `str'.
+||!?str?|string including `str'.
+
+These suffixes can modify history expansion behavior.
+
+|||mark|usage
+||:0|command name
+||:N|the N-th argument
+||^|the first argument
+||$|the last argument
+||*|all arguments
+
+<<REDIRECT of STDERR>>
+
+: 2> FILENAME
+:: switch standard-error-output to write FILENAME.
+: 2>> FILENAME
+:: switch standard-error-output to append FILENAME.
+: 2>&1
+:: switch standard-error-output to standard output
+: 2>&-
+:: drop the contents of standard-error-output.  It equals to `2>nul'.
+: COMMAND1 |& COMMAND2
+:: link COMMAND2's standard-input with both COMMAND1's
+    standard-output and standard-error-output.
+
+<<COMMAND SUBSTITUTION>>
+
+With `option +backquote', replace `COMMAND ARGUMENTS..` to
+the strings which they output at executing.
+
+For instance:
+
+To back up all files under the current working directory.
+
+8<
+    [C:work] $ option +backquote
+    [C:work] $ foreach i `dir /b /s`
+    [C:work] $    copy %i% %i%-backup
+    [C:work] $ end
+>8
+
+Double backquotes `` are replaced to one backquote ` between backquotes.
+
+8<
+    [C:work] $ echo `echo 1``2`
+    1`2
+    [C:work]
+>8
+
+To diable replacing, do 'option -backquote'.
+
+<<<ENVIRONMENT VARIABLE>>>
+
+%VARNAME% format like DOS or $VARNAME and ${VARNAME} format like UNIX
+was replaced to the value of the environment variable VARNAME.
+And some operators were provided as below.
+
+:<tt> %VARNAME.length%</tt>
+:<tt> ${VARNAME.length}</tt>
+:: replace to the length of the variable.
+:<tt> %VARNAME.split%</tt>
+:<tt> ${VARIABLE.split}</tt>
+:: substitution ';' in the value of the variable to one space.
+:<tt> %VARNAME.defined%  or  ${VARNAME.defined}</tt>
+:: replaced to one of belows.
+
+* 1 when VARNAME was set as the command 'option'
+* 2 when VARNAME was set as the environment variable name.
+* 0 when VARNAME was not set as any variable.
+
+<<<EXTENDED PROMPT>>>
+
+New macro '$W' was available. It was replaced to the last part of the
+current directory. For example, the current directory is c:\foo\bar,
+$W was replaced to 'bar'.
+
+<<FUNCTION>>
+
+Function was available.
+
+8<
+    FUNCTIONNAME{
+	COMMAND1
+	COMMAND2
+	    ;
+	COMMANDn
+    }
+>8
+
+* Don't insert space between FUNCTIONNAME and brace-mark '{'
+* Parameters can be able to be refered with %1,%2..%*, $1...$9,$*.
+
+For example
+
+8<
+    which{
+	foreach dir . ${PATH.split}
+	    foreach ext .com .exe .bat .cmd
+		if exist %dir%\%1%ext% then
+		    echo found %dir%\%1%ext%
+		endif
+	    end
+	end
+    }
+
+    [D:nya]which nyados
+    found .\nyados.exe
+    found C:\usr\bin\nyados.exe
+    [D:nya]
+>8
+
+<<ROLLUP/DOWN-SCREEN(NYACUS)>>
+
+When CTRL-UP was typed, the ROLLUP/DOWN-mode begins.
+Key-bindindings.
+
+:<tt>LEFT Ctrl-B (xscript:backward)</tt>
+::    move cursor left.
+:<tt>UP Ctrl-P (xscript:previous)</tt>
+::    move cursor up.
+:<tt>RIGHT Ctrl-F (xscript:forward)</tt>
+::    move cursor right
+:<tt>DOWN Ctrl-N (xscript:next)</tt>
+::    move cursor down.
+:<tt>Home Ctrl-A (xscript:head)</tt>
+::    move cursor onto the left edge of screen.
+:<tt>End Ctrl-E (xscript:tail)</tt>
+::    move cursor onto the right edge of screen.
+:<tt>PGUP Ctrl-Z (xscript:previous-page)</tt>
+::    move cursor one page of screen up.
+:<tt>PGDN Ctrl-V (xscript:next-page)</tt>
+::    move cursor one page of screen down.
+:<tt>Ctrl-Home (xscript:heaven)</tt>
+::    move cursor onto the first line.
+:<tt>Ctrl-End (xscript:earth)</tt>
+::    move cursor onto the last line.
+:<tt>Shift</tt>
+::    start the mode to select the rectangle area.
+:<tt>Enter  (xscript:copy)</tt>
+::    Yank the current rectangle area the to the clipboard.
+:<tt>Escape (xscript:leave)</tt>
+::    quit.
+
+Key-bindings are customizable with bindkey command.
+
+for example.
+
+8<
+bindkey CTRL_E xscript:previous
+bindkey CTRL_S xscript:backward
+bindkey CTRL_D xscript:forward
+bindkey CTRL_X xscript:next
+>8
+
+<<EMURATION OF ESCAPE SEQUENCE.>>
+
+In WindowsNT/2000/XP, NYACUS emurates the escape-sequence
+controling to change cursor-color and position.
+
+8<
+ESC [<ps>;…;<ps>m
+>8
+
+|||<ps>	|
+||30	|Foreground-color to black
+||40	|Background-color to black
+||0	|Initializing.
+||1	|High color
+||31	|Foreground-color to red
+||32	|Foreground-color to green
+||33	|Foreground-color to yellow
+||34	|Foreground-color to blue
+||35	|Foreground-color to purple
+||36	|Foreground-color to light-blue
+||37	|Foreground-color to white
+||41	|Background-color to red
+||42	|Background-color to green
+||43	|Background-color to yellow
+||44	|Background-color to blue
+||45	|Background-color to purple
+||46	|Background-color to light-blue
+||47	|Background-color to white
+
+|| ESC [2J | cleaning screen
+|| ESC [>5l | drawing cursor on
+
+
+<<HERE DOCUMENT>>
+
+8<
+COMMAND <<KEYWORD
+    LINE-1
+    LINE-2
+    LINE-3
+	:
+    LINE-n
+KEYWORD
+>8
+
+LINE-1 to n was into the standard-input of COMMAND.
+When KEYWORD are quoted,

@@ -1,0 +1,39 @@
+<<oluacle on NYAOS>>
+
+NYAOS の中から、いきなり SQL を発行してみるテスト
+
+<<{OluacleOnNyaos.PNG}
+
++ Oracle のインスタンスに接続できる環境で(SQL*Plus が動けば、バッチリ)
++ http://forgot.uh-oh.jp/doc/index.cgi?p=oluacle{oluacle.dll}
+をPATHの通ったディレクトリに置き
++ 以下のコードを _nya に追加して
++ NYAOS.EXE を起動する
+
+8<
+lua_e "
+    function nyaos.command.connect(argv)
+        if type(oluacle) ~= 'table' then
+            require 'oluacle'
+        end
+        local frags={}
+        for f in argv:gmatch('[^/ ]+') do
+            table.insert(frags,f)
+        end
+        table.insert(frags,{ null=''})
+        conn = oluacle.new( unpack(frags) )
+    end
+    function nyaos.command.select(argv)
+        for rs in conn:exec('select ' .. argv) do
+            print( table.concat(rs,'|') )
+        end
+    end
+"
+>8
+
+>> 「``select``」しか出来ないけどね！ <<
+
+* Lua が外部モジュールのローダーの役割を果してくれている
+* Lua の変数空間が、コマンド間で引き渡す必要があるバイナリ情報を保持する場所となる
+
+やー、すごいね。作ってるおいらがビックリだよwww

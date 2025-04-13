@@ -1,0 +1,30 @@
+Security Assertion Markup Language。
+認証情報をサーバ間で交換するためのマークアップテキストの規格
+
+:葉山の理解
+::「このクライアントは認証済みだから、ログイン処理しなくていいよ」
+という情報を、認証をしたサーバから別のサーバにあげることによって、
+シングルサインオンを実現する…ための要素技術
+
+http://e-words.jp/w/SAML.html
+
+6<
+標準化団体OASISによって策定された、IDやパスワードなどの認証情報を安全に交換するためのXML仕様。AuthXMLとS2MLを統合して標準化したもの。認証情報の交換方法はSAMLプロトコルとしてまとめられており、メッセージの送受信にはHTTPもしくはSOAPが使われる。
+
+SAMLを用いることで、一度の認証で複数のWebサイトやサービスが利用できるシングルサインオン([[SSO]]：Single Sign-On)を実現できる。
+>9
+
+6<
+WebサイトがSAMLに対応していれば、別のサイトへ移動したときに、移動元のサイトと移動先のサイトがSAMLプロトコルで通信し、自動的に認証情報が引き継がれる
+>9
+
+http://ja.wikipedia.org/wiki/SAML{Security Assertion Markup Language - Wikipedia}
+
+6<
+同様の技術として Securant Technologies社が発表したAuthXMLとNetegrity社 が発表したS2MLという規格があり、SAML はこの二つの規格を統合したものである。
+>9
+
+* どこから、どこへ SAML は交換される？
+* 交換用のサーバがある？
+* 何が入っている？
+

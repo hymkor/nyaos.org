@@ -1,0 +1,14 @@
+<<[NYAOS] 続 Python 3/2 自動判別>>
+
+一年くらい前に書いた「>>{(2012.02.06)#p1}{[Python][NYAOS][Lua] NYAOS で Python 3/2 自動判別}」
+のスクリプトを汎用化して、
+https://bitbucket.org/zetamatta/_nya.d{_nya.d} に登録しました。
+
+拡張子 .py のファイルを実行すると、Python 2 か 3 かを判別して、
+呼び出すべき対応インタプリタを選択します。
+前のバージョンだとインタプリタのパスは固定でしたが、
+今回は %PATH% から自動検索します。
+
+((bitbucket _nya.d/src/f6f9804f4d8face431da0952e936d1537e8a022b/python2or3.lua))
+
+今回からスクリプトを引用するのに bitbucket の embed を使ってみました。

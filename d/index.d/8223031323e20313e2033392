@@ -1,0 +1,46 @@
+<<いろいろリリースしました>>
+
+<<<http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS 3.3.0_0 をリリースしました}>>>
+
+昨年12月にリリースされました Lua 5.2.0 を取り込みました。
+その他は特に改変した点はありません
+''(強いていえば、Lua 5.2.0 と機能的に被っている NYAOS 独自Lua拡張の部分を削除したのみです)''
+
+このバージョンを今後の開発版とし、
+3.2 系列は安定版としたいと思います。
+
+<<<[wifky] http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%282012.01.03%29+%A4%CB%A4%C3%A4%AD%A5%D7%A5%E9%A5%B0%A5%A4%A5%F3+1.1.3_0+%A4%F2%B8%F8%B3%AB%A4%B7%A4%DE%A4%B7%A4%BF{にっきプラグイン 1.1.3_0 をリリースしました}>>>
+
+今まで ```((nextday))``` 、```((prevday))``` を使うと、
+デフォルトのアンカーのシンボルとして不等号が表示されていましたが、
+ここを翌日、前日のページ名を表示するようにしました。
+
+従来どおりの表示をさせたい場合は ```((nextday >))```、```((prevday <))```
+と明示的に不等号を引数に渡していただければ Ok です。
+
+<<<[wifky] http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%282012.01.03%29+%B8%AB%BD%D0%A4%B7%A5%DE%A1%BC%A5%AF%A5%D7%A5%E9%A5%B0%A5%A4%A5%F3+1.10_0+%A4%F2%B8%F8%B3%AB%A4%B7%A4%DE%A4%B7%A4%BF{見出しマークプラグイン 1.10_0 をリリースしました}>>>
+
+見出しに Facebook の「いいね！」ボタンを表示するようにしました。
+
+----
+
+引越しも終わり''(厳密には終わってませんが)''、
+仕事も終わり''(人生も終わってるかもしれませんが)''、
+晴れて無職の身になったので、今までたまっていた個人的ソフトウェア活動のタスクを消化してみました。
+
+やっぱり、商売とか考えない開発はいいですね！
+''(一応、リチャード・ストールマンを崇拝するフリーソフトウェア至上主義者なのでw)''
+
+<<Bitbucket にバイナリをアップ>>
+
+Bitbucket って、ソースのレポジトリにしかならないと思ってたら、
+任意のファイルをアップロードできたのね。
+
+ということで、Bitbucket にバイナリパッケージをアップしておいた。
+
+* https://bitbucket.org/zetamatta/nyaos3000/downloads{zetamatta / nyaos3000 / downloads — Bitbucket}
+* https://bitbucket.org/zetamatta/nyaos2000/downloads{zetamatta / nyaos2000 / downloads — Bitbucket}
+* https://bitbucket.org/zetamatta/oluacle/downloads{zetamatta / oluacle / downloads — Bitbucket}
+* https://bitbucket.org/zetamatta/wifky{zetamatta / wifky / overview — Bitbucket}
+
+これで、万が一 nyaos.org が失なわれても大丈夫だ。

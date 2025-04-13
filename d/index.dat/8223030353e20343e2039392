@@ -1,0 +1,55 @@
+<<((lb))D((rb)) DMD 0.120 リリースだってさー>>
+
+Ben Hinkle の新しいstd.stream が導入されたということで、
+さっそく試してみただわさー。
+
+<pre>
+((lb))d:d-bug((rb))cat foo.d
+import std.stream;
+
+int main()
+{
+    ubyte u;
+
+    for(int i=0 ; i<4 ; i++ ){
+        stdin.read( u );
+        stdout.writef("%2x\n", u );
+    }
+    return 0;
+}
+
+((lb))d:d-bug((rb))foo
+ahaha
+61
+68
+61
+68
+((lb))d:d-bug((rb))foo
+バグフィックス
+Error: not enough data in stream
+((lb))d:d-bug((rb))
+</pre>
+
+やっぱり直ってねーよ！
+
+<<((lb))wifky((rb)) まだだ、まだ終わらんよ>>
+
+飽きたといった途端に、
+
+>> あー、画像入れられると嬉しいなー <<
+
+と思った。んで、がんばった。
+さぁ、http://hpcgi2.nifty.com/hayamatta/wifky_training.pl?title=%5B%31%5D%20%B0%DC%C5%BE%A4%B7%A4%C6%A4%AD%A4%BF%CE%FD%BD%AC%BE%EC{これ}を見よ！
+まだ、プロトバージョンなので、
+
+* <strike>対応画像は jpg だけ</strike>
+* １ページ１画像だけ。
+* 場所も一番下固定。
+* 差し替えは出来ても削除が出来ぬ。
+
+という制約だらけだけどね。
+
+ここまでやって、それでもなお、
+モノリシックスクリプトを貫くワシって、カコイイ？
+
+

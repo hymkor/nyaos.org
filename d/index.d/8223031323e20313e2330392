@@ -1,0 +1,35 @@
+<<NYAOS 3.3.0_2 を公開しました>>
+
+<<<ダウンロード>>>
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000.ja{NYAOS.ORG - NYAOS 3000.ja} (配布ページ)
+* https://bitbucket.org/zetamatta/nyaos3000{zetamatta / nyaos3000 / overview — Bitbucket}
+  (BitBucket レポジトリ)
+
+<<<変更点>>>
+
+* option savehist 時にファイルが存在しない時、エラーを出さないようにした。
+
+これが出るばかりに、わざわざ空ファイルを作って、エラーを抑制されている方もいらっしゃいましたが、今後は不要になります''(すみません)''。
+
+* ウインドウを閉じた場合も、ヒストリ保存や Lua関数 nyaos.goodbye.* を呼び出せるようになった。
+
+ただし、コマンドプロンプトの[×]ボタンを押下した場合となります。
+https://github.com/deflis/ckw-mod{現行の ckw} は未対応ですが、これを対応させる
+http://nocd5.blog59.fc2.com/blog-entry-497.html{nocd5 さんのパッチ}
+が公開されています。Console2 は未確認です。
+
+* option uncompletechar に含まれる文字がディレクトリ名の漢字の2バイト目にあった場合にファイル名補完で不要な二重引用符が足されてしまう不具合を修正
+
+具体的には uncompletechar に逆クォート(`) を含めると、
+「香港」というディレクトリの補完がおかしくなります。
+
+* mklink を CMD.EXE 経由で呼び出すよう alias 定義した(_nya)
+
+mklink は WindowsVista 以降の CMD.EXE の内蔵コマンドとのことです。
+要望により、標準 _nya に加えました。
+
+<<<その他>>>
+
+今回は 3.2.0_2 に相当する安定版は作成していません。
+理由は…管理がたいへんだから。

@@ -1,0 +1,48 @@
+<<メリークリスマス>>
+
+昨日、ローソンで買ったショートケーキを食しました、ひとりで。
+
+<<{m2010122407100000.JPG}
+
+>> 寂しさ三倍界王拳！ <<
+
+去年もやったような気もするが、気のせいだろう。
+
+<<続・NYAOS でキーボードマクロ>>
+
+[[NYAOS でキーボードマクロ|(2010.11.12)#p1]]にて
+6<
+* たくさんのタイプ数を記録すると、再生時に Lua のスタックがオーバーフローして NYAOS が落ちる可能性があります。'''(だめじゃん)'''
+>9
+
+これ、NYAOS 3.1.4 にて回避できるようにしていたんですが、そのやり方を紹介していませんでした。
+
+>>{(2010.12.11)#p1}{[NYAOS][wifky] いろいろリリースしました}にて
+6<
+* nyaos.hook.xxxxx の戻り値の中にテーブルが含まれていたら、その要素も解釈するようにした。
+>9
+
+にある機能がそれでして、これで Lua でオーバーフローを引き起こす可能性がある「``return unpack(…)``」を使わずに済みます。
+
+で、直したバージョンが次のコードです。
+
+8<
+function nyaos.keyhook.macro2(t)
+    if t.key == nyaos.key.F1 then
+        keyboard_macro_buffer = {}
+    elseif t.key == nyaos.key.F2 then
+        keyboard_macro = keyboard_macro_buffer
+        keyboard_macro_buffer = nil
+    elseif t.key == nyaos.key.F3 and keyboard_macro and 
+        not keyboard_macro_buffer 
+    then
+        return keyboard_macro
+    elseif keyboard_macro_buffer then
+        table.insert( keyboard_macro_buffer , t.key )
+    end
+end
+>8
+
+「``return keyboard_macro``」の行は、以前は「``return unpack(keyboard_macro)``」でした。キーを記録したテーブルを unpack せずとも、そのまま返せるようになったというわけです、はい。
+
+これでオーバーフローせず、ちゃんと使えるキーボードマクロ機能完成ですたい。

@@ -1,0 +1,89 @@
+<<Oracle Instant Client を coLinux(Fedora10) に入れてみよう>>
+
+簡単になったもんだねぇ。
+
+<<<RPM ファイルをダウンロードする>>>
+
+http://www.oracle.com/technology/global/jp/software/tech/oci/instantclient/htdocs/linuxsoft.html よりダウンロードできる''(前は違うURLだったんだがなぁ、ころころ変えてくれるな Oracle さんよ)''。ダウンロードの際、Oracle technology network のアカウントが必要みたいだけれども、無料だから入ってない人はこの機会に登録しちまおう。
+
+自分は OCI アプリケーションをコンパイルしたかったので、以下の3点をダウンロード
+
+* oracle-instantclient11.2-basic-11.2.0.1.0-1.i386.rpm
+* oracle-instantclient11.2-devel-11.2.0.1.0-1.i386.rpm
+* oracle-instantclient11.2-sqlplus-11.2.0.1.0-1.i386.rpm
+
+<<<RPM のインストール>>>
+
+ルートにて：
+
+``# rpm -ihv ''RPMファイル名''``
+
+わたしの場合、3個分実行ですね。
+
+<<<環境変数を変更する>>>
+
+アプリをコンパイルしたいユーザ(not root)の 
+.bashrc に以下を追加して、再ログイン
+
+8<
+export PATH=/usr/lib/oracle/11.2/client/bin:$PATH
+export LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client/lib:$LD_LIBRARY_PATH
+>8
+
+<<<動作確認>>>
+
+以上は coLinux(Fedora10)で行ったんだけど、
+データベースインスタンスはホスト側(Windows)で走っている。
+SQL*Plus で、そいつにつながるかテストしてみる。
+
+8<
+$ sqlplus HR/HR@192.168.0.1:1521
+
+SQL*Plus: Release 11.2.0.1.0 Production on Sun May 23 18:32:20 2010
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production
+
+SQL>
+>8
+
+インスタントクライアントは、tnsnames.ora の管理が不要。
+そのかわり、SQL*Plus などで接続する場合、
+接続文字列を「ホスト名：ポート名」とする必要がある。
+
+最初の接続の時だけ、ウィルスバスターの警告ダイアログがでるけど、
+一回承認すれば、あとは問題なし。
+
+Oracle のことだから、Red Hat Enterprise Linux でなかったら動かない
+…なーんてことを想像してたけど、Fedora 10 でも全然問題でないぢゃないか。
+よかったよかった。
+
+<<Lua for Oracle (oluacle)更新、そして、ベクターへ投稿>>
+
+* http://forgot.uh-oh.jp/doc/index.cgi?p=oluacle
+
+今回は Linux 側でのビルド・動作検証もしっかりとやった。環境としては：
+
+* サーバ
+** Oracle 10g Express Edition on WindowsXP
+* クライアント
+** Oracle 11g Instant Client on coLinux(Fedora10)
+
+という構成でやった。
+
+* サーバもクライアント同一筐体''(クライアントが仮想環境のゲストOS内ですね)''
+* ソフトウェアは全て無料バージョン
+
+>> 何ちゅう、貧乏構成だ <<
+
+しかし、まぁ、Instant Client も Express Edition 
+も簡単にインストールできるとは、よい世の中になったもんですねぇ。
+
+で、今回は日本語ドキュメントを結構更新。
+免責条項から問合せ先まで NYAOS 程度に書きました。
+んでもって、ベクターへ投稿してみた。
+今度は審査通るだろうか。
+''(実は前回、連絡先が不明記ということで却下されたのだ)''

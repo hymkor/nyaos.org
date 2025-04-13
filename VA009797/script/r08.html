@@ -1,0 +1,634 @@
+<HTML>
+<HEAD>
+    <TITLE>The dark forced Hayamatta Script 〜 魔界葉山文書</TITLE>
+    <LINK REL="stylesheet" TYPE="text/css" HREF="../iyahaya.css" />
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+    <META NAME="ROBOTS" CONTENTS="NOINDEX, NOFOLLOW" />
+</HEAD>
+<BODY BGCOLOR="#000000" TEXT="#FFFFFF" LINK="# 00FFFF" VLINK="#00CCCC">
+<DIV ALIGN=RIGHT>
+    <SPAN CLASS=TRI>▼</SPAN><A HREF="./r09.html">次頁へ</A>
+    <SPAN CLASS=TRI>▼</SPAN><A HREF="./r07.html">前頁へ</A>
+    <SPAN CLASS=TRI>▼</SPAN><A HREF="./index.html">目次へ</A>
+    <SPAN CLASS=TRI>▼</SPAN><A HREF="../index.html">扉ページへ</A>
+</DIV>
+
+<HR />
+
+<H2 CLASS=VIOLET><A NAME="20010331">敵は海賊 にゃあごす団</A>
+<SPAN>(2001/03/31)</SPAN></H2>
+
+<P><A CLASS=LLFLOAT NAME="euc">い</A>や、
+<A HREF="http://www.aba.ne.jp/~kamui/zakki.htm#20010325"
+>そう</A>ではなく、
+原作自体が日本語対応していないか何かだったような気がするんですが、
+今となっては記憶があやふやで、何が何だか分かりません。
+多分、SJIS とか EUC の違いではなかったとは思うのですが、
+判断は後の世の歴史家に任せます(ぉぃ)。
+</P>
+<P>しかし、基本的に UNIX ソフトの移植つーのは、私には似合いません。
+何故なら人のコード読むの嫌いだから(笑)。
+巷では「葉山版LHA」などと呼ばれてるみたいですが、怖れ多いので、
+誰か、その筋のUNIX移植軍団の方々、代わってくれませんかね
+<EM>(←軟弱な俺)</EM>。
+</P>
+<P>その上、UNIX版原作者に断り入れてないので、これ海賊版なんですよ。
+で、最近、一度、詫びがてらにメール出したんですけど、
+無視されてます<EM>(多分、届いてないんだってば)</EM>
+。やっぱり、海賊扱いです<TT>(;_;)</TT><EM>(おいおい)</EM>。
+だから、今後は「葉山版LHA」ではなく「海賊版LHA」と読んでください
+<EM>(やれやれ)</EM>。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><A CLASS=LLFLOAT NAME="powerreport">N</A>YADOS（にゃあどす）が、
+    DOS/V Power Report 5月号の CD-ROM に収録されました。
+    そいで、収録誌が送られてきました。
+    おまけに、携帯電話型電卓がついてきました。
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    気前がいいぞ、パワレポ
+</P>
+<P>たかだか、千円ちょっとなんですけどね。しかし、最近、すっかり堕落したなぁ...
+</P>
+<P>堕落ついでに、前宣伝ばかりの NYAGOS for WindowsNT/2000 をここに
+<STRIKE>後悔</STRIKE>公開。
+</P>
+<A HREF="nyagos-pre1.zip" STYLE="text-align:center"
+>77086 Mar 31 22:10 nyagos-pre1.zip</A>
+<P>ただし、まだドキュメントもなく、正式版ではないので、
+    転載はご遠慮ください<EM>(って、いねーか)</EM>。
+    使用の際は、コマンドプロンプトの仮想画面のサイズを
+    40行未満にしておいてください。
+    43行以上にすると、バックスペースがうまく動作しないときがあります。
+</P>
+<P ALIGN=CENTER CLASS="SAY1">
+    これさえなきゃ、正式公開するんだが...
+</P>
+<P><CODE>putchar('\b');</CODE>で、カーソルが左上に移動するなんて、
+Windows2000 って素晴らしい。</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>V</BIG>AIO を少しでも軽くということで、
+    <A HREF="http://member.nifty.ne.jp/jp1nom/98lite/98lite-c.htm"
+    >98lite のページ</A>を参考に、
+    Windows98 の Explorer,WordPad,メモ帳を Windows95 のものに差し替える。
+    <A HREF="http://member.nifty.ne.jp/jp1nom/98lite/"
+    >98lite</A>自身を使えばよさそうなもんだが、
+    レジストが面倒なので全部手で実施。その結果は
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    速くなったか、よー分からん
+</P>
+<UL>
+    <LI>Explorer が IE ぽくない奴になった。</LI>
+    <LI>タスクバーから、クイックランチャー(?)が無くなってしまった。
+	<EM>(結構痛い...)</EM></LI>
+</UL>
+<P>本当は、ここから Internet Explorer やら、何やら、どんどこ削除を
+    していくべきなんだが、元に戻せるように、しばらく、そのままにする。
+    ただし、不具合の類は今のところ全然ない。
+    軽くなったかというと...今のところ、それほどハードな使い方を
+    していないから、分からないっす。<TT>(^^;</TT>
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><A HREF="http://hp.vector.co.jp/authors/VA016875/try09.html#03-31"
+><BIG>残</BIG>念ながら</A>、ハッピーハッキングキーボードでは、
+Shiftキーの下には何もありません
+(というか、CAPSキー自体が不要とされている)。
+だから、入れ替えようにも、入れかえる先がないのですよ。
+いや、はや。<TT>(^^;;</TT>
+</P>
+<P>スペースセーバーキーボードについては、
+通販サイトで見つけたことはあったのですが、
+IBM自身が直販していないのに...
+とちょっと怪しがってしまいました。
+一応、ちゃんとした形で売っているわけですね。
+<EM>(ちゃんとしてない形って、どんなだ！？)</EM>
+情報ありがとうございます。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><BIG>最</BIG>近の買い物：</P>
+<DL>
+    <DT>・<B>Ruby を256倍使うための本 魔道編</B></DT>
+    <DD>HTMLやテキストなどを生成できる、簡易マークアップ言語
+	RD(RubyDoc ?)についての本です。結構、気にいりそうです。
+	しかし、OS/2 には、一冊も出なかった256倍本が、
+	Ruby では既に四冊でているとは...</DD>
+    <DT>・<B>ARIEL〔16〕</B></DT>
+    <DD>う〜ん、これも長く続いているなぁ。もう、45話で、アニメなら
+	ぼちぼち最終回が近いと、前の巻で作者も言ってましたねぇ。
+	たしか、1巻買ったのは、私が＊＊＊の時だったねぇ。
+	もう、そんなになるのか。シミジミ</DD>
+</DL>
+
+<HR />
+
+<H2 CLASS=VIOLET><A NAME="20010325">ハッピーハッキングはやまった</A>
+<SPAN>(2001/03/25)</SPAN></H2>
+
+<P><A CLASS=LLFLOAT NAME="hhk">ハ</A>ッピーハッキングキーボードに
+新タイプがでましたね。 
+<A NAME="http://www.zdnet.co.jp/news/bursts/0103/21/pfu.html">ZDNet</A>
+とかでは、カーソルキーがついたことが大きく取りざされてますけど、
+わたくしにとっては、日本語配列版が登場したことの方が大きいですね。
+つーのも
+</P>
+<UL>
+    <LI>英語配列を使うなら、自分の使うＰＣを全部英語配列に統一しなくては
+	すぐにパニクってしまう(笑)</LI>
+    <LI>英語配列だと、コロン(:)の入力が Shift+「;」になって、
+	vi を使うとき、ちょっとウザい</LI>
+</UL>
+<P>だからなんですね。あと、</P>
+<UL>
+    <LI>CtrlキーがShiftキーの下</LI>
+    <LI>トラックポイント付き</LI>
+</UL>
+<P>にあったら、最高なんですが、まぁ、それは言うまい...
+あ、そういえば、IBM のスペースセイバーキーボードは
+もう売っていないんだろうか....そっちも実は欲しいのだが。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><A NAME="buy0325" CLASS=LLFLOAT>今</A>日の買い物:</P>
+<DL>
+<DT>・<B>ハイペリオンの没落(上・下)</B></DT>
+<DD>前作が過去回想だけで終わってしまった、ハイペリオン。
+    はたして、どういうオチになるのだろうか、興味深深である。
+    続編が新書で出ているそうなので、結構、うまくやってるのであろうが...
+    多分、そんなこと無いと思いますが、腐ってたら、また報告します(笑)
+</DD>
+<DT>・<B>月刊アフタヌーン</B></DT>
+<DD>ちょっと最近読めるところが少なくなってきた、アフタヌーン。
+    つーか、最初にコレを読むという漫画が無いのが辛い
+    <EM>(辛がるなっつーの)</EM>。
+</DD>
+</DL>
+
+<HR>
+
+<H2 CLASS=VIOLET><A NAME="20010324">ゲイツの野望の序曲</A>
+<SPAN>(2001/03/24)</SPAN></H2>
+
+<P><A CLASS=LLFLOAT NAME="shisso">ぼ</A>ちぼち、
+「葉山死亡説」とか「葉山失踪説」が出るかと思いきや、
+一向にその気配なし。当たり前だ、メーリングリストで
+発言してんだから(笑)。
+</P>
+<P>しかし、最近、どうも「会社やめる」いう単語に非常な魅力を感じてしまう。
+いや、しかし、ほんと、疲れた(いや、疲れてる、疲れつつある)。
+ソフト開発以外の仕事はもうタクサンだ。
+</P>
+<P STYLE="margin-left:1em;text-indent:0em"
+><EM>（なお、上記のことについて、ありがちな説教は却下につき、
+メール等送ってくださらぬように。
+それとは別に、励ましてくださるのも、ありがたいんですが、
+とりあえず、そうっとしておいてくだあい。
+だったら書くなっつーの＞俺）</EM>
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><A CLASS=LLFLOAT NAME="nyagos">N</A>YADOS に続き、
+WindowsNT/2000 もサポートした、</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    Nihongo Yet Another Gates'OS Shell
+</P>
+<P>が間もなく完成である。ベースは NYADOS なのだが...</P>
+<OL>
+    <LI>Turbo C++ のクラスライブラリを使っていたのを自前で用意。</LI>
+    <LI>VFAT対応の int86 を呼ぶところを普通の findfirst を呼ぶようにした。</LI>
+    <LI>Borland C++ 5.5 でコンパイルできるようにした。</LI>
+</OL>
+<P>だけである。ソース的には #ifdef を使って条件コンパイルしているので、
+NYADOS と NYAGOS でソースは既に統合している。ここまでくると、
+OS/2 も仲間も入れて、</P>
+<OL>
+    <LI>NYAGOS for WindowsNT/2000</LI>
+    <LI>NYAGOS for Windows9x/DOS(NYADOS)</LI>
+    <LI>NYAGOS for OS/2 Warp(NYAOS Lite)</LI>
+</OL>
+<P>のように、ゲイツＯＳシェルの名に恥じないラインナップにして
+しまおうかという野望も沸きつつある....
+(実際、移植性は高いので、十分可能なのである)。
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    おぉ、マルチＯＳ対応の<BR />ハイブリッドシェルぢゃん
+</P>
+<P>NYAOS があるのに何でいまさらという声もあると思うが、
+NYAOS はソースがぐっちょんぐちょんのべっちょんべちょんなのだ。
+それにくらべ、NYAGOS はいろんな反省の元に構築しているので、
+かなりシンプルな作りになっていて、軽いのだ。
+ブートフロッピーの中に入れておいたら Good かもしれないね。
+</P>
+<P>さて、実際、３種類の環境でシェルを作ってみると、
+以下のようなことに気がついた。</P>
+<OL>
+    <LI>DOS環境では、やっぱメモリが少ないし、Turbo-C++ は古すぎて、
+  	サポートしていない C++ の機能が満載である。</LI>
+    <LI>NT/2000では、エスケープシーケンスをサポートしていない上に
+	<EM>(信じられねぇ)</EM> 、画面がスクロールしてゆくと、
+	BackSpaceコード(Ctrl-H)さえ怪しくなる<EM>(ご冗談でしょ？)</EM>。</LI>
+</OL>
+<P>やはり、一番問題が少ないのは OS/2 プロンプトだなぁ
+<EM>(しみじみ)</EM>。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><A NAME="lhajp" CLASS=LLFLOAT>そ</A>うなんですよ。lha from UNIX は
+<A HREF="http://www.aba.ne.jp/~kamui/zakki.htm#20010318"
+>日本語パスを正しく扱えない</A>んですよ。
+これ、オリジナルの lha がそもそも対応していないので、
+ちょっと私の力量ではどうにもならない。
+だれか、ボスケテー。
+</P>
+<P>それはともかく、最近、
+<A HREF="http://www.aba.ne.jp/~kamui/zakki.htm#20010320"
+>私も喫茶マウンテン</A>に行きました。
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    すみません。残しちゃいました！
+</P>
+<P>正直、あれほど、甘系のスパゲッティーがまずいとは思わなかった...
+自分の奴がなかなか来ないので、人の奴を食べるのを手伝ったのが
+いけなかった。自分が注文した、普通の奴は結構食えた代物だったのだが、
+つまみ食いしたのが後々の世まで胃を攻撃し続けた....
+</P>
+<P>認めたくないものだな、若さ故の過ちというものは。
+<EM>(もう若くないって...)</EM></P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><A NAME="ygfamily" CLASS=LLFLOAT>Ｙ</A>Ｇ氏と愉快な仲間達と、<!--
+-->ドクターＨの就職祝いをする。<!--
+-->これで正真正銘、彼は博士になってしまった....<!--
+-->ふむ、Ｈ村博士、いい響きだ。<!--
+-->福島県に行っても、悪事を働くように。健闘を祈る！
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+って、物理的距離が離れても、<BR />
+どうせ、メールはどんどこ飛び交うんだが(笑)</P>
+
+<P>さらに、入社以来、いろいろとお世話になり続けた
+友人<A HREF="http://home.att.ne.jp/sun/fujiingahoh/"
+>藤田君</A>が、念願かない、彼の実家に近い支社へ転勤と相成った。
+よかったねと言いつつ、やはり親しい友人が遠くへ行ってしまうのは
+ちょっと寂しい。またイベント企画したら呼んでね...
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    って、また世話になるつもりかい！
+</P>
+<P>そう、彼および彼の実家のみなさんにはいろいろとお世話に
+なってしまっているのだな。
+う〜ん、恩返ししなくてはいけなかったのだが...
+</P>
+<P>春は出会いと分かれの季節である。</LI>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><A NAME="buy3" CLASS=LLFLOAT>最</A>近の買い物とか、
+借りたものとか、いろいろ。</P>
+<DL>
+    <DT>・<B>グイン・サーガ78 ルノリアの奇跡</B></DT>
+    <DD>まぁ、予想通りの内容といいましょうか....
+	相変わらず圧縮が効きそうな内容ですね
+	(=感情・人物描写が多すぎるってこと)。
+	でも、面白いことは面白いですよ。はい。</DD>
+    <DT>・<B>賭博破戒録 カイジ (2)</B></DT>
+    <DD>地獄でも博打やってるカイジ...しかし、相手はまだ小物だけに
+	最後の話のオチはどうするんだろ。</DD>
+    <DT>・<B>エクセル サーガ (7)</B></DT>
+    <DD>OVA版はちょっと発酵してましたけど、やはり原作はいいですね。</DD>
+    <DT>・<B>VAIOの新バッテリ</B></DT>
+    <DD>ついに届きました。3〜4時間持ちます。さすがです。
+	でも、もうちょっと安くなんないのかな、これって。</DD>
+    <DT>・<B>魔獣戦線 Complete 1,2,3</B></DT>
+    <DD>う〜む、思ったほど....</DD>
+    <DT>・<B>2010年宇宙の旅</B>(小説版)</DT>
+    <DD>「3001年終末への旅」が読みたくて読んでいるんですが、
+	やっぱり名作だけに面白いし、読みやすいですね。
+	さすが、この手の分野の元祖＆本家だ。
+	</DD>
+</DL>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><A NAME="kokuhaku" CLASS=LLFLOAT>告</A>白します。</P>
+<BR CLEAR />
+<P ALIGN=CENTER CLASS=SAY1>
+えぇ、そうですとも<BR />
+最近、ホームベースを<BR />
+Win98 にしちゃってますよ<BR />
+メールも VAIO で<BR />
+読み書きしてますよ。
+</P>
+<P>こいつ、開き直りやがった....
+って、ことはもしや、このページも。</P>
+
+
+
+
+<BR CLEAR />
+
+<HR />
+<H2 CLASS=VIOLET><A NAME="20010218">The Cold Experience
+〜 風邪ひいてまんねん</A>
+<SPAN>(2001/02/18)</SPAN></H2>
+<P><A NAME="cold" CLASS=LLFLOAT>今</A>週は誠、豪快に風邪をひいた。</P>
+<UL>
+    <LI>ズルズルである。</LI>
+    <LI>ゲホゲホである。</LI>
+    <LI>死にかけである。</LI>
+    <LI>それでいて、客先である。</LI>
+    <LI>休めないのである。</LI>
+    <LI>でも、人へ感染させかねんのである。</LI>
+    <LI>まるで病原体なのである。</LI>
+    <LI>@nifty のマイページを見てみたら、ドクロマークが出ていたのである。</LI>
+    <LI>ぼちぼち電池が切れてきたようだ</LI>
+    <LI>治ってきたころになって、ようやく親も心配するのである。</LI>
+    <LI>遅いよ！</LI>
+    <LI>それでいて、休日出勤せざるをえない状況に追い込まれているのである。</LI>
+    <LI>アァ、モウサイゴノトキガキタカ</LI>
+</UL>
+<P>Never End!</P>
+<BR CLEAR />
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><A NAME="gold" CLASS=LLFLOAT>最</A>近の買い物！</P>
+<UL>
+    <LI>ゴールド(アイザック=アシモフ最終<STRIKE>モビルスーツ</STRIKE>作)</LI>
+    <LI><SMALL>グインサーガ</SMALL>疑惑の月蝕(栗本 薫著)</LI>
+    <LI><SMALL>KUKAI in GALACTIC EMPIRE</SMALL>
+    <WBR />〜 銀河帝国の弘法も筆の誤り(田中 啓文著)</LI>
+</UL>
+<P>今月は、なかなか小説に恵まれとりますな。<!--
+-->「銀河帝国の弘法も筆の誤り」は、なかなか凄い作。<!--
+-->一瞬、作者はＹＧ師かと思ってしまった<TT>;-)</TT>。<!--
+-->ここまで駄洒落に拘った作は…やまじねーしょん以外見たことが無い(笑)。<!--
+--></P>
+<P>本屋で、ふと Qt の本を見る... なんとなく魅かれものがあるのぉ。<!--
+-->C++ ライブラリで、かつ Linux と Windows 共通ソースが出来るのか…。<!--
+-->うぅむ。GUI もいいかもしんない。つーか、単にわしゃ、C++ が好きな<!--
+-->だけなんだけどね。<!--
+--></P>
+<BR CLEAR />
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><A NAME="yamaji" CLASS=LLFLOAT>や</A>まじねーしょんで活躍している<!--
+-->人物とは別の山地さんという方から、昔の研究に関する問い合わせを<!--
+-->いただいた…。単に名字が同じだけとはいえ、かなり恐縮ものである。<!--
+-->そう、やまじねーしょんの、かの人物がギャグを宣ひさえしなければ、<!--
+-->このような悲劇はなかったのに...。偶然とは怖ろしいものだ。<!--
+--></P>
+<P>全国の山地姓の皆様(奴を除く)<!--
+-->ごめんなさい。もし山地姓の方で、かの人物のご身内の方が<!--
+-->いらっしゃたら、彼にギャグを止めるよう説得ください。<!--
+-->このままでは彼は田中啓文氏のようになって、<!--
+-->やがて「自分に捧げる」本を書いてしまうことでしょう。<!--
+-->そのような事態を防ぐ為にも、私は「やまじねーしょん」を<!--
+-->止めるわけにはいかないのです。ご理解ください。m(_ _)m
+</P>
+
+<BR CLEAR />
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><A NAME="conv" CLASS=LLFLOAT>先</A>週あたま、ついにコンビニパックが<!--
+-->届きました。<!--
+--></P>
+<P ALIGN=CENTER CLASS=SAY1>これで OS/2 は、あと10年は闘える</P>
+<P>なんか、前にも言ったような気が…。では、また来週！</P>
+
+<BR CLEAR />
+
+<HR />
+
+<H2 CLASS=VIOLET><A NAME="20010211">僕が堕落しきったわけ</A>
+<SPAN>(2001/02/11)</SPAN></H2>
+
+<P><A NAME="tired" CLASS=LLFLOAT>何</A>か作ろうという気が全く起きない…。<!--
+-->困ったもんだね。<!--
+-->ということで、ガンダムと(今さら)ウィザードリィばっかりやってる。<!--
+-->どうしようもないね。<!--
+--></P>
+<P>キャラクターで魔術師の「にゃおす」と僧侶の「ま〜りん」って<!--
+-->いうのを作ったら、いろいろやってる間に<!--
+-->性格が善悪に分かれてしまって、元に戻すのに一苦労。<!--
+-->そんな事に労力かけるなっつーの。<!--
+--></P>
+<BR CLEAR />
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+<FONT COLOR="#FF0000" SIZE=+2>★</FONT
+><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+><FONT COLOR="#880000" SIZE=+2>≡</FONT
+><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><A NAME="reason" CLASS=LLFLOAT>最</A>近の買い物</P>
+<UL>
+    <LI>僕が泥棒になったわけ(1)(2)</LI>
+    <LI>2001年宇宙の旅(小説版)</LI>
+    <LI>月刊 ザ・プレイステーション</LI>
+    <LI>VAIO のバッテリ<EM>(納期二ヶ月先、トホホ)</EM></LI>
+    <LI>真ゲッターロボ DVD </LI>
+</UL>
+<P>買い物ぢゃないけど、友人のFuture氏より、なんとPCを一台寄贈していただいた。<!--
+-->熱烈感謝。これは、やはり、NYAGOS を作らなくてはいけないのであろうか。<!--
+-->そういえば、ＹＧ師もファウンデーションを一向に読んでくれる気配なし。<!--
+-->これも、やはり、NYAGOS を作れば…。<!--
+-->このように、Windows のプログラムを作るようになって、<!--
+-->私のプログラムは駆け引きの道具に成り下っておりまする。<!--
+-->商業主義に染まったなぁ。<!--
+--></P>
+<P>NYAGOS といえば、Win95/DOS版のシェル NYADOS。ようやく、<!--
+-->Vector の本ページの方に載りました。<!--
+-->OS/2 のソフトを投稿した時と違って、余分に一週間くらいかかってるぞ。<!--
+-->もしかして、OS/2 の投稿物はウィルスチェックしとらんのかいな。<!--
+--></P>
+<BR CLEAR />
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+<FONT COLOR="#FF0000" SIZE=+2>★</FONT
+><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+><FONT COLOR="#880000" SIZE=+2>≡</FONT
+><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><A NAME="kaze" CLASS=LLFLOAT>ま</A>た風邪をひいてしまった。<!--
+-->ゲホゲホ。体調管理がなっていない。連休が台無しである。<!--
+--></P>
+<BR CLEAR />
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+<FONT COLOR="#FF0000" SIZE=+2>★</FONT
+><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+><FONT COLOR="#880000" SIZE=+2>≡</FONT
+><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><A NAME="webchain2" CLASS=LLFLOAT>W</A>ebChain/2 のミニバナー。<!--
+-->あちゃいんさんにリファインしてもらったバージョンに差し換えました。<!--
+-->葉山オリジナルに比べると…</P>
+<UL>
+<LI>フォントがきれい</LI>
+<LI>標準バナーサイズといえる88*31ドットになっている<BR />
+(葉山のは間違って 89*31 になっていた)</LI>
+<LI>ファイルサイズが当社比 1/4 !</LI>
+</UL>
+<P>さすがベテラン。(^o^)</P>
+<BR CLEAR />
+<HR />
+<H2 CLASS="VIOLET"><A NAME="20010208">Hayama in Nightmare</A>
+<SPAN>(2001/02/08)</SPAN></H2>
+<P><BIG>先</BIG>週は、ウェブに何か書こうと思っても、<!--
+-->筆が進みませんでした...<BR />
+くらけさん、こと、日下部憲一さんの御冥福を心からお祈りいたします。</P>
+<BR CLEAR />
+<HR />
+<H2 CLASS=VIOLET>
+<A NAME="20010128">さらば休暇、また会う日まで</A
+><SPAN>(2001/01/28)</SPAN>
+</H2>
+<P><BIG>い</BIG>やはや、休暇もおしまい。明日から仕事ぢゃ。<!--
+-->がんばろーっと。思う存分、ぬるま湯につかったので、<!--
+-->それなりに充電した感じである。ただ、生活時間帯が少々<!--
+-->シフトしてしまっているので、例によって月曜一日だけ<!--
+-->しんどいであろうな<EM>(眠れんので、コレ書いてるのだ)</EM>。<!--
+-->こんなこともあろうかと、月曜日を月一回の早帰り日の代替日に<!--
+-->しておいてよかったわい。<!--
+--></P>
+<BR CLEAR />
+<P>さて、この 8 日間、何をやったんぢゃろーな。</P>
+<UL>
+<LI>NYADOS のバージョンアップ</LI>
+<LI>eff の虫繕</LI>
+<LI>ウェブの読み書き</LI>
+<LI>レンタルビデオを見てた。</LI>
+<LI>日本橋ウロウロ</LI>
+<LI>Beer など飲みーの</LI>
+<LI>ガンダムに乗っていた</LI>
+<LI>散髪</LI>
+<LI>メールを書いていた</LI>
+<LI>ひたすら寝てた</LI>
+<LI>本屋で長時間立ち読みをしていた</LI>
+</UL>
+<P>おや、「Oracle の勉強」とか「Linux の再インストール」とかは、<!--
+-->どこへ行ったんだろう？</P>
+<BR CLEAR />
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+<FONT COLOR="#FF0000" SIZE=+2>★</FONT
+><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+><FONT COLOR="#880000" SIZE=+2>≡</FONT
+><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><BIG>e</BIG>ff については、そこそこ手は入れているのではありますが、<!--
+-->出すに出せない事情がございます。つーのは、_eff の文法に関しての<!--
+-->大きな変更が今回のバージョンアップに入るから。<!--
+-->一度、公開してしまうと、互換性を保たなくてはいけないので、<!--
+-->以後は変更できなくなっちまう。よって、慎重になっているわけ。<!--
+-->Tree表示からルートディレクトリのファイル表示へ移行すると、<!--
+-->ファイルが０件になってしまうという虫については(手元では)駆除済みです。<!--
+--></P>
+<P>NYADOS については DOS で動くようにすることによって、<!--
+-->裏切者の自覚に基く背徳感を若干緩和<EM>(貴様たのしんどるだろ)</EM>。<!--
+-->まぁ、NYADOS については、メモリサイズの圧迫問題もあるし、<!--
+-->できるのはここまでかなと思われる。<!--
+-->DOSプログラミングは窮屈だというのもある。<!--
+--></P>
+<P>一方、圧力団体「秘密結社 ＹＧ師とその仲間達」より、<!--
+-->WindowsNT/2000 対応の要請がかかっている。<!--
+-->「盆休みにでもね」などと、お茶を濁す。<!--
+-->でも、NT/2000マシンが無いんだよね〜。<!--
+-->とりあえず、NT/2000版の名前だけは<!--
+-->「NYAGOS(Nihongo Yet Another Gates'Os Shell)」としておく。<!--
+-->「にゃあ」シリーズといったところか。<!--
+-->多分、互いに全く互換性は無い。<!--
+--></P>
+<HR />
+<SPAN CLASS=TRI>▼</SPAN><A HREF="./r07.html">前頁へ</A>
+<SPAN CLASS=TRI>▼</SPAN><A HREF="./index.html">目次へ</A>
+<SPAN CLASS=TRI>▼</SPAN><A HREF="../index.html">扉ページへ</A>
+</BODY>
+</HTML>

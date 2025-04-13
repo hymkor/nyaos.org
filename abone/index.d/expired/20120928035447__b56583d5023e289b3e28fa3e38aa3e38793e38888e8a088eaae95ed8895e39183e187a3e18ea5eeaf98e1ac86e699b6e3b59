@@ -1,0 +1,11 @@
+d8 を使えばよい。
+
+8<
+[hayama@colinux v8]$ ./d8
+V8 version 2.4.2 [console: dumb]
+d8> var a="10"
+d8> print(a)
+10
+d8>
+[hayama@colinux v8]$
+>8

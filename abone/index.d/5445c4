@@ -1,0 +1,11 @@
+http://ja.wikipedia.org/wiki/Extract/Transform/Load{Extract/Transform/Load - Wikipedia}：
+
+6<
+データウェアハウスにおける以下のような工程を指す。
+
+* Extract - 外部の情報源からデータを抽出
+* Transform - 抽出したデータをビジネスでの必要に応じて変換・加工
+* Load - 最終的ターゲット（すなわちデータウェアハウス）に変換・加工済みのデータをロード
+>9
+
+今回のプロジェクトでは、SOA を補完する機能として視野に入れる。

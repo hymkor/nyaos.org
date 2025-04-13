@@ -1,0 +1,93 @@
+<<神田明神行ってきた>>
+
+どこかと思えば、毎週行ってる御茶ノ水の御近所ではないですか。
+
+<<{m2011020216380000.JPG}
+<<{m2011020216380001.JPG}
+
+鳥居をくぐって…
+
+<<{m2011020216390000.JPG}
+<<{m2011020216390001.JPG}
+
+門をくぐって…
+
+<<{m2011020216410003.JPG}
+<<{m2011020216460000.JPG}
+
+本殿へ。5円玉をチャリーン。「記憶力がよくなりますよーに」
+(そんなに頭が悪いのか？)
+
+平日の夕方だから、全然人いないかなと思いきや、
+ちょろちょろ参拝者の姿が…。大きい神社は違いますね。
+
+<<{m2011020216500001.JPG}
+<<{m2011020216470000.JPG}
+
+がびーん。もう4時過ぎてる。
+もっと早く来れば、屋上庭園とか、資料館とかも見れたらしい。
+
+いつも腰が重くて、行くのが夕方になってしまうのは、だめだなぁ。
+
+''(ちなみに、今日は平日ですが、
+午前中は自宅の電気設備点検、夕方は通院があったので、
+お休みをいただきました)''
+
+----
+
+で、このあと、いつも通ってる医院へ行ってみたら…
+
+<<{m2011020217450000.JPG}
+
+受付の人が急病ですか!? そんなこともあるんですねぇ。
+
+<<[Python] ```__slots__```で変わる dir関数の挙動>>
+
+http://www.python.jp/doc/release/library/functions.html#dir{dir関数}はオブジェクトの属性のリストを生成してくれるが、
+http://www.python.jp/doc/release/reference/datamodel.html#__slots__{
+```__slots__```} を定義していると、挙動が変わるようだ。
+
+8<
+class Hoge1:
+    __slots__ = ["ahaha","ihihi","ufufu","ohoho"]
+    def __init__(self,ahaha):
+        self.ahaha = ahaha
+
+class Hoge2:
+    def __init__(self,ahaha):
+        self.ahaha = ahaha
+
+class Hoge3(object):
+    __slots__ = ["ahaha","ihihi","ufufu","ohoho"]
+    def __init__(self,ahaha):
+        self.ahaha = ahaha
+
+class Hoge4(object):
+    def __init__(self,ahaha):
+        self.ahaha = ahaha
+
+hoge1 = Hoge1("1")
+hoge2 = Hoge2("2")
+hoge3 = Hoge3("3")
+hoge4 = Hoge4("4")
+
+for i,obj in enumerate( [ hoge1,hoge2,hoge3,hoge4 ] ):
+    print i+1,",".join(e for e in dir(obj) if e[0] != '_' )
+>8
+
+8<
+$ python hoge.py
+1 ahaha
+2 ahaha
+3 ahaha,ihihi,ohoho,ufufu
+4 ahaha
+>8
+
+そのオブジェクトが新スタイルのクラスオブジェクトで、
+```__slots__``` を定義していると、
+代入していない属性値も dir関数で列挙されるようだ。
+
+だから、普通 dir関数で出てくれば、http://www.python.jp/doc/release/library/functions.html#getattr{getattr関数}で(第3引数を指定せずとも)属性値を取得できると思うと、エラーになってしまう。
+
+まぁ、滅多なことでは問題になることはないが、
+その滅多なことが起きたので、メモしておく。

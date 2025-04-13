@@ -1,0 +1,29 @@
+<<[Lua] Lua for Windows が Cygwin で使えないように見える件>>
+
+<<<問題編>>>
+
+なぜなら、Cygwin は拡張子なしのファイルを「lua」→「lua.exe」の順に探すから。
+
+Lua for Windows では「C:\Program Files\Lua\5.1」直下に
+
+* 「lua.exe」という実行ファイル
+* 「lua」というディレクトリ
+
+の双方があって、単純にインストールした状態では、lua と打つと、
+lua というディレクトリの方がヒットしてしまう。
+
+<<<解決編>>>
+
+8<
+    cd /usr/local/bin
+    ln -s /cygdrive/c/Program Files/Lua/5.1/lua.exe lua
+>8
+
+これで lua のインタプリタは起動するようになるし、
+一応ライブラリのロードもしてくれる。
+ただし
+
+* インタラクティブモードは、だめぽ
+* 改行コードは CRLF になってしまう。
+** それが嫌なら、make linux とかで自前ビルドしてみよう。((br))
+   (Cygwin だけど、make linux でのビルドは一応できる)

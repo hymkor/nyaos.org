@@ -1,0 +1,32 @@
+<<NYAOS のダイナミックリンク版を用意しました>>
+
+6<
+: http://nocd5.blog59.fc2.com/blog-entry-501.html{nocd5@blog Lua5.2での"multiple Lua VMs detected"の考察}
+:: …"multiple Lua VMs detected"って言われる。
+>9
+
+NYAOS がスタティックリンクしている Lua と、
+Luaの拡張ライブラリがダイナミックリンクしている Lua へのポインタが違っているのが
+原因で怒られているようなので、
+Lua をダイナミックリンクする NYAOS をビルドしてみました。
+
+* https://bitbucket.org/zetamatta/nyaos3000/downloads/nyaos-3.3.0_2-win-dynamiclink.zip
+
+本当は、Lua の外部ライブラリを活用できるように、
+ダイナミックリンク版を標準にしたいところなんですが、
+1-ファイルで動作するという利便性を捨てちゃうので、
+ちょっと悩ましいところです。
+
+単純に lua52.dll を nyaos のパッケージに含めるというので、
+許容してもらえるもんでしょうかねぇ。
+
+----
+
+ところで… LuaBinaries for Windows のパッケージですが、
+Lua 5.1 では Visual C++ 8 だったのが、
+5.2 より MingW gcc 4 になったようです
+(http://luabinaries.sourceforge.net/manual.html#LuaBinariesCompatible{ソース})。
+NYAOS と同じになったので、ありがたいことです。
+
+他のライブラリも追従してくれると嬉しいんですが。
+(個人的に Luacom を NYAOS から使いたい)

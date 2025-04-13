@@ -1,0 +1,206 @@
+<<ここ1年でのおいらのコマンドライン環境の変遷>>
+
+:1年前
+:: CygTerm + bash(cygwin) + vim(cygwin) + SKKIME
+:現在
+:: 「cmd /c start ckw」 + NYAOS 3000&SKKIME + vim(native)&skk.vim
+
+Cygwin の言語処理系は何かとバージョンが古いので、
+現在のネイティブがための構成にすることにより、
+Python など、常に最新のバージョンを使えるようになった。
+
+しかし、現在の状況を支えるバッドノウハウの多いことよ…
+
+* vim(native)では SKKIME での入力で化ける文字がある。
+** ⇒ skk.vim を導入
+** ちなみに、それまでは ckw + NYAOS + vim(cygwin) + SKKIME という組合せでやっていた。 
+* vim(native)は xkeymacs に存在をうまく認識してもらえない。
+** ⇒ ckw の上で使う。
+** ckw が認識対象となってくれる。
+* ckw をショートカットで起動すると、日本語入力ができない。
+** ⇒「cmd /c start ckw」で起動する
+** New!
+
+<<<Cygwin も…まだだ、まだ終わらんよ>>>
+
+* w3m については未だに CygTerm から使っている。
+** コマンドプロンプトから呼び出すと何故か core dump するので
+* Cygwin も 1.7 になり、ファイル名が unicode 対応した。
+** 下手なネイティブアプリより、日本語対応度がよくなっていたりして
+* 当初、Lua は Cygwin に入ってなかったが、その後、いつの間にか入っていた(1.7 になる前に)。
+
+<<NYAOS 2.94_0 リリースしたでよぉ>>
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+** [nyaos3k-2.94_0-win.zip|http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.94_0-win.zip]
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.94_0-os2.zip{nyaos3k-2.94_0-os2.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.94_0-src.zip{nyaos3k-2.94_0-src.zip}
+
+* nyaos.default_complete の設置
+
+NYAOS 内蔵のコマンドライン補完機能を Lua から呼び出せるようにしました。
+
+8<
+    L = nyaos.default_complete( BASESTRING , POS )
+>8
+
+|| BASESTRING | 補完されるべきベースの文字列
+|| POS | 文字列の位置。0 だと、先頭なのでコマンド名補完とみなされる。
+|| L | 補完候補リストの入った二次元テーブル((br))
+    L[n][1] … 完全補完された文字列((br))
+    L[n][2] … L[n][1] のディレクトリを除いた部分
+
+* nyaos.complete の戻り値を任意の個数の文字列から、テーブルへ変更した。
+
+Lua のスタックがオーバーフローするので、テーブルにしました。
+また、2.93 では、この戻り値に NYAOS.EXE 側が勝手に、
+従来の補完結果を追加していましたが、それをしないようにしました。
+
+つまり、nyaos.complete は補完機能の追加ではなく、完全置換えをするフックとなります。
+
+使用例：
+
+8<
+function nyaos.complete(basestring,n)
+    local list = nyaos.default_complete(basestring,n)
+    table.insert( list , '127.0.0.1')
+    table.insert( list , 'localhost')
+    return list
+end
+>8
+
+戻り値はテーブルでなければなりませんが、要素は必ずしも二要素のテーブルである必要はありません。``'localhost'`` という文字列の場合、``{ 'localhost' , 'localhost' }``
+と等価に扱われます。
+
+* nyaos.eval を設置した。
+
+nyaos.exec と似てますが、nyaos.exec の戻り値はコマンドの実行結果の数値ステータスです。
+nyaos.eval は逆クォートと同じで標準出力に吐かれる内容を返します。
+
+* %nyatype% の内容を NYAOS3K とした
+
+_nya の内容が NYACUS と互換性がないので、分岐できるようにという処置です。
+
+* source文で、拡張子が.lua,.luacのファイルは強制的に Lua とみなす
+  ようにした (コンパイルバイナリも読み込み可能)
+* _nya 内の読み込みメッセージを削除。かわりに、-D オプションで、
+  nyaos.exe 本体が読み込み中のスクリプト名を表示するようにした。
+*  CTRL_SPACE をキーとして認識できるようにした (Windows)
+
+「bindkey CTRL_SPACE ime-toggle」として、
+Ctrl-SPACE で IME の ON/OFF ができるようになりました。
+
+* [蟲繕] savehist 定義時に Ctrl-Z で終了すると、空行がヒストリに入ってしまう問題を修正。
+
+lingr で報告があったので。
+
+* [蟲繕] 内蔵コマンドのパイプ出力を中断した時に、出力が止まらない問題を修正(OS/2)
+
+OS/2 も忘れてません、一応。バグリポート来ないけど。
+
+以上、よろしくお願い致します。
+
+<<[python] 簡単な twitter クライアント一つ書くのにも、一苦労したお話>>
+
+なぁ、ちょっと聞いてくれよ。
+実はふと、コマンドラインから使う、簡単な twitter クライアントを書こうと思ったんだ。
+立派な手本もあったし。
+
+* http://techno-st.net/2009/07/04/python-twitter.html{python-twitter を使ってみる - trial and error}
+
+これを改造させていただいて、ポストも出来るようにしようと思っただけなんだ。
+
+<<<twitterライブラリを easy_install ((fn easy_install については「http://python.matrix.jp/modules/setuptools.html{EasyInstallを使えるようにする}」を参照のこと))で導入しようとしたんだ>>
+
+8<
+    easy_install twitter
+>8
+
+>> 違うライブラリが入ってしまった <<
+
+正しくは「``easy_install python-twitter``」だった。
+素の「twitter」は、何だか違うライブラリのようだ。
+(twitter 互換のAPIを作るライブラリ？分からん！)
+
+後から入れようとしたけど、先に入れたライブラリが邪魔して、
+うまく import できないようだった。
+どうすれば、アンインストールできるのだろうか。
+
+ググる → http://d.hatena.ne.jp/kokiya/20080920/1221931695{pythonモジュールのアンインストール - kokiyaの日記 http://www.visualpharm.com/}
+
+ふむ、```easy_install -m [plugin name]``` を実行してから、
+setup.py の [console-script] に書いてある実行ファイルを削除すればいいんですね、
+分かります。
+
+これで一応 '''python-twitter''' モジュールはちゃんど動作するようになりました。
+めでたしめでたし。
+
+<<<さて、公開しようと思ったが、パスワードを晒すわけにはいかない>>>
+
+聞くところによると、Pit というライブラリがあるらしい。
+
+* http://d.hatena.ne.jp/jYoshiori/20080623/1214219490{Pit リリースしました。 - Djangoへの片思い日記}
+
+元々は Ruby のライブラリのようで、~/.pit/ というディレクトリの下に YAML ファイルを置いて、そこに情報を保持するような仕組みになっているらしい。
+
+さっそく導入して使おうとした…が、
+
+>> お約束だが、うまく動かんのですよ！！ <<
+
+* http://d.hatena.ne.jp/souta-bot/20100112/1263313759{Pitインスコつまずきメモ - souta-bot log}
+
+まず、easy_install 版だと、うまく動かない。上サイトに倣って、ソースから setup.py install することにした。
+
+* http://mattn.kaoriya.net/software/lang/python/20090218173310.htm{Big Sky :: python版pitがWindowsで動かない問題へのパッチを書いた}
+
+これは致命的だ。ここに記載されてたパッチを当てたら、確かに直ったけれども、
+'''こんなに導入に手間暇かかるなライブラリを使ったツールなど、到底公開できん！'''
+
+<<<温故知新>>>
+
+しかし、外部パスワード情報をローカルで管理しようという話など、
+別に Ruby 以前からあったニーズなのだ。
+そんな最近作られたもん使うなら、昔からあるもの使えばいいじゃないか。
+
+>> それが .netrc <<
+
+詳しくは http://www.linux.or.jp/JM/html/netkit/man5/netrc.5.html{man netrc} を読んでくだされ。元々は FTP のパスワードを持っとくための仕組みなのだ。
+これを使うための Python ライブラリも「標準で」存在する
+
+* http://www.python.jp/doc/2.5/lib/module-netrc.html{9.4 netrc -- netrc ファイルの処理}
+
+使う際は以下に注意
+
+* 環境変数 HOME の定義が必要。Windows だから %USERPROFILE% を %HOME% に読み変えるとか、気の効いたことはしてくれない。==_nya あたりに「``set HOME=%USERPROFILE%``」の一文を入れておこう。=={netrcモジュールをコールする前に、次のように読み変えるコードを入れておくのが親切だ ''(4/30修正)''}
+
+8<
+if "HOME" not in os.environ:
+    os.environ["HOME"] = os.environ["USERPROFILE"]
+>8
+
+* .netrc は当然読まれるとまずい。まぁ、昨今、マルチユーザなマシンで使うことは少ないが、自分以外では読めないようにしといた方がいいだろう。
+** UNIX/Linux なら:
+*** ```chmod 600 .netrc```
+** Windows なら:
++++ ```cacls.exe .netrc /P everyone:n```
++++ ```cacls.exe .netrc /P 自アカウント:f```
+
+そんなわけで完成したのが以下のスクリプト(<<{tw.py}):
+
+((ref_text tw.py))
+
+パトラッシュ、ぼくつかれたよ。でも、ちゃんとうごくよ
+
+<<<思うところ>>>
+
+pit は netrc と違って、登録とかも出来る高機能な代物みたいだけれども、
+別段暗号化もしないようだし、そこまで高度なことをしたいなら、
+素直に SQLite とかを使った方が正解のような気がします。
+
+牛刀をもって鶏を割くという言葉もありますし、
+一個人の自動ログインのためのパスワード管理くらいは netrc で十分でしょう。
+(vim だと、ちゃんとハイライト表示もしてくれる！)
+
+あと、(問題があるのに)メンテされないライブラリは、百害あって一利なしだと思います。
+
+>> そんでもって、ライブラリの名前には気を付けような！ <<

@@ -1,0 +1,124 @@
+Oracle に関するメモ
+
+<<CSV 出力>>
+
+<<<起動>>>
+
+<pre>
+$ sqlplus -S ユーザ/パスワード @ スクリプト名
+</pre>
+
+* -S オプションで余計なロゴの出力を抑制できる。
+* ps でパスワードが見えてしまう。
+    <br>⇒ 本当は内部で connect 文を発行した方がいいが、
+	それだと「接続しました」と出てしまう。
+
+<<< 共通設定>>>
+
+<pre>
+    rem ▼ コマンド行を出力しない。
+    set echo off
+    rem ▼ 改頁しない.
+    set pages 0
+    rem ▼ 途中で折り返さない。
+    set lines 32767
+    rem ▼ 末尾の空白を除く.
+    set trims on
+    set feed off
+    rem ▼ ヘッダを出力しない。
+    set hea off
+    rem ▼ 行数を出力しない。
+    set ver off
+    set term off
+    rem ▼ 一時停止しない.
+    set pau off
+    rem ▼ 項目区切りをカンマに(CSV 化の時)
+    set colsep ','
+    spool 'ファイル名'
+</pre>
+
+<<< カラム別フォーマット定義>>>
+
+COLUMN 文を使う
+
+<pre>
+    SQL> COLUMN カラム名 HEADING （ヘッダ文字列）
+    SQL> COLUMN カラム名 FORMAT （フォーマット定義）
+</pre>
+
+フォーマット文字列は、こんなんだったかな
+
+* 文字列は「a桁数」で左詰めとなる。
+* 数値は 9 を桁数分ならべる。
+* 9 を 0 にすることで、その桁を切り捨ててくれる。
+* 数値にカンマを入れると、意図どおりの3桁区切りのカンマが入る。
+
+これだけで、特に SQL*Plus の出力を awk などで加工する必要がない。
+
+<<< こんなの覚えてられない/やってられない時>>>
+
+<pre>
+    SQL> spool foo.csv
+    SQL> SELECT 'CSV=' || 〜 FROM …
+    SQL> spool off
+</pre>
+
+して、スクリプト言語で CSV= で始まる行だけ抽出する。
+だいたいは、vi で
+
+<pre>
+    :s/  *$// ⇒ 末尾の空白を除く
+    :g/^(ヘッダに含まれる文字列)/d
+    :g/^--/d ⇒ ヘッダ削除
+    :g/^$/d
+    Gdddd
+</pre>
+
+とかして、手修正する。
+
+<<Ruby との連携>>
+
+<<< Ruby/OCI8 on Cygwin and Oracle9i>>>
+
+http://nyaos.org/d/?date=20041009#p05
+
+<<< Win32OLE/ADO 経由のアクセス>>>
+
+* http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/18636 (ruby-list)
+* http://www.itmedia.co.jp/help/howto/win/win2000/0007special/complus_vb/chapa/a4.html (ITMedia/VBScript)
+* http://acvb.s19.xrea.com/main.html (MSAccess 関係のTIPS)
+
+<<定番SQL>>
+
+: セッションリスト 
+:: SELECT SID,SERIAL#,SESSION#,USERNAME,STATUS,MACHINE,TERMINAL,PROGRAM FROM V$SESSION WHERE USERNAME IS NOT NULL;
+: セッションKILL
+:: ALTER SYSTEM KILL SESSION '（ＳＩＤ）,（SERIAL#）';
+: 表移動 
+:: alter table （表名） move tablespace （表領域名）;
+: 索引再構築 
+:: alter index （索引名）rebuild;
+: 索引移動 
+:: alter index （索引名） rebuild tablespace （表領域名）;
+: 要再構築索引検索 
+:: select index_name , table_name , status from user_indexes where status = 'UNUSABLE';
+
+<< リンク>>
+
+<<< わがにっき>>>
+
+: データファイルの紐付けチェック 
+:: http://nyaos.org/d/?date=20041221#p01
+: リカバリの例 
+:: http://nyaos.org/d/?date=20041231#p02
+: UNDO 表領域が壊れた 
+:: http://nyaos.org/d/?date=20041001#p02
+
+<<< よそ>>>
+
+: Oracle少女 リリカルなのは『一時表領域が縮小不可能なの？』 
+:: http://www.roy.hi-ho.ne.jp/montague/lilical-oracle.html
+: セッションリスト 
+:: http://www.mars.dti.ne.jp/~o-shin/new/kowaza/script/who.sql
+: セッションキル 
+:: http://www.mars.dti.ne.jp/~o-shin/new/kowaza/script/kill.sql

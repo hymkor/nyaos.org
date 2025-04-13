@@ -1,0 +1,61 @@
+<<+ パスフレーズの入力無しにリモート実行させる方法>>
+
+<<<+ ローカルサーバにて、キーを作成する>>
+
+8<
+    $ ssh-keygen -t rsa
+    Generating public/private rsa key pair.
+    Enter file in which to save the key (/home/******/.ssh/id_rsa): 
+    Enter passphrase (empty for no passphrase): 
+    Enter same passphrase again: 
+>8
+
+三回の入力待ちで、Enter だけを入力してください。
+パスフレーズを入れると、意味がなくなります。
+
+8<
+    $ chmod 600 ~/.ssh/*
+>8
+
+<<<+ ローカルからリモートサーバへ、公開鍵を転送する>>
+
+8<
+    $ cd ~/.ssh
+    $ ftp サーバ名
+    FTP> mkdir .ssh
+    FTP> cd .ssh
+    FTP> put id_rsa.pub
+    FTP> bye
+    $
+>8
+
+<<<+ 「リモートサーバで」、公開鍵を登録して、パーミッションを調節>>
+
+8<
+    $ telnet サーバ名
+    $ cd .ssh
+    $ cat id_rsa.pub >> authorized_keys
+    $ chmod 600 *
+>8
+
+<<<+ ローカルからリモートへログインが出来るか確認します。>>
+
+8<
+    $ ssh サーバ名 ls -al
+>8
+
+（最初の一回だけ、
+
+8<
+    The authenticity of host '******** (***.**.**.**)' can't be established.
+    RSA key fingerprint is **:**:**:**:**:**:**:**:**:**:**:**:**:**:**:**.
+    Are you sure you want to continue connecting (yes/no)? yes
+    Warning: Permanently added '********,***.**.**.**' (RSA) to the list of 
+    known hosts.
+>8
+
+とか出ますが、２回目以降は出ないはずです）
+
+! 参考
+
+* http://komura.net/ssh.htm

@@ -1,0 +1,189 @@
+#!/bin/bash
+
+source /usr/local/etc/switch_service.conf || exit 1
+
+logging(){
+    echo "`date '+%Y/%m/%d %H:%M:%S'` $*" >> $LOGFN
+}
+
+call(){
+    logging "[C] $*"
+    $* >> $LOGFN 2>&1
+    local RC=$?
+    logging "[R] $RC"
+    return $RC
+}
+
+error(){
+    local RC="$1"
+    echo "Failed to change service status($RC)"
+    exit $RC
+}
+
+LOGFN=/var/log/ha.log 
+
+start_ip(){
+    local ERRCD="$1"
+    local ETHDEV_N="$2"
+    local ETHDEV="${ETHDEV_N/:*/}"
+    local IP_ALIAS="$3"
+    local BCAST="$4"
+    local SUB_NET="$5"
+    local ROUTER_IP_LIST="$6 $7 $8 $9"
+
+    logging "### START TO RESERVE IP:${IP_ALIAS} ON ${ETHDEV_N} ###"
+
+    if call ping -c 3 $IP_ALIAS 
+    then
+        logging "$IP_ALIAS exist!" 
+        error `expr $ERRCD + 1`
+    fi
+    if ! call ifconfig ${ETHDEV_N} $IP_ALIAS netmask $SUB_NET broadcast $BCAST 
+    then
+        logging "### failed to ifconfig $IP_ALIAS ###"
+        error `expr $ERRCD + 2`
+    fi
+    for ip in $ROUTER_IP_LIST
+    do
+        if ! call arping -U -s $IP_ALIAS -I ${ETHDEV} -c 3 $ip
+        then
+            logging "### failed to arping to router(${ip}) ###"
+            error `expr $ERRCD + 3`
+        fi
+    done
+    call ifconfig -a
+    logging "### SUCCEEDED TO RESERVE IP ###"
+    return 0
+}
+
+stop_ip(){
+    local ERRCD="$1"
+    local ETHDEV_N="$2"
+    local IP_ALIAS="$3"
+
+    logging "### START TO RELEASE IP-ADDRESS:${IP_ALIAS} ON ${ETHDEV_N} ###"
+    call ifconfig ${ETHDEV_N} down || error `expr $ERRCD + 2`
+    call ifconfig -a
+    logging "### SUCCEEDED TO RELEASE IP ###"
+    return 0
+}
+
+status_ip(){
+    local ERRCD="$1"
+    local ETHDEV_N="$2"
+    local IP_ALIAS="$3"
+
+    ifconfig | gawk -v no="$ERRCD" -v ip="$IP_ALIAS" -v ethdev_n="${ETHDEV_N}" '
+        (index($0,ethdev_n) > 0 ){
+            printf "[%d] %s is ACTIVE on %s\n", no/10, ip, ethdev_n
+            flag = 1
+        }
+        END{
+            if( flag != 1 ){
+                printf "[%d] %s is STANDBY on %s\n", no/10, ip, ethdev_n 
+            }
+        }
+    '
+} 
+
+mysql_start(){
+    logging "### STARTUP DATABASE ###"
+    # ps -ef | grep mysql >> $LOGFN || error 50
+    return 0
+} 
+
+mysql_stop(){
+    logging "### SHUTDOWN DATABASE ###"
+    # ps -ef | grep mysql >> $LOGFN && error 50
+    return 0
+}
+
+asteria_start(){
+    logging "### STARTUP ASTERIA ###"
+    return 0
+}
+
+asteria_stop(){
+    logging "### SHUTDOWN ASTERIA ###"
+    return 0
+} 
+
+case "$1" in
+start)
+    case "$2" in
+    "")
+        for ips in "${IPS[@]}"
+        do
+            start_ip $ips
+        done
+        mysql_start
+        asteria_start
+        ;;
+    as)
+        asteria_start
+        ;;
+    db)
+        mysql_start
+        ;;
+    *)
+        ips=${IPS[$2]}
+        if [ -n "$ips" ]
+        then
+            start_ip $ips
+        else
+            error 99
+        fi
+        ;;
+    esac
+    echo "Succeeded to startup service."
+    ;;
+stop)
+    case "$2" in
+    "")
+        asteria_stop
+        mysql_stop
+        for ips in "${IPS[@]}"
+        do
+            stop_ip $ips
+        done
+        ;;
+    as)
+        mysql_stop
+        ;;
+    db)
+        asteria_stop
+        ;;
+    *)
+        ips=${IPS[$2]}
+        if [ -n "$ips" ]
+        then
+            stop_ip $ips
+        else
+            error 99
+        fi
+        ;;
+    esac
+    echo "Succeeded to shutdown service."
+    ;;
+status)
+    for ips in "${IPS[@]}"
+    do
+        status_ip $ips
+    done
+    ;;
+*)
+    echo "Usage: $0 COMMAND [TARGET]"
+    echo "  COMMAND:"
+    echo "    status         ... print ip-assigned status"
+    echo "    start [TARGET] ... start service TARGET"
+    echo "    stop  [TARGET] ... stop service TARGET"
+    echo ""
+    echo "  TARGET:"
+    echo "    ''(empty) : all services"
+    echo "    '1','2'.. : assign/release n'th ip-address"
+    echo "    'db'      : startup/shutdown database"
+    echo "    'as'      : startup/shutdown asteria"
+    echo ""
+    ;;
+esac
+# vim:ft=sh notextmode: 

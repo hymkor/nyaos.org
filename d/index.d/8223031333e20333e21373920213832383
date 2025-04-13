@@ -1,0 +1,29 @@
+!!! ((title [NYAOS] グローバルな環境変数の==操作=={参照}))
+
+NYAOS の中から set 文で環境変数を操作しても、それは今の NYAOS にしか反映されない。
+システム全体に反映させるには、「マイコンピュータ」→「プロパティ」→「詳細設定」
+→「環境変数(N)」を変更することになる。これをスクリプトから出来ないか。
+
+* http://blog.livedoor.jp/akf0/archives/51607997.html{全ては時の中に… : 【VBScript】環境変数の登録}
+
+を参考に、NYAOS からグローバルな環境変数を操作してみよう。
+
+8<
+[C:hayama]
+$ type gset.lua
+local shell=nyaos.create_object("WScript.Shell")
+local sysEnv=shell:Environment("System")
+local path=sysEnv:Item("PATH")
+
+print( "PATH="..path ,type(path) )
+
+-- sysEnv:Item("PATH") = sysEnv:Item("PATH") .. ";foo"
+[C:hayama]
+$ nyaos gset.lua
+PATH=C:\oraclexe\app\oracle\product\11.2.0\server\bin;;C:\Program Files\ImageMagick-6.7.6-Q16;C:\Perl\site\bin;C:\Perl\bin;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;C:\Program Files\Intel\WiFi\bin\;c:\Program Files\Common Files\Lenovo;C:\Program Files\ThinkPad\ConnectUtilities;C:\Program Files\Lenovo\Client Security Solution;c:\Program Files\Mercurial\;C:\usr\vim73-kaoriya-win32;c:\usr\bin;C:\Program Files\Git\cmd   string
+[C:hayama]
+$
+>8
+
+ここで気付いたが、NYAOS ではプロパティーの参照はできても、代入ができないのだ。うーん。
+要対応だなぁ。

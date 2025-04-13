@@ -1,0 +1,19 @@
+/*** 魔界葉山文書用スタイルシート ***/
+H2  {color:violet;font-style:italic;
+    /*border-style:groove;border-width:3 0 0 0;border-color:white;width:100%;*/
+    font-size:large;
+    margin-right:0;
+    line-height:200%;
+    }
+H2 A{color:violet;font-style:italic}
+H3{border-style:solid;border-color:white;border-width:0 1 1 0}
+P BIG{
+    font-size:xx-large;font-family:helv;border-style:solid;border-color:#FFFFFF;
+    border-width:0px 2px 2px 0px;float:left
+}
+TABLE BIG{
+    font-size:xx-large;font-family:helv;border-style:solid;border-color:#FFFFFF;
+    border-width:0px 2px 2px 0px;float:left
+}
+BLOCKQUOTE{font-style:italic;color:#AAFFAA}
+BLOCKQUOTE B{color:#66FF66;font-style:italic}

@@ -1,0 +1,48 @@
+#include <windows.h>
+#include <winnt.h>
+#include <stdio.h>
+
+int main(int argc,char **argv)
+{
+    for(int i=1;i<argc;i++){
+        if( stricmp(".exe",argv[i]+strlen(argv[i])-4) != 0 ){
+            printf("%s: skiped\n" , argv[i]);
+            continue;
+        }
+
+        IMAGE_DOS_HEADER image_dos_header;
+        IMAGE_NT_HEADERS32 image_nt_header32;
+        FILE *fp=fopen(argv[i],"rb");
+
+        if( fp == NULL ){
+            perror( argv[i] );
+            continue;
+        }
+        if( fread( &image_dos_header , sizeof(image_dos_header) , 1 , fp ) < 1 ){
+            fprintf(stderr,"%s : DOS_HEADER broken.\n" , argv[i]);
+        }else{
+            printf("%s : %.2s" , argv[i] , &image_dos_header.e_magic );
+
+            if( fseek( fp , image_dos_header.e_lfanew , SEEK_SET ) == 0 && 
+                fread( &image_nt_header32 , sizeof(image_nt_header32) , 1 , fp ) >= 1 )
+            {
+                printf(" %.2s" , &image_nt_header32.Signature );
+                if( image_nt_header32.FileHeader.Characteristics & 0x100 ){
+                    printf(" 32bit");
+                }
+                switch( image_nt_header32.OptionalHeader.Subsystem ){
+                    case 2:
+                        printf(" GUI"); break;
+                    case 3:
+                        printf(" CUI"); break;
+                    case 7:
+                        printf(" CUI(Posix)"); break;
+                    case 9:
+                        printf(" WindowsCE"); break;
+                }
+            }
+            putchar('\n');
+        }
+        fclose(fp);
+    }
+}

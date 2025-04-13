@@ -1,0 +1,43 @@
+<<Firefox を 1.5.0.1 に UP したら…>>
+
+Mozex 1.0.7.1 が
+
+"" Firefox 1.5.0.1 に対応していないため、更新が見つかりませんでした。
+
+http://www.cas.cmc.osaka-u.ac.jp/~paoon/OriginalDoc/{日本語版配布サイト}
+に行くと、さっそく対応版が！
+http://ex13.2ch.net/test/read.cgi/gline/1134940789/l50{
+    ぁ‥ぁぁ…、ありがてぇ！ありがてぇ！}
+
+<<[UO] http://www5a.biglobe.ne.jp/~parari/uo/quest/lorekeeper-broolol-the-keeper-of-tradition.html{Lorekeeper Broolol The Keeper of Tradition}>>
+
+というクエストに挑戦したっちゃ（な、長い名前だ）。
+
+Minotaur Artifact (ミノタウロスの工芸品か？）をとってくるべく、
+ラビリンスダンジョンに潜入したが、物陰からいきなり殺られて、
+
+>> 一瞬で幽霊に <<
+
+誰に殺られたのかも分かんねーーー。
+
+生き帰って、もう一度挑戦したが、荷物すら回収できぬ
+((fn 死ぬと保険をかけていない持ち物は全てその場に落としてしまう))。
+
+むむーん、レベルが低すぎるのか…。
+やっぱり素の戦士じゃ、きついのかのぉ。
+
+<<.vimrc さらしが流行っているそうですが>>
+
+vim 使いなのに、~/.vimrc がない…。せいぜい、.bashrc の
+
+8<
+    export EXINIT='sw=4 ts=8 ai nobk'
+>8
+
+だけという…すみません（何故に謝る）
+
+パーソナルコンピュータであれば、自分用環境を用意するのは当然なんだけど、
+vi って共有のサーバ機で使うもんだから、カスタマイズ無しで、
+デフォルト状態で使うのが普通というイメージがどうしても離れない…
+
+あぁ、永遠のオールドタイプ

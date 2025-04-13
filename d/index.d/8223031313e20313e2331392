@@ -1,0 +1,123 @@
+<<NYAOS 3.1.5_0 を公開しました>>
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS.ORG - NYAOS 3000}
+
+変更点
+
+* 変数の置換構文 %VAR/FROM/TO% , ${VAR/FROM/TO} サポート
+
+環境変数 VAR に含まれる文字列 FROM を全て TO
+へ変換した値に置換するという機能です。
+${VAR/FROM/TO}の方はbash などでサポートされている構文ですね。
+
+6<
+ImageMagick で、日記に使う写真をコンバートしている時、
+270度回転する写真は、頭に _ を付けてるから、これを m に変えた名前に変えたいなー
+>9
+
+と思って実装しました。具体的には
+
+8<
+foreach i _*.jpg
+foreach> convert -rotate 270 -resize "50%x50%" $i ${i/_/m}
+foreach> end
+>8
+
+なんて感じに使います。いじょー
+
+<<[wifky] 最近の新文法>>
+
+6<
+http://twitter.com/#!/temtan/status/31976960825499648{Twitter / @TEM:}((br))
+wifky の文法パーサを書いてるんだけど、ソースを見たらマニュアルに無い文法（```>>{title}```の後に```{text}```を記述できるっぽい）があるっぽくてほかにも無いか見るべきなのだが、perl のソースが読みづらくてやる気が
+>9
+
+>> ごめんなさい <<
+
+洗い出してみると、結構、記述されていない新文法が…
+
+!! 引用
+
+6<
+引用2
+(```6<～>9``` で囲まれる部分が引用とみなされます
+>9
+
+8<
+6<
+引用2
+(```6<～>9``` で囲まれる部分が引用とみなされます)
+>9
+>8
+
+!! 内部ページへのエイリアスリンク
+
+>>{CSS}{内部ページ} へのエイリアスリンク
+
+8<
+>>{CSS}{内部ページ} へのエイリアスリンク
+>8
+
+!! 訂正
+
+==取り消し=={訂正} (← ```<del>～</del><ins>～</ins>```を使用)
+
+8<
+==取り消し=={訂正}
+>8
+
+!! 大フォント
+
+''''大フォント''''
+
+8<
+''''大フォント''''
+>8
+
+!! ALT付きの画像リンク
+
+<<{gomamilk.jpg}{ごまみるく}
+
+8<
+<<{gomamilk.jpg}{ごまみるく}
+>8
+
+!! タグのついたページのみの一覧
+
+((ls +NYAOS -5))
+
+8<
+((ls +NYAOS -5))
+>8
+
+!! そのまま使える HTML タグ追加 (追記@2011.02.01)
+
+* br
+* cite
+* code
+* del
+* dfn
+* hr
+* ins
+* kbd
+* q
+* s
+* samp
+* span
+* var
+* center
+
+※ blockquote と center はブロック文法扱いなので、段落の先頭と末尾にある時のみ有効
+
+!! コメント(追記@2011.02.01)
+
+8<
+// … 行頭から始まるスラッシュ二つ
+>8
+
+以上、判明した分については、
+
+* http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%A1%FE%CA%B8%CB%A1%A1%DA%A3%B1%A1%DB{A single file wiki - wifky! - ◇文法【１】}
+* http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%A1%FE%CA%B8%CB%A1%A1%DA%A3%B2%A1%DB{A single file wiki - wifky! - ◇文法【２】}
+
+へ反映しました。``m(_ _)m``

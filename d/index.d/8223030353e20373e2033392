@@ -1,0 +1,140 @@
+<<((lb))oldtype((rb)) 番組の途中ですが、挑戦状には答えねばなるまい！>>
+
+<blockquote>
+複数のファイルを一行ずつ読み出して処理したい時に、
+どうしても変数なり配列に格納して
+ENDの中で処理しなければいけないあたりがawkの限界かなと思う今日此頃
+</blockquote>
+
+awk が最適な手段とはいえないかもしれないが、
+awk の限界ではないことを証明せねばなるまい！
+
+見ていてくれ、新出先生！
+（昔、Dr.H , Ｆ と共に、この先生に awk を習ったらしい：マジ）
+
+<pre>
+((lb))hayama@YUKIKAZE tmp((rb))$ cat awkpaste2.awk
+#!/usr/bin/gawk -f
+
+BEGIN{
+    for(;;){
+        succ = 0;
+        line = "";
+        for( i = 1 ; i in ARGV ; ++i ){
+            if( status((lb))i((rb)) != "NG" && getline < ARGV((lb))i((rb)) ){
+                line = line "\t" $0
+                succ++;
+            }else{
+                line = line "\t"
+                status((lb))i((rb)) = "NG";
+            }
+        }
+        if( succ <= 0 ){ break; }
+        print substr(line,2);
+    }
+}
+((lb))hayama@YUKIKAZE tmp((rb))$ ./awkpaste2.awk foo bar goo
+A       D       W
+B       C       X
+C       B       Y
+D       A       Z
+((lb))hayama@YUKIKAZE tmp((rb))$
+</pre>
+
+でも、ここまでやるんだったら、素直に Perl・Ruby・Python 
+とか使った方がいいと思いますけどね。
+
+<<((lb))oldtype((rb)) join と paste を勘違いしてたりして>>
+
+実は途中で気付いてはいたんだけれども、
+二つの引数しか取れないのは join なのに、
+paste と混同していたりなんかして。
+
+ということで、join の gawk 版を作ってみるが、
+ここで、
+http://www.linux.or.jp/JM/html/gnumaniak/man1/join.1.html{
+join の仕様}を再確認。
+
+<blockquote>
+FILE1 と FILE2 は実行前に join フィールドの
+昇順にソートしておかなければならない (数値順のソートはだめ)。
+</blockquote>
+
+>> 思った以上にヘタレ仕様です。<<
+
+これなら、別に連想配列とかで、メモリ喰うこともなく、
+gawk で実装可能ですヨ。
+
+<pre>
+((lb))hayama@YUKIKAZE tmp((rb))$ cat awkjoin.awk
+#!/usr/bin/gawk -f
+
+BEGIN{
+    for(;;){
+        if( ! (getline < ARGV((lb))1((rb)) ) ){
+            exit;
+        }
+        fail = 0 ; line = $0 ; keyword = $1
+        for( i=2 ; i in ARGV ; ++i ){
+            do{
+                if( length(nextline((lb))i((rb))) > 0 ){
+                    $0 = nextline((lb))i((rb));
+                    nextline((lb))i((rb)) = "";
+                }else if( ! (getline < ARGV((lb))i((rb))) ){
+                    exit 0;
+                }
+            }while( $1 < keyword );
+            if( $1 != keyword ){
+                nextline((lb)) i ((rb)) = $0;
+                fail++;
+                break;
+            }
+            $1 = ""
+            line = line $0
+        }
+        if( fail == 0 ){
+            print line;
+        }
+    }
+}
+((lb))hayama@YUKIKAZE tmp((rb))$ cat j1
+A0 j1-1行目
+A1 j1-2行目
+B0 j1-3行目
+B1 j1-4行目
+C0 j1-5行目
+C1 j1-6行目
+((lb))hayama@YUKIKAZE tmp((rb))$ cat j2
+A0 j2-1行目
+A1 j2-2行目
+A2 j2-3行目
+B1 j2-4行目
+C1 j2-5行目
+((lb))hayama@YUKIKAZE tmp((rb))$ cat j3
+A1 j1-1行目
+B1 j1-2行目
+((lb))hayama@YUKIKAZE tmp((rb))$ ./awkjoin.awk j1 j2
+A0 j1-1行目 j2-1行目
+A1 j1-2行目 j2-2行目
+B1 j1-4行目 j2-4行目
+C1 j1-6行目 j2-5行目
+((lb))hayama@YUKIKAZE tmp((rb))$ ./awkjoin.awk j1 j2 j3
+A1 j1-2行目 j2-2行目 j1-1行目
+B1 j1-4行目 j2-4行目 j1-2行目
+((lb))hayama@YUKIKAZE tmp((rb))$
+</pre>
+
+バグあらば、御指摘いただければ幸い。
+共通フィールドは一列目固定というところがヘタレでありますが、
+まぁ、それはプログラム中の「$1」と行の連結部分を
+少々変えていただければよろしい。
+
+BEGIN パターンしか無い時点で、
+もはや、これは awk ではないという節も無きにしもあらず。
+<code>$1 = "";</code>など、もはや、バッドノウハウ以外の何者でもなし。
+
+ところで、素の awk は、思わぬ機能がなかったりしてハマるので、
+決して使うにあらず。
+よい子は gawk (Linux) か nawk (Solaris) を使いましょう。
+
+

@@ -1,0 +1,37 @@
+<<#Python 2.7 の urllib.urlopen は with文に対応していない>>
+
+8<
+$ type foo2.py
+#!/usr/bin/env python
+
+import urllib
+
+with urllib.urlopen("http://nyaos.org/d/") as u:
+    for line in u:
+        print(line.decode("utf8").rstrip("\n").encode("mbcs"))
+$ python foo2.py
+Traceback (most recent call last):
+  File "foo2.py", line 5, in <module>
+    with urllib.urlopen("http://nyaos.org/d/") as u:
+AttributeError: addinfourl instance has no attribute '__exit__'
+$
+>8
+
+Python 3 は対応してるみたい。
+
+8<
+$ type foo.py
+#!/usr/bin/env python3
+
+import urllib.request
+
+with urllib.request.urlopen("http://nyaos.org/d/") as u:
+    for line in u:
+        print(line.decode("utf8").rstrip("\n"))
+$ python3 foo.py
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja"><head>
+<link rel="stylesheet" type="text/css" href="src/prettify.css"></link>
+<script type="text/javascript" src="src/prettify.js"></script>
+(以下略)
+>8

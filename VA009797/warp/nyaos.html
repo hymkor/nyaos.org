@@ -1,0 +1,206 @@
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+    <LINK REL="stylesheet" TYPE="text/css" HREF="../gray.css" />
+    <TITLE>The NYAOS --- The commandline revolution on OS/2 Warp</TITLE>
+</HEAD>
+<BODY bgcolor="black" text="white" link="silver" vlink="gray" alink="red" >
+
+<DIV ALIGN="RIGHT">
+<TABLE>
+<TR>
+  <TD><DIV CLASS="XOB">NYAOS</DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../../homepage/warp/eff.html">eff</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="ell.html">ELL &amp; etc</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="port.html">移植物</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../rexx/index.html">REXX</A></DIV></TD>
+</TR>
+</TABLE>
+</DIV>
+<H1 CLASS=GOLD STYLE="text-align:right">
+    <DIV STYLE="font-size:small">The free software</DIV>
+    <DIV>Nihongo Yet Another<BR />Os/2 Shell-I</DIV>
+</H1>
+<DIV CLASS=GOLD STYLE="text-align:right" ALIGN=RIGHT>
+- The commandline revolution on OS/2 Warp -</DIV>
+
+<DIV ALIGN=RIGHT>
+<TABLE>
+<TR>
+  <TD><DIV CLASS="BOX"><NOBR><A HREF="nyaosdoc.html">HTML版マニュアル</A></NOBR></DIV></TD>
+  <TD><DIV CLASS="BOX"><NOBR><A HREF="nyaos-faq.html">HTML版最新FAQ</A></NOBR></DIV></TD>
+  <TD><DIV CLASS="BOX"><NOBR><A HREF="history.html">変更履歴</A></NOBR></DIV></TD>
+  <TD><DIV CLASS="BOX"><NOBR><A HREF="nyaos-eng.html">English</A></NOBR></DIV></TD>
+</TR>
+</TABLE>
+</DIV>
+
+<P>
+    Nihongo Yet Another Os/2 Shell -- NYAOS は、
+    OS/2 のコマンドライン(CMD.EXE)を拡張するフリーソフトウェアです。
+    使用には CMD.EXE と <B STYLE="color:#FF00FF">0.9d FIX 03</B> 以降の<A
+    HREF="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+    >emxrt.zip</A>のDLLが必要です(v1.62までは FIX02 でも可)。
+    主な特徴として次のようなものがあります。
+</P>
+<UL>
+    <LI>カスタマイズ可能な編集機能(tcsh/Vz)</LI>
+    <LI>「#!」型スクリプト/SOSスクリプトの実行で、
+	インタプリタ名の入力を省略できる。</LI>
+    <LI>Java アプリケーション実行で、コマンド名「Java」の入力を省略できる。</LI>
+    <LI>コマンドラインからファイルをWP-Objectとして開く事ができる。</LI>
+    <LI>ファイル名 / コマンド名 / Javaアプリケーション名 補完機能。</LI>
+    <LI>拡張属性.LONGNAME/.COMMENTS も表示できる内蔵カラーls</LI>
+    <LI>履歴機能(Vz/bash/tcsh型)</LI>
+    <LI>別名機能(alias)。命令毎にワイルドカードの展開指定可能</LI>
+    <LI>拡張chdir と ディレクトリスタック</LI>
+    <LI>csh ライクな foreach。</LI>
+    <LI>「<TT>&amp;</TT>」「<TT>~</TT>」(チルダ)「|&amp;」
+	「`」(逆クォート)「'」(シングルクォート)を UNIX 的に解釈</LI>
+    <LI>拡張プロンプト</LI>
+    <LI>xterm , 外部からのtelnet , Mule の Shellモードでも使用できる。</LI>
+    <LI>「かんな」による日本語入力サポート(要 canna.dll)</LI>
+</UL>
+
+<H2>ダウンロード</H2>
+
+<P>バイナリ版の展開には LHA or ZIP を、
+    ソース版の展開には、tar と bzip2 or gzip を使用してください。
+</P>
+
+<PRE STYLE="margin-left:3em;text-indent:-2em">
+例) lha x nyaos160.lzh
+unzip nyaos-20000104.zip
+gzip -dc nyaos160.tgz  | tar xvf -
+bzip2 -dc nyaos-1.49.tar.bz2 | tar xvf -
+</PRE>
+
+<P> http 転送につき、左クリックではブラウザが書庫を文字化けテキストとして、
+    画面に表示してしまう可能性があります。Shift + 左クリックか、
+    「名前を付けて保存」でダウンロードしてください。
+</P>
+
+<TABLE BORDER=0 ALIGN=CENTER>
+<TR><TD BGCOLOR="white">
+<TABLE CELLSPACING=1 BORDER=0 >
+<TR BGCOLOR="black">
+  <TD ROWSPAN=3>1.65</TD>
+  <TD>バイナリ(通常版)</TD>
+  <TD><A HREF="nyaos165.zip"><TT>185602 May 27 14:04 nyaos165.zip</TT></A></TD>
+</TR>
+<TR BGCOLOR="black">
+  <TD>ソース</TD>
+  <TD><A HREF="nyaos-1.65.tar.bz2"><TT>96221 May 27 14:04 nyaos-1.65.tar.bz2</TT></A></TD>
+</TR>
+<TR BGCOLOR="black">
+  <TD>バイナリ(S2版)</TD>
+  <TD><A HREF="s2nya165.zip"><TT>165074 May 27 14:06 s2nya165.zip</TT></A></TD>
+</TR>
+<!-- emx runtime routines -->
+<TR BGCOLOR="black">
+  <TD COLSPAN=2 ALIGN=CENTER>emx runtime 0.9d FIX03</TD>
+  <TD><A HREF="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+  >emxrt.zip at Hobbes</A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+<P>
+    <A NAME="whats2">「S2版」</A>とは静的リンクしたもので、
+    emx の DLL が無くても利用できるバージョンです。
+    ただし、かんなや、補完キャッシュ共有など、
+    一部機能の制限があります。ドキュメントなどは
+    S2版パッケージに含まれていませんので、
+    通常版バイナリパッケージのものを利用してください。
+</P>
+
+<H2>バグ・不具合</H2>
+
+<P>基本的にここに記述のあるものは、
+    作者環境で再現できない、NYAOSの原理的に対応できない、
+    などの理由で対応していないものです。
+    今後も対応する予定はありません。
+</P>
+<UL>
+    <LI>スナップショット版が XFree86 上で複数起動できない場合がある。</LI>
+    <LI>1.6x のインストーラが正常に動作しない。</LI>
+    <LI>ktermやrxvtの上のnyaosから<A
+	HREF="http://hp.vector.co.jp/authors/VA000199/os2/w3m/history.html"
+	>w3m</A>を起動すると、終了後にnyaosが妙にCPU負荷を食うようになる。</LI>
+    <LI>アイコンクリックで起動すると、「コマンド &amp;」の自動クローズが
+	働かない場合がある(emacsclient等)。</LI>
+    <LI>ヒストリ中にリダイレクト先ファイル名やパイプの後の命令が登録されない。</LI>
+    <LI>「<TT>ls | more</TT>」 を Ctrl-C で中止できない
+	(Ctrl-Break なら中止できるが、普段だと NYAOS 自身を殺してしまう)。</LI>
+    <LI> (画面幅-1)桁目に全角文字を来ると、全体の桁位置がおかしくなってしまう。</LI>
+    <LI>MenuBar から起動できない。</LI>
+    <LI>XFolder から複数起動できない。</LI>
+    <LI>インクリメンタルサーチで、カーソル位置が狂ってしまう。</LI>
+    <LI>open が効かない時がある。</LI>
+    <LI>ls を Ctrl-C で中断すると core dump することがある。</LI>
+    <LI>「type 存在しないファイル名」で、
+	「SYS0002: 指定されたファイルが見つかりません。」と表示されるべきところが、
+	「SYS0005: アクセスが拒否されました。」となってしまう。</LI>
+</UL>
+
+<H2>謝辞</H2>
+
+<P>Nihongo Yet Another Os/2 Shell を開発するにあたり</P>
+
+<DIV STYLE="margin-left:2em;margin-right:2em">
+    金島 岳さん、 <WBR>
+    宇野 篤也さん、 <WBR>
+    山田 秀雄さん、 <WBR>
+    奥西 藤和さん、 <WBR>
+    吉田 孝一さん、 <WBR>
+    松尾 浩さん、 <WBR>
+    我那覇 誠さん、 <WBR>
+    赤木 有一さん、 <WBR>
+    近藤 弘康さん、 <WBR>
+    羽生 匡之さん、 <WBR>
+    清水 洋さん、 <WBR>
+    相澤 邦彦さん、 <WBR>
+    さとうひろもとさん、 <WBR>
+    品野 竜太さん、 <WBR>
+    大島 幸一さん、 <WBR>
+    上野 博さん、 <WBR>
+    我澤 賢之さん、 <WBR>
+    松村 興さん、 <WBR>
+    山野＠ＮＥＬさん、 <WBR>
+    大久保 均さん <WBR>
+    崎濱 たつひでさん、 <WBR>
+    橋本 出さん、 <WBR>
+    Altair☆さん、 <WBR>
+    畠山 明さん、 <WBR>
+    Kai Eversさん、 <WBR>
+    吉田かつひささん、 <WBR>
+    織華さん、 <WBR>
+    葛原 賢二さん、 <WBR>
+    今井 優さん、 <WBR>
+    Chris Hellwigさん、 <WBR>
+    小林 敬太郎さん、 <WBR>
+    FRIESさん、 <WBR>
+    中山 靖さん、 <WBR>
+    Jeff R.さん、 <WBR>
+    中川 貴之さん、 <WBR>
+    たが まさひろさん、 <WBR>
+    大黒 義裕さん、 <WBR>
+    Sukisuki-OS/2 ＭＬのみなさん
+</DIV>
+
+<P> に御協力いただきました。この場を借りてお礼申し上げます。 </P>
+
+<TABLE WIDTH=100%><TR><TD>
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT>
+<A HREF="../index.html">戻る</A>
+</TD>
+<TD ALIGN=RIGHT><IMG SRC="../img/nyaosbnr.png" WIDTH=88 HEIGHT=31 ALT="NYAOS Banner"
+><IMG SRC="../img/iyabar.png" WIDTH=88 HEIGHT=31 ALT="HAYAMA Banner" />
+<BR>
+本ページへのリンクは御自由に
+</TD>
+</TABLE>
+</FONT>
+</BODY>
+</HTML>
+<!-- vim:set sw=2: -->

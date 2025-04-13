@@ -1,0 +1,49 @@
+* 洗濯物をとりこんでる時にすっころんだ。
+  転んだのが、親ぢゃなくて自分でよかった。
+
+* わし内の rubyco さんのイメージは、キリコです。
+
+* あ！ wifky.sourceforge.jp の中身バックアップ忘れた…。
+  メンテ大丈夫だろうと信じきってしまっていたが、
+  万が一ということも考えられるよな。うっかりしてた。
+** …とか思ったら、もう復活してる。早いですね。
+
+<<[Code Golf] Dancing Queens>>
+
+3番目、訳できた！
+
+* >>{[訳] Code Golf | Dancing Queens}
+
+ちなみに現在までの成績：
+
+||| Game | Rank  | User  | Size  | Language  | Score
+|| Reverse | 40th  | zetamatta  | 135  | Python  | 3,777 (v2)
+|| Seven-Segment Displays | 33rd  | zetamatta  | 222  | Python  | 4,819 (v3)
+|| Dancing Queens | 27th  | zetamatta  | 223  | Python  | 3,183 (v1)
+
+今一、ふるいませんね〜。
+トップのコードは 100バイト以下になっていることが多い。
+姑息なテクを散々駆使した割に、この差が縮まらないことを考えると、
+「アルゴリズムの差が性能の差」ということなんだろうなぁ。
+
+しかし、この分野、かなり Ruby勢が健闘している。強いな。
+
+<<[python] 演算子を明示的にメソッド呼び出し>>
+
+今日もスネークは rubyco さんをつけねらう。
+
+* http://d.hatena.ne.jp/rubyco/20061216/method{rubyco（るびこ）の日記 - 演算子を明示的にメソッド呼び出し}
+
+8<
+>>> print 2.__add__(3)
+  File "<stdin>", line 1
+    print 2.__add__(3)
+                  ^
+SyntaxError: invalid syntax
+>>> print 2 .__add__(3)
+5
+>8
+
+* 演算子は特殊なメソッド名を持っている。演算子自体はメソッド名として使えない。
+* 整数の場合、直後にドットを置くと、小数点とみなされてしまう。
+  ((br))⇒ 間に1個空白を置けばヨシ

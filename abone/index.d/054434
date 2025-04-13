@@ -1,0 +1,7 @@
+Primary Domain Controller (⇔ [[BDC]])
+
+「NTドメイン」での話。
+[[ActiveDirectory]] では、ドメインコントローラーの主従関係はなくなって、
+単なる「DC」となった。
+
+http://www.atmarkit.co.jp/fwin2k/operation/adprimer002/adprimer002_03.html{Active Directoryによるディレクトリ管理 － ＠IT}

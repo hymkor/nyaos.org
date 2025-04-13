@@ -1,0 +1,105 @@
+<HTML>
+<HEAD>
+  <TITLE>VIO を256倍使うためのページ(4)</TITLE>
+  <LINK REL=STYLESHEET TYPE="text/css" HREF="../iyahaya.css" />
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+  <STYLE TYPE="text/css">
+    <!-- H3{color:orange} -->
+  </STYLE>
+</HEAD>
+<BODY BGCOLOR=BLACK TEXT=WHITE LINK="silver" VLINK="gray" ALINK="red" >
+<H1 ALIGN=RIGHT STYLE="color:#EEEEAA">VIO を256倍使うためのページ</H1>
+<DIV ALIGN=RIGHT>
+<NOBR>▼<A HREF="vio3.html">prev</A></NOBR>
+<NOBR>▼<A HREF="vio.html">index</A></NOBR>
+<NOBR>▼next</NOBR>
+</DIV>
+<HR>
+<H2 CLASS=AQUA>[4] .NYAOS ソリューション</H2>
+
+<P>さて、では前回説明しなかった CONFIG.SYS によらない<!--
+-->環境変数の設定方法だが…。なんてことない<!--
+-->「.nyaos」(FATの場合は「nyaos.rc」)という<!--
+-->ファイルに記述しておけばいいのだ。<!--
+-->これは拙作の NYAOS(S2NYAOS) が起動時に読み込むファイルで、<!--
+-->記述内容としては、普通の バッチファイル と同じでよい。<!--
+-->ここに<NOBR>「SET TERMCAP=F:/emx/etc/termcap.dat」</NOBR>などという行を<!--
+-->記述しておけば、以後、NYAOS を起動する<!--
+-->度にこのファイルを読んで、内容を再設定してくれるのである。<!--
+-->つまり、NYAOS 上から起動するソフトに限っていえば、<!--
+-->そのソフトの為の環境変数を変更する度に OS/2 を再起動するなどと<!--
+-->いう愚かなことは全くする必要がないわけです、はい。
+</P>
+<P ALIGN=CENTER CLASS=SAY2M>
+	で、その「.nyaos」どこに置けばいいの？
+</P>
+<P>それは前回説明したホームディレクトリに…</P>
+<P ALIGN=CENTER CLASS=SAY2M>
+	ホームディレクトリはどうやって設定するの？
+</P>
+<P>環境変数HOMEに設定すればいいんだよ。</P>
+<P ALIGN=CENTER CLASS=SAY2M>
+	環境変数 HOME はどこで設定するの？
+</P>
+<P>それは「.nyaos」に…</P>
+<P ALIGN=CENTER CLASS=SAY1>
+	ボカッ
+</P>
+<P>おぉ、無限ループである。こりゃいかん。というわけで、<!--
+-->HOME に限っては例外扱いしなくちゃいかんわけです。<!--
+-->どう例外扱いするかというと…、以下のどっちかの方法で定義<!--
+-->してくださいまし。
+</P>
+<OL>
+  <LI>CONFIG.SYS に「SET HOME=《ホームディレクトリ名》」の行を追加する。
+  <LI>NYAOS(S2NYAOS)のパラメータに「-h 《ホームディレクトリ名》」を<!--
+	-->追加する。
+</OL>
+<P>前者は OS/2 の再起動が必要であるのに対し、後者は NYAOS(S2NYAOS)の<!--
+-->(アイコンの)プロパティーのパラメータ欄を変更すれば、次回の<!--
+-->NYAOS の起動から、ただちに適用される。<!--
+-->好きな方法を選んでくれ！
+</P>
+<P>なお、以上の方法は、VIO系で特に NYAOS から起動するプログラムにのみ<!--
+-->有効である。Workplace Shell からいきなりアイコンをたたいて起動つー、<!--
+-->プログラムは out of 眼中なのだな。<!--
+-->そういうプログラムをどぎゃんしたらいいのだろう。<!--
+-->実は(VIOプログラムに限っては)逃げ道も無きにしもあらずなのだが、<!--
+-->それはいずれ「.NYAOS の歩き方」を執筆してから説明しよう。
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+	と、もったいつけてみる。
+</P>
+<P>では、実際に .nyaos を書いてみよう。<!--
+-->とりあえず、次のようなディレクトリ構成を前提にする。<!--
+-->この通りでないといけないというわけではないので、<!--
+-->適当にご自分のディレクトリ構造に置き換えて欲しい。
+</P>
+<UL>
+  <LI>f:/usr … ホームディレクトリ
+  <UL>
+    <LI>f:/usr/bin … ユーザの実行ファイルの置き場
+    <LI>f:/usr/dll … ユーザの DLL ファイルの置き場
+  </UL>
+  <LI>f:/emx … emx のディレクトリ
+</UL>
+<P>これを設定する .nyaos は次の通りだ。</P>
+<PRE>
+	ECHO ~/.nyaos reading...
+	SET PATH=f:\usr\bin;f:\emx\bin;%PATH%
+	SET TERMCAP=f:/emx/etc/termcap.dat
+	SET TERM=ansi-color-2
+	ECHO done
+</PRE>
+<P>何かシンプルだなぁ。そんな一生懸命説明するほどのもの<!--
+-->ぢゃないではないか。なお、LIBPATH は CONFIG.SYS , HOME
+は NYAOS のアイコンのプロパティーの方で設定するのを忘れないように。
+</P>
+
+
+<HR>
+<NOBR>▼<A HREF="vio3.html">prev</A></NOBR>
+<NOBR>▼<A HREF="vio.html">index</A></NOBR>
+<NOBR>▼next</NOBR>
+</BODY>
+</HTML>

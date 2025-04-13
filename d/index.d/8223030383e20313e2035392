@@ -1,0 +1,41 @@
+<<エンゼルバンク>>
+
+http://www.amazon.co.jp/gp/redirect.html?ASIN=4063726614&tag=manhimazinein-22&lcode=xm2&cID=2025&ccmID=165953&location=/o/ASIN/4063726614%3FSubscriptionId=1YKWYFPHYWMTQ1WKYBG2{エンゼルバンク 1 (1) (モーニングKC)}キャリア11より：
+
+8<
+重要なことは我社の伝統と堅実を
+きちんと踏まえたうえで新しい想像をすること
+
+伝統から革新へ……ということです。
+
+初めは厳しいだろうけどそれを若手社員に経験させたい
+
+若い社員の兄貴分になる中堅社員の数がわが社は少ない。
+
+若手も我らの世代に怒られながらやるより
+中堅と一緒に悩むほうが素直に頑張れる
+>8
+
+―― そういえば、うちはコードを書ける中堅が少ないなぁ。その上、伝統も堅実さもない。
+
+<<こゐふきが書いてくれません>>
+
+cowifky.cgi を wifky 1.3 向けに改造したのだけれども、
+内容が空の投稿になっている。
+
+今回改造したのは、wifky をコールする部分であって、
+ブログペットの受け口ではない。
+が、ブログペットからの通信データを見ると、
+普通に内容が入ってない。。。
+
+8<
+$ less cowifky.log
+<?xml version="1.0" ?><methodCall><methodName>metaWeblog.getPost</methodName><params><param><value><string>100</string></value></param><param><value><string>(ゆーざ名)</string></value></param><param><value><string>(ぱすわーど)</string></value></param></params></methodCall>
+>8
+
+いつの間にか仕様が変わったのであろうか。。。
+
+:追記
+:: どうも、XMLRPC のメソッドを複数使用するようになった模様。
+get してみて記事が取れなかったら、post しないような動きをするようだ。
+むむむ。真面目に XMLRPC へ対応するしか。

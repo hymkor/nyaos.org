@@ -1,0 +1,17 @@
+!!! TIS の BPM
+
+* http://tisbpm.tis.co.jp
+* ユーザ名: TIS198064
+* パスワード:gehogeho
+
+!!! 用語
+
+Business Process Management
+
+* http://www.atmarkit.co.jp/im/cap/special/five_bpms/00.html{5分で絶対に分かるBPMS － ＠IT情報マネジメント}
+* Oracle なら Oracle [[EBS]] (Enterprise Business Suite) に含まれる BPMS
+* JBoss では、JBoss Enterprise SOA Platform に含まれる「JBOSS jBPM」
+** ただし、本当にワークフローの必要最小限のことしかやってくれないので、   いろいろなものを自前で追加しなくてはいけない。
+*** 西社会の「'''e-Process Manager'''」(4CPUで 500～700万くらい)
+*** TC 山本さん作の「'''部内ＷＦ'''」 (山本さんの御好意で)
+

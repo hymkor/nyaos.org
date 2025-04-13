@@ -1,0 +1,65 @@
+<<ファイル表示の実装に見る言語文法の特徴>>
+
+ちょっと気分転換に
+
+<<<Perl>>>
+
+8<
+open(my $fp,'<','foo.pl') or die;
+while( <$fp> ){
+    print $_;
+}
+close $fp;
+>8
+
+* 明示的な open/close が必要
+
+<<<Ruby>>>
+
+8<
+IO.foreach('foo.rb') do |line|
+    print line
+end
+>8
+
+* 自動オープン/クローズ
+* イタレータの文法が特徴的
+
+<<<AWK (ただし、gawk/nawk)>>>
+
+8<
+BEGIN{
+    while( getline < "foo.awk" ){
+        print $0
+    }
+    close("foo.awk")
+}
+>8
+
+* open と read が一体化しているという変わった文法 ''(個人的には嫌いではない)''
+* close は省略できるが、スクリプト終了まで開きっぱなしになる。
+
+<<<Python>>>
+
+8<
+with open("foo.py") as fp:
+    for line in fp:
+        print line,
+>8
+
+* with の文法が若干ださく感じる
+* print 文をそのまま使ってしまうと、改行コードを二重に付けてしまう
+** そのため、カンマで改行を抑制
+** 本来は sys.stdout.write(line) を使うべきなのでしょうな
+
+
+<<<Lua>>>
+
+8<
+for line in io.lines("foo.lua") do
+    print(line)
+end
+>8
+
+* 自動オープン/クローズ
+* 最もシンプルかつオーソドックス

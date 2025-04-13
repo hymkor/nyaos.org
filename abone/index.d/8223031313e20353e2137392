@@ -1,0 +1,10 @@
+* 物理NICの監視のために、リソースエージェント pingd を使うのは正しいか？
+
+* bond0,bond1,bond2 とあり、DRBD で bond2 を使用、外部へのアクセスに bond0 を使用している時
+    Heartbeat 用の NIC は、bond0 & bond1 を使うべきか、bond1 & bond2 を使うべきか？
+    (bond2 は Gigabit Ether を使用している)
+
+* postfix のリソースエージェントは postfix 2.5 でテストされているとコメント覧にあるが、
+    CentOS 5.5 の postfix は 2.3 とあり、そのままでは誤動作する場合がある。
+    (具体的には /usr/sbin/postfix status というコマンドが 2.3 にはない)
+    どのように回避しているのか？ LSB の方を使用しているのか？

@@ -1,0 +1,14 @@
+http://www.usupi.org/sysad/150.html{alternatives でいろんなものを共存させる - いますぐ実践! Linuxシステム管理 / Vol.150}
+
+<<<
+# update-alternatives --config mta
+
+2 プログラムがあり 'mta' を提供します。
+
+  選択       コマンド
+-----------------------------------------------
+*+ 1           /usr/sbin/sendmail.sendmail
+   2           /usr/sbin/sendmail.postfix
+
+Enter を押して現在の選択 [+] を保持するか、選択番号を入力します:2
+>>>

@@ -1,0 +1,9 @@
+from elementsoap.ElementSOAP import SoapService , SoapRequest , SoapElement
+
+def doEcho():
+    server = SoapService("http://localhost:65082/services/EchoUMO")
+    request = SoapRequest("echo")
+    SoapElement( request , "text" , "string" , "soapclient!!!" )
+    return server.call("",request).findtext("text")
+
+print doEcho()

@@ -1,0 +1,49 @@
+((amazon B0001GF1NE)) に関するメモ
+
+!!! リンク
+
+* 本家
+** http://www.japan.ea.com/alice/main.html{アリス・イン・ナイトメア}
+** http://www.japan.ea.com/alice/downloads.html{体験版ダウンロード(80MB)}
+* 動画
+** http://www.nicovideo.jp/watch/sm149934{アリス イン ナイトメア part.1‐ニコニコ動画(SP1)}
+** http://dic.nicovideo.jp/a/%E3%82%A2%E3%83%AA%E3%82%B9%E3%82%A4%E3%83%B3%E3%83%8A%E3%82%A4%E3%83%88%E3%83%A1%E3%82%A2{ニコニコ大百科 アリスインナイトメアとは}
+** http://www.nicovideo.jp/watch/sm1653745{アリスインナイトメア　ジャバウォック戦　難易度　悪夢‐ニコニコ動画(秋)} 
+* 2chスレ
+** http://unkar.jp/read/game14.2ch.net/gamef/1197675222{復活！【アリス イン ナイトメア】第10章}
+** http://schiphol.2ch.net/test/read.cgi/gamef/1218630747/l50{復活！【アリス イン ナイトメア】第11章}
+** http://yasai.2ch.net/game/kako/980/980777779.html{アリス・イン・ナイトメア Part2}
+** http://yasai.2ch.net/game/kako/980/980624097.html{ネタバレあり!! 攻略アリスインナイトメア}
+* 紹介記事
+** http://marianne.nobody.jp/alionp.html{アリスインナイトメア同盟}
+** http://www.terra.dti.ne.jp/~god/alice/index.html{らとれっじ病院付属ケダルイ学校}
+** http://www.4gamer.net/archive/heated/alice_heat.html{迫り来るアリスの恐怖}
+   ※((# ref fear_of_alice))
+** http://www.watch.impress.co.jp/game/docs/20001226/game.htm{
+   開発者 特別インタビュー}
+* 解説
+** http://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%AA%E3%82%B9_%E3%82%A4%E3%83%B3_%E3%83%8A%E3%82%A4%E3%83%88%E3%83%A1%E3%82%A2{アリス イン ナイトメア - Wikipedia}
+* 資料
+** http://www.ceres.dti.ne.jp/~hassy01/cheshire_cat.html{アリスインナイトメア チシャ猫台詞集}
+* 原作
+** http://www.genpaku.org/alice01/alice01j.html{Alice's Adventures in Wonderland: Japanese}}(山形浩生 訳「不思議の国のアリス」)
+
+!!! メモ
+
+!! ジョイスティック対応
+
++ トップメニューの"Setting"内にある"CONSOLE"(一番下)にチェックを入れる。
++ ゲームプレイ画面で「~」(チルダキー) or 半角/全角（日本語キーボードの場合は半角/全角キー） or F12 を押してコンソールウインドウを表示させ，``in_joystick 1``とコマンドを入力しEnterキーを押す。
++ 次に ``in_restart`` と入力してEnterキーを押す。
++ "Controls"メニューでジョイスティックボタンに各動作等を割り当てる。
+
+以上、※<<{fear_of_alice}より
+
+!! 視点の変更
+
+* 1人称視点にする
+** ``cg_3rd_person 0``
+* 元に戻す
+** ``cg_3rd_person 1``
+
+以上、※<<{fear_of_alice}より

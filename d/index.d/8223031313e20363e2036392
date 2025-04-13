@@ -1,0 +1,38 @@
+!!! vmware 上の CentOS 5.5 をリブートしたら、eth0 を認識しなくなった。
+
+``Error, some other host already uses address`` とか言い出したのに、
+該当アドレスに ping をかけても応答無し。
+
+「http://wiliki.zukeran.org/index.cgi?VMware#H-2h5ob7ltmygai{
+Error, some other host already uses address xxx.xxx.xxx.xxx と言われて eth0 が up できない}」によると vmware の設定次第で、そういうことが起きることがあるらしいが、こっちは vmware は vmware でも ESXi サーバだから、ちと違う。
+
+結局「http://d.hatena.ne.jp/iww/20101104/p1{eth0がアップできない - 揮発性のメモ}」のように、arp で重複を検出しても無視するようにした。同ページでは ifup を修正していたが、CentOS 5.5 では ifup-eth というスクリプトだった。
+
+8<
+[root@hayama-otrs1 network-scripts]# diff -c ~/ifup-eth /etc/sysconfig/network-scripts/ifup-eth
+*** /root/ifup-eth      2009-07-04 18:10:48.000000000 +0900
+--- /etc/sysconfig/network-scripts/ifup-eth     2011-06-03 15:49:09.000000000 +0900
+***************
+*** 263,272 ****
+      fi
+
+      if ! LC_ALL=C ip addr ls ${REALDEVICE} | LC_ALL=C grep -q "${IPADDR}/${PREFIX}" ; then
+!        if ! arping -q -c 2 -w 3 -D -I ${REALDEVICE} ${IPADDR} ; then
+!           echo $"Error, some other host already uses address ${IPADDR}."
+!           exit 1
+!        fi
+         if ! ip addr add ${IPADDR}/${PREFIX} \
+            brd ${BROADCAST:-+} dev ${REALDEVICE} ${SCOPE} label ${DEVICE}; then
+            echo $"Error adding address ${IPADDR} for ${DEVICE}."
+--- 263,272 ----
+      fi
+
+      if ! LC_ALL=C ip addr ls ${REALDEVICE} | LC_ALL=C grep -q "${IPADDR}/${PREFIX}" ; then
+! #      if ! arping -q -c 2 -w 3 -D -I ${REALDEVICE} ${IPADDR} ; then
+! #         echo $"Error, some other host already uses address ${IPADDR}."
+! #         exit 1
+! #      fi
+         if ! ip addr add ${IPADDR}/${PREFIX} \
+            brd ${BROADCAST:-+} dev ${REALDEVICE} ${SCOPE} label ${DEVICE}; then
+            echo $"Error adding address ${IPADDR} for ${DEVICE}."
+>8

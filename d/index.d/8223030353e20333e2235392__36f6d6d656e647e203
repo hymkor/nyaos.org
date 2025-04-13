@@ -1,0 +1,1 @@
+2005/03/28 12:29:35	sava	BEGIN(END)LIBPATH は API 経由で取得／設定しないといけなかったような気がします。 （たしか Dos[Query|Set]ExtLIBPATH という API があった）  

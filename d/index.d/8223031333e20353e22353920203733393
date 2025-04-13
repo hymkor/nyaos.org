@@ -1,0 +1,36 @@
+!!! ((title Pythonはデータの隠蔽が出来ない？))
+
+http://sitekamimura.blogspot.jp/2012/11/ruby-initialize.html{
+Ruby - 新しいクラスの作成と既存クラスの変更(インスタンス変数とinitialize) | Kamimura's blog}
+
+6<
+Pythonはデータの隠蔽が出来ない。上記のrubyやjavascriptのように、同じ名前のデータ属性とメソッドを定義する と上書きされる。データ属性の先頭に下線「_」を付け加えて読みやすくするようにしたり、メソッド名は動詞にするなどして回避はできるけど、外からアクセス、変更可能 である事には変わりはない。(pythonはデータの隠蔽、カプセル化はできない。)
+>9
+
+あれ、そうだっけ？ 2個の下線(```__```)を頭につけたら、いけたような
+
+8<
+#!/usr/bin/python2
+
+class Klass:
+    def __init__(self,value):
+        self.member1   = value
+        self._member2  = value
+        self.__member3 = value
+
+instance = Klass("ahaha")
+print "member1=",instance.member1
+print "member2=",instance._member2
+print "member3=",instance.__member3
+>8
+
+8<
+$ py foo.py
+member1= ahaha
+member2= ahaha
+member3=
+Traceback (most recent call last):
+  File "foo.py", line 12, in <module>
+    print "member3=",instance.__member3
+AttributeError: Klass instance has no attribute '__member3'
+>8

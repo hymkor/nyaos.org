@@ -1,0 +1,65 @@
+RunScript2.java
+
+8<
+import org.mozilla.javascript.*;
+
+public class RunScript2 {
+    public static void main(String args[])
+    {
+        // Creates and enters a Context. The Context stores information
+        // about the execution environment of a script.
+        Context cx = Context.enter();
+        try {
+            cx.setClassShutter(new MyClassShutter() );
+
+            // Initialize the standard objects (Object, Function, etc.)
+            // This must be done before scripts can be executed. Returns
+            // a scope object that we use in later calls.
+            Scriptable scope = cx.initStandardObjects();
+
+            // Collect the arguments into a single string.
+            StringBuffer s=new StringBuffer();
+            for (int i=0; i < args.length; i++) {
+                s.append( args[i] );
+                s.append( " ");
+            }
+
+            // Now evaluate the string we've colected.
+            Object result = cx.evaluateString(scope, s.toString(), "<cmd>", 1, null);
+
+            // Convert the result to a string and print it.
+            System.err.println(Context.toString(result));
+
+        } finally {
+            // Exit from the context.
+            Context.exit();
+        }
+    }
+}
+>8
+
+MyClassShutter.java
+
+8<
+import javax.script.*;
+import org.mozilla.javascript.*;
+
+public class MyClassShutter implements ClassShutter {
+    public boolean visibleToScripts(String fullclassName){
+        if( fullclassName.startsWith("java.") ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
+>8
+
+
+!!! 解説
+
+!! クラス Context
+
+!! クラス ClassShutter (MyClassShutter)
+
+!! クラス Scriptable

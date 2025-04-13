@@ -1,0 +1,66 @@
+!!! [Perl] リファレンス返しのパフォーマンス
+
+呼び出し元へ値を返す場合、戻り値で返す他、
+参照渡しで引数で渡された変数へ関数側が値を返す方法がある。
+
+ここで同じことをするのに、その
+「リファレンスの書き方」で、どれだけ速度差があるか計測してみた。
+
+8<
+use strict;
+use warnings;
+use Benchmark;
+
+my $cnt1=0;
+my $cnt2=0;
+my $cnt3=0;
+timethese(1000000,
+    {
+        'Perl-4 Reference' => sub{ bar1($cnt1);} ,
+        'Perl-5 Reference[1]' => sub{ bar2(\$cnt2);} ,
+        'Perl-5 Reference[2]' => sub{ bar3(\$cnt3);} ,
+    }
+);
+
+print "cnt1=$cnt1\n";
+print "cnt2=$cnt2\n";
+print "cnt3=$cnt3\n";
+
+sub bar1{
+    $_[0]++;
+}
+
+sub bar2{
+    ${$_[0]}++;
+}
+
+sub bar3{
+    my $p=shift;
+    ${$p}++;
+}
+>8
+
+*  bar3 は標準的な参照渡し。\ 演算子で参照を渡している。
+*  bar2 は shift を使わず、直接 ${$_[0]} を使って、速度を稼ごうとている。
+*  bar1 は Perl 4 の参照渡し。@_ を $_[…] のままで変更すると、
+  呼び出し元の内容にも変更が反映される。
+
+結果発表：
+
+8<
+Benchmark: timing 1000000 iterations of Perl-4 Reference, Perl-5 Reference[1], Perl-5 Reference[2]...
+Perl-4 Reference:  1 wallclock secs ( 0.42 usr +  0.00 sys =  0.42 CPU) @ 2375296.91/s (n=1000000)
+Perl-5 Reference[1]:  1 wallclock secs ( 0.75 usr +  0.00 sys =  0.75 CPU) @ 1331557.92/s (n=1000000)
+Perl-5 Reference[2]:  1 wallclock secs ( 1.34 usr +  0.00 sys =  1.34 CPU) @ 745712.16/s (n=1000000)
+cnt1=1000000
+cnt2=1000000
+cnt3=1000000
+>8
+
+一番最後に cntN の値を表示させることで、
+呼び出し側の変数が修正されていることを確認している。
+
+予想どおり、最も演算子の少ない Perl-4 Reference が速いことが分かった。
+
+残念ながら、Perl-4 Reference は wifky では全く使っていない。もったいない話だ。
+(互換性の都合、今から変更するのは難しい)

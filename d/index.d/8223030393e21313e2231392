@@ -1,0 +1,44 @@
+<<[NYAOS] lua_e "nyaos=nil" とすると、落ちるよ！>>
+
+ので、http://nyaos.org/index.cgi?p=NYAOS+3000{直した}。
+
+NYAOS 本体で、テーブル nyaos を参照しようとして、
+テーブルじゃなかったら、スルーするようにした(だけ)。
+
+他、やったのは以下のとおり。
+
+* lpprojさんからもらった TeraTerm で動くパッチを取り込む。
+  (でも、リッチな一行編集はちょっと無理っぽい)
+* 「澤」という漢字を入力できない件対応
+* xscript が動かなくなっている件対応
+
+---
+
+ふと、JSON で alias を保存とか出来たらいいなぁとか思って、
+http://json.luaforge.net/{Lua の JSONライブラリ}を見た。
+
+8<
+    json = require("json")
+>8
+
+あー、require は、こういう使い方でも出来るのか
+(普通は「require "json"」したら、勝手に json という名前が使われる)。
+これは名前空間を汚染しなくていいなぁ。
+
+http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html#pdf-require{
+Luaマニュアルの require}を見たところ、C言語で作ったライブラリなら簡単に
+対応できるようだ。
+
+8<
+int luaopen_oluacle(lua_State *lua)
+{
+    lua_newtable(lua);
+    lua_pushstring(lua,"new");
+    lua_pushcfunction(lua,olua_connect);
+    lua_settable(lua,-3);
+    return 1;
+}
+>8
+
+ローダー関数で値を返せばいいだけだった。
+(上の場合、Luaスタックに一つテーブルを残して、戻り値の個数「1」を return している)

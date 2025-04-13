@@ -1,0 +1,33 @@
+<<[NYAOS] NYAOS 3000 キーボードフック拡張>>
+
+NYAOS 3000 に、一行入力の際のキーボードフックを追加しました。
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000#p3.4{Keyboard-hook}
+
+要は一文字タイプするごとに、Lua の関数を呼び出せるようにしたってことです。
+フック関数で返された戻り値は、そのままキーボードから入力されたものと同等に扱われます。
+
+ただし、nil を返した時は何もしない、
+true は Enterキー(入力の終結)、false は Ctrl-C(入力の破棄)と同等に扱われます。
+数値は ASCII or SJIS コードとみなされます。
+
+サンプルは、コマンドラインが空の時に ESC キーを押すと、
+環境変数 EDITOR に定義されているエディターを起動するというものです。
+
+8<
+lua_e "
+    function nyaos.keyhook(t)
+        if t.key == nyaos.key.ESCAPE and t.text == '' then
+            return os.getenv('EDITOR') or 'notepad',true
+        end
+        return nil
+    end
+"
+>8
+
+ここでは直接エディタを呼び出すのではなく、戻り値にエディター名を返してやることで、ユーザがエディタ名をタイプしたのと同じ効果を得るようにしています。
+
+---
+
+あとは… lua_e コマンドのリダイレクトをちゃんと実装せねば。
+それほど難しくない…と信じたい。

@@ -1,0 +1,90 @@
+!!! ((title [NYAOS][Lua] Windowsのデフォルトの PATH をコマンドラインから変更する))
+
+Windowsのデフォルトの PATH を変更するには、
+通常、マイコンピュータ→プロパティ→詳細設定→環境変数→システム環境変数、
+という経路で修正しなくてはいけない。
+
+>> が、これ非常にやり辛い <<
+
+環境変数を書くテキストボックス小さいし…
+
+ということで、コマンドラインから簡単に出来る NYAOS-Lua スクリプトを書いた
+(ソース → https://bitbucket.org/zetamatta/_nya.d/src/06bd017dc5070a3bfb8978f24808cf2f608fe83d/gpath.lua?at=default{gpath.lua})。
+今回は COM経由で WSH(WindowsScriptingHost)を使っている
+(ので、もしWSHが入っていないと多分動かない)。
+
+まずは、NYAOS 3.3.7 以降で「``source gpath.lua``」をしよう。
+で、gpath とだけ打つと、PATH を見易く表示する。
+
+8<
+$ gpath
+Usage:
+  gpath add [POSITION] DIRECTORY
+  gpath del [POSITION]
+  gpath swap POSITION-1 POSITION-2
+
+1       %SystemRoot%\system32
+2       %SystemRoot%
+3       %SystemRoot%\System32\Wbem
+4       C:\Program Files\Intel\WiFi\bin\
+5       c:\Program Files\Common Files\Lenovo
+6       C:\Program Files\ThinkPad\ConnectUtilities
+7       C:\Program Files\Lenovo\Client Security Solution
+8       c:\Program Files\Mercurial\
+9       c:\usr\bin
+10      C:\usr\vim73-kaoriya-win32
+11      C:\WINDOWS\system32\WindowsPowerShell\v1.0
+>8
+
+ここで PATH の 2番目の位置にディレクトリを加えたい時は
+
+8<
+$ gpath add 2 C:\Perl\bin
+>8
+
+などとすればよい。位置の数値を省略すると、末尾に追加となる。
+よければ、本当に変わったかをマイコンピューターのプロパティーで確認してほしい。
+つまり、'''ここで NYAOS を終了させても変更は残るわけだ'''。
+
+逆に PATH から特定ディレクトリを消すには、何番目を消すかを数字で指定して
+
+8<
+$ gpath del 2
+>8
+
+などとする。こちらも位置の数値を省略すると、末尾のディレクトリを削除する。
+
+PATH の順番を変えるには gpath swap だ。
+
+8<
+[C:hayama]
+$ gpath swap 9 10
+[C:hayama]
+$ gpath
+Usage:
+  gpath add [POSITION] DIRECTORY
+  gpath del [POSITION]
+  gpath swap POSITION-1 POSITION-2
+
+1       %SystemRoot%\system32
+2       %SystemRoot%
+3       %SystemRoot%\System32\Wbem
+4       C:\Program Files\Intel\WiFi\bin\
+5       c:\Program Files\Common Files\Lenovo
+6       C:\Program Files\ThinkPad\ConnectUtilities
+7       C:\Program Files\Lenovo\Client Security Solution
+8       c:\Program Files\Mercurial\
+9       C:\usr\vim73-kaoriya-win32
+10      c:\usr\bin
+11      C:\WINDOWS\system32\WindowsPowerShell\v1.0
+[C:hayama]
+$
+>8
+
+なお、この変更は「システムのデフォルト」なので、既に起動したプロセスの環境変数PATHには影響しない
+('''gpath を動かした NYAOS 自身の環境変数も変化しない''')。
+そのプロセスを一回終了して、再び起動すると、gpath コマンドで設定したPATHが読み込まれる。
+
+うん、これで編集しやすくなった。NYAOS の上からなら、ディレクトリ名の補完もできるしね！
+
+gpath.lua は一応 NYAOS の次のバージョンから標準搭載する予定です。

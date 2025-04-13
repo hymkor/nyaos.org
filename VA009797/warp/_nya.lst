@@ -1,0 +1,6 @@
+nyaos\d+\.zip$       バイナリ(通常版)
+nyaos\d+\.lzh$       バイナリ(通常版)
+s2nya\d+\.zip$       バイナリ(S2版)
+s2nya\d+\.lzh$       バイナリ(S2版)
+s2nya\d+\.exe$       バイナリ(S2版自己解凍)
+tar\.bz2$            ソース

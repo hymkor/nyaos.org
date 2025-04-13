@@ -1,0 +1,136 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="../../gray.css" />
+</head><body>
+<h1>tDiaryClient(仮称)</h1>
+<p>
+tDiaryClient(仮称)は、Windows 上の任意のエディターで、
+tDiary の日記の更新ができるツール、
+利用には <a href="http://www.ruby-lang.org/" target="_blank">Ruby 1.8</a>
+と <a href="http://www.osk.3web.ne.jp/~nyasu/software/vrproject.html" target="_blank">VisualuRuby計画(仮称)</a> が必要です。
+</p>
+<p>
+よー分からん人は、
+<a href="http://www.geocities.co.jp/SiliconValley-PaloAlto/9251/ruby/" target="_blank">ActiveScriptingRuby</a>をインストールするのが近道と思われます。
+（MicrosoftInstaller で、みんな入ります…多分）
+</p>
+<h2>ダウンロード</h2>
+<table border align="center" class="framed"><tr><td> <a href="tdclient-0.02.zip"><tt>tdclient-0.02.zip</tt></a> </td>
+<td>
+    4001 bytes</td>
+</tr></table>
+<h2>準備</h2>
+<p>
+環境変数 HOME が差すディレクトリに次のような内容のファイル
+.tdiaryrc を用意してください。
+</p>
+<pre>
+url	《利用のtDiaryのURL》
+user	《利用のtDiaryの認証ユーザ名》
+passwd	《利用のtDiaryの認証パスワード》
+</pre>
+<p>
+（この辺、もうちょっと改良の余地あるなー）
+</p>
+<h2>起動</h2>
+<p>
+「<code>ruby tdiaryclient.rb</code>」を実行すると、
+次のような画面が表示されます。
+</p>
+<p align="center">
+    <img src="tdiaryclient-4.PNG">
+</p>
+<p>
+左上のテキストボックスは、年・月・日を示し、その下の一行は標題です。
+ともに編集可能です。
+一番下の編集できないテキストエリアには、編集中のテキストが表示されます。
+ボタンの意味は以下の通り：
+</p>
+<dl>
+<dt></dt>
+<dt>「Download」ボタン
+</dt>
+<dd>サーバから日記をダウンロードします。
+</dd>
+<dt>「編集」ボタン
+</dt>
+<dd>拡張子.txtに関連付けられたエディタで、日記を編集します。
+    エディタでの編集中は tDiaryClient のウインドウは消えています。
+    編集が終わりましたら、エディタを終了させてください。
+    tDiaryClient のウインドウが復活します。
+</dd>
+<dt>「登録」ボタン
+</dt>
+<dd>編集した日記をサーバにアップロードします
+</dd>
+<dt>「消去」ボタン
+</dt>
+<dd> ローカルの草稿を消去します。
+</dd>
+<dt>「追記」or「置換」コンボボックス
+</dt>
+<dd>「追記」の時に「登録」すると、日記が追記登録され、
+    「置換」の時に「登録」すると、
+    その日の日記全体が差し変えられます。
+</dd>
+<dd>　初期状態では「追記」になっており、サーバから日記がダウンロードされると
+    「置換」に変わります。また「消去」ボタンを押すと「追記」に戻ります。
+    （こういう動作をするのは、できるだけ日記の破損を防ぐためです）
+</dd>
+<dd> 明示的に変更することも無論可能です。
+</dd>
+<dt>「*」マーク
+</dt>
+<dd> 草稿が変更されていることを示します。</dd>
+</dl>
+<p>
+ローカル、あるいは、サーバ上の日記に対し、
+何らかの破壊を伴う可能性がある操作を行おうとすると、
+ダイアログで確認が行われます。
+</p>
+<h2>課題</h2>
+<p>
+一応、使えるものにはなったけど、
+認証あたりの設定ファイルを用意しなくてはいけないところが、
+利用にあたってのハードルだなぁ。
+</p>
+<p>
+あ、もしかしたら、Windows95,98,Me では start コマンドの
+オプションの都合、うまくエディタが起動しないかも。。。
+リポート求む。
+</p>
+<ul>
+<li> <strike>エラー処理（さっさとやれよ！）</strike></li>
+<li>Windows95,98,Me での動作検証</li>
+<li>ログインダイアログを作る（今は設定ファイル読み）</li>
+<li>Exerbで、単一バイナリ化</li>
+<li>草稿をセーブできる機能を付ける（エディタで別ファイルに保存すりゃ済むけど）</li>
+<li>PROXY 対応（やらんでいいという説もある）</li>
+<li>上戸彩メソッドを活用した命名</li>
+</ul>
+<h2>変更履歴</h2>
+<h3>0.02 (2004.6.13)</h3>
+<ul>
+<li> レイアウト全体を FormDesigner で作り直し。</li>
+<li>消去ボタン追加。</li>
+<li>問い合わせダイアログの追加。</li>
+<li>追加/置換をコンボボックスで切り変えられるようにした。</li>
+<li>通信部分を別にファイルに分けた(RemoteTD.rb)</li>
+<li>認証エラー・通信エラーの例外処理を実装</li>
+</ul>
+<h2>参考リンク</h2>
+<ul>
+<li> <a href="http://www.tdiary.org/" target="_blank">tdiary.org</a></li>
+<li><a href="http://kitaj.no-ip.com/rw-cgi.rb?cmd=view;name=tdiary-mode" target="_blank">tdiary-mode</a>
+    for Emacsen by きたさん</li>
+<li><a href="http://www20.big.or.jp/~rin_ne/soft/tdiary-mode/" target="_blank">tDiary-mode for xyzzy</a>
+    by ハハハハさん</li>
+<li><a href="http://www.potaway.net/tdiary/20040204.html#p01" target="_blank">tdiary.vim</a>
+    by うのさん</li>
+</ul>
+<ul>
+<li> <a href="../index.html"><tt>..</tt></a>
+</li>
+</ul>
+</body>
+</html>

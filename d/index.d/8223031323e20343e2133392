@@ -1,0 +1,31 @@
+<<[NYAOS] 胡麻化した>>
+
+Excel の Workbook オブジェクトで、
+何故かプロパティーとして取得できてしまうAdd を、
+'''見掛け上'''、メソッドとして呼べるようにした。
+
+8<
+local excel=nyaos.create_object("Excel.Application")
+excel.Visible = true
+local workbook = excel.Workbooks:Add()
+local worksheet = workbook.Worksheets:Item(1)
+worksheet:Range("A1").value = "おれだよおれ"
+>8
+
+実際には3行目の Add は「プロパティー取得」となってしまうので、
+Add の後の丸括弧は Add で得られる値である「Workbook オブジェクト」
+に対して関数コールを行っていることになる((fn メソッドコールではない))。
+
+これは Lua の userdata 型に対する関数コールになるので、
+今まではエラーになっていた。
+が、今回、userdata 型に対して ```__call``` メソッドを定義して、
+関数として呼び出された時、第一引数、つまり自分自身を戻り値にするようにした
+((fn Lua を御存知の方なら分かるが、Lua のメソッドコールである
+ ``foo:bar()``という書式は ``foo.bar(foo)`` という書式のエイリアスなのだ))。
+
+>> なんちゅー、やっつけ仕事だ <<
+
+プロパティーかメソッドかを明確に区別する方法があったらなぁ。
+luacom とかではうまいことやってそうなんだが、ソースの量が多過ぎて、拾い読みレベルでは分からん。
+
+なんだかなー

@@ -1,0 +1,110 @@
+!!! ((title #golang で引数のファイルの各行を全部ひっぱってくるライブラリを作った))
+
+俺にとっては定番の奴。Perl の <> 、Python の ``fileinput.input``、Ruby の ``ARGF`` に相当する奴。
+でも、こういうのって、普通、標準にありそうなんだけどなぁ。
+
+'''./eachline/eachline.go''' :
+
+8<
+package eachline
+
+import (
+	"bufio"
+	"os"
+)
+
+func EachLine(filepath string) chan string {
+	ch := make(chan string)
+	go func(ch chan string){
+		defer close(ch)
+		fd , err := os.Open(filepath)
+		if err != nil {
+			return
+		}
+		defer fd.Close()
+		reader := bufio.NewReader(fd)
+		for{
+			line,err := reader.ReadString('\n')
+			if err != nil {
+				return
+			}
+			ch <- line
+		}
+	}(ch)
+	return ch
+}
+
+func EachArgsLine() chan string {
+	ch := make(chan string)
+	go func(ch chan string){
+		defer close(ch)
+		if len(os.Args) >= 2 {
+			for i:=1;i<len(os.Args);i++ {
+				for line := range(EachLine(os.Args[i])) {
+					ch <- line
+				}
+			}
+		}else{
+			reader := bufio.NewReader(os.Stdin)
+			for{
+				line,err := reader.ReadString('\n')
+				if err != nil {
+					return
+				}
+				ch <- line
+			}
+		}
+	}(ch)
+	return ch
+}
+>8
+
+'''./main.go'''
+
+8<
+package main
+
+import (
+	"./eachline"
+	"fmt"
+)
+
+func main(){
+	for line := range(eachline.EachArgsLine()) {
+		fmt.Print(line)
+	}
+}
+>8
+
+まず、ソースファイルのまま実行。次に EXE ファイル化して、実行。
+
+8<
+[C:src]
+$ go run main.go
+f
+f
+z
+z
+^Z
+
+[C:src]
+$ go build main.go
+[C:src]
+$ ls -l
+drwx       0 2013-05-26 22:39 eachline/
+-rwx 1442816 2013-05-26 22:58 main.exe*
+-rw-     141 2013-05-26 21:50 main.go
+[C:src]
+$ main
+f
+f
+>8
+
+* import 文の先は「ディレクトリ名(=パッケージ名)」。ソースファイル名ではない '''(気付くのにかなり時間を要した)'''
+* Python だったら yield 文一個で済むことが、go言語だと、
+  まるでC言語でパイプラインを作るようなことをしなければいけない。
+* range が、Perl の each 、Lua の pairs 的な役割を果たしてくれるが、ぶっちゃけダサい。
+* 標準入力から読み取ると、リダイレクトしている時は問題が、端末経由だと CTRL-Z で EOF が伝わらず、
+  終了できない…(結局、CTRL-C で終わらんとしゃーないのは、どうかと)
+
+まだ慣れんが、何かをつかんだような気はしてきた。

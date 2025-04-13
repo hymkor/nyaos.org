@@ -1,0 +1,232 @@
+<html>
+<head>
+   <HTA:APPLICATION
+    ID="oHTA"
+    APPLICATIONNAME="Terminal Logger"
+    SHOWINTASKBAR="no"
+    SINGLEINSTANCE="yes"
+    MINIMIZEBUTTON="no"
+    MAXIMIZEBUTTON="no"
+    SYSMENU="no"
+    INNERBORDER="no"
+    SCROLL="no" >
+<style type="text/css">
+    h1{
+        font-size:24pt;
+    }
+    p,td{
+        font-size:10pt;
+    }
+    table{
+        border-collapse:collapse;
+        border-width:2px ;
+        border-style:solid;
+        border-color:black;
+    }
+    td,th{
+        border-width:1px;
+        border-style:solid;
+        border-color:black;
+        padding:2pt;
+    }
+</style>
+<script language="JScript">
+<!--
+    /************** 各種設定項目 ***********/
+    /*** アクセスログとワークファイルの設定 ***/
+    var access_log="C:\\アクセスログ.txt";
+    var work_file ="C:\\最新状態.txt";
+
+    /*** 作業者リスト ***/
+    var worker_list = [
+        "Ｍ下",
+        "Ｔ口",
+        "Ｈ山",
+        "Ｔ川"
+    ];
+    /*** 作業内容リスト ***/
+    var task_list = [
+        "ログ回収" ,
+        "障害調査" , 
+        "リリース" , 
+        "障害対応(重障害)" , 
+        "システム監視" , 
+        "システム再起動"
+    ];
+    var client_list = [
+        "Ｙ様" , 
+        "Ｍ様" ,
+        "Ｓ様"
+    ];
+    /******************************************/
+
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
+
+    function logger(stamp,message){
+        if( stamp == null ){
+            stamp = ( new Date() ).toLocaleString();
+        }
+        var msg = stamp + "\t" + message ;
+        document.form1.log.value += msg + "\n";
+        var fo = fso.OpenTextFile(access_log,8,true);
+        fo.WriteLine(msg);
+        fo.close();
+    }
+
+    function to_max(){
+        window.moveTo(0,0);
+        window.resizeTo(480,360);
+        window.focus();
+        document.getElementById("inputarea").style.display = "block";
+        document.getElementById("watcharea").style.display = "none";
+    }
+
+    function to_min(){
+        window.moveTo(0,0);
+        window.resizeTo(250,120);
+        window.blur();
+        document.getElementById("inputarea").style.display = "none";
+        document.getElementById("watcharea").style.display = "block";
+    }
+
+    function heartbeat(){
+        var now=new Date();
+
+        /*** 前回の起動時の情報を読み出す ***/
+        var rs = fso.OpenTextFile(work_file,1,true);
+        /* 最後にカウントした時刻 */
+        var last_count  = (rs.AtEndOfStream ? 0 : rs.ReadLine());
+        var last_stamp  = (rs.AtEndOfStream ? "[不明]" : rs.ReadLine() );
+        /* 現プロセスが起動した時刻 */
+        var startup_count = 
+            (rs.AtEndOfStream ? now.getTime() : rs.ReadLine());
+        var startup_stamp = 
+            (rs.AtEndOfStream ? now.toLocaleString() : rs.ReadLine() );
+        /* 前プロセスが終了した時刻 */
+        var shutdown_count  = (rs.AtEndOfStream ? 0 : rs.ReadLine());
+        var shutdown_stamp  = (rs.AtEndOfStream ? "[不明]" : rs.ReadLine() );
+        rs.close();
+
+        if( now - last_count > 5000 ){
+            logger( last_stamp , "shutdown");
+            logger( null       , "startup" );
+            shutdown_count = last_count;
+            shutdown_stamp = last_stamp;
+            startup_count = now.getTime();
+            startup_stamp = now.toLocaleString();
+            to_max();
+        }
+        /*** 現在時刻を記録する ***/
+        var ws = fso.OpenTextFile(work_file,2,true);
+        ws.WriteLine( now.getTime() );
+        ws.WriteLine( now.toLocaleString() );
+        ws.WriteLine( startup_count );
+        ws.WriteLine( startup_stamp );
+        ws.WriteLine( shutdown_count );
+        ws.WriteLine( shutdown_stamp );
+        ws.close();
+
+        var passed=(now - startup_count)/1000;
+
+        document.getElementById("shutdown").innerText = shutdown_stamp;
+        document.getElementById("startup" ).innerText = startup_stamp;
+        document.getElementById("running" ).innerText = 
+                (Math.floor(passed/3600   )).toString(10) + "時間" +
+                (Math.floor(passed%3600/60)).toString(10) + "分" +
+                (Math.floor(passed%60     )).toString(10) + "秒" ;
+    }
+
+    function do_update(){
+        if( document.form1.worker.value == "---" ){
+            alert("作業者名を選んでください");
+            return;
+        }
+        if( document.form1.task.value == "---" ){
+            alert("作業内容を選んでください");
+            return;
+        }
+        if( document.form1.client.value == "---" ){
+            alert("依頼者を選んでください");
+            return;
+        }
+        logger( null ,
+                "login\t" + document.form1.worker.value + 
+                "\t" + document.form1.task.value   +
+                "\t" + document.form1.client.value +
+                "\t" + document.form1.detail.value );
+        document.form1.worker.selectedIndex = 0;
+        document.form1.task.selectedIndex = 0;
+        document.form1.client.selectedIndex = 0;
+        document.form1.detail.selectedIndex = 0;
+        to_min();
+    }
+    /* SELECT～OPTION リストに配列の内容を加える汎用関数 */
+    function append_option( selectNode , list ){
+        var pNode=document.getElementById( selectNode );
+        for(var i=0 ; i < list.length ; ++i ){
+            var node=document.createElement("option");
+            node.value = list[i];
+            node.appendChild( document.createTextNode( list[i] ) );
+            pNode.appendChild( node );
+        }
+    }
+    function startup(){
+        setInterval(heartbeat,1000);
+        to_max();
+        var node=document.getElementById("anchor2accesslog");
+        node.href = "file:///" + access_log;
+        append_option( "worker" , worker_list );
+        append_option( "task"   , task_list   );
+        append_option( "client" , client_list );
+    }
+// -->
+</script>
+<title>セキュリティ監査様がみてる</title>
+</head>
+<body onLoad="JavaScript:startup();">
+<div id="inputarea" onDblClick="to_min();">
+    <form name="form1">
+        <h1>端末使用記録フォーム</h1>
+        <table>
+            <tbody>
+            <tr><td>担当者</td>
+                <td><select name="worker" id="worker" style="width:100%">
+                        <option value="---">作業者名を選んでください</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td>タスク</td>
+                <td><select name="task" id="task" style="width:100%">
+                        <option value="---">作業内容を選んでください</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td>依頼者</td>
+                <td><select name="client" id="client" style="width:100%">
+                        <option value="---">依頼者　を選んでください</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td>作業詳細</td>
+                <td><input type="text" name="detail" value="" size="60"></td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="button" value="登録"             onClick="do_update()">
+        <br>
+        <textarea name="log" cols="60" rows="5" readonly></textarea>
+    </form>
+    <a href="" id="anchor2accesslog">これまでのアクセスログ</a>
+</div><!-- inputarea -->
+<div id="watcharea" onClick="window.focus();" onDblClick="to_max();"
+     title="ダブルクリックで作業登録,ALT-F4 で終了します">
+    <table border>
+    <tbody>
+        <tr><td>前回終了</td><td id="shutdown"></td></tr>
+        <tr><td>今回起動</td><td id="startup"></td></tr>
+        <tr><td>稼働時間</td><td id="running"></td></tr>
+    </tbody>
+    </table>
+</div><!-- watcharea -->
+</body>
+</html>

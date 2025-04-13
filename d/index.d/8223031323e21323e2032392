@@ -1,0 +1,23 @@
+<<バイト列でも正規表現が使えるんだねぇ #python3>>
+
+出来ないかと思ってたけど、bytesリテラルという表現がある以上、
+文字列的な表現も想定しているわけで、実際できた。
+
+UTF-8文字列を URL に使うような %nn 形式に変換する処理を書いてみた(Cygwin)
+
+8<
+hayama@LENOVO-055B9A2D ~/src/t
+$ cat foo.py
+#!/usr/bin/env python3
+import re
+
+bstr = bytes("AあIいUうEえOおKAかKIきKUくKEけKOこ","utf8")
+bstr = re.sub(b"[^a-zA-Z0-9]",
+            lambda m:bytes("%{0:2X}".format(m.group(0)[0]),"ascii"),
+            bstr )
+print( bstr.decode("ascii") )
+
+hayama@LENOVO-055B9A2D ~/src/t
+$ python3 foo.py
+A%E3%81%82I%E3%81%84U%E3%81%86E%E3%81%88O%E3%81%8AKA%E3%81%8BKI%E3%81%8DKU%E3%81%8FKE%E3%81%91KO%E3%81%93
+>8

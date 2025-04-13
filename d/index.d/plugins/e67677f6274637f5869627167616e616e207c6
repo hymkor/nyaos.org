@@ -1,0 +1,13 @@
+package wifky::hiragana;
+
+my $original_comment=$::action_plugin{comment};
+$::action_plugin{comment} = sub {
+    if( $::charset eq 'EUC-JP' ){
+        if( $::form{comment} !~ /\xA4[\xA0-\xFF]/ ){
+            die("!Your comment has no hiragana(eucjp)!");
+        }
+    }elsif( $::form{comment} !~ /\xe3(\x81[\x81-\xbf]|\x82[\x80-\x93]|\x83\xbc)/){
+        die("!Your comment has no hiragana(utf8)!");
+    }
+    $original_comment->(@_);
+};

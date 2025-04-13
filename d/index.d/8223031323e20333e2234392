@@ -1,0 +1,95 @@
+<<[twitter] 続・やった、僕も OAuth できたよー>>
+
+* 前回: >>{(2012.03.23)#p1}{[twitter] やった、僕も OAuth できたよー}
+
+twitter の認証情報をソースに埋め込みだと、不都合なことが多いので、
+``~/.twit_profile`` という JSON ファイルに外出しして、
+それを読み出して、認証を行ってくれるモジュールを書いた。
+
+<<<モジュール: ``twit_profile.py``>>>
+
+8<
+# encoding:cp932
+
+import json
+import os.path
+import tweepy
+
+def load_and_auth():
+    fname = os.path.expanduser("~/.twit_profile")
+    with open(fname) as fp:
+        info = json.load(fp)
+    consumer_key    = info["consumer_key"]
+    consumer_secret = info["consumer_secret"]
+    access_token    = info["access_token"]
+    access_secret   = info["access_secret"]
+
+    auth = tweepy.OAuthHandler( consumer_key , consumer_secret )
+    auth.set_access_token( access_token , access_secret )
+    return tweepy.API( auth )
+
+def _test():
+    from datetime import datetime
+    twitter = load_and_auth()
+    twitter.update_status( u'テストツイート on ' + unicode( datetime.now()) )
+
+if __name__ == '__main__' :
+    _test()
+>8
+
+<<<設定ファイル: ``~/.twit_profile``>>>
+
+8<
+{
+    "consumer_key":"(consumer_keyをここに書く)",
+    "consumer_secret":"(consumer_secret をここに書く)",
+    "access_token":"(access_token をここに書く)",
+    "access_secret":"(access_secret をここに書く)"
+}
+>8
+
+<<<気付いたこと>>>
+
+* Python のファイルフォーマット系のモジュールはどうもたまに気が利かないところがあるなぁ
+** http://www.python.jp/doc/release/library/json.html{JSON モジュール}は、
+  中括弧を閉じる直前にカンマがあるとエラーにする。
+  規格上そうでないといけないのかもしれないが、
+  C言語的な寛容さで無視して欲しかった。
+** JSON ではなく、http://www.python.jp/doc/release/library/configparser.html{ConfigParser}
+  も考えたが、無名セクションというものが許されないので、採用せず。
+* 今までホームディレクトリを取得する際、Windows のことを考慮して、
+  「``os.environ["USERPROFILE"] or os.environ["HOME"]``」としてきた。
+  が、実は「``os.path.expanduser("~/")``」を使えば
+  %HOMEDRIVE%%HOMEPATH% を %HOME% と解釈してくれるのですなぁ
+  ''(大抵のWindows(XP?)環境は、``%HOMEDRIVE%%HOMEPATH% == %USERPROFILE%`` みたい)''。
+  標準モジュール万歳!!
+* tweepy モジュールは、ちゃんとユニコードを認識してくれる。イイネ!
+
+<<[twitter] タイムラインを読み出してみる>>
+
+twitter の書き込みを>>{#p1}{前回}やったので、次に読み出しをやってみる
+
+8<
+import twit_profile
+
+twitter = twit_profile.load_and_auth()
+
+for status in twitter.home_timeline():
+    print "-------------------------------------------------------------"
+    print status.user.screen_name.encode("cp932","replace")
+    print status.text.encode("cp932","replace")
+>8
+
+home_timeline というメソッドはすぐ http://packages.python.org/tweepy/html/index.html{
+tweepy のリファレンス}を見て分かったのだが、
+戻り値リストの要素の属性が分からなかった。
+あてずっぽうで、twitter 本家の
+https://dev.twitter.com/docs/api{REST API Resources}
+の中の名前を使ってみたら、だいたいあってた。
+
+あと、本来は encode メソッドは不要なのだが、
+ShiftJIS に変換できないコードが
+ツイートに含まれているので、エスケープのために明示的に呼び出している。
+
+一度、ライブラリのラッパクラス(twit_profile)を作ってしまうと、
+もうあとは結構簡単ですね。

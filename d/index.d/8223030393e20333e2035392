@@ -1,0 +1,15 @@
+<<SAKURA Internet のサーバ OS がバージョンアップ>>
+
+* http://support.sakura.ad.jp/page/news/20090303-005.news
+
+2009年3月10日（火）～ 4月23日（木）中だそうで。
+
+* OS
+**  FreeBSD 6.1 → 7.1
+* Perl
+** Perl 5.8.8 → '''5.8.9'''
+* Python
+** Python 2.4.5 → '''2.5.2'''
+
+OS 標準品だから、仕方ないんだけれども、微妙なバージョンだなぁ。
+Python は 2.6 か 3.0 、Perl は 5.10 が欲しかった。

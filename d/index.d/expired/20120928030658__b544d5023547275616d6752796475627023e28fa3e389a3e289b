@@ -1,0 +1,192 @@
+* 0.126 になって、当コードは意味なくなってしまいました。
+
+D言語の文字コードは UTF-8 であるが、附属ライブラリ Phobos は未完成故に、
+Windows のコマンドプロンプトでは見事に化けてしまう。
+
+そこで、OutputStream クラスにラッピングして、UTF-8 ⇒ SJIS 変換を
+通すライブラリ：StreamWriter クラスを作ってみた。
+
+標準出力/標準エラー出力の場合は、stdout/stderr のかわりに
+cout/cerr を使えばよいし、ファイル出力の場合は
+
+<pre>
+    fp = new StreamWriter(new File("(ファイル名)", FileMode.Out) );
+</pre>
+
+みたいにすればよいはず（あ、でも、これでは close を明示的に呼べないや）
+
+コピペした後、UTF-8 形式でセーブすることを忘れずに。
+
+<pre>
+    private import std.stdio;
+    private import std.utf;
+    private import std.stream;
+    private import std.outbuffer;
+
+    version(USE_Y4D){
+	// Recommended, better performance and linux supported.
+	// To compile :
+	//   dmd -version=USE_Y4D -d stream_writer.d widestring.d ...
+	private import y4d_aux.widestring;
+    }else{
+	// Without Y4D library, low performance 
+	// and on Linux, code is not converted.(it remains UTF8)
+	// To compile :
+	//   dmd stream_writer.d ...
+	private import std.file;
+	extern(C) int strlen(char *);
+    }
+
+    class StreamWriter : OutputStream {
+	private OutputStream os;
+	this( OutputStream os1 ){ os = os1; }
+
+	/*** core private functions ***/
+	version( USE_Y4D ){
+	    private void output( wchar[] s ){ os.writeString( toMBS(s) );   }
+	    private void output(  char[] s ){ output( std.utf.toUTF16(s) ); }
+	}else{
+	    version( Win32 ){
+		private void output( char[] s)
+		    { char* p=toMBSz(s); writeExact(p,strlen(p)); }
+	    }else{
+		private void output( char[] s)
+		    { os.writeString(s); }
+	    }
+	    private void output(wchar[] s){ output( toUTF8(s) ); }
+	}
+	private void output( dchar[] s ){ output( std.utf.toUTF16(s) ); }
+	private void br()               { os.write('\n'); }
+
+	/*** interface function ***/
+	void writeString ( char[] s ){ output(s); }
+	void writeStringW(wchar[] s ){ output(s); }
+	void writeLine   ( char[] s ){ output(s); br(); }
+	void writeLineW  (wchar[] s ){ output(s); br(); }
+
+	StreamWriter opShl(char[] s ){ output(s) ; return this; }
+
+	void writef(...)
+	{  
+	    dchar[] buf;
+	    doFormat( delegate(dchar c){ buf ~= c; }, _arguments, _argptr );
+	    output( buf );
+	}
+	void writefln(...)
+	{  
+	    dchar[] buf;
+	    doFormat( delegate(dchar c){ buf ~= c ; } , _arguments, _argptr );
+	    output( buf ); br();
+	}
+	uint vprintf(char[] fmt,va_list args)
+	{  
+	    OutBuffer buf=new OutBuffer();
+	    buf.vprintf(fmt,args);
+	    char[] s=buf.toString();
+	    output( s );
+	    return s.length;
+	}
+	uint printf(char[] fmt,...)
+	{   return this.vprintf(fmt,_argptr); }
+
+	/*** static definition ***/
+	static StreamWriter cout,cerr;
+	static this(){
+	    cout=new StreamWriter(std.stream.stdout);
+	    cerr=new StreamWriter(std.stream.stderr);
+	}
+
+	/** Dummy code to inherit from OutputStream **/
+	void writeExact(void *buffer,uint size){ os.writeExact(buffer,size); }
+	uint write( ubyte[] s){ return os.write(s); }
+	void write( char[] s ){ os.write(s); }
+	void write( wchar[] s){ os.write(s); }
+
+	void write( byte s   ){ os.write(s); }
+	void write( ubyte s  ){ os.write(s); }
+	void write( short s  ){ os.write(s); }
+	void write( ushort s ){ os.write(s); }
+
+	void write( int s    ){ os.write(s); }
+	void write( uint s   ){ os.write(s); }
+	void write( long s   ){ os.write(s); }
+	void write( ulong s  ){ os.write(s); }
+
+	void write( float s  ){ os.write(s); }
+	void write( double s ){ os.write(s); }
+	void write( real s   ){ os.write(s); }
+	void write( ifloat s ){ os.write(s); }
+
+	void write( idouble s){ os.write(s); }
+	void write( ireal s  ){ os.write(s); }
+	void write( cfloat s ){ os.write(s); }
+	void write( cdouble s){ os.write(s); }
+
+	void write( creal s  ){ os.write(s); }
+	void write( char s   ){ os.write(s); }
+	void write( wchar s  ){ os.write(s); }
+	void write( dchar s  ){ os.write(s); }
+
+	unittest{
+	    /* Here are Japanese UTF8-characters */
+	    cout << "class Stream Writer unit test.\n";
+	    cout.writeString("日本語を書いてみる(writeString)\n");
+	    cout.printf("フォーマットされた%.*sを書いてみる(printf編)\n","日本語");
+	    cout.writef("フォーマットされた%sを書いてみる(writef編)\n"  ,"日本語");
+	    cout.writefln("改行付きのフォーマットされた%sを書いてみる"  ,"日本語");
+	    cout << "C++風に出力してみる." << "(改行)\n";
+	}
+    }
+    alias StreamWriter.cout cout;
+    alias StreamWriter.cerr cerr;
+</pre>
+
+なお、Linux でも、やねうらお氏のライブラリ y4d_aux.widestring をリンクすれば
+ロケールに合わせて文字コードのコンバートができる。
+その場合、-version=USE_Y4D をコマンドラインオプションで指定するべし。
+
+なお、入力系ストリームでは、見事に挫折した。
+
+<pre>
+    import std.stream;
+
+    int main(char[][] args){
+	char s;
+	while( stdin.read(s) , s != '\n' ){
+	    stdout.printf("[%02X]",s);
+	}
+	stdout.printf("\n");
+	return 0;
+    }
+</pre>
+
+というプログラムを走らせてみた結果
+
+<pre>
+    [d:rmcloned]dmd tststdin.d
+    d:\usr\dmd\bin\..\..\dm\bin\link.exe tststdin,,,user32+kernel32/noi;
+    [d:rmcloned]tststdin
+    hogehoge
+    [41AC68][41AC6F][41AC67][41AC65][41AC68][41AC6F][41AC67][41AC65][41AC0D]
+    [d:rmcloned]tststdin
+    ふむ。
+    Error: not enough data in stream
+    [d:rmcloned]
+</pre>
+
+というように、日本語文字コードを読み込んだだけで、
+例外になってしまった為である。なお、
+
+<pre>
+    [d:rmclone] echo "ふむ" | tststdin 
+</pre>
+
+と一度パイプをかませた場合、上症状は発生しなかったことから、
+問題は単純ではないと考えられる。
+実際、ライブラリのソースを追いかけたが、
+原因らしきコードが発見できなかった。
+
+どうも、最近のDコンパイラの仕様の変更で、
+キャスト時に厳密な値の範囲チェックが入ったからという説もあるが、さて…。
+ちなみに、C言語の stdio ライブラリを使う分でも、
+このような症状は一切発生しない。

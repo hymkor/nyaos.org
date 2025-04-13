@@ -1,0 +1,145 @@
+<<激しく疑心暗鬼で死にそーです>>
+
+要は他人の仕事っぷりが気に入らないんですね、分かります
+
+* '''仕事が雑！'''(速いのはいいんだけどね)
+** 「直してもらう」のを前提にした作りっぷり
+** 依頼主の負担を軽くしようという意識なし
+** でも、これはきちんとした指示を出さない/叱らないオイラが悪い
+* 名前だけの責任者
+** 技術力も案件知識も劣る新参者に何をしろと
+** 経緯を知ろうにも休んでやがる(長期間)。
+   信頼性の落ちる情報を渡さざるを得ず、
+   俺自身の言葉の信頼も落ちる
+** そもそも、権限の範囲が不明瞭だし
+* きちんと「リソース管理」ができていない
+** 保持しているはずが、保持している「つもり」になってるだけ。
+   '''前任者出て来い！'''
+   つーかそもそも「そういう運用」が認められてるのか、これ？
+* さらば、親分
+** 吉宗公徳川宗家の相続にあたり、幕府に殿をとられたと嘆く紀州藩士の心境
+** 後ろ盾がなくなったから、今後はキツいぞーとみんな言う。
+   明る過ぎて、目を背けたくなる未来
+* 苦境を共有できる人がいない
+** 実は一人いるんだけれども、そやつばかりに愚痴るのもね…
+** 人が知らないところで、別の仕事とかも結構やらんといかんのよね
+
+いや、自分が悪いのは分かってるんです。分かってるから、辛いんです。
+他人を批判する脳内与党と、自分を否定する脳内野党で、
+脳議会が紛糾。そろそろ解散総選挙といったところです。
+
+今までがメンバーに恵まれすぎていただけで、甘ったれていただけかもしれませんが。
+
+利害関係の無い誰かと酒でも飲みにいって、話を聞いてもらえば、
+ちょっとは気分が晴れるのかな
+
+<<[Lua] 地味にゴルフ>>
+
+* '''画面の左半分で動画流して、
+  右半分のターミナルで(コード)ゴルフするのが、
+  正しい堕落人の姿です'''
+
+というわけで、今日・明日締切りの
+「http://golf.shinh.org/p.rb?Tak+z+_FIXED_{anarchy golf - Tak z _FIXED_}」
+に、Ruby/Perl/Python/Lua/AWK で参戦。
+
+* Perl/Lua のみ暫定一位
+** Lua はともかくとして、Perl勢は今手薄か!? 今が勝つチャンス!
+** それとも、タイムアウトに阻まれる人が多いのかな…
+   でも、すぐ乗り越えられそうな問題だし。
+* Perl最強伝説
+** でも、何故か AWK/Rubyに勝てん。こんなに短いのに！
+* 意外と Lua は不利
+** 不利
+***「return」「function」などのキーワードが長い
+*** true を 1 へ、false を 0 に自動コンバートしてくれない
+*** 文字列の中で変数を展開できる文法がないとか
+** 有利
+*** 数値と文字列ごっちゃな仕様
+*** 標準入出力が扱いやすい
+** ==三項演算子=={条件演算子}は無いが、and/or が良い代替となる。
+   (Ruby と同様に false と nil のみが偽なので、
+    Pythonのand/or方式と違い、誤判定が無い)
+
+もう少し奥儀を勉強すれば、短かくなるんだろうか。
+でも、標準ライブラリがほとんどないからなぁ(それがいいんだけどね)
+
+<<[Lua] 文字列操作の比較表>>
+
+* [文字列操作の比較表|http://0xcc.net/blog/archives/000137.html]
+
+Lua 版を作ってみる。未完成だけどね
+
+||| Ruby (String) | Lua
+|| s = "abc"  | s = "abc"
+|| s = x + y  | s = x .. y
+|| ```s == x```  | ```s == x```
+|| s % [x, y] ((br)) sprintf(s, x, y)  | s:format(x,y)
+|| [x, y, z].join(s)  | table.concat({x,y,z},s)
+|| s.capitalize | (なし)
+|| s.capitalize! | (なし)
+|| s.center(x) |
+|| s.chomp | s:gsub("\n$","")
+|| s.chomp!  | (なし)
+|| s.chop  | s.sub(1,-2))
+|| s.chop!  | (なし)
+|| s.clear  | (なし)
+|| s.concat(x) | s..x
+|| s.count(x) | (なし)
+|| s.crypt(x) | (なし)
+|| s.delete!(x) | s=s:gsub(x,"")
+|| s.downcase  | s.lower()
+|| s.downcase! | (なし)
+|| ```s.each_byte {|x| ... }``` | for x in s:gmatch(".") do ... end
+|| ```s.each_line {|x| ... }``` | for x in s:gmatch("[^\n]+\n?") do ... end
+|| s.empty? | ```s==""```
+|| s.end_with?(x) | ```s:sub(s:len()-x:len(),-1)==x```
+|| s.gsub(x, y)  | s:gsub(x,y)
+|| s.gsub!(x, y) | (なし)
+|| s.hex ((br)) s.to_i(16)  | 0+("0x"..s)
+|| s.include?(x) | s:find(x,1,true)
+|| s.index(x) | s:find(x)
+|| s.insert(i, x) | s:sub(1,i-1)..x..s:sub(i,-1)
+|| s.length ((br)) s.size | s:len()
+|| s.ljust(x) |
+|| s.lstrip  | g:gsub("^%s+","")
+|| s.lstrip!  | (なし)
+|| s.match(x)((br))x.match(s)  | s:match(x)
+|| s.next! ((br)) s.succ!  | s=s+1
+|| s.oct ((br)) s.to_i(8)  |
+|| s.partition(x) |
+|| s.replace(x) |
+|| s.reverse  | s:reverse()
+|| s.reverse!  | (なし)
+|| s.rindex(x) |
+|| s.rjust(x)  |
+|| s.rpartition(x) |
+|| s.rstrip | g:gsub("%s+$","")
+|| s.rstrip!  | (なし)
+|| s.scan(x) { ... }  | for e in s:gmatch(x) do ... end
+|| s[i] ((br)) s.slice(i) | s:sub(i,i)
+|| s[i..-1] ((br)) s.slice(i..-1)  | s:sub(i,s:len())
+|| s[i, l] ((br)) s.slice(i, l)  | s:sub(i,l)
+|| s[i..j] ((br)) s.slice(i..j)  | s:sub(i,j)
+|| s[i...j] ((br))s.slice(i...j)  | s:sub(i,j-1)
+|| s.split(x)  | '''(ない!)'''
+|| s.start_with?(x)  | ```s:sub(1,x:len())==x```
+|| s.strip  | s:gsub("^%s+",""):gsub("%s+$","")
+|| s.strip! | (なし)
+|| s.sub(x, y) | s:sub(x,y)
+|| s.sub!(x, y) | (なし)
+|| s.swapcase  | (なし)
+|| s.to_f |
+|| s.to_i |
+|| s.to_s | tostring(s)
+|| s.tr!(x, y)  |
+|| s.tr_s!(x, y) |
+|| s.unpack(x) |
+|| s.upcase  | s:upper()
+|| s.upcase!  | (なし)
+|| Regexp.escape(s) ((br))Regexp.quote(s) | (なし)
+
+* Lua の文字列位置は n 文字の場合、0～(n-1)ではなく、1～n で指定する。
+** 後ろから数えるマイナス指定はあり(-1が最後の文字)
+* Lua には正規表現は無いが「パターン」という似たものがある。
+* Lua は数値・文字列の区別がない。

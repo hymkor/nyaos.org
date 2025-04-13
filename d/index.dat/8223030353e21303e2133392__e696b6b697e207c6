@@ -1,0 +1,232 @@
+package nikky;
+
+$main::inline_plugin{'nikky.pl_version'} = sub{ 'nikky.pl 1.2' };
+$main::inline_plugin{include}=\&include;
+$main::inline_plugin{includes}=\&includes;
+$main::inline_plugin{lastdiary}=\&lastdiary;
+$main::inline_plugin{recentdiary}=\&recentdiary;
+$main::inline_plugin{referer}=\&referer;
+$main::action_plugin{'rss'} = \&action_rss ;
+
+if( exists $main::form{date} ){
+    my $date=$main::form{date};
+    $main::form{p} = sprintf('(%04d.%02d.%02d)',
+		    substr($date,0,4) ,
+		    substr($date,4,2) ,
+		    substr($date,6,2) );
+}
+
+sub include_is_nested{
+    q(<blink>Can't nest include-plugin.</blink><br>);
+};
+
+sub title2dateurl{
+    my $title=shift;
+    if( $title =~ /^\((\d\d\d\d)\.(\d\d)\.(\d\d)\)$/ ){
+	sprintf("%s?date=%4s%2s%2s" , $main::me , $1 , $2 , $3 );
+    }else{
+	&main::title2url($title);
+    }
+}
+
+sub include{
+    my $session = shift;
+
+    my $htm_pagename = join(' ',@_);
+    my $pagename     = &main::denc($htm_pagename);
+    my $url=&title2dateurl( $pagename );
+
+    local $main::inline_plugin{include} = \&include_is_nested;
+    local $main::print = '';
+    local $main::form{p} = $pagename;
+
+    &main::print_page( title=>$pagename );
+    
+    qq(<h1><a href="${url}">${htm_pagename}</a></h1>\n) . $main::print;
+};
+
+sub includes{
+    my $session=shift;
+    my %opt=();
+    my @arg=();
+
+    local $main::inline_plugin{includes} = \&include_is_nested;
+
+    &main::parse_opt(\%opt,\@arg,@_);
+
+    my @list=&main::ls_core(\%opt,@arg);
+    splice(@list,10) if $#list > 10;
+    my $buf="";
+    foreach my $p (@list){
+	$buf .= &{ $main::inline_plugin{include} }(
+	    $session , &main::enc($p->{title}) );
+    }
+    $buf;
+};
+
+
+sub lastdiary{
+    my $session=shift;
+    my $days = (@_[0] || 3);
+    local $main::inline_plugin{ diary } = \&include_is_nested;
+    my $buf = &{ $main::inline_plugin{includes} }(
+	$session,"-r","-${days}","(????.??.??)*");
+    $buf ;
+};
+
+
+sub recentdiary{
+    my ($session,$day)=@_;
+    "<ul>\n" . join('' , 
+	map( sprintf('<li><a href="%s">%s</a></li>',
+			    &title2dateurl($_->{title}) ,
+			    &main::enc($_->{title}) ) ,
+	    &main::ls_core({ r=>1 , countdown=>$day } , '(????.??.??)*' )
+	)
+    ) . "</ul>\n";
+}
+
+sub referer{
+    my $session=shift;
+    my @exclude=@_;
+    my @title=($main::form{'p'} || 'FrontPage' , 'referer.txt' );
+    my $ref=$ENV{'HTTP_REFERER'};
+
+    my @lines=split(/\n/,&main::read_object(@title));
+    if( defined($ref) && 
+	length($ref) > 0 && 
+	$ref !~ /$main::me\?[aq]=/ &&
+	scalar(grep(index($ref,$_) >= 0 , @exclude)) <= 0 )
+    {
+	my $found=0;
+	foreach my $line ( @lines ){
+	    my ($cnt,$site)=split(/\t/,$line,2);
+	    if( $site eq $ref ){
+		$found = 1;
+		$line = sprintf("%4d\t%s",$cnt + 1,$site);
+		last;
+	    }
+	}
+	unless( $found ){
+	    push(@lines,sprintf("%4d\t%s",1,$ref));
+	}
+	&main::write_object(@title,join("\n",reverse sort @lines));
+    }
+    '<ul class="referer">' .
+    join("\r\n",reverse sort map('<li>'.&main::enc($_).'</li>',@lines) ) .
+    '</ul>';
+};
+
+sub action_rss{
+    my $URL=sprintf('http://%s%s', $ENV{'HTTP_HOST'} , $ENV{'SCRIPT_NAME'} );
+    my $RSS="$URL?a=rss";
+    my $articles=5;
+    $main::inline_plugin{comment} = sub { '' };
+
+    %::enclist = (
+	'lp'       => '&#40;' ,
+	'rp'       => '&#41;' ,
+	'lb'       => '&#91;' ,
+	'rb'       => '&#93;' ,
+	'll'       => '&#40;&#40;' ,
+	'rr'       => '&#41;&#41;' ,
+	'vl'       => '&#124;' ,
+    );
+    my $sitename=$main::config{sitename};
+
+    print qq(Content-Type: text/plane; charset=EUC-JP\n\n);
+
+    ### read page list ###
+    my @pagelist;
+    opendir(DIR,".") || die;
+    while( my $fn=readdir(DIR) ){
+	next unless $fn =~ /^[a-z0-9]+$/;
+	my $title = pack("h*",$fn); 
+	next unless $title =~ /^\(\d\d\d\d\.\d\d\.\d\d\)/;
+	push( @pagelist , { fname=>$fn , title=>$title } );
+    }
+    closedir(DIR);
+    @pagelist = sort{ $a->{title} cmp $b->{title} } @pagelist;
+    splice(@pagelist,0,-$articles);
+
+    print qq(<?xml version="1.0" encoding="EUC-JP" ?>
+<rdf:RDF 
+  xmlns="http://purl.org/rss/1.0/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xml:lang="ja">
+ <channel rdf:about="${RSS}">
+  <title>${sitename}</title>
+  <link>${URL}</link>
+  <description>${sitename}</description>
+  <items>
+   <rdf:Seq>
+);
+
+    ### read title list ###
+    my @topics;
+    foreach my $p (@pagelist){
+	open(FP,$p->{fname}) || die;
+	my @text = <FP>;
+	close(FP);
+	my $text = join('',@text);
+
+	local $/="\n\n";
+
+	my $topics=[];
+	my $title=$p->{title};
+	my $pageurl = $title;
+	my $id=0;
+	$pageurl =~ s/([^\w])/sprintf('%%%02X', unpack('C', $1))/eg;
+	my $desc=[];
+	foreach my $frag ( split(/\r?\n\r?\n/,$text) ){
+	    if( $frag =~ /^\s*<<([^<].*)>>\s*$/s || $frag =~ /^!!!(.*)$/s ){
+		if( scalar(@{$desc}) > 0 ){
+		    unshift(@topics , { 
+			page  => $p->{title} ,
+			url   => sprintf("%s?p=%s#p%d",$URL,$pageurl,++$id),
+			title => sprintf("%s - %s",$p->{title},$title) ,
+			desc  => join('',@{$desc} ) ,
+		    });
+		}
+		$title = &main::preprocess($1,{ attachment=>{} } );
+		$desc = [];
+	    }else{
+		local $main::print="";
+		&main::syntax_engine( &main::enc($frag) , {} ) ;
+		push(@{$desc}, $main::print );
+	    }
+	}
+	if( scalar(@{$desc}) > 0 ){
+	    unshift(@topics , { 
+		page => $p->{title} ,
+		url => sprintf("%s?p=%s#p%d",$URL,$pageurl,++$id),
+		title => sprintf("%s - %s",$p->{title},$title) ,
+		desc => join('',@{$desc} ) ,
+	    });
+	}
+    }
+
+    ### write list ###
+    foreach my $t (@topics){
+	printf qq(<rdf:li rdf:resource="%s"/>\n),$t->{url} ;
+    }
+    print "</rdf:Seq>\n";
+    print "</items>\n";
+    print "</channel>\n";
+
+    ### write description ###
+    foreach my $t (@topics){
+	printf qq(<item rdf:about="%s">\n),$t->{url} ;
+	printf qq(<title>%s</title>\n),&main::enc($t->{title}) ;
+	printf qq(<link>%s</link>\n),$t->{url} ;
+	printf qq(<description><![CDATA[%s]]></description>\n),$t->{desc};
+	print  qq(</item>\n);
+    }
+    print "</rdf:RDF>\n";
+
+    exit(0);
+
+};
+
+
+1;

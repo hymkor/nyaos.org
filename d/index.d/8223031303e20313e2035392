@@ -1,0 +1,37 @@
+<<[Lua] 挿入ソート>>
+
+http://gauc.no-ip.org/awk-users-jp/blis.cgi/DoukakuAWK_249{AWK Users JP :: 挿入ソート}にインスパイアーされて、Lua で挿入ソートを…
+
+8<
+#!/usr/bin/lua
+
+function insert_sort(arr)
+    for i=2,#arr do
+        local j=i
+        while j>1 and arr[j-1]>arr[j] do
+            arr[j-1],arr[j] = arr[j],arr[j-1]
+            j = j - 1
+        end
+    end
+
+end
+
+line = {}
+for L in io.lines() do
+    table.insert(line,tonumber(L))
+end
+
+insert_sort(line)
+for i=1,#line do
+    print(line[i])
+end
+>8
+
+hi_saito さんの AWK プログラムをそのままコンバートしただけなんだけれども
+
+* table.sort があるとか、野暮なことは言わない約束で (それ言っちゃえば、最近の AWK だって、sort あったよね)
+* Lua は文字列と数値を区別するので、明示的に tonumber で配列に読み込む必要がある。
+* 変数の入れ換えは Perl 風に出来るので、一時変数は不要だった。
+* #演算子で、配列の最大値が得られるので、カウントループは要らんかった。
+* j-- とか書けないのが、ちょっと悔しい。せめて、j -= 1 が欲しい。
+* ここまで作るので満足して、ベンチするまでに、やる気が枯渇してしまった。

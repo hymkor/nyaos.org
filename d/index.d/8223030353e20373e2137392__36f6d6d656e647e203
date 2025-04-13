@@ -1,0 +1,2 @@
+2005/07/19 08:00:56	Orca	/proc/ で面白いと思ったのがコレですね。http://www.linux.or.jp/JF/JFdocs/kernel-docs-2.6/binfmt_misc.txt.html OS/2にコレがあったら, いろんなスクリプトを動かすとき便利だろーなー, とか。 それから /dev/port … C言語使わなくてもココまでできるかぁ, みたいな。  関係ないだろーけど, こんなのも見つけたです http://www.linux.or.jp/JF/JFdocs/kernel-docs-2.6/dnotify.txt.html  
+2005/07/24 21:22:30	はやまだす	むむーん、奥が深いですねー。 こういうことの「設定」のインターフェースに、 ファイルシステムという仕組みを利用するところが、 すごいですね！  

@@ -1,0 +1,81 @@
+<<鬱をこじらせて、本日、お休み>>
+
+* 休んでも誰も困らない
+* 会議への出席表明をしても、アジェンダの出席予定者に書いてもらえない
+
+のが、社内ニートの悲しいところ。
+(特に後者は思ったより、ショックだった)
+
+twitter は会社の人がバリバリに読んでるので、
+とてもこんなことは書けない。
+''(「にっき」は所在は知られているものの、
+あまりチェックはされてなさげ)''
+
+----
+
+:((amazon 4150310211 right))
+:: 日曜に買っておいたもの。本伝の((amazon 4150309752 text))がグイン・サーガの打ち止め作品かと思っていたら、外伝がありましたか。こちらは、悪く言えば、あちらこちらの雑誌に書下した作品の寄せ集めである。
+:: 標題にもなっている「ヒノプスの回廊」では、ランドックやアウラが登場し、グインの過去の秘密の一端が明らかになる。が、これが最初で最後の登場なのだなぁ。
+
+<<[Python] 構造体っぽいことをしたい>>
+
+こういう場合「辞書」だが、``foo["bar"]``と二重引用符を書くのが面倒。
+かと言って、タプルは数値でアクセスするので分かりにくい。
+Perl だったら ``$foo->{bar}`` と引用符を省略できるんだけどねぇ。
+
+こういう時のために、Python 2.6 くらいから、
+http://www.python.jp/doc/release/library/collections.html#collections.namedtuple{名前付きタプル}というものが出来たらしい。
+
+8<
+$ cat foo.py
+import collections
+
+Point = collections.namedtuple('Point',['x','y','z'])
+p1 = Point(1,2,3)
+print p1.x, p1.y , p1.z
+[c:hayama]
+$ ./foo.py
+1 2 3
+>8
+
+なんか大層だなぁ。
+python.jp によると、どうも動的にクラスを作っているらしい。
+そこまでせんでよろしい。
+
+もう少し、Perl のハッシュみたいに手軽に構造体を作れんだろうか。
+と思って、ひとクラス書いてみた。
+
+8<
+$ cat structs.py
+class Structs(object):
+    def __init__(self,**kwargs):
+        for key,val in kwargs.iteritems():
+            setattr(self,key,val)
+
+hoge = Structs( ahaha=1 , ihihi=2 )
+print hoge.ahaha
+[c:hayama]
+$ ./structs.py
+1
+>8
+
+ふむ、簡単だ。ただ、前にも書いたことがあるような or どこかで他の人が書いているのを見たような気がする。気のせいだろうか。
+
+ちなみに Perl だと
+
+8<
+my $hoge={ ahaha=>1 , ihihi=>2 };
+print $hoge->{ahaha};
+>8
+
+Lua だと
+
+8<
+local hoge={ ahaha=1 , ihihi=2 }
+print(hoge.ahaha)
+>8
+
+となる。
+Lua は元々、foo["bar"] を foo.bar と書けるという文法だし、
+構造体もハッシュも配列も「テーブル」だから、
+こういう悩みはそもそも無いんだよなぁ。

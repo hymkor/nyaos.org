@@ -1,0 +1,42 @@
+<HTML>
+<BODY>
+<H1>SQL に関するメモ</H1>
+
+<H2>ページング</H2>
+
+<P>何万件中、n 番目から 10件だけを取り出す場合、Oracle 8 だと困る。つーのも、</P>
+<PRE>
+    select * from T_LIST 
+     where rownum >= ?
+       and rownum < ?
+       and (その他、もろもろの条件)
+     order by T_LIST.SERIAL_NO ;
+</PRE>
+<P>等としても、１件もヒットしないからだ。</P
+
+<P>聞くところによると、Oracle 8 移行では、rownum の解釈が正しくなったらしく、
+    検索した後の結果に対して番号がふられるとのこと。
+    つまり、「rownum >= ?」は ? が1以外の場合、決して満たされない。
+    最初の行は必ず rownum = 1 になるからだ。
+</P>
+<P>ではということで、サブクエリを使う技がある。</P
+<PRE>
+    select … from (
+        select rownum LINENO , SERIAL_NO…
+          from T_LIST
+         where (その他、もろもろの条件)
+         order by T_LIST.SERIAL_NO
+    ) qry
+    where qry.LINENO >= ?
+      and qry.LINENO <  ? ;
+</PRE>
+<P>ところが、これ Oracle 8i からしか駄目であるそうな。
+    
+
+
+
+
+
+
+</BODY>
+</HTML>

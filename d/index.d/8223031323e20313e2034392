@@ -1,0 +1,18 @@
+<<oluacle を Lua 5.2 対応>>
+
+oluacle こと Lua for Oracle を Lua 5.2 に対応させました。
+
+* http://forgot.uh-oh.jp/doc/index.cgi?p=oluacle
+* https://bitbucket.org/zetamatta/oluacle
+
+対応自体は簡単だったんですが、テストが面倒でした。
+OracleサーバをホストOS(Windows)に入れて、
+OracleクライアントをゲストOS(CentOS)に入れなくちゃいけないんですが、
+最初、ゲストからホストへの Oracle*Net 接続が出来なくて、
+うーんうーんと悩んでしまいました。
+原因は Windows の Firewall でしたが。
+
+あと、Lua をソースからビルドした場合は大丈夫ですが、
+LuaBinaries の lua52.exe は、
+require に失敗すると落ちちゃうという不具合があるようです。
+気を付けなきゃいけないですね。

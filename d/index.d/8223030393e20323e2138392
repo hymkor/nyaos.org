@@ -1,0 +1,102 @@
+<<何を血迷ったか、また新しい言語に手を…>>
+
+>> lua <<
+
+たぶん、おいらは「汎用的な awk」を探し求めてるのかもしれない。
+でも、そんなものはどこにも無いんだ。いい加減、目を覚ませ(←誰)。
+
+で、言語仕様見た。一言で、その特徴を表すなら
+
+>> あまり濃くない <<
+
+ギークな人が見ると面白みにかけるかもしれない。
+でも、素直で分かりやすい。素朴な言語という感じがする。
+
+* 変数宣言に「local」というキーワード。
+
+Perl 4 の local を彷彿しそうで、Perl 5 の人は苦いかもしれない。つーか苦い
+でも、濃くない人にとっちゃ「ローカル変数だから local」。分かりやすすぎる。
+
+* ループ構文が BASIC を彷彿とさせる for 文
+
+8<
+$ lua
+Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
+> for i=1,10 do
+>> print(i)
+>> end
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+>
+>8
+
+今時、カウンタの開始と終了を文法に組み込んでるとは。
+だが、その一方で、for ～ in 文も装備はしている。
+(lua の癖に生意気な)
+
+8<
+> foo={"a","b","c","d"}
+> for key,val in pairs(foo) do
+>> print(key,val)
+>> end
+1       a
+2       b
+3       c
+4       d
+>
+>8
+
+>> それ何ていう iteritems()？ <<
+
+[Lua 5.1 リファレンスマニュアル|http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html#pdf-next]によると、in の後のパラメータは
+コンテナそのものではなく、
+イテレータ関数,状態,繰り返し変数のトリオでないといけないらしい。
+
+>> イテレータ関数！ <<
+
+どうやら、この言語、思ったよりも奥が深そうな勢いだぜ。
+(紹介しだすとキリがないので、この辺にしておく)
+
+<<[Lua] ARGF/fileinput 的なものを書いてみた>>
+
+8<
+#!/usr/local/bin/lua
+
+function ARGF()
+    local ARGINDEX=1
+    local NR=0
+    local iter,status,pointer = io.lines(arg[ARGINDEX])
+    return function()
+        while true do
+            line = iter(status,pointer)
+            if line ~= nil then
+                NR = NR + 1
+                return line,arg[ARGINDEX],NR
+            end
+            ARGINDEX = ARGINDEX + 1
+            NR = 0
+            if ARGINDEX > #arg then
+                return nil,nil,nil
+            end
+            iter,status,pointer = io.lines(arg[ARGINDEX])
+        end
+    end
+end
+
+for line in ARGF() do
+    print(line)
+end
+>8
+
+ふむ、別にダサくも何ともないね。
+(引数が１つも無い時に、標準入力を参照するという仕様を忘れていたが、
+まぁ、いいだろう)
+

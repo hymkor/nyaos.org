@@ -1,0 +1,257 @@
+package rssreader;
+my $version='0.1';
+
+use strict;
+use warnings;
+use IO::Socket;
+use Encode;
+
+$version .= '++' if defined(&strict::import);
+
+$::preferences{"plugin: rssreader $version"} = [
+    { desc => 'RSS-URL http://', name=>'rssreader__rssurl' ,
+      cols =>60 , type=>"textarea"},
+    { desc => 'max number(default)' , name=>'rssreader__maxnum' , size=>2  },
+];
+
+$::inline_plugin{'rssreader'} = sub {
+    my $session = shift;
+    my %opt;
+    while( $#_ >= 0 && $_[0] =~ /^-/ ){
+        $opt{ $' } = 1;
+        shift(@_);
+    }
+    my ($rssurl,$maxnum)=@_;
+
+    ### URL normalize ###
+    my $rsslist = $::config{'rssreader__rssurl'} 
+        or return '(not defined rss-list)';
+    my @rsslist = split(/\s+/,$rsslist); 
+    if( defined($rssurl) ){
+        if( grep( $_ eq $rssurl , @rsslist ) <= 0 ){
+            return "<blink>not found permitted url: $rssurl</blink>";
+        }
+    }else{
+        $rssurl = $rsslist[0];
+    }
+    $rssurl =~ s|^http://||;
+    my ($host,$uri) = split(m|(?=/)|,$rssurl,2);
+    $uri ||= '/';
+
+    ### Entry number normalize ###
+    my $default_number=$::config{rssreader__maxnum};
+    if( !defined($default_number) || $default_number !~ /^\d+$/ ){
+        $default_number = 8;
+    }
+    if( !defined($maxnum) || $maxnum !~ /^\d+$/ || $maxnum > $default_number ){
+        $maxnum = $default_number;
+    }
+
+    my @entries;
+    my $mtime;
+    &rss( &::title2fname( $session->{title} , $rssurl . '.txt'   ) ,
+          &::title2fname( $session->{title} , $rssurl . '.stamp' ) ,
+          $host ,
+          $uri ,
+          $maxnum ,
+          \@entries ,
+          \$mtime 
+    );
+    my $tag= $opt{o} ? 'ol' : $opt{u} ? 'ul' : 'dl';
+    qq(<$tag class="rssreader">\n) . join('',
+            map{
+                my $cont=$_->[1];
+                if( $_->[0] ){ ### has a url ###
+                    $cont = sprintf('<a href="%s">%s</a>',$_->[0],$cont);
+                }
+                if( $opt{o} || $opt{u} ){
+                    '<li>'.$cont.'</li>';
+                }else{
+                    sprintf(qq(<dt>%s</dt><dd>%s</dd>\n) ,
+                        $cont ,
+                        &set_class_category($_->[2]) );
+                }
+            } @entries
+    ) . "</$tag><!-- " . 
+        ( defined($mtime) ? ('Update on '.localtime($mtime))
+                          : 'New created' ) . '-->';
+};
+
+sub set_class_category{
+    my ($desc)=@_;
+    $desc =~ s|^(\[.*?\])+|<span class="rssreader_subject">$&</span>|;
+    $desc;
+}
+
+sub rss{
+    my ($fname , $stampfn , $host , $uri , $max_entries , $entries , $mtime_ref) = @_;
+
+    my @oldentries;
+    my $cache=&::read_file($fname);
+    foreach my $line ( split("\n",$cache) ){
+        push( @oldentries , [ map(&::deyen($_),split(/\t/,$line,3)) ] ); 
+        last unless scalar(@oldentries) < $max_entries ;
+    }
+    
+    $$mtime_ref=$#oldentries >=0 ? (stat($fname))[9] : undef;
+    my $xml;
+    if( $cache eq '' || ! -f $stampfn || ( -M $stampfn ) > 15.0/(24*60) ){
+        &::write_file( $stampfn , scalar(localtime) );
+        eval{
+            local $SIG{ALRM} = sub { die('Timeout to read RSS'); };
+            alarm(30);
+                $xml = &http( $host , $uri , $$mtime_ref );
+            alarm(0);
+        };
+        if( $@ ){
+            alarm(0);
+            if( $@ =~ /Timeout to read RSS/ ||
+                $@ =~ /.hatena.ne.jp not found/ ){ 
+                undef $xml;
+            }else{
+                die($@);
+            }
+        }
+    }
+
+    my @newentries;
+    if( defined($xml) ){
+        my $encode='utf8';
+        if( $xml =~ /^Content-Type:.*charset=([\-\_\w]+)/ ||
+            $xml =~ /<?xml[^>]+encoding="?([\-\_\w]+)"?/ )
+        {
+            my $charset=$1;
+            if( $charset =~ /euc[\-\_]?jp/i ){
+                $encode = 0;
+            }elsif( $charset =~ /utf[\-\_]?8/i ){
+                $encode = 'utf8';
+            }
+        }
+        if( $encode ){
+            Encode::from_to($xml,'utf8','euc-jp',Encode::XMLCREF);
+        }
+        &parse_rss($xml, 
+            sub{
+                my ($url,$title,$desc)=@_;
+                if( defined($oldentries[0])      &&
+                    defined($oldentries[0]->[1]) &&
+                    $oldentries[0]->[1] eq $title )
+                {
+                    0;
+                }else{
+                    push(@newentries,[ $url , $title , $desc ]);
+                    (scalar(@newentries) < $max_entries ) ? 1 : 0;
+                }
+            }
+        );
+    }
+    @{$entries}=(@newentries,@oldentries);
+    splice(@{$entries}, $max_entries ) if $max_entries < scalar(@{$entries}) ;
+
+    if( defined($xml) ){
+        &::write_file( $fname , join('',map(
+                    &::yen($_->[0])."\t".
+                    &::yen($_->[1])."\t".
+                    &::yen($_->[2])."\n", @{$entries})) );
+        $::version le '1.0.2.3' and &::directory();
+    }
+}
+
+# If $since has TIME and the page not modified, &http returns undef;
+sub http{
+    my ($host,$path,$since)=@_;
+
+    my $http = IO::Socket::INET->new(PeerAddr=>$host,PeerPort=>80,Proto=>'tcp')
+        or die("socket error.\n");
+    $http->print("GET $path HTTP/1.1\r\n");
+    if( defined($since) ){
+        my @tm=split(/\s+/,''.gmtime($since));
+        $http->printf("If-Modified-Since: %s, %02d %s %d %s GMT\n" ,
+                        $tm[0],$tm[2],$tm[1],$tm[4],$tm[3]) ;
+    }
+    $http->print("Host: $host\r\n");
+    $http->print("Connection: close\r\n");
+    $http->print("\r\n");
+
+    my $flag=0;
+    my $body='';
+    if( ( split(/\s+/,<$http>) )[1] eq '304' ){
+        $body = undef;
+    }else{
+        while( defined(my $line=<$http>) ){
+            if( $line =~ /^\r?\n?$/ ){
+                while( defined(my $line=<$http>) ){
+                    $body .= $line;
+                }
+                last;
+            }
+        }
+    }
+    $http->close();
+    $body;
+}
+
+sub parse_xml{
+    my ($xml,$start,$end,$text)=@_;
+    $xml =~ s/\<\!\[CDATA\[(.*?)\]\]\>/"\a".unpack('h*',$1)."\a"/ges;
+    while( length($xml) > 0 ){
+        if( $xml =~ m|\A\</([^\<\>]+)\>|s ){
+            $xml = $'; 
+            $end->(split(/\s+/,$1)) or return;
+        }elsif( $xml =~ m|\A\<([^\<\>]+)\>|s ){
+            $xml = $'; 
+            $start->( split(/\s+/,$1) ) or return;
+        }elsif( $xml =~ m|\A[^\<\>]+|s ){
+            $xml = $';
+            my $body = $&; $body =~ s/\a(.*?)\a/pack('h*',$1)/ges;
+            $text->( $body ) or return;
+        }else{
+            return;
+        }
+    }
+}
+
+sub parse_rss{
+    my ($xml,$get_entry)=@_;
+    my $item=undef;
+    my $text=undef;
+    &parse_xml( $xml ,
+        sub { ### Start ###
+            my $tag=shift;
+            my @elements = @_;
+            if( $tag eq 'item' ){
+                my %hash;
+                grep( (/^([^\=]+)\=\"?(.*?)\"?$/ and $hash{$1}=$2,0),@elements);
+                $item = { url=>$hash{'rdf:about'} , 'dc:subject'=>[] };
+            }elsif( defined($item) && $tag =~ /title|description|dc\:subject/){
+                $text = '';
+            }
+            1;
+        } ,
+        sub { ### End ###
+            my ($tag)=@_;
+            if( defined($text) ){
+                if( $tag =~ /^(title|description)/ ){
+                    $item->{ $tag } = $text;
+                }elsif( $tag eq 'dc:subject' ){
+                    push(@{$item->{'dc:subject'}},$text);
+                }elsif( $tag eq 'item' ){
+                    my $rv=$get_entry->( $item->{url},
+                            $item->{title}, 
+                            join('',
+                                map("[${_}]", grep( $_  , @{$item->{'dc:subject'}}))
+                            ) .  $item->{description} 
+                        ) or return 0;
+                    undef $item;
+                }
+            }
+            1;
+        } ,
+        sub { ### Text ###
+            defined($text) and $text .= $_[0];
+            1;
+        }
+    );
+}
+
+1;

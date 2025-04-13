@@ -1,0 +1,75 @@
+<<[NYAOS] NYAOS 3000 テスト公開>>
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{NYAOS 3000}
+
+まだまだ、これから、どんどん仕様を作り込んでゆくところでございます。
+
+* [廃止] option +multilinequote
+** 引用符で改行を囲むことを許可 ⇒ このオプションがなくても許可するようにした。((fn (2009.11.16) 追記：これ、内部的に呼び出しているCMD.EXEの制約で、外部コマンドでは二行目以降が落ちてしまうという問題がありますので、注意。option +standalone してたら大丈夫なんですが))
+* lua_e コマンド
+** 第一引数の lua 文を実行する。
+
+あとは[[先日紹介した内容|(2009.11.07)#p1]]のままでございます。
+ただし、(Lua ではなく、NYAOS内蔵コマンドの)requireはナシの方向で(lua_e 内で require を打てば済む)
+
+しかし、我ながら、``nyaos.command.filter`` は強力だと思った。
+
+8<
+lua_e "
+    --「%(Lua式)」を処理する Lua コード --
+    function nyaos.filter(cmdline)
+        return cmdline:gsub('%%(%b())',function(m)
+            return loadstring('return '..m)()
+        end)
+    end
+"
+>8
+
+とかすると
+
+8<
+$ echo %(1+2+3)
+6
+>8
+
+なんて出来るようになるんだから。
+このコードは _nya の中に組み込んである。
+今後、同じ調子で NYAOS.EXE 本体ではなく、
+_nya の中の実装でかなりのことができるようにしていきたいものだ。
+
+今後の方針は以下のとおり
+
+* Cygterm 経由で使えるようにする
+** これ重要。これが実現したら、Cygterm で bash 走らせることが自分的に少なくなるので、モチベーションむっちゃあがる。
+* 一行インタプリタも Lua でハックできるようにする
+** Vz みたいに ESC をたたいたら、エディター起動ってこともできるようになるはず。
+* Lua で実現できたり、もともと非推奨扱いされていた内蔵コマンドは廃止する 
+** print コマンドとか、sub コマンドとか
+
+<<[NYAOS][Oracle] NYAOS 3000 から oluacle 呼べた！>>
+
+oluacle とは、
+http://forgot.uh-oh.jp/doc/index.cgi?p=oluacle{
+拙作の Oracle 用 Lua ライブラリ}なんですが、
+試しにやってみたら、あっさり出来た！
+
+8<
+$ uacle.new('HR','HR'):exec([[select tname from tab]]) do print(rs.TNAME) end"
+REGIONS
+COUNTRIES
+LOCATIONS
+DEPARTMENTS
+JOBS
+EMPLOYEES
+JOB_HISTORY
+EMP_DETAILS_VIEW
+[c:nyaos3k]
+>8
+
+横スクロールで切れてるところを補完すると、正確なコマンドラインは以下のとおり
+
+8<
+lua_e "require 'oluacle' ; for rs in oluacle.new('HR','HR'):exec([[select tname from tab]]) do print(rs.TNAME) end"
+>8
+
+すげー俺！ 夢がひろがりんぐ【それはもういいって】

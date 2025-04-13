@@ -1,0 +1,13 @@
+http://www.mulesoft.org/what-mule-esb{What is Mule ESB | Mule ESB Community}
+
+*  '''Service creation and hosting''' ― expose and host reusable services, using Mule ESB as a lightweight service container
+* '''Service mediation''' ― shield services from message formats and protocols, separate business logic from messaging, and enable location-independent service calls
+* '''Message routing''' ― route, filter, aggregate, and re-sequence messages based on content and rules
+* '''Data transformation''' ― exchange data across varying formats and transport protocols
+
+:サービスの作成とホスティング
+:: Mule ESB の軽量サービスコンテナを使って、再利用可能なサービスを expose して、ホストする。
+:サービスの仲介(Mediation)
+:: メッセージのフォーマット・プロトコルからをサービスを隠蔽して、メッセージングからビジネスロジックを切離し、場所に異存しないサービス呼び出しを可能にする。
+:データ変換
+:: 様々なフォーマットや経由するプロトコルを横断して、データを交換する。

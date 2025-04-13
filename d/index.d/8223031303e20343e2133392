@@ -1,0 +1,88 @@
+<<ckw の最新バージョンが混沌としている件について>>
+
+ckw というと、今や NYAOS(NYACUS) と二人三脚で動くターミナルとして、
+Windows のネイティブコンソール愛好者には欠かせない存在なわけだが…
+
+原作者の「Kazuo Ishii」氏のサイトの消滅とともに:
+
+* 三人の開発者
+** http://d.hatena.ne.jp/hideden/{id:hideden氏}
+** http://blogs.wankuma.com/shuujin/{「囚人」氏}
+** http://d.hatena.ne.jp/bleis-tift/{id:bleis-tift氏}
+* 二つの最新ソース
+** http://blogs.wankuma.com/shuujin/archive/2008/10/15/158825.aspx{ckw-0.8.10-mod-mod}
+    by 「囚人」氏
+** http://d.hatena.ne.jp/bleis-tift/20091117/1258448920{ckw-0.8.10-mod3}
+    by id:bleis-tift氏
+
+が入り乱れる混沌状態と化していることを御存知だろうか。
+
+まぁ、詳しい相関は http://nyaos.org/index.cgi?p=Where+is+ckw+%3F{これ} 
+にまとめたが、要するに hideden氏の第一バージョン(mod1)は結構知られているのだが、
+その後、みなさん連携できずに問題解決にあたってしまっちゃってるというわけなんですねぇ。
+
+で、二つの最新ソースのマージを試みてみたわけだが…
+
+>> 見事にコンフリクトしてますなぁ <<
+
+どっちがどういいのか、正直分からんです。
+実害は無いけど、誰か何とかした方がいいんじゃないでしょーか。
+(というか、原作者の人はいったい何処へ？)
+
+<<<追記>>>
+
+http://www.graphviz.org/{Graphviz}を使って、バージョンの分岐を図にしてみました。
+
+* 黄色：原作、マゼンダ：ヘッドバージョン
+* 長方形：パッケージ化されているもの、楕円：修正パッチのみ
+
+<<{ckw-mod.png}
+
+<<{ckw-mod.dot}{ソース}はこんな感じ
+
+((ref_text ckw-mod.dot))
+
+<<[vim][Cygwin] skk.vim の変換記号の件>>
+
+* >>{(2010.04.11)#p2}{どうも、Cygwin 1.7 の UTF8 環境で、日本語の記号を使うとズレやすい傾向にある}
+
+ということで、この時は Cygwin 上の vim + skk.vim でズレないように：
+
+8<
+let g:skk_marker_white = '<>'
+let g:skk_marker_black = '>>'
+>8
+
+とした。だけど、今一目立たないし、せめて他の環境くらいは▽や▼を使いたい！
+ということで：
+
+8<
+if &encoding == 'utf-8'
+    let g:skk_marker_white = '<>'
+    let g:skk_marker_black = '>>'
+endif
+>8
+
+とした。これで、エンコードが utf8 の時だけ、<> や >> が使われる。
+
+だが、http://lingr.com/room/vim/archives/2010/04/13#message-294370{lingrにて}
+
+6<
+    gvimだとset ambiwidth=doubleで直るところを見るとそうなんだろうなと思います。
+>9
+
+とあったので、もしやと思い：
+
+8<
+if &encoding == 'utf-8'
+    set ambiwidth=double
+    "let g:skk_marker_white = '<>'
+    "let g:skk_marker_black = '>>'
+endif
+>8
+
+としてみたら、Cygwin 1.7×UTF-8表示×TeraTerm でも、
+普通に▽や▼が表示されるようになったヨ！(.vimrc で先頭が「"」で始まる行はコメント)。
+要は、unicode で文字幅が半角・全角が曖昧な奴は全角にしちまえという設定なんでしょうかね。
+
+かくして地球は平和になった！

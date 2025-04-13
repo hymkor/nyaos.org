@@ -1,0 +1,16 @@
+package wifky::eucjpurl;
+
+use Encode;
+
+my $title=$::form{p};
+unless( -f unpack('h*',$title) ){
+    $title=encode_utf8( decode('euc-jp',$title) );
+    if( -f unpack('h*',$title) ){
+        &::transfer_page($title);
+    }
+}
+
+if( $::form{p} =~ /#/ ){
+    &::transfer_url( &::myurl( { p=>$` } , "#$'" ) );
+}
+

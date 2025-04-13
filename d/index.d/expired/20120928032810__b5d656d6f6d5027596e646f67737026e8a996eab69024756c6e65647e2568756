@@ -1,0 +1,6 @@
+http://www.hatena.ne.jp/1121336982 より
+
+<blockquote>
+Windows標準のtelnetクライアントでは、漢字コードの初期値がShift-JISになっています。
+接続後、CTRL+]で設定モードに入り、set codeset Japanse EUC と入力してください。
+</blockquote>

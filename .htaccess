@@ -1,0 +1,40 @@
+#Options +ExecCGI
+
+# if you run tDiary with symbolic link, use settings below.
+#Options FollowSymLinks
+
+# if making anchor style as 'YYYYMMDD.html', use settings below,
+# then change 'your_URL_of_index.rb' and use html_anchor.rb plugn.
+# But this method makes error into error_log of apache. It is better
+# method to use mod_rewrite.
+#
+#<Files ~ "^([0-9]{6}|[0-9]{8}).html$">
+#    ErrorDocument 404 your_URL_of_index.rb
+#</Files>
+
+SetEnvIf User-Agent "NaverBot"          ng
+SetEnvIf User-Agent "msnbot"            ng
+SetEnvIf User-Agent "TurnitinBot"       ng
+SetEnvIf User-Agent "InternetLinkAgent" ng
+SetEnvIf User-Agent "Yeti"              ng
+SetEnvIf User-Agent "ia_archiver"       ng
+SetEnvIf User-Agent "Wget"              ng
+SetEnvIf User-Agent "nicobot"           ng
+SetEnvIf User-Agent "Baiduspider"       ng
+SetEnvIf User-Agent "Baiduspider+"      ng
+
+order allow,deny
+allow from all
+deny from env=ng
+deny from 60.190.240.
+deny from 119.63.193.
+deny from 119.63.194.
+
+Redirect permanent /d/monjoe.cgi        http://nyaos.org/d/
+Redirect permanent /p/nya/index_ja.html http://www.nyaos.org/index.cgi?p=FrontPage.ja
+Redirect permanent /p/nya/index.html    http://www.nyaos.org/index.cgi?p=FrontPage.ja
+Redirect permanent /index_ja.html       http://www.nyaos.org/index.cgi?p=FrontPage.ja
+
+<Files robots.txt>
+Allow from all
+</Files>

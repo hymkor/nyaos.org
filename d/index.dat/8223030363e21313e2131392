@@ -1,0 +1,78 @@
+* 今日は Binary Hacks 発売日らしい。土曜はヒキコモる日だから、
+  明日買ってくる(ぉ-ぃ)
+
+* Python の入力時の行セパレータは、どうやって変更するんだ？
+** AWK なら ``RS`` , Perl なら ``$/`` ,
+   Ruby は ``gets`` の第一引数を変更すればいいわけだが。
+
+<<[python] お勉強：rmclone を書いてみる>>
+
+と思ったが、
+http://hp.vector.co.jp/authors/VA009797/warp/ell.html#rmclone{rmclone }の詳しい仕様を忘れたので、
+引数で渡したディレクトリ以下で、重複してそうなファイルを表示するだけ：
+
+8<
+#!/usr/bin/env python
+
+import os
+import sys
+
+list = {}
+for root in sys.argv:
+    for dirpath,dirnames,filenames in os.walk(root):
+        for fn in filenames:
+            fullpath = os.path.join( dirpath , fn )
+            try:
+                size = os.path.getsize( fullpath )
+            except OSError:
+                continue
+            t = list.get( (fn,size) , [])
+            t.append( fullpath )
+            list[ fn,size ] = t
+
+for fn,size in list :
+    val = list[fn,size]
+    if len(val) <= 1 :
+        continue
+    print "### %8d %2d %s ###" % \
+        (size,len(val),fn)
+    print "\n".join(val)
+    print ""
+>8
+
+* ファイルの中身自体は比較していないのに注意。
+* ファイル名とサイズのペア(タプル)を、ハッシュ(辞書)のキーにできるのはいいな！
+* ほんと Python では、勉強とネタを兼ねた遊びコーディングしかしてないなぁ。
+** 実用的な何かを書きたいのぉ。
+* ちなみに lolipop は Python 2.2.2 が入っているようです。
+** ''''2.5 入れてくれ！''''
+* Python 1.5 が入ってる Linux 環境に影響を与えずに、
+  Python 2.5 を入れることはできるでしょうか？
+** できる！
+** どうやって？
+** ''''質問は一つだけと言ったはずだ''''
+* Python と AWK って共通点がある。
+** 一見、とっつきが悪いが、書いてみるとエレガント〜
+* だいたい、こういうプログラミングネタは、
+  おもしろいのは書いてる側だけで、
+  読者は全くもって退屈だったりして。
+
+<<ゲオでいろいろ借りた>>
+
+* ((amazon B0000DG18F)) 中古を買った：
+** これで、そんな、大人修正できるぞ。
+
+* ((amazon B000B8FJLG)) 借りた。見た：
+** ふむ、今回は、キャラクターがみんな不機嫌だな。
+** Ｚみたいな屁理屈合戦もいいけど、エウレカみたいなシカト合戦も悪くないね
+  (十分悪いです)
+
+* ((amazon B0001A7D2C)) 借りた。見た：
+** マヨネーズをご飯にかけて食べるのは…うまそうだけれども、体に悪そうだ。
+*** どうせかけるなら、食パンにしときなさい(こら)
+** ケムマキ、いい奴ぢゃないか
+** ''''波動砲もいいけど、日本の最終兵器は、やっぱり忍者だなと思った。''''
+
+* ((amazon B000F72NTE))
+** 渡辺謙さんのファンとしては見ないわけにはいくまい(それでも今頃かよ)
+** ということで、借りた。これから見る。

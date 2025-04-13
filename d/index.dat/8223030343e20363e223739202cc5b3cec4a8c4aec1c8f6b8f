@@ -1,0 +1,84 @@
+<<((lb))GAME((rb)) 今日のポイボス>>
+
+弾薬を節約するために、弱い敵に遭遇した時、逃げてばかりいたら、
+信頼度が落ちて、<big>仲間に逃げられる罠</big>。
+
+幸い、戦いに 2,3度勝ったら、警告が消えた。よかったよかった。
+
+<<((lb))おさんぽ((rb)) うろうろ >>
+
+* http://www.enterbrain.co.jp/digifami/products/rpgxp/shinkinou.html{
+    RPGツクールXP}
+( ((lb))2ch((rb)) http://pc5.2ch.net/test/read.cgi/tech/1087999575/{Rubyについて Part 9}より)
+((br))　<cite>
+	――「『RPGツクールXP』では、『Ruby』というプログラミング言語を
+	『RPGツクール』専用にカスタマイズした言語
+	『Ruby Game Scripting System（以下、『RGSS』）』が採用されており…
+	</cite>
+((br))　Ruby 人口大幅 Up の悪寒。
+	shitaraba.com に
+	http://jbbs.shitaraba.com/game/14836/{RGSSの専用掲示板}も出来ているようです。
+* http://www.kowa.org/modules/pukiwiki/176.html{
+    のぶのぶXOOPS - CUIブラウザw3mの意外な使い勝手}
+* http://www.hyuki.com/yukiwiki/wiki.cgi?textarea{
+    textarea - textareaとテキストエディタ連携 } 
+    (以上 http://kitaj.no-ip.com/tdiary/20040627.html#p05{
+	今日のなんでやねん}より)
+((br))　しまった！ w3m だと、元々、テキストエリア入力は「任意のエディタ」
+	だったんだ。しかも、rxvt を組み合わせると、
+	アンダーラインやボールドを表示できるし、普通にプレビューも出来る。
+((br))　ということで、tDiaryClient(仮称)は開発放棄。
+	でも、VisualuRuby計画(仮称)と``Net::Http`` クラスのいい勉強になったな。
+* http://www.tebichi.com/tebichi/clms/01mt/clms/040527.html{
+    TeBiCHi.com / 僕とイエスと掘っ立て小屋}
+(http://www109.sakura.ne.jp/~blueday/tdiary/?date=20040624#p02{愚痴口}より)
+((br))　かの又吉イエス氏の過去。いい先生だったんですね。
+
+<<Not only light But for Writing Browser 'w3m'>>
+
+正直、w3m を甘く見ていた。なんで気付かなかったんだろう。
+
+よくある誉め言葉に「w3m は、とても軽いブラウザである(light browser)」
+というのがあるけど、Opera 等、GUI ベースでも軽いものもあるわけだし、
+正直、あまり魅力を感じられなかった。
+
+だが、日記書きに w3m を使ってみて初めて気がついたんだけど、
+UNIX系ユーザにとって「<b>書く</b>」用途では最高のブラウザですね。
+今、w3m on rxvt + jvim for Windows(GUI専用)という組み合わせで書いているわけですが、
+
+* w3m 自体のキーバインドは (だいたい) vi 準拠
+* textarea の編集は jvim がほぼ瞬時に起動
+* その他の一行入力は、w3m 内で readline (Emacsバインド)
+* 日記系ページは、そもそも画面装飾がある程度限られているので、
+    表示内容のプレビューも w3m + rxvt で十分用足りる。
+* 日記本文だけでなく、設定画面も jvim が使える。
+
+など、その使い勝手の良さに、今更ながらカルチャーショックです。
+wiki とか、ウェブアプリケーション全体に対する食わずもの嫌いが一掃されました。
+ただ、オフラインでの執筆はちょっと辛いかなっていうのはありますが。
+
+ところで、jvim は Windows ネイティブのものですが、Cygwin の w3m on rxvt からも
+シームレスに呼び出せました。cygdrive パスをきちんと認識してくれるようです。
+たいしたもんだ。
+
+<<((lb))おさんぽ((rb)) はやくねろよ>>
+
+* http://www.rumandmonkey.com/widgets/toys/namegen/969/{
+    Rum and Monkey: The Name Generator Generator}
+((br))　わたしは「浜野一真 or 彩花」だそうです。
+	正直、本名ほどインパクトないなぁ。
+	親に感謝しとくか。子供のころは結構キツかったんだが。
+* http://wangando.com/diary/2004/06/26/#A03{湾岸日記：中国は今エネルギー不足へ}
+    (http://dayomon.fc2web.com/index.html{それゆけ！！だよもん星}より)
+((br))　まずは敵を知るべし。
+* http://www.net1.nus.ne.jp/~takahide/sap/sap.html{いろんな漫画家が描いた風のサップ}
+    (http://dayomon.fc2web.com/index.html{それゆけ！！だよもん星}より)
+((br))　秀＠蔵さんという方が書く絵はインパクト高し！
+* http://www.kiy.jp/~drudgery/mukiryoku.htm{無気力度診断}
+    (http://d.hatena.ne.jp/manhole/20040627#1088349841{manholeのおきらくごくらく日記}より)
+((br))　<cite>
+	――かなり無気力な性格です。このまま無気力になっていくかどうかの瀬戸際ですね。
+	戻るなら今ですよ！ちなみにあなたの性格を動物にたとえるとラクダです。
+	しかもフタコブラクダ。コブがふたつ。
+    </cite>
+((br))　言われなくても、自覚済み！

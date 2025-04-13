@@ -1,0 +1,83 @@
+
+<<Ping of heart>>
+
+ふむ、休日に心臓付近が痛くなってくるのは、
+ストレスが原因かと思っていたが、
+もしかして、ゴロゴロしすぎのせいですか？
+
+マクラトップＰＣというのは、よろしくないのやもしれん。
+
+<<ぞくぞく Firefox Plugin>>
+
+* http://guide.search.goo.ne.jp/plugin/firefox/{
+    Mozilla Firefox対応 goo サーチプラグイン}
+* http://hatena.g.hatena.ne.jp/hatenaantenna/20041225#1103970237{
+    Firefox Extention 「Hatenabar」について}
+
+goo も hatena も Firefox に続々対応ですか。
+hatena はあからさまなツールバーなのに対し、
+goo の方は、既存の検索ボックスに検索エンジンサイト追加だけです。
+それぞれのサイトの性質を考えると、妥当ですね。
+goo の辞書は重宝しているので、これはありがたい拡張です。
+
+しかし、細かい挙動は Opera の方が馴染んでるんだよなぁ。
+拡張性の Firefox か、必要十分の Opera か。なかなか悩ましい。
+ということで、Opera の検索窓を goo 対応にする方法を調べてみました。
+
+* http://www.moonstone.jp/cgi/sim/{
+    opera Search.ini Maker}
+* http://www14.plala.or.jp/operairc/search.html{
+    Search.ini Customizations}
+
+最初、<tt>C:\Program Files\opera\search.ini</tt>の方を触ってしまい、
+反映されんと悩んでいましたが、
+<tt>C:\Documents and Settings\(ユーザ名)\Application
+Data\Opera\Opera\profile</tt>でないといかんようですね。
+小一時間悩んでしまったではないですか（馬鹿者）。
+
+<<名前重要 - FireFox>>
+
+ところで、Firefox の躍進は、広告効果もあると思いますが、
+どちらかというと名前効果でしょうね。
+Mozilla / Firebird ともに、名前だけ聞くと、正直ダサダサです。
+特に Mozilla は、マニアックさ丸出しという感じで、
+Hacker ならともかく、お堅い人は受け入れにくいでしょう。
+
+対して、Firefox。
+これは、どっかの航空機のようでなかなか格好よろしい。
+クリント・イーストウッドあたりが（古っ！）、
+某国の空軍から強奪してきそうです（どこの映画だよ！）。
+まったくもって、名前重要。
+
+関連リンク：
+
+* (マルチ検索サービスの)http://blog.livedoor.jp/jdash/archives/8979842.html{
+    9199.jp はNetscape・Operaでも使えます！}
+    :: プラグイン自体は IE でしか使えないが、
+	サイト側は Firefox , Opera でも対応しているという話題。
+	マルチ検索には余り関心はないので、紹介のみ。
+
+<<((lb))D言語((rb)) 無名コールバック関数>>
+
+ふむ、http://www.kmonos.net/alang/d/expression.html#FunctionLiteral{
+無名関数(関数リテラル)}が使えるのですか。これは素晴しい。
+
+delegate キーワードを使うと、Ruby の Iterator 的なことができますね。
+でも、Ruby 以外の言語で、言語機能としてサポートされているにも関わらず、
+無名コールバック関数が活用されていないのは何故なんだろう。
+
+<<((lb))D言語((rb)) jvim の UTF8 サポート>>
+
+あー、jvim って、UTF8 サポートしてたのか(<tt>:set jcode=t</tt>)。
+今の今まで知らんかっとった。
+これで、Ｄ言語のソースをコンパイルエラーなく入力することは可能になった，
+
+しかしながら、UTF8 の文字列リテラルを printf で出力すると、
+当然ながら文字化けしてしまう。
+自然な方法で SJIS に自動変換して出力する方法はないものか。
+OS 側で変換してくれるのが望ましいのだが。
+
+Shift JIS も、
+http://www.sun-inet.or.jp/~yaneurao/dlang/Chapter-07.html{
+wysiwyg文字列}(r"…")を使えば通るんで、
+回避できるっちゃあ、できるんだが。 なんかなぁ。

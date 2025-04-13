@@ -1,0 +1,1 @@
+2005/05/02 18:57:55	Orca	*.XULファイルだと再読み込みも可能だし, それに JavaScriptも CSSも 一部の I18Nも できなくはないれす。こんな感じで。 <script type="application/x-javascript"><![CDATA[ // JavaScript  ]]> </script> <!DOCTYPE window [   <!ENTITY hello "Hello">   <!ENTITY bye "Bye"> ]>  

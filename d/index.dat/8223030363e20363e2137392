@@ -1,0 +1,81 @@
+* 「http://blog.livedoor.jp/dankogai/archives/50531152.html{地球が滅亡したって、別に宇宙がおかしくなるわけではない。まったく影響ないだろう}」というフレーズにほれた！なんか、仏教の精神のようだ。でも、下手したらオウム。
+
+* Gmail むしろ有料化してくれまいか。
+  その方が、Google がサービスの保証の義務を負うので、安心して使えるというものだ。
+
+* こういう時、トラックバックできないのはくやしいなぁと思いました。
+  コメント欄にこっちの URL を書いたけど、やってることは、まるでスパマー。
+  こうなったら、トラックバックがんばって実装します。
+  まずは、参考資料探しから始めないといかんなぁ。
+
+* wifkyNews(なんだそれ)での標題は、その語尾で誰がリリースしたか分かる。
+  「しました」→ わし。「されています」→ わし以外の誰か。
+  述語の活用で主語が推定できるのが古来の日本語。
+  でも、そういう配慮なしに主語不明な馬鹿な日本語を書く馬鹿がいて、
+  困ったもんだ。そういうのを社訓にされ、あまつさえ暗唱まで強いられて、
+  危うく発狂するところだった。あぶないあぶない。
+
+<<http://ll.jus.or.jp/2006/blog/categories/doukaku2.0/{キミならどう書く2.0 ― Lightweight Language Ring} Oracle - PL/SQL編>>
+
+(http://gauc.no-ip.org/wiki.cgi/private?page=Blog%2F2006%2D6%2D15{
+Rocco の日記}より)
+
+軽々しい貴様らに、この俺様が特別に
+エンタープライズなソリューションというものを見せてくれよう！
+
+<pre>
+SET SERVEROUTPUT ON SIZE 100000;
+DECLARE
+    TYPE T_FURUI IS TABLE OF BOOLEAN INDEX BY PLS_INTEGER;
+    A_FURUI T_FURUI ;
+    I       PLS_INTEGER;
+    J       PLS_INTEGER;
+    IMAX CONSTANT PLS_INTEGER := 100;
+BEGIN
+    FOR I IN 2..IMAX LOOP
+        IF NOT A_FURUI.EXISTS(I) THEN
+            DBMS_OUTPUT.PUT(TO_CHAR(I) || ' ');
+            J := I+I;
+            WHILE J <= IMAX LOOP
+                A_FURUI(J) := TRUE;
+                J := J + I ;
+            END LOOP;
+        END IF;
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+END;
+/
+</pre>
+
+うりゃ！
+
+<pre>
+SQL> @furui
+2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97
+
+PL/SQLプロシージャが正常に完了しました。
+
+SQL>
+</pre>
+
+SQL が一つも入ってない PL/SQL の、何と馬鹿馬鹿しいことよ。くっくっく。
+
+<<移転通知メソッド>>
+
+wifky のホームページ移転に際して、以前「移転通知のポータルサイトがあったらなぁ」
+と言っていたことがあるが(、言ってなかった？)、
+はてなブックマークを書き変えれば、要が足りることに気がついた。
+ということで、早速実践。
+
+* http://b.hatena.ne.jp/entry/http://hpcgi2.nifty.com/hayamatta/wifky.pl{はてなブックマーク - (wifky.sourceforge.jp に移転しました→)A single file wiki - wifky! - FrontPage}
+* http://b.hatena.ne.jp/entry/http://hpcgi2.nifty.com/hayamatta/wifky.pl?p=FrontPage{はてなブックマーク - (wifky.sourceforge.jpに移転しました→)A single file wiki - wifky! - FrontPage}(こっちは p=FrontPage の引き数がついている)
+
+はてなブックマークの場合、URLは変えられないが、
+タイトルは書き変え可能で、しかも、
+ある人の変更が全ての人のブックマークへ反映する。
+だから、「移転しました」というメッセージをタイトルに入れてやれば、
+ブックマーカー全員に伝わるというわけだ。
+
+もっとも、これはブックマークされているページが特定できたらの話。
+だから、できるのは、せいぜいトップページだけですけどね。
+それでもやらないよりマシかも。

@@ -1,0 +1,230 @@
+<<やったー、MinGW C++ で COM 呼べたよー>>
+
+喜びのあまり、ソースコード全文コピペ
+(「#if 0」で無効化してるブロックはバグってる可能性があるから注意)。
+
+make して a.exe を実行すると、エクスプローラーが起動するだけ。
+だが、一つうまく動けば、あとはずっと楽なので(修正して動かなくなったら、
+修正した場所に問題があることは明白だから)、
+もう、NYAOS内蔵Luaから COM を呼び出せるようにするのも夢ではないね!
+
+<<<win32ole.cpp>>>
+
+8<
+#include <windows.h>
+#define DEBUG
+
+#ifdef DEBUG
+#  include <stdio.h>
+#endif
+
+BSTR c2b(const char *s)
+{
+    size_t csize=strlen(s);
+    size_t wsize=MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,s,csize,NULL,0);
+    BSTR w=SysAllocStringLen(NULL,wsize );
+    if( w == NULL ){
+#ifdef DEBUG
+        puts("memory allocation error");
+#endif
+        return NULL;
+    }
+    MultiByteToWideChar(CP_ACP,0,s,csize,w,wsize);
+    return w;
+}
+
+class ActiveXObject {
+    static int instance_count;
+    IDispatch *pApplication;
+public:
+    ActiveXObject(const char *name);
+    ~ActiveXObject();
+    int invoke(const char *name,
+            WORD wflags ,
+            VARIANT *argv ,
+            int argc ,
+            VARIANT *result );
+
+    operator const void*() const
+    { return pApplication != NULL ? this : 0; }
+    int operator !() const
+    { return pApplication == NULL; }
+};
+
+int ActiveXObject::instance_count = 0;
+
+ActiveXObject::~ActiveXObject()
+{
+    if( pApplication != NULL )
+        pApplication->Release();
+    if( --instance_count <= 0 )
+        CoUninitialize();
+}
+
+ActiveXObject::ActiveXObject(const char *name)
+{
+    CLSID clsid;
+    HRESULT hr;
+
+    if( instance_count++ <= 0 )
+        CoInitialize(NULL);
+
+    /* クラス名をユニコード化 */
+    BSTR wname=c2b(name);
+    if( wname == NULL ){
+#ifdef DEBUG
+        puts("Error: c2b");
+#endif
+        goto exit;
+    }
+
+    /* クラスID取得 */
+    hr = CLSIDFromProgID( wname , &clsid );
+    if( FAILED(hr) ){
+#ifdef DEBUG
+        puts("Error: CLSIDFromProgID");
+#endif
+        goto exit;
+    }
+
+    /* インスタンス作成 */
+    hr = CoCreateInstance(
+            clsid ,
+            NULL ,
+            CLSCTX_INPROC_SERVER , /* or CLSCTX_LOCAL_SERVER , */
+            IID_IDispatch ,
+            (void**)&this->pApplication );
+    if( FAILED(hr) ){
+#ifdef DEBUG
+        puts("Error: CoCreateInstance");
+#endif
+        goto exit;
+    }
+    SysFreeString( wname );
+    return;
+exit:
+    pApplication = NULL;
+    free( wname );
+}
+
+int ActiveXObject::invoke(
+        const char *name,
+        WORD wflags ,
+        VARIANT *argv ,
+        int argc ,
+        VARIANT *result )
+{
+    HRESULT hr;
+    DISPID dispid;
+    DISPID dispid_name;
+    DISPPARAMS disp_params;
+    UINT puArgerr = 0;
+    EXCEPINFO excepinfo;
+
+    BSTR wname=c2b( name );
+
+    hr = this->pApplication->GetIDsOfNames(
+            IID_NULL , /* 将来のための予約フィールド */
+            &wname ,
+            1 ,
+            LOCALE_USER_DEFAULT , 
+            &dispid );
+    if( FAILED(hr) ){
+#ifdef DEBUG
+        puts("Error: GetIDsOfNames");
+#endif
+        goto errpt;
+    }
+    
+    disp_params.cArgs  = argc ;
+    disp_params.rgvarg = argv ;
+
+    if( wflags & DISPATCH_PROPERTYPUT ){
+        disp_params.cNamedArgs = 1;
+        disp_params.rgdispidNamedArgs = &dispid_name;
+    }else{
+        disp_params.cNamedArgs = 0;
+        disp_params.rgdispidNamedArgs = NULL;
+    }
+
+    hr = this->pApplication->Invoke(
+            dispid ,
+            IID_NULL ,
+            LOCALE_SYSTEM_DEFAULT ,
+            wflags ,
+            &disp_params ,
+            result ,
+            &excepinfo ,
+            &puArgerr );
+    if( FAILED(hr) ){
+#ifdef DEBUG
+        puts("Error: Invoke");
+        printf("Error=[%0X]\n",GetLastError());
+#endif
+        goto errpt;
+    }
+
+    SysFreeString(wname);
+    return 0;
+errpt:
+    SysFreeString(wname);
+    return -1;
+}
+
+#if 1
+#include <stdio.h>
+
+int main(int argc,char **argv)
+{
+    ActiveXObject ie("WScript.Shell");
+    if( !ie ){
+        fprintf(stderr,"%s: Can not create Object.\n",argv[0]);
+        return -1;
+    }
+
+    VARIANTARG args[10];
+    VARIANT result;
+
+#if 0
+    VariantInit( &args[0] );
+    BSTR w=c2b("cmd.exe");
+    args[0].vt = VT_BSTR|VT_BYREF;
+    args[0].pbstrVal = &w;
+
+    VariantInit( &args[1] );
+    args[1].vt = VT_I4;
+    args[1].lVal = 1;
+
+    VariantInit( &args[2] );
+    args[2].vt = VT_BOOL;
+    args[2].boolVal = VARIANT_TRUE;
+
+    VariantInit( &result );
+
+    ie.invoke("Run",DISPATCH_METHOD,args,3,&result);
+#else
+    VariantInit( &args[0] );
+    BSTR w=c2b("C:\\Windows\\explorer.exe");
+    args[0].vt = VT_BSTR;
+    args[0].bstrVal = w;
+    VariantInit( &result );
+    ie.invoke("run",DISPATCH_METHOD,args,1,&result);
+#endif
+    SysFreeString(w);
+}
+#endif
+>8
+
+<<<Makefile>>>
+
+8<
+win32com.exe : win32com.cpp
+	gcc $< -lole32 -luuid -loleaut32 -lstdc++
+>8
+
+<<<参考>>>
+
+* http://d.hatena.ne.jp/sirocco/20101011/1286763001{COM を学ぶ(6) : C言語でExcel を操作する(Mingw) - sirocco の書いてもすぐに忘れるメモ}
+** MinGW C でのサンプル。C++ ではないので、メソッドの呼び出し方法が少し違う。第一のお手本
+* http://marupeke296.com/IKDADV_CPP_VARIANT.html{VARIANT型を知ってみる}
+** COMオブジェクトとの情報の受渡しに利用する VARIANT構造体の内部構造の解説

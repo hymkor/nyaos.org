@@ -1,0 +1,555 @@
+Use of uninitialized value in string eq at plugins/27d636d647e207c6 line 4.
+Use of uninitialized value in string eq at plugins/27d636d647e207c6 line 4.
+Use of uninitialized value in concatenation (.) or string at /home/nyaos/www/nyaos.org/d/index.pl line 1232.
+Content-type: text/html; charset=EUC-JP
+
+<?xml version="1.0" encoding="EUC-JP"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="generator" content="wifky.pl 1.3.1_0">
+<link rel="start" href="./">
+<link rel="index" href="./?a=index">
+<style type="text/css">
+div.ascii-art{
+ font-size:12pt;
+ line-height:18px;
+ font-family: "Mona","IPA MONAPGOTHIC","MS PGothic","ＭＳ Ｐゴシック","MS Pｺﾞｼｯｸ","MS Pゴシック",sans-serif;
+}
+</style>
+
+<!-- HatenaStar -->
+<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script>
+<script type="text/javascript"><!--
+    Hatena.Star.Token = 'ffcb7b78c7df57183e4543e079df03476';
+    Hatena.Star.SiteConfig = {
+        entryNodes: {
+            'div.xsection':{ uri: 'h3 a', title: 'h3', container: 'h3' },
+            'div.day'     :{ uri: 'h2 a', title: 'h2', container: 'h2' }
+    }
+};
+// -->
+</script>
+
+<link rel="alternate" type="application/rss+xml"
+        title="RSS" href="./?a=rss">
+<link rel="prev" href="./?p=(2007.12.07)">
+<title>DARK SERVER - (2007.12.10)</title>
+<style type="text/css"><!--
+ul.sowp-nikkytools-archives{
+    font-size:80%;
+}
+
+.sectionmark,.subsectionmark,.subsubsectionmark{
+    float:right; font-size:70%; text-decoration:none;
+}
+.hatebu_subject{
+    font-weight:bold;
+}
+
+.caption{
+    font-weight:bold;
+}
+
+table.calender{
+    position:absolute;top:3px; left:3px;
+    font-size:80%;
+}
+
+.calender td{
+   border-width:0pt;
+}
+
+.Today{
+   background-color:#AAEEEE;
+}
+
+div.update textarea{
+    font-size:90%;
+}
+
+input.field,textarea.field{
+    background-color:black;
+    color:white;
+    border-style:inset;
+    border-width:1px;
+}
+
+body{
+    color:white;font-size:90%;
+    background-color:black;
+    background-image: url(./?p=CSS;f=%B6%F5.jpg);
+    background-repeat: repeat-x;
+}
+
+.header{
+    text-align:right;
+    color:black;
+}
+
+.header img{
+    float:left;
+}
+
+span.adminmenu a:link,span.adminmenu a:visited,span.adminmenu a:hover{
+    color:black;
+}
+
+h1{
+    border-color:white;
+    font-size:200%;
+    font-family:Comic Sans MS,cursive;
+    padding:3px 3px 20pt 3px;
+}
+
+h2{
+   font-size:180%;
+   border-color:white;
+   border-width:0 0 1px 0;
+   border-style:solid;
+}
+
+h2 a{
+    text-decoration:none;
+}
+
+h3{
+    background-color:#444444;
+    font-size:120%;
+}
+
+h4{
+    border-style:solid;
+    border-width:0px 0px 0px 10px;
+    border-color:#444444;
+    font-size:100%;
+    padding-left:3px;
+}
+
+.xsectionbody,.xsubsectionbody,.xsubsubsectionbody{
+    margin-left:1em;
+}
+
+dt{
+    font-weight:bold;
+}
+
+A:hover {
+    color:black;
+    background-color:white;
+}
+
+big,p.centering{
+    font-size:200%;
+}
+
+cite,blockquote{
+    font-style:italic;
+}
+
+a:link {
+    color:silver;
+    font-weight:bold;
+}
+
+a:visited {
+    color:silver;
+}
+
+div.day table{
+    border-collapse:collapse;
+    border-width:2px ;
+    border-style:solid ;
+    border-color:white;
+    margin-left:4em;
+    font-size:80%;
+}
+
+td,th{
+    border-width:1px ;
+    border-style:solid ;
+    border-color:white;
+}
+
+.adminmenu{
+    text-align:right;
+    font-size: 90%;
+}
+
+.adminmenu a{
+
+    color:black;
+}
+
+.adminmenu a:hover{
+
+    color:black;
+}
+
+
+pre{
+    margin-left: 1cm;
+    margin-right: 1cm;
+    border-width:1px 0px 1px 1px;
+    border-color:white;
+    border-style:solid;
+    white-space: -moz-pre-wrap; 
+    white-space: -pre-wrap;     
+    white-space: -o-pre-wrap;   
+    white-space: pre-wrap;      
+    word-wrap: break-word;      
+    padding:3px;
+    font-size:90%;
+}
+
+div.terminator{
+    font-size:90%;
+    background-color:#444444;
+    margin-left:0.5cm;
+    margin-right:0.5cm;
+    padding:3pt;
+}
+
+div.main{
+    float:right;
+    width:70%;
+}
+
+div.sidebar{
+    float:left; 
+    width: 25%;
+    font-size:90%;
+    background-color:transparent;
+    padding:145px 3px 3px 3px;
+}
+
+div.sidebar h3{
+    border-width:1px 3px 0px 0px;
+    border-color:white;
+    border-style:solid;
+    padding:1px 1px 1px 3px;
+    -moz-border-radius:4%;
+    margin:0;
+    color:black;
+    font-size:normal;
+    background-color:white;
+    font-size:90%;
+}
+
+div.sidebar h3 a{
+    color:black;
+}
+
+div.sidebar ul li{
+    padding-left: 0em;
+}
+
+div.sidebar div.xsection{
+    border-width:1px 3px 3px 1px;
+    border-color:white;
+    border-style:solid;
+    margin:4px 0 0 4px;
+    -moz-border-radius:5%;
+}
+
+sup a{
+    text-decoration:none;
+    font-size:90%;
+}
+
+div.footnote{
+    font-size:70%;
+    margin:1em 1em 1em 1em;
+}
+
+ul.referer{
+    font-size:80%;
+}
+
+ul.comment{
+    font-size:90%;
+}
+
+div.comment p{
+    margin:3px 3px 3px 3px;
+}
+
+span.commentator{
+    color:silver;
+    font-weight:bold;
+}
+
+span.comment_date{
+    font-size:80%;
+    color:silver;
+}
+
+div.body img{
+    float:right;
+}
+
+.sidebar img{
+    float:none;
+    border-width:0px;
+}
+
+.copyright{
+    text-align:right;
+    font-size:90%;
+    font-style:italic;
+}
+div.commentshort p{
+    margin-left:1cm;
+    text-indent:-1cm;
+}
+
+div.header ul{
+    text-align:left;
+    color:white;
+}
+
+h3{clear:both}
+
+h2.twitter-title{
+  color:white;
+}
+
+--></style></head>
+<body class="frozen">
+
+<form name="newdiary" action="./" method="post" style="display:none"><input type="hidden" name="p" /><input type="hidden" name="a" value="edt" /></form>
+<div class="main">
+<div class="header">
+<p><table class="calender"><caption><a href="./?p=(2004.01.01)+%A5%B3%A5%B3%A5%ED%A5%B0%A4%E8%A4%EA%A4%CE%A5%B3%A5%F3%A5%D0%A1%BC%A5%C8">|</a><a href="./?p=(2007.11.29)">&lt;&lt;</a> 2007.12 <span class="nonextmonth">&gt;&gt;</span><a href="./?p=(2007.12.10)">|</a></caption><tr nowrap><td></td><td></td><td></td><td></td><td></td><td></td><td align="right" class="Sat"><a href="./?date=20071201">1</a></td> </tr>
+<tr nowrap><td align="right" class="Sun">2</td> <td align="right" class="Mon">3</td> <td align="right" class="Tue">4</td> <td align="right" class="Wed">5</td> <td align="right" class="Thu"><a href="./?date=20071206">6</a></td> <td align="right" class="Fri"><a href="./?date=20071207">7</a></td> <td align="right" class="Sat">8</td> </tr>
+<tr nowrap><td align="right" class="Sun">9</td> <td align="right" class="Mon Today"><a href="./?date=20071210">10</a></td> <td align="right" class="Tue">11</td> <td align="right" class="Wed">12</td> <td align="right" class="Thu">13</td> <td align="right" class="Fri">14</td> <td align="right" class="Sat">15</td> </tr>
+<tr nowrap><td align="right" class="Sun">16</td> <td align="right" class="Mon">17</td> <td align="right" class="Tue">18</td> <td align="right" class="Wed">19</td> <td align="right" class="Thu">20</td> <td align="right" class="Fri">21</td> <td align="right" class="Sat">22</td> </tr>
+<tr nowrap><td align="right" class="Sun">23</td> <td align="right" class="Mon">24</td> <td align="right" class="Tue">25</td> <td align="right" class="Wed">26</td> <td align="right" class="Thu">27</td> <td align="right" class="Fri">28</td> <td align="right" class="Sat">29</td> </tr>
+<tr nowrap><td align="right" class="Sun">30</td> <td align="right" class="Mon">31</td> <td></td><td></td><td></td><td></td><td></td></tr></table>
+<p class="adminmenu menubar"><span class="adminmenu"><a href="./?p=(2007.12.07)">&lt;</a></span>
+<span class="adminmenu"><a href="./">FrontPage</a></span>
+<span class="adminmenu"></span>
+<span class="adminmenu"><a href="./?a=recent">Index</a></span>
+<span class="adminmenu"><a href="./?p=(2007.12.10);a=signin" ref="nofollow">SignIn</a></span>
+<span class="adminmenu"><span class="nonextday">&gt;</span></span></p></p>
+<h1> DARK SERVER</h1>
+<p><br clear="all"></p>
+<p><ul><li><a href="./?p=(2007.12.10)">(2007.12.10)</a><ul><li><a href="./?p=(2007.12.10)#p1">子曰く</a></li>
+<li><a href="./?p=(2007.12.10)#p2">ソリューション（笑）と、スイート（笑）って似てるね！</a></li></ul></li></ul></p>
+</div>
+<div class="day">
+<h2><span class="title">(2007.12.10)</span></h2>
+<div class="body">
+<div class="section xsection">
+<h3 id="p1"><a href="./?p=(2007.12.10)#p1" class="sectionmark sanchor"><span class="sanchor">$ </span></a><span class="sectiontitle">子曰く</span></h3>
+<div class="sectionbody xsectionbody">
+<ul><li>
+ 語るは易し。聞くは難し。
+</li></ul>
+<p>親の言うことさえ時として意味不明であるなのに、
+どうして赤の他人の言葉を容易に理解しえようか。</p>
+<p>逆に言えば、たやすき「語る」に労力を割くのを厭うとはならぬ。
+他人が自分にヒアリングする際の「難さ」を鑑みれば、
+こちらが語るなどお易い御用というものであろう！</p>
+<p>が、そうやって易い道を後進に示すのは「教育」としてどうかという話もあり、
+世の中難しいのぉ。言ってみれば「御膳立て」の是非って奴</p>
+<p>奈落の底に尽き落として苦しむと、人はその経験が ROM に焼きつけられるので、
+これは強い。問題解決力が飛躍的に Up する。
+まさにサイヤ人と同じ。フリーザだって一刀両断だ。すごいぞ、トランクス(あれ?)</p>
+<p>でも、下手をすると、ストレートに昇天してしまう罠。
+わぉ、気がつくと、死屍累々だ。ピッコロさ〜ん。</p>
+<p>さて、汝ならどうする？</p>
+<dl>
+<dt>参考文献</dt>
+
+<dd> 鳥山 明著「ドラゴンボール」</dd>
+
+</dl>
+</div></div>
+<div class="section xsection">
+<h3 id="p2"><a href="./?p=(2007.12.10)#p2" class="sectionmark sanchor"><span class="sanchor">$ </span></a><span class="sectiontitle">ソリューション（笑）と、スイート（笑）って似てるね！</span></h3>
+<div class="sectionbody xsectionbody">
+<p>しかし、実際のところ、クライアント/サーバシステムに対して、
+正面から向き当っている and/or 向き合うことができているのは
+Microsoft だけだよなぁ。</p>
+<p>Oracle にせよ、Sun にせよ、IBM にせよ、どのメーカーも
+ソフトウェアにおいてはサーバサイドにしか有効な手立てを打てないので、
+事実上提供できるソリューション（笑）は、ウェブアプリケーション
+だけになってしまっている。</p>
+<p class="centering" align="center">
+これは弱いぜ 
+</p>
+<p>Oracle のセミナーみたいなものを受けたのは、もう1年以上前だけど、
+その時だって、DBサーバー〜アプリケーションサーバ〜ウェブサーバという、
+あくまでサーバサイドの層を統合的にウンタラカンタラするということばかりでした、はい。</p>
+<p>で、エンタープライズ（笑）なウェブアプリケーションといえば
+一応「Java」が定番となっているもんだから、
+かつての C言語ベースのサーバアプリケーションは完全にアウトオブ眼中になっている始末。</p>
+<p>一例を上げると、Pro*C っていう、SQL を静的に組込める拡張Ｃ言語があるんだけども、
+その組み込み SQL って、8i 相当のまま更新されてないんですよ。
+最新の SQL関数が使えない。 Oracle 11g がそろそろってこの時代に。
+やー、正直、ほんと困ったね。見事に時代においてけぼりくらった感じだ。
+動的SQL使えば回避できるとはいえ、それじゃあ、組込みSQL言語のメリットは無いんだよ。</p>
+<hr class="sep">
+<p>一方、Microsoft は .NET という形で、結果的に唯一実用化された、
+分散オブジェクトシステムを実現している。</p>
+<p>無論、過去には SOM とか CORBA とかいろいろございました。
+力業だの資本力だのマーケティングの力だの、
+いろいろ陰口は叩かれているものの、
+本当に使えているのは、 COM→DCOM→.NET だけなんだろうと思う。</p>
+<p>.NET は総スカンをくらって全然使われていないという印象が強いけど、
+特定の分野では「使わざるを得ない」シーンがあったりする。
+「国際化」ですな。
+マイナー分野に見えるけど、アジア圏に工場を持つようになる企業は増える一方の昨今、
+決して無視できないゾーンですわ。
+んで、アジア圏の言語を二つ使うとなると、UNICODE でやらんといかんわけですが、
+そうすると、.NET は避けては通れん「らしい」。</p>
+<p>それでいやいやながら、無理に使って、なんとかとっつきにくさを克服すると、
+実はそれなりのライブラリが充実しているのに気付いて、結構いい感じだそうだ。
+（正直この辺まったく知らんので、知合いの VB 使いの人から聞きかじったことを
+そのまま言ってるだけということを告白する。でも、まったく嘘というわけでも
+ないだろうから、.NET はそうひどいものではないというのは確かだと思う）</p>
+<hr class="sep">
+<p>さて、脱線したけど、言いたいのは .NET がいいとかいうのではなくて、
+そういう、クライアント=サーバを気持ちよく結ぶ手段を提案できているのが
+Microsoft だけになってしまっているという事実。</p>
+<p>おまけに、新興(というほど新しくもないけど)の Ruby や Python といった
+動的型付け言語軍団は、 UNIX/Linux 発祥ではあるけれども、
+分散オブジェクトというのと、ひどく相性がいいときている。
+しかも、作ってる人達は何故か Java を目の敵にする人が多いときたもんだ。
+こりゃ、Microsoft がアンチオープンソースから宗旨を変えて、
+バックアップしてもおかしくないってもんですよ。</p>
+<p>もちろん、その辺は Sun も気付いていて、JRuby とか提案しているね。
+でも、たぶん「このままじゃあ」クライアント圏に切込むのは永遠に無理だろう。
+OS を握っているところはやっぱり強いぜ。</p>
+<hr class="sep">
+<p>でも、OS を握れなくなったらどうだろうか。
+すなわち、ありえる可能性は「Vista のおおこけ」。
+Vista が XP からスムーズに移行できないという実態。
+そこに隙がある。隙があれば突くしか無いでしょう。
+ありえる可能性は：</p>
+<ul><li>
+ Linux クライアント
+</li>
+<li> MacOSX
+</li></ul>
+<p>安定共有が可能で、ちょっとだけ詳しい人が何とかメンテできるレベルにまで、
+ユーザ・システムがうまく歩みよることができれば、
+工業用端末として Linux クライアントはありだと思う。</p>
+<p>ただ、ネックは Linux には VB が無いってことか。
+Kylix があるとかっていう話じゃなくて、開発者の安定供給が無いってところですね。
+この辺、Java とか、Ruby/Python といった動的型付け言語で
+GUI アプリケーションを構築できる環境をうまいこと提供できるのであれば、
+サーバ側技術者をうまいことクライアントへコンバートできると思うんですが、
+どうなんでしょうかねぇ＞Java な人々。</p>
+<p>MacOSX は BSD なので、システム的には問題ない【←偏見まみれ】。
+しかも、Microsoft Office が動くので、オフィス用としても遜色ないのが強い。
+ただ、Mac ってファッション性が強すぎて、
+あんまり工場の中に端末として置かれてる姿が想像つかんですわ。</p>
+<p>となると、やっぱり Linux 端末？
+でも、IBM は端末業界(ThinkPad)から足あらってるしなぁ。</p>
+<ul><li>
+ 言語ビジネス
+</li>
+<li> 端末ハードウェア提供
+</li>
+<li> OS面でのサポート
+</li>
+<li> MS と全面戦争できる覇気と体力
+</li></ul>
+<p>この４つを同時に満たせるところってあるんかい？なさそうだよなぁ。</p>
+<p class="centering" align="center">
+汝はどう思う？ 
+</p>
+<p>と別段結論もなく終わる。では、また来週
+</p>
+</div></div>
+</div></div>
+<div class="terminator">
+<div>
+<div class="comment"><div class="caption">Comment</div><div class="commentshort"><div class="form">
+<form action="/d/index.cgi" method="post" class="comment">
+<input type="hidden" name="p" value="(2007.12.10)">
+<input type="hidden" name="a" value="comment">
+<input type="hidden" name="comid" value="0">
+<div class="field name">
+<input type="text" name="who" size="10" class="field">
+</div><!-- div.field name -->
+<div class="textarea">
+<textarea name="comment" cols="60" rows="1" class="field"></textarea>
+</div><!-- div.textarea -->
+<div class="button">
+<input type="submit" name="Comment" value="Comment">
+</div><!-- div.button -->
+</form>
+</div><!-- div.form -->
+</div></div></div>
+<div><div class="referer"><ul class="referer"><li>   1	<a href="http://clip.nifty.com/entry/f3749946bb15d82d93ead906e0e22f7f7ec6b14e/210457" target="_blank">http://clip.nifty.com/entry/f3749946bb15d82d93ead906e0e22f7f7ec6b14e/210457</a></li></ul></div>
+</div>
+</div>
+<div class="copyright footer">
+<div>Powered by nikky.pl 0.23
+    <a href="./?a=rss" class="rssurl">[RSS]</a></div>
+Generated by <a href="http://wifky.sourceforge.jp">wifky</a> 1.3.1_0 with Perl 5.008008
+<script type="text/javascript"><!--
+    var currentPage=document.location.href.split(/#/)[0];
+    function hash2title(hash){
+        var el=document.getElementById(hash.substr(1));
+        if( el ){
+            document.title 
+                = "DARK SERVER - " 
+                + el.innerHTML.replace(/<[^>]*>/g, '');
+        }
+    }
+    var lnk=document.links;
+    for(var i=0 ; i<lnk.length ; i++ ){
+        if( lnk[i].href && lnk[i].href.split(/#/)[0] == currentPage ){
+            lnk[i].onclick = function(){ hash2title( this.hash ); };
+        }
+    }
+    var hash=document.location.hash;
+    if( hash ){ hash2title( hash ); }
+// -->
+</script>
+
+</div>
+</div><!-- main --><div class="sidebar">
+<div><ul class="sowp-nikkytools-archives"><li class="sowp-nikkytools-archives-month">2004|<a href="./?a=archives;year=2004;month=1" title="8 article(s)">01</a>|<a href="./?a=archives;year=2004;month=2" title="9 article(s)">02</a>|<a href="./?a=archives;year=2004;month=3" title="20 article(s)">03</a>|<a href="./?a=archives;year=2004;month=4" title="18 article(s)">04</a>|<a href="./?a=archives;year=2004;month=5" title="20 article(s)">05</a>|<a href="./?a=archives;year=2004;month=6" title="21 article(s)">06</a>|<a href="./?a=archives;year=2004;month=7" title="22 article(s)">07</a>|<a href="./?a=archives;year=2004;month=8" title="20 article(s)">08</a>|<a href="./?a=archives;year=2004;month=9" title="11 article(s)">09</a>|<a href="./?a=archives;year=2004;month=10" title="20 article(s)">10</a>|<a href="./?a=archives;year=2004;month=11" title="18 article(s)">11</a>|<a href="./?a=archives;year=2004;month=12" title="21 article(s)">12</a></li><li class="sowp-nikkytools-archives-month">2005|<a href="./?a=archives;year=2005;month=1" title="22 article(s)">01</a>|<a href="./?a=archives;year=2005;month=2" title="13 article(s)">02</a>|<a href="./?a=archives;year=2005;month=3" title="10 article(s)">03</a>|<a href="./?a=archives;year=2005;month=4" title="17 article(s)">04</a>|<a href="./?a=archives;year=2005;month=5" title="12 article(s)">05</a>|<a href="./?a=archives;year=2005;month=6" title="13 article(s)">06</a>|<a href="./?a=archives;year=2005;month=7" title="21 article(s)">07</a>|<a href="./?a=archives;year=2005;month=8" title="20 article(s)">08</a>|<a href="./?a=archives;year=2005;month=9" title="14 article(s)">09</a>|<a href="./?a=archives;year=2005;month=10" title="25 article(s)">10</a>|<a href="./?a=archives;year=2005;month=11" title="20 article(s)">11</a>|<a href="./?a=archives;year=2005;month=12" title="11 article(s)">12</a></li><li class="sowp-nikkytools-archives-month">2006|<a href="./?a=archives;year=2006;month=1" title="16 article(s)">01</a>|<a href="./?a=archives;year=2006;month=2" title="17 article(s)">02</a>|<a href="./?a=archives;year=2006;month=3" title="19 article(s)">03</a>|<a href="./?a=archives;year=2006;month=4" title="16 article(s)">04</a>|<a href="./?a=archives;year=2006;month=5" title="21 article(s)">05</a>|<a href="./?a=archives;year=2006;month=6" title="18 article(s)">06</a>|<a href="./?a=archives;year=2006;month=7" title="19 article(s)">07</a>|<a href="./?a=archives;year=2006;month=8" title="25 article(s)">08</a>|<a href="./?a=archives;year=2006;month=9" title="27 article(s)">09</a>|<a href="./?a=archives;year=2006;month=10" title="25 article(s)">10</a>|<a href="./?a=archives;year=2006;month=11" title="27 article(s)">11</a>|<a href="./?a=archives;year=2006;month=12" title="31 article(s)">12</a></li><li class="sowp-nikkytools-archives-month">2007|<a href="./?a=archives;year=2007;month=1" title="24 article(s)">01</a>|<a href="./?a=archives;year=2007;month=2" title="25 article(s)">02</a>|<a href="./?a=archives;year=2007;month=3" title="20 article(s)">03</a>|<a href="./?a=archives;year=2007;month=4" title="21 article(s)">04</a>|<a href="./?a=archives;year=2007;month=5" title="28 article(s)">05</a>|<a href="./?a=archives;year=2007;month=6" title="20 article(s)">06</a>|<a href="./?a=archives;year=2007;month=7" title="26 article(s)">07</a>|<a href="./?a=archives;year=2007;month=8" title="14 article(s)">08</a>|<a href="./?a=archives;year=2007;month=9" title="19 article(s)">09</a>|<a href="./?a=archives;year=2007;month=10" title="26 article(s)">10</a>|<a href="./?a=archives;year=2007;month=11" title="22 article(s)">11</a>|<a href="./?a=archives;year=2007;month=12" title="4 article(s)">12</a></li></ul></div>
+<p><a href="http://iddy.jp/profile/iyahaya/" title="My Profile"><img border="0" src="http://iddy.jp/image/banner/117x20_05.gif" width="117" height="20" alt="My Profile by iddy" /></a><br>
+<img width="88" height="31" src="./?a=webchain2" usemap="#WEBCHAIN2-2" alt="WebChain/2" border="0" />
+<map id="WEBCHAIN2-2" name="WEBCHAIN2-2">
+<area shape="rect" coords="0,0,21,30" alt="Previous" href="http://www.serina.org/cgi-bin/webchain2/webchain.cgi?go=prev&amp;usr=iyahaya"/>
+<area shape="rect" coords="22,0,44,30" alt="Ramdom Jump" href="http://www.serina.org/cgi-bin/webchain2/webchain.cgi?go=random&amp;usr=iyahaya"/>
+<area shape="rect" coords="45,0,63,30" alt="WebChain/2 Home" href="http://www.serina.org/cgi-bin/webchain2/webchain.cgi?go=home&amp;usr=iyahaya"/>
+<area shape="rect" coords="64,0,87,30" alt="Next" href="http://www.serina.org/cgi-bin/webchain2/webchain.cgi?go=next&amp;usr=iyahaya"/>
+</map>
+<br></p>
+<div class="xsection">
+<h3><a href="./?p=Sidebar#p1" class="sectionmark sanchor"><span class="sanchor">$ </span></a><span class="sectiontitle"> ブログペット</span></h3>
+<div class="xsectionbody">
+<div><div align="center"><script language="JavaScript" type="text/javascript" src="http://www.blogpet.net/js/409e4e26fa8552a622f5261d912c08c5.js" charset="EUC-JP"></script></div></div>
+</div></div>
+<div class="xsection">
+<h3><a href="./?p=Sidebar#p2" class="sectionmark sanchor"><span class="sanchor">$ </span></a><span class="sectiontitle"> <a href="http://b.hatena.ne.jp/zetamatta/" target="_blank">はてなブックマーク</a></span></h3>
+<div class="xsectionbody">
+<div><dl class="hatebu">
+<dt><a href="http://www.nicovideo.jp/watch/sm1711627">ニコニコ動画(RC2)‐スパイダーマの隠れ家</a></dt><dd><span class="hatebu_subject">[動画][笑]</span> 進出鬼没の東映版スパイダーマ！</dd>
+<dt><a href="http://d.hatena.ne.jp/masayang/20071208/1197133669">安物買いの銭失い...開発をアウトソースしてはいけないという事例 - masayangの日記（ピスト通勤他 </a></dt><dd><span class="hatebu_subject">[Business]</span> ボーイング社が次期旅客機の開発をアウトソースした結果、半年以上遅れ、追加投資が20億ドル必要になったという事例。どっかで見たことあるような話。</dd>
+<dt><a href="http://www.onemorelevel.com/games/zookeeper.html">OneMoreLevel.com - Zoo Keeper</a></dt><dd><span class="hatebu_subject">[game]</span> 一見コラムスみたいだけど、宝石ならぬ動物が入れ替わるのは一瞬だけ。結構はまりました。</dd>
+<dt><a href="http://www.nicovideo.jp/watch/sm283980">ニコニコ動画(γ)‐シューティングゲームの歴史 【ニコ語字幕付き】</a></dt><dd><span class="hatebu_subject">[game][動画]</span> インベーダーゲームから斑鳩付近まで、シューティングゲームの歴史を語る外国放映のTV(ニコ風(2ch風?)字幕付き)。</dd>
+<dt><a href="http://d.hatena.ne.jp/Rocco/20071208/p13">getline の問題点 - 日本 GNU AWK ユーザー会 0.2</a></dt><dd><span class="hatebu_subject">[awk]</span> 入出力先を指定しない getline は影響させる変数が多い / 行をスキップさせる getline はバグの元</dd>
+<dt><a href="http://d.hatena.ne.jp/gomi-box/20071204/1196760497">ここにまた一つ、クソレポート - 毛の生えたようなもの</a></dt><dd><span class="hatebu_subject">[笑]</span> twitter は楽しくていいな！</dd>
+<dt><a href="http://votoms.cocolog-nifty.com/web/2007/12/post_9c73.html">ボトムズBLOG: なんと・・！TVシリーズを10話まで無料配信！</a></dt><dd><span class="hatebu_subject">[動画]</span> 標題のとおり、装甲騎兵ボトムズ本篇最初の10話を視聴できる。ただし、IE限定。</dd>
+<dt><a href="http://d.hatena.ne.jp/gomi-box/20071205/1196858030">質量保存の法則終了のお知らせ - 毛の生えたようなもの</a></dt><dd><span class="hatebu_subject">[笑]</span> これからの世の中はナノクラスター水だな！nice title</dd>
+<dt><a href="http://d.hatena.ne.jp/brazil/20071206/1196905366">LDR、重複エントリをグレー表示するGreasemonkeyスクリプト、約第三版 - 実用</a></dt><dd><span class="hatebu_subject">[Firefox]</span> livedoor Reader で重複エントリを以下同文</dd>
+<dt><a href="http://ameblo.jp/archive-redo-blog/entry-10035436637.html">[Oracle] RMANでのバックアップ実行時にアーカイブログファイルの識別エラーが発生する｜Archive Redo Blog</a></dt><dd><span class="hatebu_subject">[Oracle][Business][DB]</span>バックアップを実行する前にOSコマンドによってアーカイブログを削除した時に発生するエラーの回避方法</dd>
+</dl><!-- Update on Thu Dec 13 01:10:08 2007--></div>
+<p>(<a href="http://b.hatena.ne.jp/zetamatta/" target="_blank">もっと読む?</a>)</p>
+<div><em>Powerd by「<a href="http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%5Bplugin%5D+%A1%D6%A4%CF%A4%C6%A5%D6%A1%D7%A5%A4%A5%F3%A5%AF%A5%EB%A1%BC%A5%C9" target="_blank">はてブぷらぐいん</a>」</em>
+</div>
+</div></div>
+</div></body></html>
+Use of uninitialized value in concatenation (.) or string at index.cgi line 1232.
+Use of uninitialized value in concatenation (.) or string at index.cgi line 1232.
+Use of uninitialized value in concatenation (.) or string at index.cgi line 1232.

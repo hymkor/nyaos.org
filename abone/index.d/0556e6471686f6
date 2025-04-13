@@ -1,0 +1,48 @@
+8<
+開発サーバ4(実験サーバ)
+　□IP：192.168.215.197
+　□user/passwd：root/srv28%04
+
+　□Pentahoのインストールディレクトリ...（というか、とりあえずここに入ってます）
+　　/tmp/pre_install/pentaho/biserver-ce
+
+　□Pentahoサーバの起動
+　　start-pentaho.sh
+
+　□Pentahoサーバの終了
+　　stop-pentaho.sh
+
+　□Pentahoの実行
+　　http://192.168.215.197:8080/pentaho/Login
+
+　□PostgreSQL
+　　仮想ＰＪルームで、5432ポートが使用できないので
+　　ポートは、1433を使用するようにしています。
+　
+　　ローカルＰＣにPostgreSQL8.4をインストールして
+　　pgAdminⅢで接続すると、テーブル作成やら、データ変更やらできるので
+　　便利です。
+
+　□サーバ環境
+　　基本的に
+　　http://svn.tis.co.jp/unit/plm_pj/docs/trunk/41_基盤構築/環境構築手順/開発環境構築手順書.xls
+　　に従って構築しています。
+
+　不明点があればお気軽にメールください。
+
+　□集計、分析機能の方式検討資料（ご参考）
+http://svn.tis.co.jp/unit/plm_pj/docs/trunk/10_要件定義/02_アーキテクチャ/集計・分析・報告書方式検討/PLM_集計・分析機能方式検討.xls
+
+　以下、紙面でお渡しした資料です。
+>8
+
+<<{検証タスク.xls}
+
+8<
+　ＯＳＳラボの船井社長(satoruf@Twitter)からの回答
+>8
+
+<<{100725TIS_Pentaho質問.xls}
+
+:管理パスワード
+:: 8000 , admin/password

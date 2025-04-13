@@ -1,0 +1,96 @@
+<<[python] TCPSocket クラスを作ってみる>>
+
+Ruby の TCPSocket クラスは、単なるラッパーながらお手軽で羨しいので、
+Python で似たようなものを作れないかと挑戦してみた！
+
+8<
+#!/usr/bin/python
+
+import socket
+
+class TCPSocket :
+    def __init__(self,ip,port):
+        self.socket = socket.socket( socket.AF_INET , socket.SOCK_STREAM )
+        self.socket.connect( (ip , port) )
+        self.fd = self.socket.makefile()
+
+    def close(self):
+        if self.fd :
+            self.fd.close()
+            self.fd = None
+            self.socket.close()
+            self.socket = None
+
+    def write(self,s):
+        self.fd.write(s)
+        self.fd.flush()
+
+    def readline(self):
+        return self.fd.readline()
+
+http = TCPSocket("www.yahoo.co.jp",80)
+http.write("GET / http/1.1\r\n")
+http.write("Host: www.yahoo.co.jp\r\n\r\n")
+line = http.readline()
+while line != "" :
+    print line,
+    line = http.readline()
+
+http.close()
+>8
+
+驚愕の事実：
+
+>> Python では、代入は「式」ではなく「文」だった <<
+
+つくづく、C言語や Perl までの常識が通用しない言語だ。
+
+まぁ、上記の場合「while + 代入式」ではなくて
+「for + イタレータ」でやるべきだし、
+他の言語でも代入式を使うと確かにゴチャゴチャになりがちだから、
+言語仕様に入れてないのは、それなりに真っ当な理由があったのだろう。
+思うに'''『筋の悪い書き方をすると、自動的にみっともなくなるようになっている』'''
+のではなかろうか。
+
+でも、なんだか、いろいろと、その、ついてくのがアレ。
+例えるなら、パシっとした格好いいスーツの着心地の悪さのような。
+
+ちなみに、上は習作だから http 書いてるけど、
+Python には標準ライブラリに urllib という良いものがあるから、
+こういうのは一般には必要ではない。
+(うちは、専用のC言語のソケットライブラリがあるので、
+それと通信する仕方を確認したかっただけなのよん)
+
+<<自分のアンテナの低さを恥じる今日このごろ(汗)>>
+
+「Plagger の人！」とか「シックスアパートの人」とか言われれば、
+「おぉ、あの有名な」とか言って知ったふりができたのになぁ(笑)
+
+ちなみに、わたしの場合、アンテナが低いというよりは、
+「折れて明後日の方向むいてる」が正しいと思う。
+
+ところで、せっかくなので、
+http://www.hsbt.org/diary/20061123.html#p01{アレなエンジニア}
+の典型的モデルと照らし合わせてみよう。それ、こんなエスイー：
+
+:エディタ=「RFCは読んでません」でおなじみの秀丸
+:: Windows でも Linux でも jvim 3.0 でございます。
+   vim 7？― あれは、ザクIIIやギラ・ドーガをザクと言うようなもんで、
+   もはや、vi と言っていいものやら。
+   jvim 3.0 は vi界のハイザックです''(← それ誉めてるのか?)''
+: Linux=Vine Linux
+:: いろいろあるのは無論知ってるけど、
+  ちゃんと使ってるのは Redhat Linux だけなんですよね。。。
+: Perl=CGI
+:: wifky 動かすのに要る奴でしょ(コラ) ''(正解は Plagger 動かすのに要る奴)''
+: RubyやPythonはもちろん知らない
+:: 両方とも、がんばって勉強してますよ。 
+: VSSは知っててもcvsやもちろんSubversionは知らない
+:: Subversion は名前と評判が高いことしか知らないなぁ。
+   ''(cvs と違って、リネームに支障がないんでしたっけ)''
+: 半角カナや全角記号をやたらと使う
+:: 日本語文章では、たまに全角括弧使います。それくらいかな。
+: どうでもいいことに時間をかける
+:: 人生において、どうでもよくないことなんて、ほんのチョッピリしかありませんよ。
+   時として、生きてること自体、無駄無駄無駄。無駄だから嫌いなんだ。
+   ''(← このあたり、ちょっとダーク)''

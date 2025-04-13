@@ -1,0 +1,24 @@
+epel を追加すると、Mercurial とか、諸々 yum できる
+
+* http://futuremix.org/2009/01/centos-epel-atrpms-yum{CentOS で EPEL や ATrpms のパッケージを yum で利用できるようにする}
+
+<<<
+[root@TIS006500001 etc]# wget http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+--2011-07-26 17:40:00--  http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+tisproxy.tis.co.jp をDNSに問いあわせています... 172.26.1.7
+tisproxy.tis.co.jp|172.26.1.7|:8080 に接続しています... 接続しました。
+Proxy による接続要求を送信しました、応答を待っています... 200 OK
+長さ: 12232 (12K) [application/x-rpm]
+`epel-release-5-4.noarch.rpm' に保存中
+
+100%[================================================>] 12,232      --.-K/s 時間 0.001s
+
+2011-07-26 17:40:00 (7.78 MB/s) - `epel-release-5-4.noarch.rpm' へ保存完了 [12232/12232]
+>>>
+
+<<<
+[root@TIS006500001 tmp]# rpm -ihv epel-release-5-4.noarch.rpm
+警告: epel-release-5-4.noarch.rpm: ヘッダ V3 DSA signature: NOKEY, key ID 217521f6
+準備中...                ########################################### [100%]
+   1:epel-release           ########################################### [100%]
+>>>

@@ -1,0 +1,11 @@
+<<あるディレクトリ以下の全てのbinディレクトリにPATHを通したい時 - NYAOS編>>
+
+* http://d.hatena.ne.jp/rx7/20120223/p1{あるディレクトリ以下の全てのbinディレクトリにPATHを通したい時 - RX-7乗りの適当な日々}
+
+NYAOS でやるなら、こうなる
+
+8<
+set PATH+=`lua_e "print((nyaos.eval('dir /s /b bin'):gsub('\n',';')))"`
+>8
+
+ディレクトリ指定してねーけど、まぁ、いいや。

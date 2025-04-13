@@ -1,0 +1,72 @@
+<<+可変長配列登場とは>>
+
+サイズの見積り・サイズの拡張とか、勝手にやってくれる配列です。
+STL では std::vector という便利な配列があります。
+
+<<<ソース>>>
+
+<pre>
+    #include <string>
+    #include <vector>
+    #include <cstdio>
+
+    using namespace std;
+
+    int main()
+    {
+	vector<string> foons;
+
+	foons.push_back( "兄者" );
+	foons.push_back( "弟者" );
+	foons.push_back( "母者" );
+
+	for(unsigned int i=0 ; i < foons.size() ; i++ ){
+	    printf( "%s\n" , foons[ i ].c_str() );
+	}
+	return 0;
+    }
+</pre>
+
+<<<結果>>>
+
+<pre>
+    [C:デスクトップ] $ foo
+    兄者
+    弟者
+    母者
+    [C:デスクトップ] $
+</pre>
+
+<<+解説しよう!>>
+
+<pre>
+    vector<string> foons;
+</pre>
+
+変な文法ですが、これは型をパラメータに取る宣言だからです。
+
+可変長配列といっても、int でも string でも、
+いろんな型で使えないと意味がありません。
+そこで、要素がどんな型かを与えるために
+型を <> で囲んで与えてやる必要があります。
+本当は、
+
+<pre>
+    string foons[];
+</pre>
+
+とか書ければいいんですが、
+この機能もライブラリで実現されている都合、
+こんな感じになってしまっています。
+
+<<+vector その他>>
+
+便利というか、利用できないと困るんですがね。
+
+:◇.push_back( ○ );
+:: ○ を vector ◇ の末尾に追加する。
+:◇.size();
+:: ○ の要素数を得る(std::size_t 型、たいていは unsigned int/long)
+
+各要素は、普通に ◇[ … ] で代入も参照もできます。
+

@@ -1,0 +1,58 @@
+* Lisp は使ったことが無いんだけど、ずばり「馬鹿には使えない言語」だから、Ruby ほど人気が出ないのではないだろうか。
+
+*  ネタかと思った ―― ((amazon 4839925232 right))
+   <br>素人が真似したらどうする！
+   <br>もちろん買うさ！
+
+*  StringIO は、なぜモジュール名もクラス名も大文字が入ってるんだ。
+他のモジュールは小文字しか使っていないことが多いのに！
+Python のこの一貫性の無さは何？
+
+*  ということを、これ書いてる時に思った(
+http://ja.doukaku.org/33/{どう書く?orgの33番目の課題}デスガ)
+
+8<
+import csv
+import StringIO
+
+def splitCSV(s):
+for csv1 in csv.reader( StringIO.StringIO(s) ):
+for i,e in enumerate(csv1):
+print "%d => %s" % (i,e)
+
+splitCSV('''"aaa","b
+bb","ccc",zzz,"y""Y""y",xxx''')
+>8
+
+*  スコープドッグをザクのパクリとか言う、ゆとり世代は氏ねばいいと思います。
+
+*  職場では未だにＣ言語が使われているから思うんだけれども、
+やっぱり、あれは OS とか、ミドルウェアとか、基幹ソフトウェアを書いたり、
+そういうものを「書ける人」だけが使ってよい言語にしとかないといかんと思う。
+
+*  Cygwin の screen 最強すぎる…。
+
+*  好みが分かれると思うけど、わたしは Poderosa より
+UTF8-Teraterm + Cygterm + screen の方がいいな。
+
+*  今日は「.screenrc」に「vbell off」を追加した。
+
+<<Opera でページのスクラップをする Obook Plugin がうまく動作しない>>
+
+* http://www.forest.impress.co.jp/article/2006/08/09/obookplugin.html{
+窓の杜 - 【NEWS】「Opera」で閲覧中のWebページをスクラップできるプラグイン
+「Obook Plugin」}
+
+ずばり、xkeymacs が邪魔していた。
+どうも、ページのスクラップを取る時、Obook は Opera に Ctrl-S を送っているようなのだ。
+
+>> なんという最後の手段 <<
+
+xkeymacs がそれを Ctrl-F に変換し、
+結果、セーブを実行する代わりに、検索ダイアログが表示されてしまうという始末。
+
+対応としては ――安直だが―― xkeymacs の設定で
+Opera では Ctrl-S を変換しないようにしたところ、
+正常に動作するようになった。
+
+くそ、気付くまで、3回もインストールし直してしまったではないか！

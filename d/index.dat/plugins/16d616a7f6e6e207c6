@@ -1,0 +1,180 @@
+package wifky::amazon;
+
+# use strict; use warnings;
+my $version='0.3';
+
+$main::preferences{"Plugin: Amazon.pl $version"} = [
+    {
+      desc => 'Your Amazon associate-ID' ,
+      name => 'amazon_associate_id' ,
+      size => 20 
+    }
+];
+
+$main::inline_plugin{'amazon'} = sub {
+    my ($session,$itemid) = @_;
+    my $title;
+    my %option=( left=>0  , right=>0 , center=>0 ,
+                 clear=>0 , image=>0 , small=>0 ,
+                 large=>0 , middle=>0 , text=>0 );
+    foreach(@_[2..$#_]){
+        if( exists $option{$_} ){ $option{$_}++ ; }
+        else { $title = $_; }
+    }
+
+    my %tags;
+    my $bookinfo=&main::read_object($session->{title},"bookinfo.$itemid");
+    if( $bookinfo ){
+        %tags = map{ split(/=/,$_,2) } split(/\n/,$bookinfo);
+    }else{
+        eval 'use Encode;';
+
+        my $id=$main::config{amazon_associate_id}; 
+        my $associate_tag=( $id ? "&AssociateTag=$id" : '' );
+
+        my $xml = &http('webservices.amazon.co.jp' ,
+          '/onca/xml?Service=AWSECommerceService' .
+          '&AWSAccessKeyId=1YKWYFPHYWMTQ1WKYBG2' .
+          '&ResponseGroup=Small,Images' .
+          '&Operation=ItemLookup&ItemId=' . $itemid . $associate_tag
+        );
+        
+        my $text='';
+        &parse_xml(
+            $xml ,
+            sub { 1; } ,
+            sub {
+                my $tag=shift;
+                if( $tag =~ /((Small)|(Medium)|(Large))Image/ ){
+                    $tags{ $tag } ||= join("\t",$tags{'URL'}
+                                               ,$tags{'Width'}
+                                               ,$tags{'Height'} );
+                }else{
+                    $tags{ $tag } = $text ;
+                }
+                $text = '' ;
+                1;
+            } ,
+            sub {
+                $text .= shift;
+                1;
+            }
+        );
+        if( $tags{IsValid} eq 'True' ){
+            if( defined(&Encode::from_to) ){
+                Encode::from_to($tags{Title},'utf8','euc-jp');
+            }else{
+                $tags{Title} = "The Bookimage for $itemid on amazon";
+            }
+            $tags{DetailPageURL} =~ s/%([0-9a-fA-F][0-9a-fA-F])/pack('C',hex($1))/eg;
+            &main::write_object( $session->{title} ,
+                                 "bookinfo.$itemid" ,
+                                 join("\n",map(
+                                    sprintf("%s=%s",$_,$tags{$_}),
+                                    qw{
+                                        DetailPageURL
+                                        Title
+                                        SmallImage
+                                        MediumImage
+                                        LargeImage
+                                    }
+                                 )));
+        }
+    }
+
+    if( %tags ){
+        $title ||= &main::enc( $tags{Title} );
+        my $buf = sprintf('<a href="%s"%s>',$tags{DetailPageURL},$main::target );
+
+        my $img = $option{large} ? $tags{LargeImage}
+                : $option{small} ? $tags{SmallImage}
+                : $tags{MediumImage} ;
+        if( $img && !$option{text} ){
+            $buf .= sprintf(
+                    '<img align="%s" alt="%s" title="%s" border=0 class="amazon"' .
+                    ' src="%s" width="%s" height="%s">'
+                , ( $option{left}   ? 'left'   :
+                    $option{center} ? 'center' :
+                    'right' )
+                , $title , $title
+                , split(/\t/,$img) 
+            );
+        }
+        $option{image} or $buf .= $title;
+        $buf . '</a>';
+    }else{
+        'Book information cannot read from amazon.co.jp.';
+    }
+};
+
+# If $since has TIME and the page not modified, &http returns undef;
+sub http{
+    my ($host,$path,$since)=@_;
+
+    use Socket;
+
+    my $ip       = Socket::inet_aton($host) or die("$host not found.");
+    my $port     = getservbyname('http', 'tcp');
+    my $sockaddr = Socket::pack_sockaddr_in($port, $ip);
+    socket(HTTP, Socket::PF_INET, Socket::SOCK_STREAM, 0) 
+        or die("socket error.\n");
+
+#     eval 'use Socket';
+#     my $ip = (gethostbyname($host))[4];
+#     my $sockaddr = pack("S n a4 x8" , 2 , 80 , $ip);
+#     socket(HTTP, defined(Socket::PF_INET)     ? Socket::PF_INET     : 2 
+#                , defined(Socket::SOCK_STREAM) ? Socket::SOCK_STREAM : 2 # or 1
+#                , 0) or die("socket error.\n");
+
+    connect(HTTP, $sockaddr);
+    binmode(HTTP);
+    my $output=select(HTTP); $| = 1; select($output);
+    print HTTP "GET $path HTTP/1.1\r\n";
+    if( defined($since) ){
+        my @tm=split(/\s+/,''.gmtime($since));
+        printf HTTP "If-Modified-Since: %s, %02d %s %d %s GMT\n" ,
+            $tm[0],$tm[2],$tm[1],$tm[4],$tm[3] ;
+    }
+    print HTTP "Host: $host\r\n";
+    print HTTP "Connection: close\r\n";
+    print HTTP "\r\n";
+
+    my $flag=0;
+    my $body='';
+    if( ( split(/\s+/,<HTTP>) )[1] eq '304' ){
+        $body = undef;
+    }else{
+        while( defined(my $line=<HTTP>) ){
+            if( $line =~ /^\r?\n?$/ ){
+                while( defined(my $line=<HTTP>) ){
+                    $body .= $line;
+                }
+                last;
+            }
+        }
+    }
+    close(HTTP);
+    $body;
+}
+
+sub parse_xml{
+    my ($xml,$start,$end,$text)=@_;
+    $xml =~ s/\<\!\[CDATA\[(.*?)\]\]\>/"\a".unpack('h*',$1)."\a"/ges;
+    while( length($xml) > 0 ){
+        if( $xml =~ m|\A\</([^\<\>]+)\>|s ){ ### close tag
+            $xml = $'; 
+            $end->(split(/\s+/,$1)) or return;
+        }elsif( $xml =~ m|\A\<([^\<\>]+)\>|s ){ ### open tag
+            $xml = $'; 
+            $start->( split(/\s+/,$1) ) or return;
+        }elsif( $xml =~ m|\A[^\<\>]+|s ){ ### text
+            $xml = $';
+            my $body = $&; $body =~ s/\a(.*?)\a/pack('h*',$1)/ges;
+            $text->( $body ) or return;
+        }else{
+            return;
+        }
+    }
+}
+
+1;

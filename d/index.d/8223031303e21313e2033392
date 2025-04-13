@@ -1,0 +1,110 @@
+<<日が暮れるのが早くなりましたね>>
+
+<<{m2010102616510000.JPG}
+ありし日の御茶ノ水。
+
+毎週、1日だけ早退して、17時くらいに此処にある医院に通ってますが、
+だんだん暗くなってきているのを感じます。
+
+御茶ノ水って、有名な駿台予備校発祥の地だったんですね。
+ソースはありませんが、住所見たら「千代田区神田駿河台」とか書いてますし。
+駿台予備校は大昔、夏期講習などでお世話になりました。
+
+御茶ノ水は、近くに大学とか病院があって緑も多く、いいところですね。
+そのせいか、通うのが、あまり苦になりません。
+
+<<[Lua] 2 つのファイルを紐付けする>>
+
+* http://okwave.jp/qa/q6294003.html?utm_source=twitterfeed&utm_medium=twitter{外部ファイルを1行ずつ読み込んで特定カラムを引数として | OKWave}
+* http://gauc.no-ip.org/awk-users-jp/blis.cgi/DoukakuAWK_284{AWK Users JP :: 2 つのファイルを紐付けする}
+
+一つ目の引数で示されたファイルの第二カラムと、二つ目のファイルの第一カラムを紐付けて、行を連結して出力するという課題ですが、Lua でもやってみました。
+コード的には、AWK USERS JP のものを、そのまま移植したような形になっています。
+
+8<
+local function split(s)
+    local cols={}
+    for col in string.gmatch(s,"%S+") do
+        table.insert( cols , col )
+    end
+    return cols
+end
+
+log_item = {}
+for line in io.lines(arg[2]) do
+    local cols = split( line )
+    log_item[ cols[1] ] = cols[2]
+end
+
+for line in io.lines(arg[1]) do
+    local cols = split( line )
+    print( cols[1],cols[2],log_item[cols[2]] )
+end
+>8
+
+8<
+[C:284]
+$ cat sample1.log
+0001 AAAA
+0002 BBBB
+0003 AAAA
+0004 CCCC
+[C:284]
+$ cat sample2.log
+AAAA ABC
+BBBB DEF
+CCCC GHI
+[C:284]
+$ lua foo.lua sample1.log sample2.log
+0001    AAAA    ABC
+0002    BBBB    DEF
+0003    AAAA    ABC
+0004    CCCC    GHI
+[C:284]
+$
+>8
+
+Lua には split に相当する関数がないのが結構痛いですね。毎回、簡単ではありますが、自前の split を作成する必要があります。
+
+なお、よくある誤解として Lua には join が無いと言われますが、実はちゃんと http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html#pdf-table.concat{table.concat} という文字列連結関数があります。
+
+Lua のファイル読み込みでありがたいのは、http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html#pdf-io.lines{io.lines} というイタレータです。
+AWK の場合、明示的に close 関数を実行する必要がありますが
+(しなくてもファイルハンドルを無駄使いするだけですが)、
+io.lines は open → 各行読み込み → close を自動でやってくれます。
+
+ただ、Perlの「<>」・Pythonの「fileinput」・Rubyの「ARGF」等のような、
+スクリプトに与えられた引数全てのファイルを連続して読み出す仕組みや関数がなく、
+そこだけ今一感があります。
+まぁ、Lua はフィルター処理ではなく、アプリ組込み用言語なので、
+これは仕方ないかなという気もしますが。
+
+<<[Python][Cygwin] 聞こえる化？>>
+
+* http://www.slideshare.net/pastak/ruby-1884744{Rubyの聞こえる化}
+
+/dev/dsp を使ってるってことで、Linux 用なんだけども、
+Windows でも出来ないかなと思って、
+Cygwin で「ls /dev/dsp」したら普通にあったので、
+Cygwin の Python でもやってみた。
+
+スライドでは Ruby のインタプリタに手を入れて？、
+動作の分岐に合わせて…といったエラいことをやってるみたいだけど、
+そこまではせず、サンプルを真似ただけ。
+
+8<
+def sound():
+    f=file("/dev/dsp","w")
+    n=""
+    for i in xrange(2560):
+        n += "%c"%(i*15%256)
+    f.write(n)
+    f.close()
+
+if __name__ == '__main__':
+    sound()
+>8
+
+走らせると、やや耳障りなブザー音。
+昔の BASIC みたいに、MML(Music Macro Language だっけ)
+で簡単に音階が指定できたらいいのにね。

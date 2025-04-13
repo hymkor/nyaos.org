@@ -1,0 +1,185 @@
+<!-- This HTML file is made with RLP -->
+<HTML>
+<HEAD>
+<TITLE>emxfix03.doc</TITLE>
+<STYLE TYPE="text/css">
+<!--
+PRE{margin-left:3em}
+H1{text-align:center}
+-->
+</STYLE>
+</HEAD>
+<BODY>
+<H1><A NAME="emxfix03">超訳：emxfix03.doc (一部)</A></H1>
+<H2>解説</H2>
+<P>emxfix03.zip は emx 0.9d の修正パッケージである。<!--
+-->これは emxfix01.zip と emxfix02.zip と全ての修正と<!--
+-->新規の修正を含んでいる<!--
+--></P>
+<P>貴方がアプリケーションを作成するのに emx を用いているプログラマーなら、<!--
+-->emxfix03.zip をインストールしなさい。<!--
+-->単に emx を用いたアプリケーションを使うだけなら、<!--
+-->emxfix03.zip に対応した emxrt.zip をインストールしなさい<!--
+-->(ZIP のコメントを参照のこと)。<!--
+-->両方をインストールする必要はない。<!--
+--></P>
+<H2>ライセンス</H2>
+<P>emx はフリーソフトウェアであり、フリーソフトウェアファウンデーションの<!--
+-->発行する GNU General Public License 第二版(もしくは、貴方の選択する、<!--
+-->それ以降の版)の下で、配布・修正することができる。<!--
+--></P>
+<P>
+emx is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+</P>
+<P>You should have received a copy of the GNU General Public License
+along with emx; see the file COPYING.  If not, write to
+the Free Software Foundation, 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+</P>
+<P>See \emx\doc\COPYING.EMX and \emx\doc\COPYING for details.
+</P>
+<P>In consequence, emxfix03.zip can be distributed only if distributed
+with emxsrcr.zip, gccsrc*.zip, gppsrc2.zip, and gbinusrc.zip.
+</P>
+<H2>警告</H2>
+<P>emx 0.9d をインストールしていないのに、<!--
+-->この修正パッケージを導入してはならない。<!--
+-->これは emx の他のリリースでは動作しない。<!--
+-->もっと後の修正パッケージをインストールしたのなら、<!--
+-->emxfix03.zip をインストールしてはいけない。<!--
+--></P>
+<H2>本修正パッケージで解決される問題</H2>
+<H3>[emxfix03.zip]</H3>
+<UL>
+<LI>emxfix01.zip と emxfix02.zip は emxdoc 用に<!--
+-->html.c と html.h を含んでいない。<!--
+--><LI>fork() : 同一ハンドルで、addsockettolist() を二度呼び出さないようにした。<!--
+--><LI>fork() : 256個のDLLをサポート(前は64だった)した。<!--
+--><LI>数値の引数をとる emx.dll のオプションが、16進数もサポート。<!--
+--><LI>ソケットのクローズに関するバグの修正を試みた(Apacheで見られた)。<!--
+-->うまく動作しないようなら、「set emxopt=-!0x800」を試す。<!--
+--><LI>emx.exe が 1GB のメモリーをサポート(64MBだった)。<!--
+--><LI>printf() : &quot;%0f&quot; の不正確な出力を修正。<!--
+--><LI>printf() : &quot;%.0f&quot; の不正確な丸め(rounding)を修正。<!--
+--><LI>printf() : &quot;%#g&quot; で、値 0.0 のための、数字の個数(number
+of digits)を修正。<BR>[訳注：桁数がおかしいってことか？！]
+<LI>'exception type_info node' (の名前)を解決するために、<!--
+-->emxlibc*.dll より、もう一つのシンボルをエクスポート。<!--
+--><LI>&lt;ctype.h&gt; でマクロ関数のために、プロトタイプ(宣言)を追加。<!--
+--><LI>C++ の為に、ヘッダファイルで wchar_t を定義しないようにした。<!--
+--><LI>as(アセンブラ): 入力行長さの制限を増加。<!--
+--><LI>exp(): +INF(正の無限大)と-INF(負の無限大)のための不正確な結果を修正。<!--
+--><LI>&lt;limits.h&gt;: LONG_LONG_MAX を LLONG_MAX等へ改名した。<!--
+--><LI>&lt;math.h&gt;: cbrt() と cbrtl() は ISO C関数となった。<!--
+--><LI>&lt;arpa/nameser.h&gt;: 入れ子のコメントを一掃した。<!--
+--></UL>
+<H3>[emxfix02.zip]</H3>
+<UL>
+<LI>emxfix01.zip は c_import.a の新バージョンを含んでいなかった。<!--
+--><LI>strstr関数の実装がちょっとシンプルになった。<!--
+--><LI>os2emx.h における全ての REXX の定義を #if … #endif で囲んだ。<!--
+--><LI>emxdoc プロトタイプ(宣言)で (C++の[参照の]) &amp; を[ポインタの]
+* と同様に扱っていなかった。<!--
+--></UL>
+<H3>[emxfix01.zip]</H3>
+<UL>
+<LI>scanf関数の &quot;%[...]&quot; は空でない一連の文字と<!--
+-->マッチすべき[であるのに、マッチしていなかった？]。<!--
+--><LI>malloc( ~(size_t)0 ) が成功していた。<!--
+--><LI>fread関数で EOF を越えて、２バッファ以上のデータを読み込もうとすると、<!--
+-->fseek関数が正しく動作しない。<!--
+--><LI>テキストモードで read関数が &quot;x\r\377y&quot; を &quot;x\ry&quot;
+と読んでしまう。<!--
+--><LI>&lt;sys/un.h&gt; TCPIPV4 マクロをテストしていない。<!--
+-->[原文：&quot;sys/un.h&gt; no longer tests the TCPIPV4 macro]
+<LI>&lt;ctype.h&gt; と &gt;stdio.h&gt; で<!--
+-->インライン関数のプロトタイプ宣言を加えた。<!--
+--><LI>#pragma interface/implemetation は今度は正しく動作すべきだ<!--
+-->[ひどい訳だ]。<!--
+--><LI>libg++ (gpp.a) を上記修正の元で、再構築した。<!--
+--></UL>
+<H2>本修正パッケージで追加される特徴</H2>
+<H3>[emxfix03.zip]</H3>
+<UL><LI> emxdoc : ref{} が ハイパーリンクを作成するようになった。</UL>
+<H3>[emxfix02.zip]</H3>
+<H3>[emxfix03.zip]</H3>
+<UL>
+<LI> emxdoc : LaTeX の出力を改良した。<!--
+--><LI> emxdoc : HTML の出力を追加した。<!--
+--><LI> emxdoc : オプションを改名した(-i,-k,-l,-m,-t → 英大文字へ)
+</UL>
+<H2>リビジョン索引</H2>
+<PRE>
+emx.dll         61
+emx.exe         61
+emxio.dll       60
+emxlibc.dll     63
+emxlibcm.dll    63
+emxlibcs.dll    63
+emxwrap.dll     60
+</PRE>
+<H2>本修正パッケージのインストール</H2>
+<OL>
+<LI>emxlibcm.dll や emxlibcs.dll を用いる全てのプロセスをストップする。<!--
+-->OS/2 でプリロードされたプログラムを止めるには、<!--
+--><PRE>
+emxload -qw
+</PRE>
+を使う。<!--
+--><LI>emx をインストールしたドライブのルートディレクトリで、<!--
+-->emxfix03.zip や emxrt.zip (解説参照)を、展開する。<!--
+--><PRE>
+cd \
+unzip -o emxfix03  (or `unzip -o emxrt')
+</PRE>
+<P>
+unzip のオプション -f , -u を使ってはいけない<!--
+-->--- ヘッダファイルのタイムスタンプは更新されていない。<!--
+--></P>
+<P>DLL ファイルを作成できないことについての</P>
+<PRE>
+error:  cannot create emx/dll/emx.dll
+</PRE>
+<P>のようなエラメッセージが出たら、<!--
+-->テンポラリなディレクトリを作成して、<!--
+-->そのディレクトリ上でコマンドラインから<!--
+-->emxfix03.zip のパス と emx の DLL ディレクトリのパスを(引数に)与えて、<!--
+-->emxuzdll.cmd を実行する。<!--
+--></P>
+<PRE>
+mkdir \emxtmp
+chdir \emxtmp
+emxuzdll a:\emxfix03.zip c:\emx\dll
+chdir ..
+rmdir emxtmp
+</PRE>
+<P>これは DLL が使用中であっても、c:\emx\dll 内の DLL を<!--
+-->emxfix03.zip 内の DLL で置き換えてくれる。<!--
+-->新版の DLL は、DLL を参照している最後のプロセスが終了すると、<!--
+-->間もなく有効になる。<!--
+-->それゆえ、emxuzdll を走らせた後、リブートすべきである。<!--
+-->さもなければ、新版が有効になったかどうか、いつ有効になったか分からない。<!--
+-->(実際、DLL ファイルを含まないディレクトリが必要とするであろう<!--
+-->一時ディレクトリを貴方は必要としない)
+</P>
+<LI>以下のコマンドを OMFスタイルのライブラリを再構築するためにタイプする<!--
+-->(DOSの下では必要ではない)。<!--
+--><PRE>
+cd \emx\lib
+emxomf -s -l -q gpp.a mt/c.a st/c.a st/c_p.a
+emxomf -s -l -q mt/c_import.a st/c_import.a
+</PRE>
+</OL>
+<P>ライブラリの修正によるアドバンテージを得るには、<!--
+-->貴方のプログラムを再リンクする。<!--
+--></P>
+<P>どんな修正を導入したのかを知るために、<!--
+-->ファイル \emx\doc\emxfix03.doc は保存すべきである。<!--
+--></P>
+<HR>
+<A HREF="./emxnow.html" STYLE="text-align:right">The EMX NOW</A>
+</BODY>
+</HTML>

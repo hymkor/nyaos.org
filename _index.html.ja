@@ -1,0 +1,339 @@
+<HTML>
+<HEAD>
+  <link rel="stylesheet" type="text/css" href="gray.css" />
+  <!-- link rel="home" href="http://nyaos.org/" /-->
+  <TITLE>NYAOS Support Page</TITLE>
+  <STYLE TYPE="text/css">
+  <!-- B{color:red}
+       B.KEY{background-color:white;color:black}
+       TABLE.BX TD {
+	  border-width:1px 3px 3px 1px;
+	  border-color:white;
+	  border-style:solid;
+	}
+  -->
+  </STYLE>
+</HEAD>
+<BODY BGCOLOR=black TEXT=white LINK=silver VLINK=gray ALINK=red >
+<div align="right">
+  <a href="./index.html.ja">[Japanese]</a>
+  <a href="./index.html.en">[English]</a>
+</div>
+
+<H1>Nihongo Yet Another OSes Shell<br>support page</h1>
+
+<ul style="text-align:right">
+  <li>Nihongo Yet Another CUI Shell (for NT,2000,XP)</li>
+  <li>Nihongo Yet Another DOS Shell (for DOS,95,98,Me)</li>
+  <li>Nihongo Yet Another OS/2 Shell-II( for OS/2 Warp)</li>
+</ul>
+
+
+<DIV ALIGN=RIGHT>
+<TABLE class="BX">
+<TR>
+  <TD><A HREF="icon/index.html">Icons</A></TD>
+  <TD><A HREF="nyatools.html">Tools</A></TD>
+  <TD><A HREF="todo.html">BUG/TO DO</A></TD>
+  <TD><A HREF="nyafaq.html">FAQ</A></TD>
+  <TD><A HREF="doc/01.html">ソースの歩き方</A></TD>
+  <td><A HREF="doc/cmaga.html">紹介記事</a></td>
+</TR>
+</TABLE>
+</DIV>
+
+
+<P>
+    NYAOS(NYACUS,NYADOS,NYAOS-II)は Windows,DOS,OS/2上の
+    DOS窓/コマンドプロンプト上で動作するコマンドラインシェルです。
+    主な特徴として次のような点があります。
+
+</P>
+
+<!-- img alt="２色" src="../monjoe/n10.files/ls77l2.png"  align="right" -->
+<UL>
+
+    <LI>tcsh ライクなだけの編集機能<!--
+        -->（NYACUS,NYAOS-II はクリップボード読書き可能）</LI>
+    <LI>Vzライクな単語単位のヒストリ機能(tcshライクも可能)</LI>
+    <LI>DOS,Windows95,98,Me,NT,2000,XP,OS/2 と幅広いプラットフォームをサポート</LI>
+    <LI>内蔵カラー ls (listコマンド)
+    <LI>エイリアス/関数機能</LI>
+    <LI>キーカスタマイズ可能</LI>
+    <LI>コマンドが長くても、横スクロールするので、編集に支障が出ない</LI>
+    <LI>逆クォート</LI>
+    <LI>強力な補完機能 
+        <UL>
+          <LI>VFAT 対応</LI>
+          <LI>tcsh 同様の補完(TAB)、候補リスト表示機能(TABx2)</LI>
+          <LI>英大文字・小文字の違いは自動修正。</LI>
+          <LI>空白を含むファイル名の場合、引用符も自動付加。 </LI>
+          <LI>スラッシュ・バックスラッシュの自動使い分け</LI>
+          <LI>変換型の補完もサポート(Ctrl-TAB)</LI>
+	</UL>
+        <DL COMPACT>
+            <DT>(例)</DT>
+            <DD>「<code>c:/prog</code><b class="KEY">TAB</b>」
+                →「<code>&quot;c:/Program Files/&quot;</code>」</DD>
+            <DD>「c<code>:\prog</code><b class="KEY">TAB</b>」
+                →「<code>&quot;c:\Program Files\&quot;</code>」</DD>
+        </DL>
+    </LI>
+    <LI>GNU General Public License の下で配布可能なフリーソフトウェア</LI>
+
+</UL>
+
+
+<H2 ID="topic">トピック</H2>
+
+<ul>
+  <li>配布 URL が変わりました。(2007.05.05)<br />
+	<div align="center">
+	  <a href="http://www.nyaos.org/">http://www.nyaos.org/<a>
+	(英語・日本語共用)
+	</div>
+  </li>
+  <li>配布URL が変わりました。<br />
+    <table align="center">
+      <tr><td>(英語)</td>
+          <td><a href="http://www.nyaos.org/">http://www.nyaos.org/<a></td>
+      </tr>
+      <tr><td>(日本語)</td>
+          <td><a href="http://www.nyaos.org/index_ja.html"
+              >http://www.nyaos.org/index_ja.html</a></td></tr>
+    </table>
+  </li>
+  <li><a href="#2.22a">2.22a</a>(開発版)を公開しました。
+  <li><b>(注意)</b>「＄環境変数名」表記を導入した結果、alias は
+      「<code>alias foo="bar $1"</code>」と引用符付きで、
+      定義しないと、正しく引数が参照されなくなっています。
+  <li><a href="#2.22">2.22</a>(開発版)を公開しました。
+  <li>2.21 で実装したタグジャンプ機能を廃止しました。これは
+      <ol>
+        <li>特定のアプリケーションに特化しない形での
+            きれいな実装が難しい</li>
+        <li>本来、シェルではなく、エディタが実装すべき</li>
+      </ol>
+      と判断したためです。
+  </li>
+  <li><a href="#2.21">2.21</a>(人柱版) を公開しました。</li>
+  <li><a href="#2.20">2.20</a>(人柱版) を公開しました。</li>
+  <li>2.20 では、環境変数展開ロジックを変更した結果、200文字以上の
+      内容の環境変数を参照させると、cmd.exe/command.com レベルで、
+      エラーが出る場合があります(例: <code>echo $path</code> )。
+      「<code>option +standalone</code>」を定義して、
+      自前処理レベルを上げると回避できます。
+      その際、cmd.exe/command.com の内蔵コマンドを利用する場合、
+      「<code>cmd /c echo</code>」などのように呼び出す必要があります。
+      この辺は悩みどころなので、後のバージョンで、また変更するかもしれません。
+      よって、人柱版です。
+  </li>
+  <li>2.19 を安定版に格上げしました。
+      それに伴い、2.18b の公開を停止しました。</li>
+  <li>2.19 を公開しました。→ (<a href="#2.19">詳細</a>)
+      <br><strong>(注意)</strong> ls がデフォルトで内蔵ls (list)になりました。
+  </li>
+
+  <LI>2.13 までbindkey で補完を表す機能名が、ドキュメントでは
+      「<code>complete-or-list</code>」
+      となっていますが、実際は「<code>complete_or_list</code>」となっていました。
+      2.14 以降では、両方利用できるようになっています。
+  </LI>
+  <LI>ソースパッケージのファイル名を「<code>nyasrc<var>NNNX</var>.zip</code>」から
+      「<code>nya<var>NNNX</var>.zip</code>」に変えました。(2002/10/20)
+      <BR />（OS/2 に持って行く際にファイル名が化けるのを回避するため）
+  </LI>
+  <LI>2.06 以前の _nya は、現在は使用できません
+    <BR />
+        （複数行にまたがる alias がデフォルトでは使えないようになっている
+        → 関数機能で代用ください）
+  </LI>
+</UL>
+
+
+<H2><A NAME="download">Download</A></H2>
+
+<TABLE BORDER align="center" class="LINE">
+
+<TR>
+<td rowspan="4">2.22a<br />(開発版)</TD><TD>Source</TD>
+
+  <TD><A HREF="nya222a.zip"><TT>211813 Oct 23 08:56 2004 nya222a.zip</TT></A></TD></TR>
+<TD>NYACUS</TD>
+
+  <TD><A HREF="nyacus222a.zip"><TT>135160 Oct 23 08:56 2004 nyacus222a.zip</TT></A></TD></TR>
+<TD>NYADOS</TD>
+
+  <TD><A HREF="nyados222a.zip"><TT>091152 Oct 23 08:56 2004 nyados222a.zip</TT></A></TD></TR>
+<TD>NYAOS-II</TD>
+
+  <TD><A HREF="nyaos222a.zip"><TT>169041 Oct 23 08:56 2004 nyaos222a.zip</TT></A></TD></TR>
+
+
+<TR>
+<td rowspan="4">2.19<br />(安定版)</TD><TD>Source</TD>
+
+  <TD><A HREF="nya219.zip"><TT>199809 Jan 25 04:55 2004 nya219.zip</TT></A></TD></TR>
+<TD>NYACUS</TD>
+
+  <TD><A HREF="nyacus219.zip"><TT>128271 Jan 25 04:55 2004 nyacus219.zip</TT></A></TD></TR>
+<TD>NYADOS</TD>
+
+  <TD><A HREF="nyados219.zip"><TT>087809 Jan 25 04:55 2004 nyados219.zip</TT></A></TD></TR>
+<TD>NYAOS-II</TD>
+
+  <TD><A HREF="nyaos219.zip"><TT>162721 Jan 25 05:01 2004 nyaos219.zip</TT></A></TD></TR>
+
+
+</TABLE>
+
+<H3>Platform</H3>
+
+<table align="center" class="LINE" border>
+<THEAD>
+<TR>
+
+    <TH ALIGN=CENTER>シェル名</TD>
+    <TH ALIGN=CENTER>動作OS</TD>
+    <TH ALIGN=CENTER>備考</TD>
+    <TH ALIGN=CENTER>ビルド環境</TD>
+
+</TR>
+</THEAD>
+<TBODY>
+<TR>
+    <TD>NYADOS<BR />(にゃあどす)</TD>
+    <TD>Windows95,98,Me,DOS</TD>
+    <TD>OS/2 は VDM でのみ動作可能</td>
+    <TD>Digital Mars C++ 8.26n</td>
+</TR>
+<TR>
+    <TD>NYACUS<BR />(にゃあかす)</TD>
+    <TD>Windows95,98,Me,NT,2000,XP</TD>
+    <TD>95,98,Me は日本語入力不可<BR />OS/2 では動作不能</TD>
+    <td>Borland C++ 5.5.1</td>
+</TR>
+<TR>
+    <TD>NYAOS-II<BR />(にゃおす弐)</TD>
+    <TD>OS/2 Warp</TD>
+    <TD>Windows は動作不能</TD>
+    <td>emx 0.9d/gcc</td>
+</TR>
+</TBODY>
+</TABLE>
+
+
+<p>プロンプトにて、それぞれのEXEファイル名を入力すると起動します。
+    終了させる時は Ctrl-Z をタイプしてください。
+    NYADOS・NYACUS(NYAGOS),NYAOS-II はフリーソフトウェアです。
+    コピー・配布は自由に行ってください。
+</p>
+
+
+
+<h2>ありがたや</h2>
+
+NYADOS・NYACUS・NYAOS-II の導入/利用方法等を解説されているページを
+ご紹介します。ありがたや。
+
+<ul>
+  <li><a href="http://qwerty777.s57.xrea.com/winunix/index.htm" target="_blank"
+	>WindowsをUNIXっぽく</a>(QWERTY様 , 2004.05.05 移転されました)
+  </li>
+  <li><a href="http://galaxy.shinshu-u.ac.jp/~koyama/inst/index.html" 
+       target="_blank">インストールに苦しんだ記録</a>
+       (KOYAMA, Shigeru様)</li>
+  <li><a href="http://childs.squares.net/program/nyaos/index.html" target="_blank"
+	>NYAOS を使おう！</a>
+	(TEM 様)</li>
+</ul>
+
+他にもございましたら、一報いただければ、リンクさせていただきます
+(一報なくても、リンクしますけど)。
+
+<H2><A NAME="history">更新履歴</A></H2>
+
+<UL>
+  <li><a name="2.22a">2.22a</a> (2004/10/23)
+  <ul>
+    <li><b>[虫繕]</b> %未定義変数.defined% が常に 2 になってしまっていた。
+  </ul>
+  <li><a name="2.22">2.22</a> (2004/10/17)
+  <ul>
+    <li>(NYACUSのみ)chdir した時、カレントディレクトリをウインドウタイトルに
+        出力するようにした。
+    <li>${…},$…形式でも環境変数の補完ができるようにした。
+    <li>bindkey の機能コードに none (何もしない) , insert-self 
+        (自分自身を挿入する)を追加。
+    <li><b>[虫繕]</b>
+      逆クォート結果の末尾から空白が除かれていなかった。
+    <li><b>[虫繕]</b>
+      改行コードをプロンプトで出すと、画面幅を誤認識してしまっていた。
+    <li><b>[虫繕]</b>
+      環境変数名の補完で、変数名の大文字・小文字を区別してしまっていた。
+    <li><b>[虫繕]</b>
+      空行入力や Ctrl-C で入力をキャンセルした際、その直前のヒストリが
+      失なわれてしまっていた。
+    <li><b>[虫繕]</b>
+      後ろに補完対象以外の文字列がある時に、補完リストを出力すると、
+      表示が乱れていた。
+    <li>(NYACUSのみ)<b>[廃止]</b>
+      逆スクロール時のタグジャンプ支援機能
+    </ul>
+  <li><a name="2.21">2.21</a> (2004/04/25)
+  <ul>
+    <li>bindkey 文で一度に複数の機能をバインドできるようにした。</li>
+    <li>実行ファイルと同じディレクトリの _nya も読み込み対象候補とした。</li>
+    <li>(NYACUS のみ) xscript 機能の呼称を「逆スクロール機能」へ改めた。</li>
+    <li>(NYACUS のみ) 逆スクロール時のキーをカスタマイズできるようにした</li>
+    <li>(NYACUS のみ) 逆スクロール時のタグジャンプ「支援」機能：
+          <br>　SHIFT-F10 を入力すると、環境変数TAGJUMP に定義されている
+          コマンドにカーソルのある行全体が渡されます。
+          NYACUS 自身は構文解析部分を内蔵しませんので、添付の 
+          tagjump.vbs のようなエディタに渡すファイル名・行番号を
+          抽出して、エディタに渡すスクリプトのパスを TAGJUMP に
+          設定してください。
+    </li>
+    <li><b>[虫繕]</b> %～.defined% で 0 が得られなかった</li>
+  </ul>
+  <li><a name="2.20">2.20</a> (2004/04/11)
+  <ul>
+    <li>「関数名{ … }」という形式の新関数定義をサポート</li>
+    <li>$XXXX , ${XXXX} という形式で変数を参照できるようにした。</li>
+    <li>一行エディタを拡張
+      <ul>
+        <li>Ctrl-D ⇒ 空入力状態の時、シェルを終了する。</li>
+        <li>Ctrl-T ⇒ カーソル直前の二文字を入れ替える。</li>
+      </ul>
+    </li>
+    <li>foreach のパラメータリストを括弧で囲めるようにした。
+        (括弧を無視するだけ)</li>
+    <li>VBScript版・REXX版ビルド用スクリプトを用意。</li>
+    <li><b>[虫繕]</b>
+      「掛」という文字の 2 バイト目をパイプ文字と認識してしまっていた。</li>
+    <li><b>[虫繕]</b>
+        bracexpオプションが有効な時、内部にカンマが無い {…} の
+        中括弧が消えてしまっていた。</li>
+  </ul>
+  </li>
+    <li><a name="2.19">2.19</a> (2004/01/25)
+    <ul>
+      <li>listコマンドについて下記の変更を行った。
+        <ul>
+          <li>「<code>ls</code>」 を<code>list</code>と等価とした。<br />
+                ⇒ 外部の ls を使用する時は
+                「<code>alias ls ls.exe</code>」と宣言ください
+          </li>
+          <li>オプション:-1,-R,-t,-S を追加.</li>
+          <li>環境変数 LS_COLORS で、<code>list</code>
+              の色をカスタマイズできるようにした.</li>
+          <li>Ctrl-C で中断できるようにした。</li>
+        </ul>
+      </li>
+    </ul>
+  <LI><A HREF="nyaoldhistory.html">より過去の履歴</A></LI>
+</UL>
+
+</BODY>
+</HTML>
+

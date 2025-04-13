@@ -1,0 +1,142 @@
+.H{
+  font-size:large;font-weight:bold
+}
+
+H1{
+  text-align:right;
+  border-style:solid;border-width:0px 0px 4px 0px;border-color:white;
+  color:snow;
+  font-family:Comic Sans MS,cursive;
+  font-size:large;
+  clear: both;
+  width: auto;
+}
+
+H2{
+  border:none;
+  background-color:#444444;
+  font-size:large;
+  font-family:Comic Sans MS,cursive;
+  width:auto;
+}
+
+H3{
+  border-style:solid;border-width:0px 0px 0px 20px;border-color:silver;
+  font-size:medium;
+  text-indent:5pt
+}
+
+H4{
+    text-decoration:underline;
+}
+
+DT{ color:silver;font-weight:bold; }
+
+UL LH{ color:silver;font-weight:bold; }
+
+EM{ color:gray;font-weight:bold;font-style:normal }
+
+STRONG{ color:red }
+
+STRIKE{ color:red }
+
+TABLE {
+    border-collapse:collapse;
+    border-width:2px ;
+    border-style:solid ;
+    border-color:white;
+}
+
+TD{
+    border-width:1px ;
+    border-style:solid ;
+    border-color:white; }
+
+A:hover { background-color:#440000; }
+
+BIG,P.OxFF{ font-size:xx-large; }
+
+CITE,BLOCKQUOTE{
+    color:silver;font-style:italic;
+}
+
+body {
+    background-color: black;
+    color: white;
+}
+
+a:link {
+    color: silver;
+}
+
+a:visited {
+    color: gray;
+}
+
+table{
+    border-collapse:collapse;
+    border-width:2px ;
+    border-style:solid ;
+    border-color:white;
+    margin-left:4em;
+
+}
+table td{
+    border-width:1px ;
+    border-style:solid ;
+    border-color:white;
+}
+
+p.adminmenu{
+    display:xx-small;
+    text-align: right;
+    font-size: x-small;
+}
+
+/* p.adminmenu a{
+    border-style: solid;
+    border-color: white;
+    border-width: 1px 2px 2px 1px;
+    padding: 2px;
+} */
+
+p.adminmenu a:hover{
+    border-style: solid;
+    border-width: 1px 2px 2px 1px;
+    padding: 2px;
+    background-color:white;
+    color:black;
+}
+
+pre{
+    margin-left: 1cm;
+    margin-right: 1cm;
+    background-color:#222222;
+}
+
+div.footer p{
+    font-size:small;
+    border-width:1px 0px 0px 0px;
+    border-color:whilte;
+    border-style:solid;
+    margin-left:1.5cm;
+    margin-right:1.5cm;
+}
+
+div.header{ 
+    font-family:Comic Sans MS,cursive;
+    font-size:36pt; 
+    text-align:right;
+/*    float:right;
+    width:350; */
+}
+
+body.frozen{
+    border-width:1px 1px 1px 1px;
+    border-style:solid;
+    border-color:white;
+}
+
+img{
+    float:right;
+}

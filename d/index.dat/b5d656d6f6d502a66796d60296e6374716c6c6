@@ -1,0 +1,45 @@
+<<ソースの入手>>
+
+http://hp.vector.co.jp/authors/VA003457/vim/vim3/vim.html より
+
+    * vim-3.0.tar.gz - オリジナルソース
+    * jvim.2.1beta.tar.gz - 日本語化パッチ
+
+をダウンロード。
+
+<<curses の確認>>
+
+多分不要だろうが...
+
+<pre>
+    # cd /usr/lib
+    # ln -s ncurses.so.4.2 ncurses.so.3.0
+</pre>
+
+とシンボリックリンク。
+(ncurses 4.x は 3.x とバイナリ互換があるらしい)
+
+<<展開＆パッチあて>>
+
+これはドキュメントどおり
+
+<<SJIS対応化など>>
+
+<<<Makefile の修正>>>
+
+<pre>
+    % cd vim/src
+    % cp makjunix.mak Makefile
+</pre>
+
+Linux 2.0.x/2.2.x (TESTED Debian GNU/Linux 2.0/2.1)
+のエントリのコメントを外して、コンパイルオプションの
+ところを
+
+<pre>
+    CC=gcc -O -DJP_DEF=\"SSS\"
+</pre>
+
+と変更する。
+
+<<後は make のみ>>

@@ -1,0 +1,289 @@
+* ジョーシンで見た、スコープドックのプラモの表紙が格好よすぎ。
+でも、高いなぁ?。きょうび、数千円はあたりまえか…
+
+* 暗黙の disり機能「はてなバカー」というのは、どうだろうか。
+
+* クリックすると、ウンコが増えるわけだ。
+
+* なんだ、違ってるのはアイコンくらいしかないじゃないか。
+
+* livedoor Reader の PIN 機能みたいな「あとでよむ」機能。
+  Firefox の拡張機能でないだろうか。
+* 仕様としては Bookmark とほとんど同じ
+
+* 一点だけ。一度、Bookmark で移動してしまうと、それで Bookmark から消える。
+
+* 「あとでよむ」んであって「何回も読む」つもりはないわけだから
+(その時はソーシャルブックマークで改めて登録する)、
+消すのが面倒なわけですよ。
+
+* こういうのって、普通の人はタブとして開いていておいているのかな。
+
+<<[python] SI ObjectBrowerER 向けパーサー>>
+
+http://www.sint.co.jp/siob/er/default.asp{SI ObjectBrowser ER}という、
+データベース設計ツールがあって、
+最近になって会社がコーポレートラインセンスを購入してくれるという快挙。
+ということで、社員使いたい放題なので、遠慮なく使わさていただいている。
+
+当ツールは、なかなか使い勝手がよく、バグもなく安定していて快適なんだが、
+最もよいのはファイル形式(EDMファイル)が XML 形式なので、
+その手のライブラリを使えば、お手軽に内容を展開することが可能な点だ。
+
+さっそくというわけではないが、expat を使って、専用パーサーを一つ書いてみた。
+
+8<
+#!/usr/bin/env python
+# -*- coding: mbcs -*-
+
+import re
+import xml.parsers.expat
+
+class dict2object:
+    def __init__(self,attr):
+        for key,val in attr.iteritems():
+            setattr(self,key.replace("-","_").lower() , val )
+    def __contains__(self,key):
+        return key in self.__dict__
+
+class dict2node(dict2object):
+    def __init__(self,attr):
+        self._list = []
+        dict2object.__init__(self,attr)
+    def append(self,value):
+        self._list.append( value )
+    def __getitem__(self,n):
+        return self._list[n]
+    def __iter__(self):
+        return self._list.__iter__()
+
+class SIObject:
+    def __init__(self):
+        self.id         = {}
+        self.entities   = {}
+        self.model      = {}
+        self._cur_entity = None
+        self._cur_model  = None
+        self._cur_index  = None
+
+    def __call__(self,name,attrs=None):
+        if attrs : ### Start ###
+            if name == "ENTITY" :
+                entity = dict2node(attrs)
+            if self._cur_model :
+                target = self.id[ entity.id ]
+                self._cur_model[ target.p_name ] = target
+            elif "p_name" in entity :
+                self._cur_entity = self.id[ entity.id ] = \
+                self.entities[entity.p_name] = entity
+                self._cur_entity.index = []
+            elif name == "ATTR" and self._cur_entity :
+                attr = dict2object(attrs)
+                if re.match("TIMESTAMP\(\d+\)",attr.datatype ):
+                    attr.datatype = "TIMESTAMP"
+                if attr.scale != "0":
+                    attr.dim = "%s,%s" % (attr.length,attr.scale)
+                else:
+                    attr.dim = attr.length
+                self._cur_entity.append( attr )
+            elif name == "INDEX" and self._cur_entity :
+                self._cur_index = dict2node(attrs)
+                self._cur_entity.index.append( self._cur_index )
+                if attrs["I-TYPE"] == "0" :
+                    self._cur_entity.primary_index = self._cur_index
+            elif name == "COLUMN" and self._cur_index :
+                self._cur_index.append( dict2object(attrs) )
+            elif name == "MODELVIEW" :
+                self._cur_model = self.model[ attrs["L-NAME"] ] = {}
+            else : ### End ###
+                if name == "ENTITY" :
+                   self._cur_entity = None
+                elif name == "INDEX" :
+                   self._cur_index = None
+                elif name == "MODELVIEW" :
+                   self._cur_model = None
+    def loadFile(self,fd) :
+        xmlparser = xml.parsers.expat.ParserCreate("UTF-8")
+        xmlparser.StartElementHandler = xmlparser.EndElementHandler = self
+        xmlparser.ParseFile( fd )
+    def __iter__(self):
+        return self.entities.itervalues()
+
+if __name__ == "__main__":
+    import sys
+    siobject = SIObject()
+    siobject.loadFile( sys.stdin )
+
+    for entity in siobject:
+        print "CREATE TABLE %s (" % (entity.p_name )
+        print ",\n".join(
+              "  %s %s %s" % (
+                e.p_name ,
+                e.datatype ,
+               "NOT NULL" if e.null == "1" else "NULL" ,
+             )
+             if e.datatype in ("DATE","TIMESTAMP") else
+              "  %s %s(%s) %s" % (
+                 e.p_name ,
+                 e.datatype ,
+                 e.dim ,
+                 "NOT NULL" if e.null == "1" else "NULL" ,
+             )
+             for e in entity )
+        print ");"
+        print "ALTER TABLE %s ADD ( PRIMARY KEY (" % entity.p_name ,
+        print ",".join( e.p_name for e in entity if e.pk=="1"),
+        print "));"
+        for e in entity:
+            if len(e.comment) > 0:
+                print "COMMENT ON %s.%s AS '%s';" \
+                  % (entity.p_name , e.p_name , e.comment )
+                print
+>8
+:(2010.02.06 注記)
+:: この記事は一旦破損したものをリカバリしたため、上記ソースのインデントは非常に怪しいです。
+
+テストは
+
+8<
+[C:] python siobject.py < EDMファイル名
+>8
+
+と標準入力へ EDM ファイルを流し込む。
+出力される SQL は一見正しそうに見えるけど、
+実際に DB に読み込ませてテストしてないから信用するなよ（笑）。
+あくまで、パースの読み込みができているかの確認用のコードだから。
+
+さて、トピックは二つ
+
+<<<+辞書(ハッシュ/連想配列)をオブジェクト化する標準ライブラリはないのかな？>>>
+
+expat で普通に読み込むと、XML の属性が辞書(ハッシュ)形式で得られる。
+これをいちいちオブジェクトのフィールドにコピーするのもたいへんだし、
+かといって、そのまま辞書として使うと entity["P-NAME"] と、
+角括弧と二重引用符と大文字をならべる必要があるので、かなりイケてない。
+
+というわけで、上のコードでは
+
+8<
+class dict2object:
+    def __init__(self,attr):
+        for key,val in attr.iteritems():
+            setattr(self,key.replace("-","_").lower() , val )
+>8
+
+なんていうコンバートクラスを使って、
+次のようにメンバーアクセスできるようコンバートしている。
+
+8<
+entity = dict2object( {"L-NAME":"テーブルの論理名","P-NAME":"テーブルの物理名" }
+print "Lname=%s,Pname=%s" % (entity.l_name , entity.p_name )
+>8
+
+こんなの、ある意味定番なのだから、標準ライブラリで装備していないのかな…
+と思ったが、よく考えると、ハッシュのキーって何でもありだから、
+いわゆる例外系の名前をどう取り扱うかを考えると、標準化は不可能だな。
+上の例でも、
+
+*  ハイフンをアンダスコアにする。
+
+*  大文字を小文字にする
+
+といった「加工」をしているわけだし。
+
+<<<+xml.parsers.expat の I/F なんとかならんか>>>
+
+ハンドラにコールバック関数を渡す仕様はいいが、
+いっしょにパラメータを渡せるようになっていないのは、
+どういうことなんだ。
+
+これでは、コールバック関数は取り込んだXMLの内容をグローバル変数に
+保管しとかなくちゃいかんではないか。
+
+というわけで、しゃーないので、self を関数オブジェクト化し、
+一見関数を渡しているように見せて、実は関数のようにふるまうオブジェクトをわたしておいて、
+コールバック関数として ```__call__``` が呼び出されたら、結果をこっそり
+self 内に隠し持つようにしたのであった。
+
+でも、これはこれで汚い(関数オブジェクトって、普通の人は知らない/使わないよね)
+
+<<プライオリティーの悲劇>>
+
+ブクマで「自分なら優先順位を聞く」という話があったけど
+高い優先順をまずやるのは、まぁ、あたりまえな話でありまして…
+「優先順位が低いと判断したもの」のプライオリティーを下げすぎたというのに、
+今回の敗因がある。それは、つまり：
+
+* 優先順位を自分が判断する立場にあった。
+
+* つまり「自分が」優先順位を読み違えた。
+
+* 優先順位の低いものを「あとでやる」ことにしたが、その「あと」具合が遅すぎた。
+
+* その優先順位の低い事柄は「やるのがいやなこと」ではなく、
+  実は「むしろ、そういうの大好き」な類の仕事だった。
+
+* それについては、他にもやってくれる人がいた。
+
+* 他所からの成果物を拝借できるので、やらなくてもいい可能性もあった。
+
+ぶっちゃけ、どういう類の仕事かというと、
+
+* サーバ開発環境のセットアップ
+
+* ライブラリの整備
+
+わし、こういうの大好き。だから、ぜひやりたいところだった
+
+だが、一方で、今まで経験した案件において一般に自分は仕様についての理解が浅く、
+そこが弱点となっていたのを強く意識していた。それゆえ、こういう得意仕事よりは
+
+* お客さんと接する時間や、仕事仲間とのミーティング時間
+
+* そのミーティング内容を踏まえたデータベースのスキーマ設計
+
+を最優先事項に据えたのだった…(これだけじゃなく、これを含めた上流工程ですな)。
+ところが、要件がなかなかまとまらず、これらの最優先と位置付けられたタスクは
+無尽蔵に我々の時間を消費し尽すこととなる。
+
+結果として、相対的に優先順位が低いタスクが、想定以上に後回しにされてしまったのであった。が、上のリストに
+
+* それについては、他にもやってくれる人がいた。
+
+* 他所からの成果物を拝借できるので、やらなくてもいい可能性もあった。
+
+という二件があり、これらでそれが補えたのではないかという説もある。
+
+「他にやってくれる人がいた」という件については、
+その人はそこそこの経験者であり確かにそれなりの仕事を果たしてくれた。
+が、やはり、きちんとした仕事をやっていただくには、
+きちんとした指示の仕方をそれなりの手間をかけて説明しなければいけないわけで
+((fn 
+わたしは「正しい仕事をしてもらうには、正しく指示しなければいけない」と考える。
+で、正しい指示を行うにはそれなりの時間がかかるものである。
+それゆえ作業というのは分担したからといっても、
+中央の指令塔の人の負荷は簡単に減るものではなく、
+人数に比例して開発速度がアップするものでは決してないのである))、
+結果としては、後から全く修正なしに使えたわけではなかった。
+<br>（その人の名誉の為にいうと、その仕事っぷりはあの状況では100点だったし、
+その成果がなければ、更に状況は悪いものになっていたのは間違いない）
+
+「成果物を拝借する」件は、真面目に問題だらけであった。
+
+* 利用の経験者がいなかった。
+* とっつきにくいツールで慣れるのに若干時間がかかった。
+
+* 品質もよいとはいえない。
+* 害が無いのだが、妙な Warning を吐きまくり。
+
+* 非常に排他的なツールで、自前のライブラリの仕様を強要する。
+* エラーのトレーサビリティーが高い自前の自信作のライブラリの利用を
+断念せざるをえなかった。
+<br>(時間があったら、改造して、なんとか共存させるということもできたであろうに)
+
+そんなわけで、我々は非常に足腰の弱った状態で、開発に突入することになる。
+自分の直感というか趣向を否定してした結果が、この事態を招いてしまったような気もするが、どう飾っても要は判断ミスである
+（もっとも他にも多々問題があり、これらはそのうちのほんの一部にすぎない）
+
+かくして健康被害者まで出したこのプロジェクトは、
+その第一ステップを“味方総崩れの大敗北”という形で踏み出すこととなる。

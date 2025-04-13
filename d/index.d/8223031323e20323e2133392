@@ -1,0 +1,104 @@
+<<[Python] requests モジュール簡単すぎ。わろた>>
+
+6<
+: https://twitter.com/#!/zetamatta/status/168234040577630208{@zetamatta}
+:: 同じファイルを、sakura と bitbucket 両方にアップするのって、めんどいなぁ
+: https://twitter.com/#!/k2kkrm/status/168234263605551104{@k2kkrm}
+:: @zetamatta 自動化するしか！
+: https://twitter.com/#!/zetamatta/status/168234763017134080{@zetamatta}
+:: @k2kkrm そ、そうか !!
+>9
+
+というわけで、『
+http://d.hatena.ne.jp/doloopwhile/20120118/1326913018{「結構便利だからみんな使った方がいいぞ！」という7つのPythonライブラリ - None is None is None}』で紹介されていた、
+request モジュールを使って、アップロードを自動化することにしました。
+が…
+
+6<
+: https://twitter.com/#!/zetamatta/status/168927428473925632{@zetamatta}
+:: Pythonでrequestsモジュールを導入しようとしたら setup.py でコケた。マニュアルを読むと pip で導入しろとの事。pip を導入しようとしたら setup.py でコケた。マニュアルを読むと setuptools を導入しろとの事。setuptools を…
+: https://twitter.com/#!/zetamatta/status/168927605796515842{@zetamatta}
+:: 標準的なインストールシステムくらい、本体に同梱しておくべきだよなぁ ≫ Python。バッテリ内蔵がポリシーちゃうかったんけ
+>9
+
+いや、まぁ、ここは面倒くさかったです、インストールは。
+しかしながら、以下の順に導入していけば、別にトラブルもなく、スムーズに入りますので、御安心を。
+
++ http://pypi.python.org/pypi/setuptools{setuptools 0.6c11 : Python Package Index}
++ http://pypi.python.org/pypi/pip/1.0.2{pip 1.0.2 : Python Package Index}
++ http://docs.python-requests.org/en/latest/index.html{Requests: HTTP for Humans — Requests 0.10.2 documentation}
+
+さて、使ってみようか…あれ？README がない。サイトをいろいろ見てみたら、ウェブ上にマニュアルがあった。
+
+* http://docs.python-requests.org/en/latest/index.html
+
+ふむ、なるほど、確かに分かりやすい仕様だ。
+というわけで、wifky 向けのファイルアップロードスクリプトを作成してみました。
+(<<{wifky_upload.py})
+
+8<
+import requests
+
+class AuthError(StandardError):
+    pass
+
+class BadURL(StandardError):
+    pass
+
+def upload(baseurl,pagename,fname,password=None):
+    if password :
+        r = requests.post( baseurl , 
+                data={ "a":"signin" , "password":password , "signing":"Enter" }
+                )
+        if r.status_code < 200 or r.status_code >= 300:
+            raise BadURL()
+        if len(r.cookies) <= 0 :
+            raise AuthError()
+        cookies = r.cookies
+    else:
+        cookies = {}
+
+    r = requests.post( baseurl ,
+            files={ "newattachment_b":open(fname,"rb") } ,
+            data= { "a":"Upload" , "p":pagename } ,
+            cookies=cookies
+            )
+    if r.status_code < 200 or r.status_code >= 300:
+        raise BadURL()
+
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) < 3:
+        print("usage: %s BASEURL PAGENAME FNAME [PASSWORD]" % sys.argv[0])
+    else:
+        try:
+            upload(*sys.argv[1:])
+            print("%s: %s: Upload success fully" % (sys.argv[0],sys.argv[3]))
+        except BadURL:
+            print("%s: %s: Bad URL" % (sys.argv[0],sys.argv[1]))
+        except AuthError:
+            print("%s: Authentication Error" % sys.argv[0])
+>8
+
+例外処理を真面目に書いたので、少々長くなってしまいましたが、
+本質的なところは 7～8行です。
+requests モジュールはメソッドが分かりやすくて、
+使ってるコードを見れば、だいたいの使い方が分かるのがいいですね。
+
+さて、このスクリプトの使い方:
+
+6<
+python wifky_upload.py ''(ベースのURL)'' ''(ページ名)'' ''(アップロードファイルフルパス)'' ''(パスワード)''
+>9
+
+* URL は「index.cgi」を省略せず、全て書いてください。
+* 凍結されていないページのアップロードする場合はパスワードを省略できます。
+* このスクリプトを実行すると、ブラウザでログインしていても、強制的にログアウトさせられます。
+  ''(同時にログインできるブラウザは一つだけという wifky の仕様のため)''
+
+さらに、wifky 側に
+http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%5Bplugin%5D+%BA%C7%BF%B7%C5%BA%C9%D5%A5%D5%A5%A1%A5%A4%A5%EB%A5%C0%A5%A6%A5%F3%A5%ED%A1%BC%A5%C9%A5%D7%A5%E9%A5%B0%A5%A4%A5%F3{最新添付ファイルダウンロードプラグイン}
+を入れておけば、ほぼアップロード後、ページの添付ファイルリンクを修正作業も不要になります。
+
+さて、これで今後のバージョンアップ作業が格段に楽になる…はずだっ!
+''(ほんとかな？)''

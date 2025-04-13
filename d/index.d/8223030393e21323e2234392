@@ -1,0 +1,32 @@
+<<[Cygwin] 緊急特集 Cygwin 1.7.1 が出たよ、全員集合！>>
+
+* http://sourceforge.jp/magazine/09/12/24/0429208{
+    Cygwin 1.7系初となるメジャーリリース「Cygwin 1.7.1」リリース 
+    - SourceForge.JP Magazine}
+** http://sodium.dnsalias.com/sodium/diary/20091224.html#p01{
+    sodiumイオンにっき(2009-12-24)}経由
+
+さっそくインストールしてみたよ！ 
+setup.exe が変わってるみたいだから、
+まずは、 http://cygwin.com/ から setup.exe をダウンロードし直しだ。
+
+* CygTerm の再コンパイルが要るかなと思ったけど、別に平気だったぜ
+
+一応、互換性あるのかな？
+
+* おれたちの Lua 5.1.4 がパッケージに入ってたよ！
+
+でも、Python は何故か、まだ 2.5.2 だったんだ…
+
+* gcc が 4.3.4 だったよ。
+
+Cygwin 1.5 だと、何だったっけ？(ぉぃ)
+
+* -mno-cygwin が廃止されたよ、ドラえもん！
+
+8<
+gcc -Wall -O3 -DNDEBUG -I/usr/local/include -mno-cygwin -D_MSC_VER=1000 -DLUA_ENABLE -c nyados.cpp 
+gcc: The -mno-cygwin flag has been removed; use a mingw-targeted cross-compiler.
+>8
+
+NYAOS 3000 のビルドどうしよう。別途、MinGW を入れないといけないのかな。

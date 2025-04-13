@@ -1,0 +1,45 @@
+
+<<((lb))Ruby((rb)) Windows で Ruby/OCI8 を使う>>
+
+http://www.jiubao.org/ruby-oci8/index.ja.html{
+Ruby/OCI8} は非常に便利なブツであるが、
+今んとこ、DBサーバ内だけにインストールしてあるので、
+サーバ内にしょうもない作業ファイルが量産され、
+自室に勝るとも劣らないくらい、散らかった状態になってしまった。
+
+そこで、Windows PC にインストールすれば、状況は緩和されるだろうと思い、
+http://arton.hp.infoseek.co.jp/indexj.html{
+ActiveScriptRuby(以下 ASR)}での使用に挑戦した。
+そのため、ASR と Ruby/OCI8 以外に次のようなソフトウェアをインストールした。
+
+:ASR の(開発用の)ヘッダとライブラリ
+:: ASR の配布ページより、ダウンロードしてインストール。msi なので、簡単簡単。
+	(ASRDev??.msi という名前のパッケージとなっている)
+:OCI 自体
+:: Oracle の Windows クライアント向けの CD-ROM を
+    掘り出して追加インストール。
+    OCI はデフォルトではインストールしてくれなかったようだ。
+:Microsoft Visual C++ Toolkit 2003
+    :: VC++ のフリー版。
+:Microsoft Visual Studio .NET 2003
+    :: nmake のためだけに入れた。
+
+だが、しかし、VC++ では結局コンパイルまで辿りつけなかった、とほほ。
+（なんか、<a href="../tmp/mkmf.log">winsock2.h が
+include できんかった</a>とか言っているな…）
+
+ところが、一方で、試しにやってみたら、
+Cygwin 環境ではあっさりと入ってしまった… orz。
+Cygwin は、余り日常的に使わないから、
+どちらかというと、ASR で導入したいのだが…。
+
+それとも、これは Cygwin へ行けという神仏の啓示なのか？
+まぁ、いいんだけどね（いいのか！）
+
+<<((lb))おさんぽ((rb)) うろうろ>>
+
+* http://www.ritsumei.ac.jp/~akitaoka/index-j.html{北岡明佳の錯視のページ}
+    (http://www.alles.or.jp/~spiegel/200406.html#d17_t3{
+	辺境からの戯れ言}より)
+    :: 見える、見えるぞ、ララァ。この私にも錯覚が見える。
+	（←だめだぁ、自分が見えてねぇ！）

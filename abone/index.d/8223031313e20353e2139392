@@ -1,0 +1,5 @@
+!!! 物理サーバ Up の件
+
+* IP>MOUNT>DOVECOT>POSTFIX>APACHE>MYSQL>OTRS の順で起動させるようにする。
+* PINGD での host_list は 192.168.38.12 とする。
+* options="noatime" を MOUNT に入れる

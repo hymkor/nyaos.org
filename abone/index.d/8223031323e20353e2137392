@@ -1,0 +1,30 @@
+!!! ODTwithODAC112021 をインストールした時に出てきたメッセージ
+
+8<
+Run the SQL scripts located in C:\app\ql099664\product\11.2.0\client_1\ASP.NET\SQL directory for a new installation or an upgrade of Oracle Providers for ASP.NET.
+>8
+
+sqlplus /nolog で実行してみたが、DB に接続されていませんというエラーが出て、
+何もできない。だからといって、サーバDBに接続するのは危険。
+
+ということで、何もせず。
+
+PrintWatch をビルドしたところ：
+
+8<
+警告	1	参照アセンブリ 'C:\app\ql099664\product\11.2.0\client_1\ODP.NET\bin\2.x\Oracle.DataAccess.dll' は、アプリケーションとは異なるプロセッサをターゲットにしています。	PrintWatch
+>8
+
+という警告が出たが、デバッグ実行は問題なく実行できている模様。
+
+8<
+2012/05/17 10:33:45 TRACE DATA [PrintCheck Error]
+>8
+
+というエラーがトレースログ(bin\Debug\2012.05.17_trace.log)に出ていたが、
+
+8<
+ mkdir c:\temp\Qualica\PS 
+>8
+
+したら出なくなった。みかけ上、ちゃんと動いている模様。

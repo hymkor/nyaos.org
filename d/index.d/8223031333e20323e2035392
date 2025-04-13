@@ -1,0 +1,89 @@
+<<[NYAOS][Lua] ショートカットをコマンドラインから作成する>>
+
+今、コマンドラインで作成したファイルのショートカットを急にデスクトップに作りたくなっても大丈夫。
+
+そう、NYAOS ならね
+
+'''lnk.lua''':
+8<
+function nyaos.command.lnk(src,dst)
+    if not dst then
+        print('Usage: lnk FILENAME SHORTCUT')
+        return 1
+    end
+    local fsObj=nyaos.create_object('Scripting.FileSystemObject')
+    if not string.match(src,'^http://') then
+        src = fsObj:GetAbsolutePathName(src)
+    end
+    dst = fsObj:GetAbsolutePathName(dst)
+    if fsObj:FolderExists(dst) then
+        dst = dst .. '\\' .. fsObj:getFileName(src)
+    end
+    if string.match(src,'^http://') then
+        dst = dst .. '.url'
+    elseif not string.match(dst,'%.lnk$') then
+        dst = dst .. '.lnk'
+    end
+    print('    '..src)
+    print('--> '..dst)
+                                                                  
+    local shell = assert(nyaos.create_object('WScript.Shell'))
+    local shortcut=assert(shell:CreateShortcut(dst))
+    shortcut.TargetPath=src
+    shortcut:Save()
+end
+>8
+
+8<
+[c:hayama]
+$ source lnk.lua
+lnk.lua reading ....
+[c:hayama]
+$ lnk hoge.txt ~desktop\
+    C:\Documents and Settings\hayama\hoge.txt
+--> C:\Documents and Settings\hayama\デスクトップ\hoge.txt.lnk
+[c:hayama]
+$
+>8
+
+標準の _nya に組み込んどこかな
+
+<<Mercurial のレポジトリ分割>>
+
+* http://d.hatena.ne.jp/ursm/20080813/1218642833{Mercurial リポジトリを分割する - ursmの日記}
+
+convert プラグインは標準装備なので、Mercurial.ini に
+
+8<
+[extensions]
+hgext.convert=
+>8
+
+を加えるだけで使えるようだ。
+
+以下、カレントディレクトリは、基本レポジトリの一つ上のディレクトリから
+
+8<
+$ cat filemap.GGGGGGGG
+include src/GGGGGGGG 
+rename src/GGGGGGGG .
+
+$ hg convert --filemap filemap.GGGGGGGG experimental src/GGGGGGGG 
+
+[C:\home]
+$ type filemap.XXXXXXXX
+include src/exe/XXXXXXXX
+rename src/exe/XXXXXXXX .
+[C:\home]
+$ type filemap.FFFFFFFF
+include src/exe/FFFFFFFF
+rename src/exe/FFFFFFFF .
+
+$ hg convert --filemap filemap.XXXXXXXX experimental src/exe/XXXXXXXX
+
+$ hg convert --filemap filemap.FFFFFFFF experimental src/exe/FFFFFFFF
+>8
+
+* パスの区切りは、Windows でも「/」を使わなくちゃいけないようだ。
+* レポジトリをコンバートするだけなので、ワークファイルを展開するために、hg update が必要みたい。
+* 実際に打ったコマンドラインを、後から一部伏せ字にしたので、もし動かなくなってたらごめんなさい。

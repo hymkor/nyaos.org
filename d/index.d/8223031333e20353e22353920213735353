@@ -1,0 +1,79 @@
+!!! ((title go言語勉強中 #golang))
+
+* 中括弧を使うのに、丸括弧を使わない。
+* 公開シンボルは頭文字を大文字にするというMS臭。
+* 代入は Pascal風の「``:=``」''(← これは誤解。宣言の省略表記)''
+* 日本語コードは UTF8 限定。
+* インデントはタブですってば奥様。
+
+というアレルギー反応をなんとか克服して、
+なんとか go言語を勉強し始めた40歳児教室。
+
+最近は Windows 用の MSI パッケージが普通にあるのか、うれしいな。
+ま、それはともかく、な、なんとか cat っぽいものが書けたぞ。
+
+:``type.go`` :
+
+8<
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main(){
+	if len(os.Args) <= 1 {
+		fmt.Printf("Usage: %s FILENAME\n",os.Args[0])
+		return
+	}
+	for i:=1 ; i < len(os.Args) ; i++ {
+		fd,err := os.Open(os.Args[1])
+		if err != nil {
+			fmt.Printf("%s: Can not open\n",os.Args[1])
+			return
+		}
+
+		reader := bufio.NewReader(fd)
+		for{
+			line , err := reader.ReadString('\n')
+			if err != nil {
+				break
+			}
+			fmt.Print(line)
+		}
+		fd.close()
+	}
+}
+>8
+
+'''うぎゃー、vimを4桁タブにしていても、
+ブラウザに貼り付けると8桁タブになってしまう。'''
+やはり、世界は古代よりタブは8桁と決まってるんだよ。
+いつものように空白でインデントすりゃいいんだけど、
+わざわざ「go fmt」とかいう、整形ツールまでついてるしなぁ。
+標準の記法を外れない方がいいだろう。
+
+それにしても、ドキュメントを見ても、なかなかio.File型？/io.Reader型？/iobuf.Reader型？
+の関連性がうまく結びつかなくて悩んだ。
+やはり、go という名前はググラビリティーが低くて困る。
+というか、世の文書量そのものも多くはなさそうだ。
+
+さて、このソース「``go run type.go``」でコンパイル抜きで即動かすこともできるし、
+「``go build type.go``」で、type.exe という実行ファイルを作成することもできた。
+だが… 1.4MB もあるよ、すごいね、サイズ。objdump してみると
+
+8<
+$ objdump -x type.exe | findstr DLL
+ vma:            Hint    Time      Forward  DLL       First
+        DLL Name: advapi32.dll
+        DLL Name: winmm.dll
+        DLL Name: kernel32.dll
+        DLL Name: ntdll.dll
+>8
+
+とシステム標準品の DLL を必要としないようだ。これはこれで単品配布できて嬉しい。
+
+気が向いたらまた続きやる。
+しかし、テキストファイルを軽く触るのは、やはりスクリプト言語ほど手軽にはいかないなぁ。むむむ。

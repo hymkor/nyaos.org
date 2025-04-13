@@ -1,0 +1,63 @@
+<<Windows のコマンドラインスタック>>
+
+Windows で UNIX的なコマンドライン環境を整える場合、
+だいたい三つの「層」を揃える必要がある。
+
++ ターミナル
++ シェル
++ 諸コマンド(cp とか mv 等のファイル操作系の基本コマンド)
+
+これらを Windows のコマンドラインスタックと呼びたい。
+ここで強調しておきたいのは、ターミナルとシェルはよく混同されるが、
+別物であるということだね。
+
+<<<よくある誤解>>>
+
+>> NYAOS はターミナルではない！シェル！<<
+
+だから、'''NYAOS でフォントの種類とかサイズとかコントロールとか出来ません！'''
+(要望受けたら、ckw を紹介してるけど)
+
+Linux だと、この辺：
+
++ ターミナル: xterm 等 (Windows からログインする時は TeraTerm)
++ シェル: bash/zsh/tcsh…
++ 諸コマンド: (GNU) coreutils
+
+となっていて分かりやすい。
+
+<<<葉山のスタック>>>
+
+さて、わたしのコマンドラインスタックはどういう組合せになっているか、紹介したい。
+
+一つ目:(ネイティブベース)
+
++ ターミナル: https://github.com/deflis/ckw-mod/downloads{ckw-mod (deflis氏版)}
++ シェル: http://www.nyaos.org/{NYAOS 3.1}
++ 諸コマンド: http://www.piedey.co.jp/softs/ntuxtl.html{NT版UNIX-like tools}
+
+二つ目:(Cygwinベース)
+
++ ターミナル: TeraTerm + CygTerm
++ シェル: bash
++ 諸コマンド: Cygwin (GNU) coreutils
+
+一つ目はメイン。二つ目は w3m 使う時と、anarchy golf をやる時だけ使うようになった。
+ネイティブベースだと、改行コードが CRLF になって、バイト数的に不利だからね。
+
+諸コマンドは最近は MinGW+MSYS を使う向きが多いが、
+わたしは UNIX-like tools を愛用している。
+元々は新出尚之先生が DOS 用に開発されたものだが、
+その後、Windows95 向きに VFAT 対応し、
+今では、株式会社ピーデーの川俣晶氏が 32bit Windows システム向けに移植されたものがある。
+
+UNIXのコードを移植したものもいいのだが、
+DOS時代からスクラッチから作られた奴の方が、
+WindowsのDOS由来のファイルシステムと相性がよいような気がするものでね。
+((br))(そもそも、NYAOS がそうだから)
+
+さて、Windows でコマンドラインを使ってる「皆さん」のコマンドラインスタックは
+どんな構成だろうか？
+
+* 参考
+** http://d.hatena.ne.jp/nabnab/20101024{2010-10-24 - nabnabの日記 - ckw+nyaosでwindowsでunixライクな環境を作った}

@@ -1,0 +1,151 @@
+<HTML>
+<HEAD>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+  <LINK REL="STYLESHEET" HREF="../gray.css" TYPE="text/css" />
+  <TITLE>Porting for OS/2 Warp</TITLE>
+</HEAD>
+<BODY bgcolor="black" text="white" link="silver" vlink="gray" alink="red">
+
+<DIV ALIGN="right">
+<TABLE>
+<TR>
+  <TD><DIV CLASS="BOX"><A HREF="nyaos.html">NYAOS</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../../homepage/warp/eff.html"
+      >eff</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="ell.html">ELL &amp; etc</A></DIV></TD>
+  <TD><DIV CLASS="XOB">移植物</DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../rexx/index.html">REXX</A></DIV></TD>
+</TR>
+</TABLE>
+</DIV>
+
+<H1>移植の間</H1>
+
+<H2><A NAME="lha">LHa from UNIX for OS/2</A></H2>
+
+<P>-lh6- 形式書庫や、Windowsのラージサイズ自己展開書庫の(Windows以外でも)<!--
+-->展開が可能な、UNIX用 LHA 1.14 を emx/gcc でコンパイルしたものです。<!--
+-->
+</P>
+
+<TABLE BORDER=0 ALIGN=CENTER><TR><TD BGCOLOR="white">
+<TABLE BORDER=0 CELLSPACING=1>
+<TR BGCOLOR="black">
+  <TD>from 1.14d.ty2</TD>
+  <TD><A HREF="./lha-114d.ty2-os2b.zip"
+      >33,048 May 30 01:23 lha-114d.ty2-os2b.zip</A>
+  </TD>
+</TR>
+<TR BGCOLOR="black">
+  <TD>from 1.14i</TD>
+  <TD><A HREF="./lha-114i-os2.zip"
+      >29,004 Nov 04 01:46 lha-114i-os2.zip</A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+<P>アーカイブには、ソースのパッチと実行ファイルしか含まれていません。
+  オリジナルソースは
+</P>
+
+<DL>
+  <DD><A
+   HREF="http://www.aist-nara.ac.jp/~tsuneo-y/soft/lha/lha-114d.ty2.tar.gz"
+	>http://www.aist-nara.ac.jp/~tsuneo-y/soft/lha/lha-114d.ty2.tar.gz</A>
+	(1.14d.ty2)
+  <DD><A HREF="http://www2m.biglobe.ne.jp/~dolphin/index.htm"
+	>http://www2m.biglobe.ne.jp/~dolphin/index.htm</A>(1.14e/f/g/h/i)
+</DL>
+<P>より別途入手ください(マージした奴欲しいですか？)。<!--
+-->本バージョンは、UNIX用非公式バージョンを葉山が<!--
+-->無断にポーティングしたものです。<!--
+-->オリジナルの著作者の方々への問い合わせは御遠慮ください。<!--
+-->なお、Windows製書庫の解凍は、1.14d.ty2 の方が 1.14e より<!--
+-->成功率が高いようです(1.14f,g,h,i は未確認)。
+</P>
+
+<H3>変更履歴</H3>
+
+<DL>
+  <DD>lha-1.14d.ty2-os2.zip  (1999.5.16)
+    <UL>
+      <LI>emx 0.9d にて単純にコンパイル(Makefile の修正程度)</LI>
+    </UL>
+  <DD>lha-1.14d.ty2-os2a.zip (1999.5.19)
+    <UL>
+       <LI>新出さんの2000年パッチを取り込む</LI>
+    </UL>
+  <DD>lha-1.14d.ty2-os2b.zip (1999.5.30)
+    <UL>
+      <LI>ワイルドカード展開(￥マーク不具合対応含む)</LI>
+      <LI>-g オプションのデフォルト化(UID/GIDを記録しないわけね)</LI>
+      <LI>DLL 使用による実行ファイルのサイズ削減化(135KB→65KB)</LI>
+    </UL>
+  <DD>lha-1.14e-os2.zip (1999.6.13)
+    <UL>
+      <LI>ベースを 1.14e + 新出先生パッチに移行</LI>
+    </UL>
+  <DD>lha-1.14f-os2.zip (1999.9.5)
+    <UL>
+	<LI>ベースを 1.14f へ移行</LI>
+    </UL>
+  <DD>lha-1.14g-os2.zip (2000.8.27)
+    <UL>
+	<LI>もらったパッチより、1.14g バイナリを作る。Thanks to 岡林さん</LI>
+    </UL>
+  <DD>lha-1.14i-os2.zip (2000.11.4)
+    <UL>
+	<LI>1.14i バイナリを作る。</LI>
+    </UL>
+</DL>
+
+<H2><A NAME="whypic">WhyPic for OS/2</A></H2>
+
+<P>WhyPic は葉山の友人の可逆圧縮狂
+    山地 治氏が作成してしまった画像圧縮ツールです。
+    その特徴として、次のような点があげられます。
+</P>
+
+<UL>
+  <LI>可逆圧縮としては、多分世界一、圧縮率が高い。</LI>
+  <LI>可逆圧縮でなくとも、多分世界一、遅い。</LI>
+  <LI>メモリを莫大に消費する。(640x400x16 でも 10MBytes要るらしい)</LI>
+  <LI>対象は 16色・256色画像のみ。それ以上の解像度では、
+      アルゴリズム上、高い圧縮率が期待できないので対応する予定はない
+      (山地氏談)
+  </LI>
+</UL>
+<P>オリジナル WhyPic は</P>
+
+<P ALIGN=CENTER>
+  <A HREF="http://www-lab25.kuee.kyoto-u.ac.jp/member/yamaji/freesoft.html"
+  >http://www-lab25.kuee.kyoto-u.ac.jp/member/yamaji/freesoft.html</A>
+</P>
+
+<P>にて、Windows95版、FreeBSD版が公開されています。<!--
+-->今回、山地氏の許可を得て、この OS/2 版を公開させていただきます。<!--
+-->本パッケージは対 ＢＭＰ形式コンバーターのみです。<!--
+-->ＰＭで直接閲覧するには、<!--
+--><A HREF="http://www.geocities.co.jp/SiliconValley-SanJose/2457/"
+>Sofiyaさん</A>が画像ビューア「水」のプラグインとしてサポート<!--
+-->されてますので、そちらをご利用ください。
+</P>
+
+<TABLE BORDER=0 ALIGN=CENTER><TR><TD BGCOLOR="white">
+<TABLE BORDER=0 CELLSPACING=1>
+<TR BGCOLOR="black">
+  <TD>1.2 for OS/2 R2</TD>
+  <TD><A HREF="./ypc12os2r2.lzh"
+  >113,990 Jan 17  1999 ypc12os2r2.lzh</A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+<P>1.2 は圧縮率は変わりませんが、圧縮速度がかなり改善されています。</P>
+
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT>
+<A HREF="../index.html">はやまったホームページに戻る</A>
+
+</BODY>
+</HTML>
+<!-- vim:set sw=2 ts=8 ai nobackup: -->

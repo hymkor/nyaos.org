@@ -1,0 +1,35 @@
+!!! ブログペット
+
+((blogpet))
+
+!!! http://b.hatena.ne.jp/zetamatta/{はてなブックマーク}
+
+((hatebu))
+
+(http://b.hatena.ne.jp/zetamatta/{もっと読む?})
+
+''Powerd by「http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%5Bplugin%5D+%A1%D6%A4%CF%A4%C6%A5%D6%A1%D7%A5%A4%A5%F3%A5%AF%A5%EB%A1%BC%A5%C9{はてブぷらぐいん}」''
+
+<<My Documents>>
+
+* A single file Wiki - Wifky
+((wifkyring))
+
+* Nihongo Yet Another OSes Shell
+[<<{nyaosbnr.png}|http://www.nyaos.org/]
+
+* [[gawk で Wiki-Engine を書いてみた!]]
+
+* [はてなアンテナ|http://a.hatena.ne.jp/zetamatta/simple/]
+* [バックナンバー＠Vector|../VA009797/index.html]
+* [バックナンバー＠nifty|../homepage/index.html]
+
+((ls -r -t -10 [*))
+
+* >>{Header}
+* [[Footer]]
+* [[Sidebar]]
+
+((ls CSS*))
+
+//((awasete))

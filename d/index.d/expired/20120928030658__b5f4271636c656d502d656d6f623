@@ -1,0 +1,90 @@
+Oracle に関する長めのメモ
+
+<< SPFILE の作り方>>
+
+Oracle をスタートアップする前に実行する。
+初期化パラメータファイルから作成する。
+
+<pre>
+    create spfile from pfile='初期パラメータファイルパス';
+</pre>
+
+OR
+
+<pre>
+    create  spfile='SPファイルパス' 
+      from  pfile='初期パラメータファイルパス';
+</pre>
+
+その後、もう一台のコピーする。
+
+<< exp コマンドのよく使うオプション>>
+
+まずは「exp help=y」でヘルプを見る。
+
+* USERID=ユーザ名/パスワード
+* FILE=ファイル名,…
+* TABLES='(テーブル名,…)' … 周りに引用符で囲むのを忘れずに
+* GRANTS=Y
+ 
+<< imp コマンドのよく使うオプション >>
+
+まずは「imp help=y」でヘルプを見る。
+
+* USERID=ユーザ名/パスワード … ユーザを変える時はここをシステムユーザにする
+* FILE=ファイル名,…
+* IGNORE=Y … 既存スキーマにインポートする時
+* COMMIT=Y … これをしないと、ロールバックセグメントがよくあふれる
+
+<<< ユーザを替える時>>>
+
+* USERID=システムユーザ名/パスワード
+* FROMUSER=exp時ユーザ名
+* TOUSER=imp時ユーザ名
+
+<<< 本当に大量にインポートする時>>>
+
+* INDEXES=N … インポート時には索引を作らない
+* INDEXFILE=ファイル名 … 索引生成の DDL を生成する。
+
+つまり、索引作成の DDL を後から作った方が速い。
+
+<<< （応用）スキーマの DDL を作成する。>>>
+
+* ROWS=N … インポートしない
+* INDEXFILE=ファイル名 … このファイルに DDL が吐かれる。
+
+<< Ruby での Oracle アクセス定番スクリプト>>
+
+<pre>
+    require 'oci8'
+    conn = OCI8.new('ユーザ名','パスワード','接続エントリ名')
+    conn.exec("（参照系ＳＱＬ）") do |rs|
+	# rs[i] に各レコードの各カラムの内容が順に入る。
+
+	conn.exec("（更新系ＳＱＬ）");
+    end
+    conn.commit
+    conn.logoff
+</pre>
+
+<< Perl での Oracle アクセス定番スクリプト>>
+
+<pre>
+    use DBI;
+    my $conn = DBI->connect('dbi:Oracle:(接続エントリ名)',
+			    'ユーザ名','パスワード');
+    my $rs = $conn->selectall_arrayref("（参照系ＳＱＬ）");
+    foreach my $r (@${rs}){
+	# $r->[i] に各レコードの各カラムの内容が順に入る。
+ 
+	$conn->do("（更新系ＳＱＬ）");
+    }
+    $conn->disconnect();
+</pre>
+
+* デフォルト動作がオートコミットになってしまう。
+* do はともかく、selectall_arrayref というメソッド名がダサい。
+* 一度、全て配列に入れるのでメモリ効率が悪い。
+* Ruby のように各レコードを一行ずつ取得するには、prepare とか、細かいメソッドを呼ばなくてはいけないが、覚えてられん。
+* 字サーバ上のインスタンスに接続する時は、 connect の引数から、接続エントリ名を省略し、「"dbi:Oracle:"」とすればよい。

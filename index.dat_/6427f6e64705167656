@@ -1,0 +1,33 @@
+ NYAOS (NYACUS,NYADOS,NYAOS-II) is the enhanced commandline shell for Windows,DOS,OS/2.
+
+* Line editor like tcsh. On NYACUS,NYAOS-II , able to read/write clipboard.
+* History like VZ-editor or tcsh-like.
+* Support OS : DOS,Windows95,98,Me,NT,2000,XP,OS/2 Warp
+* Built-in color ls((br))
+   <<{color-ls.png}{colored-buildin-ls}
+* Alias and Function
+* key-binding custom
+* Even if longer string than screen width, command-line scrolls.
+* Backquote like tcsh
+* Filename completion
+**  Support VFAT (NYADOS)
+**  Completion and listing like bash
+**  Auto correct filename's case
+**  When filename has a white-space, append "
+**  Auto corrent slash and backslash
+**  Support another completion: one bye one completion.((br))
+    <<{nyaos_completion.gif}
+* Free Software. GNU General Public License
+
+[[DOWNLOAD]]
+
+!!! Platform
+
+||| name | support OS |	compiler to build
+|| NYADOS | Windows95,98,Me,DOS | Digital Mars C++ 8.26n
+|| NYACUS | Windows95,98,Me,NT,2000,XP |	Borland C++ 5.5.1
+|| NYAOS-II | OS/2 Warp | emx 0.9d/gcc
+
+* The documentations in the archive files have not been translated to English, yet. They are under creation. Now 60%
+* To start , type EXE-Filename. With Ctrl-Z, terminate.
+* NYADOS,NYACUS,NYAOS-II are free softwares. You can copy them with GNU General Public License.

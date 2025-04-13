@@ -1,0 +1,38 @@
+!!! 無名のファイルハンドル
+
+!! 文法
+
+8<
+open( my $fh, "< filename" ) or die;
+print <$fh>
+>8
+
+* オープンに失敗した場合でも $fh は undef ではない。
+* 変数 $fh のスコープは関数 open の属するブロックと一致
+* Perl 5.8 以降でしか使えない。
+
+!! リンク
+
+* http://psst.jp/syn/archives/000205.html{
+    Perl で YAML と JSON のベンチマーク比較 - Daio Today} ← 発見
+* http://www.namazu.org/~tsuchiya/perl/perl-5.8.html#open{
+    Perl-5.8 MEMO} ← 検索で確認
+* http://hio.jp/translation/perldoc/func/open.html{
+    open - 組み込み関数 open} ← 検索で確認
+
+!!! ファイルハンドルを変数に格納する
+
+型グロブを使うのが一番手軽らしい。
+
+8<
+open( FILEHANDLE, "$file_name");
+$fh = *FILEHANDLE;
+>8
+
+!! リンク
+
+* http://www.rfs.jp/sb/perl/02/08.html{「ファイルハンドル」 Perl講座}
+
+!!! FileHandle
+
+そのうち

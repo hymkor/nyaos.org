@@ -1,0 +1,42 @@
+<<大雪ですね>>
+
+<<{m2011021422250000.JPG}
+
+JR中央線とか止まってるとか、タイムラインに流れてきました。
+個人的には、昨日じゃなくてよかったかもー。
+
+----
+
+あ、そうそう。今更ですが、wifky のプラグインマネージャーに
+アップロードしたプラグインファイルのダウンロード機能を付けました。
+
+* http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%282011.02.14%29+%A5%D7%A5%E9%A5%B0%A5%A4%A5%F3%A5%DE%A5%CD%A1%BC%A5%B8%A5%E3+1.2+%A4%F2%B8%F8%B3%AB%A4%B7%A4%DE%A4%B7%A4%BF{A single file wiki - wifky! - (2011.02.14) プラグインマネージャ 1.2 を公開しました}
+
+----
+
+ふとした疑問。
+wifky の添付画像の表示速度をちょっとでも速くしたいんだけれども、
+そのために cat 相当のことを Perl でやるのに：
+
+8<
+binmode(FP);binmode(STDOUT);
+print <FP>;
+>8
+
+と
+
+8<
+binmode(FP);binmode(STDOUT);
+print while read(FP,$_,1024);
+>8
+
+では、どっちが速いんじゃろ。
+
+何？ベンチマークしろじゃと！？ ごもっとも！
+
+>> 結果：大して変わりませんでした。<<
+
+----
+
+LibreOffice(OpenOffice.org) BASE のデータベースを、
+Python で読み書きする方法は無いもんじゃろか

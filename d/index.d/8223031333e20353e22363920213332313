@@ -1,0 +1,63 @@
+!!! ((title 遺憾ながら #golang のドキュメントは分かりにくい))
+
+!! 疑問
+
+ファイルを行単位で読み込むメソッドには bufio パッケージの
+
+http://golang.org/pkg/bufio/#Reader.ReadString
+8<
+func (b *Reader) ReadString(delim byte) (line string, err error)
+>8
+
+で delim に '\n' を与えるのがいいと思うんだけど、
+レシーバーの iobuf.Reader オブジェクトをどないして作ったらいいのかというのが分からん。
+
+http://golang.org/pkg/bufio/#NewReader
+8<
+func NewReader(rd io.Reader) *Reader
+>8
+
+これは io.Reader から bufio.Reader 型を作るコンストラクタ？
+
+一方、ファイルを開くコンストラクタは
+
+http://golang.org/pkg/os/#Open
+8<
+func Open(name string) (file *File, err error)
+>8
+
+とある。この os.File と io.Reader までのミッシングリンクをどうやって埋めればよいのだ？
+
+!! 回答
+
+結果として「io.Reader の引数に os.File をぶちこめば、そのまま動作する」のが分かったけど、
+そういう情報はどこにあるのだ？
+
+io.Reader とみなせる必要要件は
+
+http://golang.org/pkg/io/#Reader
+8<
+type Reader interface {
+    Read(p []byte) (n int, err error)
+}
+>8
+
+で、一方、os.File は
+
+http://golang.org/pkg/os/#File.Read
+8<
+func (f *File) Read(b []byte) (n int, err error)
+>8
+
+があるので Ok ということなんだろうが… 分かりにくいよ。
+
+!! 不満
+
+クラス単位で implements を宣言しなくていいのは楽かもしれないけど、可読性は落ちるよなぁ。
+
+入力力系クラスとバッファリング読み込みを分けるのは Java を手本にしているせいだと思うけど、
+実のところ面倒なだけ。.NET の System.IO.StreamReader のような、最初から合体している方が使い勝手いいのに。
+
+気持ち的に「変数名」と「型」の間に、キーワード「As」が欲しい VB 脳。
+
+むむむ

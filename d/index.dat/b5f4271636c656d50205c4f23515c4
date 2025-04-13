@@ -1,0 +1,99 @@
+PL/SQL とは
+
+* Oracle のデータを修正する際に頼りになるような気がする。
+* 通常のファイル入出力がヘナヘナ
+* Pascal っぽい文法で、Ｃゲンガーには漏れなく不評。
+
+サンプルは下手な文法解説より役に立つ（はず）。
+たとえ伏せ字だらけのソースの一部でも！
+
+<pre>
+    set serveroutput on size 900000;
+    declare
+	current_XXXXX_ID  varchar2(13);
+	new_XXXX_ORDER    number(3);
+	success           number(5);
+	failure           number(5);
+    
+	cursor c0 is
+	    select  XXXXX_ID, XXXX_ORDER
+	      from  XXX_XXXXX where  rownum < 1000 ;
+    
+	cursor c1 is 
+	    select  XXXX_ORDER,
+		    to_char(XXXXX_finish_dt,'YYYY/MM/DD HH24:MI:SS') dt
+	      from  XXX_XXXXX_detail D
+	     where  XXXXX_ID = current_XXXXX_ID 
+	       and  XXXX_ORDER >= (
+			select min(L.XXXX_ORDER)
+			  from XXX_XXXXX_detail L,
+			       XXX_XXXXX_detail G
+			 where L.XXXXX_ID        = current_XXXXX_ID
+			   and G.XXXXX_ID        = current_XXXXX_ID
+			   and L.XXXX_ORDER      < G.XXXX_ORDER
+			   and L.XXXXX_FINISH_DT > G.XXXXX_FINISH_DT )
+	     order  by XXXXX_FINISH_DT , XXXX_ORDER 
+	      FOR UPDATE OF XXXX_XXXXX ;
+    begin
+	success := 0;
+	failure := 0;
+	for r0 in c0 loop
+	    dbms_output.put_line( '=== ' || r0.XXXXX_ID );
+	    current_XXXXX_ID := r0.XXXXX_ID ;
+	    new_XXXX_ORDER   := r0.XXXX_ORDER ;
+    
+	    begin 
+		savepoint sp0;
+		for r1 in c1 loop
+		    new_XXXX_ORDER := new_XXXX_ORDER + 1 ;
+    
+		    dbms_output.put_line( 
+			    r1.XXXX_ORDER  || ' ' ||
+			    new_XXXX_ORDER || ' ' || r1.dt );
+    
+		    update XXX_XXXXX_detail 
+		       set XXXX_ORDER = new_XXXX_ORDER ,
+			   YYYYYY_order = XXXX_ORDER ,
+			   update_dt  = sysdate ,
+			   update_flg = '1'
+		     where CURRENT OF c1;
+			    /* 略 */
+		    update KTT_XXXXX_XXXXXXX
+		       set XXXX_ORDER = new_XXXX_ORDER,
+			   update_dt  = sysdate ,
+			   update_flg = '1'
+		      where XXXXX_ID = current_XXXXX_ID
+			and XXXX_ORDER = r1.XXXX_ORDER ;
+		end loop;
+    
+		update XXX_XXXXX set 
+		  ( XXXX_XXXXX ,
+		    XXXXXX_XXXXX ,
+		       /* 略 */	
+		    XXXXXX_XX ,
+		    XXXXXX_XX ) = ( select 
+					XXXX_XXXXX ,
+				          /* 略 */	
+					XXXXXX_XX 
+				    from XXX_XXXXX_detail
+				   where XXXXX_ID = current_XXXXX_ID
+				     and XXXX_ORDER = new_XXXX_ORDER )
+		where XXXXX_ID = current_XXXXX_ID ;
+    
+		dbms_output.put_line('XONE: ' || current_XXXXX_ID );
+		success := success + 1;
+	    exception
+		when others then
+		    dbms_output.put_line('FAIL: ' || current_XXXXX_ID );
+		    rollback to savepoint sp0;
+		    failure := failure + 1;
+	    end ;
+	end loop;
+	dbms_output.put_line(success || ' panels succeeded' );
+	dbms_output.put_line(failure || ' panels failed' );
+    end;
+    /
+</pre>
+
+しかし、ここまで単語を隠しちゃうと、書いた当人にも訳がわかりません。
+コメントも抜いちゃったし。。

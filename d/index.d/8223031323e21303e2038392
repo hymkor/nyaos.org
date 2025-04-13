@@ -1,0 +1,81 @@
+<<あなたの予想に反して、このページが表示されてるでしょうか>>
+
+いや、表示されてたら、サーバ移転成功なんですけどね。
+
+ただ、これを書いてる時点では、nyaos.org 変更が各所の DNS に伝わってないみたいなんですよ。
+
+<<rackhub 移転メモ>>
+
+まぁ、素人のやることなので、おかしい点もあると思うんだが、許しておくれ…
+
+* su で root になれなくて、びっくり
+** 「sudo su」すればいいようだが、su にならない方が良いみたいなので、
+   できるだけ su は使わない方向で。
+* nginx と apache が標準で入っているので、どちらを起動することも可能
+** nginx は cgi が使えなくて、敷居が高かったので、安易ながら apache を選択した。
+** ちなみに起動は両方とも簡単
+*** nginx ⇒ 起動:sudo nginx start 、停止:sudo nginx -s stop
+*** apache ⇒ 起動:sudo apachectl start 、 停止:sudo apachectl stop
+* apache もデフォルトでは CGI は使えない
+** ``LoadModule cgid_module modules/mod_cgid.so``
+** ``Options ExecCGI``
+** ``AddHandler cgi-script .cgi``
+* apache の設定ファイルは ``/usr/local/httpd/conf/{httpd.conf,conf.d/*}``
+* rackhub は自由にホスト名を設定できるネームサーバを提供していない模様
+   (勘違いだったらごめんなさい)
+** コンパネからIPアドレスは分かるので、それを利用できるネームサーバに登録すればよい。
+*** nyaos.org はhttp://muumuu-domain.com/{ムームードメイン}に登録していたのだが、
+    いつの間にやらコントロールパネルでドメインを設定できるネームサーバ
+    が利用できるようになっていたので助かった。
+    (昔は、他所のサーバを使う時は他所のネームサーバを登録できるだけだったのだが、
+    便利になりましたね)
+*** ドメイン設定の DNS への反映には3～4時間かかった。
+    一度、ムームードメイン側の設定をミスっていたので、さらに倍かかってしまった。
+* ホスト名は ServerName にだけ書く。<VirtualHost> には IP アドレスしか書けない。
+* rackhub はタイムゾーンが日本(JST-9)ではない
+** TZ を変更できる機能を wifky に追加する必要があった。
+* apache はユーザ「daemon」で稼働する
+** ログインユーザと違うので、wifky を置くディレクトリはパーミッション・オーナーに注意
+*** 事前に手動でディレクトリを作って、オーナーを最初から変えてしまうとよいかもしれない。
+**** ``mv wifky.pl index.cgi ; mkdir index.d ; sudo chown -R daemon index.d``
+
+rackhub で CGI を動かすという、なんか、すごいもったいない使い方をしているが、
+その点については目をつぶっておいてくれ。
+
+<<amazon proxy 変更テスト>>
+
+nyaos.org の rackhub への引越しが出来た。
+が、SAKURA Internet を引き払うとなると、forgot.uh-oh.jp が使えなくなるのを忘れていた。
+となると、その上で動いている wifky の amazon proxy が動かなくなる。
+
+ということで、wifky.sourceforge.jp の方にも amazon proxy を立てたのでテスト。
+
+((amazon B008HTLIWA))
+
+それにしても、なぜ、最初から sourceforge を使わなかったのか
+
+<<rackhub 移転、ふりかえり>>
+
+十分に検討せず、勢いでやってしまった。それゆえの想定外一覧：
+
+* タイムゾーンが違った。
+** wifky でのタイムゾーン対応が予想以上にてこずった。
+* 自由にホスト名を設定できるネームサーバがない
+** が、ムームードメインが高機能なので、たすかった。
+* Ubuntu だった。
+** まぁ、慣れの問題。が、一般の SIer は RHEL メインだから、
+   慣れても将来的に仕事の役に立つかは不明
+  ''(Ubuntu とか使うのって、ウェブ企業の人でしょ？)''
+* forgot.uh-oh.jp のこと忘れてた。
+** uh-oh.jp は SAKURA Internet のだから、移転できないんだった。
+   amazonプロクシーが置いてあるので、amazonプラグインの
+   参照先を変えてもらわないといけなくなってしまった。
+** SAKURA Internet の維持は、月500円。どうしようかなぁ…
+
+その他：
+
+* コンテンツの移動は rsync 一発。ね、簡単でしょ。
+* apache にするか、nginx にするか、結構長く悩んでしまった。
+  fastcgi も勉強して、将来的に wifky も fastcgi 対応できるといいな。
+
+ねもいなぁ

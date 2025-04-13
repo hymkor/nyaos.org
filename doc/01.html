@@ -1,0 +1,279 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="robots" contents="noindex, nofollow" />
+<link rel="NEXT" href="02.html" />
+    <style type="text/css">
+    <!--
+	SPAN.FIRSTLETTER{ font-size:xx-large; width:1em; float:left }
+	P.SAY1{color:#FF00FF;font-size:x-large;text-align:center}
+	P.SAY2{color:#FFFF00;font-size:x-large;text-align:center}
+        P.SEP{text-align:center;color:silver;font-weight:bold}
+	DIV.FOOTNOTE{font-size:x-small}
+	DIV.COMMENT{text-indent:12pt}
+	.H{font-weight:bold;font-size:large}
+.H{
+  font-size:large;font-weight:bold
+}
+H1{
+  text-align:right;
+  border-style:solid;border-width:0px 0px 4px 0px;border-color:white;
+  color:snow;
+  font-size:large;
+  clear: both;
+  width: auto;
+}
+H2{
+  border:none;
+  background-color:#444444;
+  font-size:large;
+  width:auto;
+}
+H2 SMALL{
+  font-size:small;
+  line-height:large;
+}
+H3{
+  border-style:solid;border-width:0px 0px 0px 20px;border-color:silver;
+  font-size:medium;
+  text-indent:5pt
+}
+.BOX{
+  border-style:solid;border-color:white;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  text-decoration:underbar;white-space:pre
+}
+.XOB{
+  border-style:solid;border-color:gray;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  background-color:white;color:black;white-space:pre
+}
+DT{ color:silver;font-weight:bold; }
+UL LH{ color:silver;font-weight:bold; }
+EM{ color:gray;font-weight:bold;font-style:normal }
+STRONG{ color:red }
+B.PLASMA{
+    color:red;background-color:#440000;font-size:xx-small;font-weight:bold;
+}
+B.DOKEN{
+    color:#FFFF00;background-color:#444400;font-size:xx-small;font-weight:bold;
+}
+DIV.D{
+    text-indent:12pt
+}
+A:hover{
+  background-color:#440000
+}
+
+    -->
+    </style>
+</head>
+<body text="white" bgcolor="black" link="silver" vlink="gray">
+<a href="#bottom" name="top">▼</a><br>
+<!--start-->
+<DIV ALIGN=RIGHT><TABLE><TR><TD><DIV CLASS="BOX"><A HREF="http://hp.vector.co.jp/authors/VA009797/">筆者ホーム</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="../index.html">NYA☆Sホーム</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="02.html">next</A></DIV></TD></TR></TABLE></DIV>
+
+
+<h1>NYA☆S のソースの歩き方</h1>
+
+
+<p><span class="FIRSTLETTER"><a name="default.1" 
+ href="#default.1">や</a></span>
+めときゃいいのに、日本語拡張コマンドラインシェル NYA☆S のソースリストの解説をする。果たして参考になるか、役に立つか、はなはだ疑わしい限りであるが。</p>
+<p>NYA☆S のソースファイルは大きく分けると４つに分けられる。</p>
+<ul>
+<li>共通ライブラリ<div class="COMMENT"> NYADOS はその動作環境ゆえに、STL など巨大クラスライブラリを使用するのが困難である。そこで、Turbo-C++ のクラスライブラリをベースに独自の小さなライブラリ Nihongo Nano Library を用意している。<em>(nnstring.cpp nnvector.cpp nnhash.cpp <strike>nnstrhash.cpp</strike>
+	nndir.cpp reader.cpp writer.cpp)</em></div>
+</li>
+<li>一行エディター部<div class="COMMENT"> NYADOS のキモッ…ではなく、肝であるところの一行エディターである。ベースは eff のものである。ヒストリは、一応、一行エディタ部に所属し、API を次のインタプリタ部に公開する形となっている。<em>(getline.cpp twinbuf.cpp getline2.cpp dosshell.cpp history.cpp 
+	keybound.cpp keyfunc.cpp ntconsole.cpp xscript.cpp )</em></div>
+</li>
+<li>インタプリタ部<div class="COMMENT"> 構文解釈部・実行部・各コマンドの処理などがある。あるなぁ。<em>(mysystem.cpp wildcard.cpp cmdchdir.cpp commands1.cpp commands2.cpp 
+	which.cpp scrshell.cpp shell.cpp shell4.cpp shellstr.cpp
+	ishell.cpp foreach.cpp)</em></div>
+</li>
+<li>その他<div class="COMMENT"> 全体を統括するメインルーチンですな。<em>(nyados.cpp)</em>
+
+</div>
+</li>
+</ul>
+
+<p>以下でそれぞれのパートを解説する。結構でかそうだけど、できるかな。</p>
+<h2>共通ライブラリ</h2>
+
+
+<p>共通ライブラリは、NYA☆S を作成するにあたり、まず最初に着手したものである。Turbo-C++ のライブラリをベースにし、Java のクラスライブラリを参考にし、貧乏性な精神で育んだため、次のような特徴を持っている。</p>
+<ul>
+<li>所有(ownership/delete義務)という概念を持っている<em>(Turbo-C++由来)</em></li>
+<li>参照よりも、ポインタをメインに使っている<em>(Javaの影響<sup style="font-size:x-small"><a href="#default.1" title="Java でいうところの参照は、C言語でいうところの参照よりも、むしろポインタに近いと思う" name="default.1.">*1</a></sup>
+    )</em></li>
+<li>日本語をフルサポートしている。</li>
+<li>必要なクラスだけに極力限定している<em>(DOSで使うため)</em>。</li>
+<li>キャストを使いまくらなくてはならない<em>(Javaの影響)</em></li>
+<li>演算子のオーバーロードを&lt;&lt;を除いて、ほとんど使用しない<em>(Javaの影響<sup style="font-size:x-small"><a href="#default.2" title="組みこみ型と見かけで区別しにくいと、可読性がむしろ落ちるように思われた" name="default.2.">*2</a></sup>)</em></li>
+<li>テンプレート , dynamic_cast , 例外など、最新の C++ の機能を一切使用していない。</li>
+</ul>
+
+<p>などがある。構成としては</p>
+<ul>
+<li>文字列クラス</li>
+<li>コンテナクラス</li>
+<li>入出力クラス</li>
+</ul>
+
+<p>からなる…と思う。基本的なクラスの継承関係は次の通りである。</p>
+<pre>
+      <a href="#nnobject">NnObject</a> (オブジェクト)
+        ┣ <a href="#nnobject">NnSortable</a> (比較可能オブジェクト)
+        ┃   ┗ <a href="#nnstring">NnString</a> (文字列)
+        ┃   　 ┗ NnStringIC (英大文字/小文字を区別しない文字列)
+        ┣ <a href="#nnvector">NnVector</a>  (可変長配列)
+        ┣ <a href="#nnstrhash">NnHash</a> <strike>NnStrHash</strike> (文字列キーのハッシュ)[2003.11.30修正]
+        ┣ NnHash::Pair <strike>NnBullet</strike>  (文字列キーと値のペア)[2003.11.30修正]
+        ┣ Writer    (汎出力)
+        ┃   ┣ FileWriter    (ファイル出力:NYADOS版)
+        ┃   ┗ StreamWriter  (FILE*出力)
+        ┃      ┣ FileWriter (ファイル出力:NYACUS版)
+        ┃      ┗ PipeWriter (パイプ出力)
+        ┣ Reader    (汎入力)
+        ┃   ┗ StreamReader  (FILE*入力)
+        ┃      ┣ AnsiConsoleWriter (コンソール出力) [2003.11.30追記]
+        ┃      ┣ FileReader (ファイル入力)
+        ┃      ┗ PipeReader (パイプ入力)
+        ┗ NnEnum    (イタレーター)
+             ┣ NnHash::Each <strike>NnStrHash::Each</strike> (ハッシュの各要素 → NnHash::NnBullet ) [2003.11.30修正]
+             ┗ NnDir           (ディレクトリ     → NnString )
+</pre>
+
+
+<p>当初の意図を越えて、やたら大きくなってしまった。特に Writer , Reader は入出力を仮想化したものだが、stdio のファイルハンドル操作だけ(dupとか)で代用できるかもしれず、正直これは不要だったように思われる。</p>
+<p>クラス名の前についている Nn は、Nihongo Nano Library を意味する。</p>
+<p>というのは建前で、単純に String 等と名乗ると、どっかで名前がぶつかりそうなので、それを避けてのことである。そうすると、適当な接頭語をつけなくてはいけないわけだが、あまり長いとタイプするのが面倒だし、かといって、１文字とするとありがちだし…ということで、入力しやすく、かつ格好よさそうな名前をつけたいのが人情である。結局、同じ文字を並べて、Nn という語で落ちついたわけだ。</p>
+<h3 id="nnobject">NnObject と NnSortable</h3>
+
+
+<p>トップの NnObject が全てのオブジェクトの既定クラスである。コンテナに格納できるのは、これを継承したクラスオブジェクトに限られる。NnObject が持つメソッドは３つしかない。デストラクタと clone と sortable である。</p>
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />class NnObject {<br />public:<br />    virtual ~NnObject();<br />    virtual NnObject   *clone() const;<br />    virtual NnSortable *sortable();<br />};<br /></pre>
+</td></tr></table>
+
+
+
+<tt>clone</tt> は自らの複製を作るものだが、実はあまり使われていない。<tt>sortable</tt> はもしオブジェクトが大小関係を持つものであれば(<tt>NnSortable</tt> を継承したオブジェクトであれば)
+自分を <tt>NnSortable*</tt> に単純キャストしたポインタを返す。さもなければ <tt>NULL</tt> を返す。要は <code>dynamic_cast&lt;NnSortable*&gt;</code> の代替品である。
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />class NnSortable : public NnObject {<br />public:<br />    /** x と比較して、大小関係を 負・零・正の数値で返す。*/<br />    virtual int compare( const NnSortable &amp;x) const = 0;<br />    virtual NnSortable *sortable();<br />};<br /></pre>
+</td></tr></table>
+
+
+
+<p>NnSortable は NnObject に対し、比較するためのメソッド compare を加えたものである。それだけ。これを継承したクラスは実は文字列しかない。</p>
+<p>NnObject , NnSortable の二つのクラスは宣言は nnobject.h ,
+定義は nnstring.cpp 内にある。nnstring.cpp 内にあるのは、本クラスライブラリの肝は文字列クラス NnString にあり、これを利用しないことはまずありえないからだ。</p>
+<h3 id="nnstring">文字列クラス NnString </h3>
+
+
+<p>クラス宣言は nnstring.h 、クラス定義は nnstring.cpp にある(が、ある一つのメソッドだけは nnvector.cpp にある)。</p>
+<p>この文字列クラスの特徴は</p>
+<p align="center" class="SAY1"> 足し算の二項演算子(+)がない！ </p>
+
+
+<p>につきる。足し算の代入演算子(+=)はあるけどね。足し算演算子は分かりやすいが、一時オブジェクトの生成/消滅を激しく伴うため、利用コストが高いのである。その代わりに用意したのが、挿入演算子 &lt;&lt; である。STL だと</p>
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />    string foo,bar(&quot;ほげ&quot;),boo(&quot;うは&quot;);<br />    foo = bar + boo;<br />    printf(&quot;%s\n&quot;,foo.c_str() );<br /></pre>
+</td></tr></table>
+
+
+
+<p>と書くところを</p>
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />    NnString foo,bar(&quot;ほげ&quot;),boo(&quot;うは&quot;);<br />    foo &lt;&lt; bar &lt;&lt; boo;<br />    printf(&quot;%s\n&quot;,foo.chars() );<br /></pre>
+</td></tr></table>
+
+
+
+<p>と記述する。可変長文字列の用途は、末尾末尾に文字列を追加してゆくことが大半であるため、これでたいていはこれで用が済む。それほど可読性が落ちているとは思えないのだが、どうだろうか。</p>
+<p>chars() は、char配列へ変換するメソッドである。本クラスから char 配列への自動変換はされない。キャスト演算子 operator const char() を定義すれば、明示的に記述せずとも、そのまま標準Ｃライブラリを利用できる。が、キャスト演算子は、下手に定義すると、C++ コンパイラが思わぬ変換をしてしまうケースがあるため、結構こわいところがある。STL でも c_str() を用意したのはそのせいであろう。</p>
+<h3>コンテナライブラリ</h3>
+
+
+<p>といっても、コンテナクラスは二つしか存在しない。</p>
+<ul>
+<li>可変長配列 - NnVector</li>
+<li>連想配列 - NnHash<strike>NnStrHash</strike>
+
+</li>
+</ul>
+
+<p>専門書を読むと、代表的なデータ構造としては、他にリスト構造、ツリーなどがある。が、だいたいの場合は、この２種だけで事足りてしまったりするのである。</p>
+<h3 id="nnvector">可変長配列 NnVector</h3>
+
+
+<p>NnVector は、Java の Vector を意識した可変長配列クラスである。宣言はヘッダファイル nnvector.h , 定義は nnvector.cpp に記述されている。正直あまり特徴はない。</p>
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />    int main()<br />    {<br />	NnVector array;<br />	array.append( new NnString(&quot;hogehoge&quot;) );<br />	array.append( new NnString(&quot;hogehoge&quot;) );<br />	for( int i=0 ; i&lt;array.size() ; ++i ){<br />	    printf(&quot;%s&quot;,(NnString*)( array.at(i) )-&gt;chars() );<br />	}<br />    }<br /></pre>
+</td></tr></table>
+
+
+
+<p>実をいうと、このクラス、<code>operator[]</code> をメソッドとして用意しておらず、 at という普通のメソッドを用意している。正直、オーバロードを使うと、クラスオブジェクトなんだか、そうでないのか、ソースを見てすぐ分からなくなってしまうため、敢えてそうしている。</p>
+<p>また、テンプレートを使っていないため、取り出した後、なんとキャストしなくてはならない。なんでかというと… Turbo-C++ がテンプレートをサポートしていなかったためだったりするのが、そもそもの理由だったりする。まぁ、NnVector をラッピングするクラスをテンプレートで作るという方法もあったが、Java では平気でキャストしていたため、まぁそれほど問題視しなかったことが大きい。</p>
+<p>さて、もう一つ気になる点としては、配列に要素を足す際に文字列をわざわざ new しているところがある。<code>array.append(&quot;hogehoge&quot;)</code>
+ではだめなのだろうか。これには、オブジェクトの所有という概念が関係している。</p>
+<h3 id="ownership">所有</h3>
+
+
+<p>STL 等では、コンテナライブラリにオブジェクトを格納する際に、オブジェクトの「複製」を格納する。これのメリットとして、１オブジェクトがコンテナ内とローカルの２箇所から参照されているようなことがないため、互いの挙動を気にすることなく、いつでもオブジェクトを破棄できるという点がある。これは int とか short 等の組み込み型のように扱えることを意味し、あまりメモリ管理を意識しないで済むということを意味する。</p>
+<p>が、格納の際に必ずコピーが行われるため、使用コストがそれなりに高い。最近の OS 環境であれば問題ないが、DOS をプラットフォームとするNYADOS の場合、そのコストは無視できない。</p>
+<p>NYADOS のコンテナライブラリはポインタベースとなっている。たとえば、コンテナにオブジェクトを格納する場合は、オブジェクトのポインタを渡すわけである。この時、そのオブジェクトを delete する義務(所有権)は、呼び出し元からコンテナオブジェクトへ移動する。</p>
+<p align="center" class="SAY1"> つまり、AUTO なオブジェクトはコンテナへ格納できないのである </p>
+
+
+<p>コンテナへ格納する可能性のあるオブジェクトは原則的にnew したものでないといけないのである。</p>
+<p>さて、逆にコンテナからオブジェクトを取り出す際には２通りのケースがある。</p>
+<ul>
+<li>所有権が取り出す側へ移動するケース<div class="COMMENT"> これはオブジェクトが呼び出し元へ移動する場合である。呼び出し元はオブジェクトを得るが、その変わり、オブジェクトはコンテナから消え失せる。そのオブジェクトは最終的に呼び出し元が delete しなくてはならない。</div>
+</li>
+<li>所有権はコンテナにとどまるケース<div class="COMMENT"> オブジェクトがメソッド呼出し後も依然としてコンテナ内にとどまる場合がある。この時、呼び出し元はそのオブジェクトを参照・変更することはできるが、delete だけはしてはならない。</div>
+</li>
+</ul>
+
+<p>以上のケースの区別はメソッド単位で規定する。ヘッダファイルを見れば、呼び出し元で delete する必要がある場合はその旨がコメントとして必ず書いてあるはずなので、読んでみましょう。</p>
+<h3 id="nnstrhash">連想配列クラス NnHash<strike>NnStrHash</strike> </h3>
+
+
+<p>宣言は nnhash.h<strike>nnstrhash.h</strike> , 
+定義は nnhash.cpp<strike>nnstrhash.cpp</strike> である。このクラスの最大の特徴は、キーとして文字列(char[],NnString)しかとらない点である。</p>
+<p>世の中、大半の連想配列は、キーとして任意のオブジェクトを利用できるようになっているが、筆者は正直、文字列以外がキーとして用いられたケースを一度も見たことがないためである。</p>
+<p>基本的な使い方は簡単である。</p>
+<table cellspacing="0" cellpadding="0"><tr><td>
+<pre><br />    NnHash hash;<br />　<br />    hash.put(&quot;キー&quot;,new NnString(&quot;実体&quot;) );<br />    NnString *obj=(NnString*)hash.get(&quot;キー&quot;);<br />    if( obj != NULL ){<br />	printf(&quot;見付かった.(%s)\n&quot;,obj-&gt;chars() );<br />    }else{<br />	printf(&quot;見付からなかった.\n&quot;);<br />    }<br /></pre>
+</td></tr></table>
+
+
+
+<p>put で登録し、get で取得する。ただし、get をした後もオブジェクトの所有は依然として hash 内にある。</p>
+<p>put の第一引数のキーは char配列を直に書いている。これは所有ルールの唯一の例外である。put メソッド内で、引数の複製である NnString オブジェクトを作成して格納している。キーに対応するオブジェクト(第二引数)の方はルール通りに所有がhash 内に移行する。オブジェクトが delete されるのは hash が消滅するタイミングである。</p>
+<hr />
+
+
+<p>とりあえず、今回はここまで… (記 2003/04/19)
+
+</p>
+<DIV ALIGN=RIGHT><TABLE><TR><TD><DIV CLASS="BOX"><A HREF="02.html">next</A></DIV></TD></TR></TABLE></DIV>
+
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="default.1" href="#default.1.">*1</a></sup>Java でいうところの参照は、
+	C言語でいうところの参照よりも、
+	むしろポインタに近いと思う</div>
+
+<div class="FOOTNOTE"><sup><a name="default.2" href="#default.2.">*2</a></sup>組みこみ型と見かけで区別しにくいと、
+	可読性がむしろ落ちるように思われた</div>
+
+</div>
+
+<!--section-->
+<br><a href="#top" name="bottom">▲</a>
+</body>
+</HTML>

@@ -1,0 +1,43 @@
+<<Lua Filesystem を #cygwin でコンパイルする>>
+
+普通に make すると、リンク時に大量「``undefined reference``」が出てしまう。
+何故かリンクオプションに -llua5.1 が入っていないので、末尾に追加したところ、
+make が通った。
+
+8<
+$ rcsdiff ./Makefile
+===================================================================
+RCS file: ./Makefile,v
+retrieving revision 1.1
+diff -r1.1 ./Makefile
+15c15
+<       MACOSX_DEPLOYMENT_TARGET="10.3"; export MACOSX_DEPLOYMENT_TARGET; $(CC) $(CFLAGS) $(LIB_OPTION) -o src/lfs.so $(OBJS)
+---
+>       MACOSX_DEPLOYMENT_TARGET="10.3"; export MACOSX_DEPLOYMENT_TARGET; $(CC) $(CFLAGS) $(LIB_OPTION) -o src/lfs.so $(OBJS) -llua5.1
+>8
+
+ぱっと見「make LIB_OPTION=-llua5.1」を実行すれば、Makefile の改変が不要に見えるが、
+-l オプションの挿入される場所がオブジェクトファイルリストの前になっているため、
+シンボルの検索順から外れてしまう。
+
+Cygwin のライブラリディレクトリにインストールする。
+デフォルトは /usr/local/lib/lua/5.1 に入るようだが、
+Cygwin のインストーラーは lua.exe を /usr/bin にインストールし、
+同時に /usr/lib/lua/5.1 というフォルダーも掘ってくれるようなので、
+そちらに合わせることにする。
+
+8<
+$ make PREFIX=/usr install
+mkdir -p /usr/lib/lua/5.1
+cp src/lfs.so /usr/lib/lua/5.1
+>8
+
+これで lfs.so が生成されるが、Lua は何故か lfs.dll を検索するので、
+リンクをはって逃げておく。
+
+8<
+$ cd /usr/lib/lua/5.1/
+$ ln lfs.so lfs.dll
+>8
+
+よしよし

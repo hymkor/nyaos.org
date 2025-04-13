@@ -1,0 +1,13 @@
+<<[NYAOS] ワンライナーでコマンド統計 [Lua]>>
+
+144文字におさまらなかった…
+
+8<
+lua_e "c={};C=0;for i,e in pairs(nyaos.history)do E=e:match('%S+');c[E]=(c[E]or 0)+1;C=C+1 end p={};for i,e in pairs(c)do table.insert(p,(('%5.2f %s'):format(e*100/C,i)))end;table.sort(p);for i=#p,1,-1 do print(p[i])end"
+>8
+
+8<
+11.11 ls
+ 3.70 history
+ 3.70 dir
+>8

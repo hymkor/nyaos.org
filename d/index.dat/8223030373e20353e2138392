@@ -1,0 +1,189 @@
+* 今週一週間はずっとエネルギーゲージが最低。ほんと、だめだめぷぅ。
+
+* ここ２回ばかり、トマトしるこは超展開。目が離せないぜ（見てるのかよ）
+
+<<[python][ruby] win32ole やら win32com やら>>
+
+Ruby の場合、OLE を操るためのモジュール win32ole が
+Cygwin版でも標準装備されている。
+
+「バッテリ内蔵」が売りの Python に同等のモジュール(win32com)が
+添付されていないのは、やっぱり「環境依存」だからかのー。
+
+そういうポリシーの徹底は立派じゃが、人が離れる一因でもあるかも。
+インストールめんどくさいのー。
+
+<<<せっかくなので、今週がんばった時のメモ>>>
+
+: 出でよ、Excel
+:: ``excel = WIN32OLE.new('Excel.Application')``
+: Excel の OLE を可視化
+:: ``excel.visible = true``
+: 既存ファイル(ブック)のオープン
+:: ``book = excel.Workbooks.Open(絶対パス)``
+: 新規ブックの作成
+:: ``book = excel.Workbooks.Add()``
+: ワークシート選択
+:: ``sheet = book.worksheets(シート位置)``
+: そのセル全部
+:: ``cells = sheet.cells``
+: あるセルのテキスト
+:: ``cells.Item(行位置,桁位置).value``
+: セルの背景色
+:: ``cells.Item(行位置,桁位置).interior.colorIndex``
+: 罫線の太さ
+:: ``cells.Item(行位置,桁位置).borders.Item(罫線の位置).weight``
+
+* ○○位置は、1から始まる。
+* 罫線は太さ以外にも要素があって、誤った属性に誤った定数を代入すると、
+  エラーになってハマる(それはおまえだけじゃ！)
+
+<<<よく考えたら、機密要素含んでないから、スクリプトぜんぶ張りつけちまった方が早いな>>>
+
+* ER図を作るための部品(箱)を生成するスクリプト
+* 本当は、SI Object Browser など、専用のツールを使うべきなんだけど、
+    客先なんで、ライセンス上の問題もあって、IN も OUT もベタな Excel にしている。
+* ソースは、DB のスキーマ一覧(TABLE_NAMEとCOLUMN_NAME)をだだっと並べた Excel データ
+* 一部、パクリあり。どこだか気付いた人も、できたら笑って許して
+
+8<
+#!/usr/bin/ruby -Ks
+
+require 'win32ole'
+
+# カラム位置定数
+
+COL_TABLE_TYPE=2  # … "T" ならトランザクション系 , "M" ならマスター系
+COL_TABLE_NAME=3  # … テーブル名
+COL_COLUMN_NAME=4 # … カラム名
+LIN_BODY_TOP=4    # … 4行目から本文。3行目まではヘッダ。
+
+# パス名変換関数
+def getAbsolutePath(filename)
+   fso = WIN32OLE.new('Scripting.FileSystemObject')
+   return fso.GetAbsolutePathName(filename)
+end
+
+# WIN32OLE ロード
+excel = WIN32OLE.new('Excel.Application')
+excel.visible = true
+
+
+### ARGV で与えられた Excel シートを読む ###
+
+table_list = []
+table_hash = {}
+table_cnt  = { "T" => 0 , "M" => 0 }
+begin
+    ARGV.each do |fn|
+        fullpath = getAbsolutePath(fn)
+        book     = excel.Workbooks.Open(fullpath)
+        sheet    = book.worksheets(1)
+        cells    = sheet.cells
+
+        lineno = LIN_BODY_TOP
+        while (tn = cells.Item(lineno,COL_TABLE_NAME).value)
+            cn = cells.Item(lineno,COL_COLUMN_NAME).value
+            if table_hash.include?(tn) then
+                table = table_hash[tn]
+                table << { :name => cn }
+            else
+                tt = cells.Item(lineno,COL_TABLE_TYPE).value
+                id = sprintf("%s%03d",tt,(table_cnt[ tt ] += 1) )
+                if tn =~ /テーブル/ then
+                    nickname = tn 
+                else
+                    nickname = tn + "テーブル"
+                end
+                table = [ { 
+                            :name => cn ,
+                            :table_name => tn ,
+                            :id => id ,
+                            :table_nickname => nickname
+                        } ]
+                table_hash[ tn ] = table
+                table_list << table
+            end
+            lineno += 1
+        end
+    end
+ensure
+    excel.Quit()
+end
+
+### テキストファイルへリポート出力(開発/Debug用) ###
+def report_to_text(fd)
+    table_list.each do |table|
+        fd.printf "%s,%s\n",table[0][:id],table[0][:table_name]
+        cid=0
+        table.each do |column|
+            cid+=1
+            fd.printf "%d,%s\n",cid,column[:name]
+        end
+        print "\n"
+    end
+end
+
+### Excel 帳票へリポート出力 ###
+
+excel = WIN32OLE.new('Excel.Application')
+begin
+    excel.visible = true
+    book  = excel.Workbooks.Add()
+    sheet = book.worksheets(1)
+    cells = sheet.cells
+
+    module B 
+    end
+
+    borders = cells.Item(1,1).borders
+    WIN32OLE.const_load(borders,B)
+
+    def setB(cells,y,x,t,r,b,l)
+        cells.Item(y,x).borders.Item(B::XlEdgeLeft).weight   = l if l
+        cells.Item(y,x).borders.Item(B::XlEdgeRight).weight  = r if r
+        cells.Item(y,x).borders.Item(B::XlEdgeTop).weight    = t if t
+        cells.Item(y,x).borders.Item(B::XlEdgeBottom).weight = b if b
+    end
+
+    D = B::XlMedium
+    T = B::XlThin
+    HEADER_COLOR = 4
+
+    line=1
+    table_list.each do |table|
+        line += 1
+        cells.Item(line,1).value = table[0][:id]
+        setB( cells, line,1 , D , nil , T , D ); # [
+        cells.Item(line,1).interior.colorIndex = HEADER_COLOR
+
+        cells.Item(line,2).value = table[0][:table_nickname]
+        setB( cells, line,2 , D , D , T , nil ); # ]
+        cells.Item(line,2).interior.colorIndex = HEADER_COLOR
+        cid=0
+        table.each do |column|
+            line+=1
+            cid+=1
+            cells.Item(line,1).value = "%s" % cid
+            setB( cells , line, 1, nil , nil , nil , D );
+            cells.Item(line,2).value = column[:name]
+            setB( cells , line, 2 , nil , D , nil , nil );
+        end
+        line += 1
+        setB( cells , line, 1 , D , nil , nil , nil ); # └
+        setB( cells , line, 2 , D , nil , nil , nil ); # ┘
+    end
+ensure
+    ### ユーザに目視で結果を確認してもらうため、
+    ### Excel を敢えて終了させない。
+    # excel.Quit()
+end
+>8
+
+<<<参考>>>
+
+* http://jp.rubyist.net/magazine/?0003-Win32OLE{
+    Rubyist Magazine - Win32OLE 活用法 【第 1 回】 Win32OLE ことはじめ}
+* http://jp.rubyist.net/magazine/?0004-Win32OLE{
+    Rubyist Magazine - Win32OLE 活用法 【第 2 回】 Excel}
+

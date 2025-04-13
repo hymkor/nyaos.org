@@ -1,0 +1,38 @@
+!!! ((title [.net] チェックリストボックスの要素を変更不能にしたい))
+
+チェックリストを表現したいけど、条件を満たさない項目はチェックできないようにしたいという仕様があった。
+
+.net 4で、チェックリストを実現するには CheckedListBox という、うってつけのコントロールがあったんだけど…項目単位で disable にできない（涙）
+
+ということで、ググってみた
+
+!! リストボックスにチェックボックスを動的に貼り付ける
+
+* http://social.msdn.microsoft.com/Forums/en-US/winforms/thread/097d6baa-f924-45eb-8d64-f5baacf110f0/{Disable CheckedListBox Items}
+
+まさに力技。しかし、こういうのって、仕様変更とか、ボツとかになった時のダメージが計り知れないので、できれば避けたい。
+
+!! MouseUp イベントの際に、チェックを外してしまう方法
+
+* http://forums.devarticles.com/net-development-43/disabling-an-item-in-a-checkedlistbox-c-11959.html{Disabling an item in a checkedListBox C# - Dev Articles}l
+
+8<
+Use MouseUp event and in that write
+Chklst_Box.SetItemChecked(0, True)
+>8
+
+とかして、チェックしても即外してしまうという方法らしい。
+ただ、これチェックできないということが見た目に分からないように思う（試してないけど）。
+せめて、文字色が変えられたらと思うけど、CheckedListBox.items.item(n) には文字色プロパティーがなさげ。
+
+!! DataGridView にして READONLY にする
+
+CheckedListBox はやめて、結局、これにした。
+
+>> 最近、なんでも DataGridView でウンザリだよ!!! <<
+
+だが、これならチェックボックスは Disable は無理だけど、ReadOnly には出来る。
+ただし、チェックボックス自体の見かけは変えられないので、
+隣接するテキストの色を灰色にすることで、変更不能を表現した。
+
+まぁ、比較的簡単なので、駄目だと言われた時のダメージも最小限で済むだろう、きっと。

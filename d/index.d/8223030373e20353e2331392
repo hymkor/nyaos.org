@@ -1,0 +1,43 @@
+書く者と書かせる者~
+その献本を狙う者~
+文才を持たぬ者は生きてゆかれぬ technical writer の街~
+あらゆる hacker がにっきする、hatena の街
+
+ここはブラウザ戦争が産み落とした Lightweight-Lang. の市~
+rubyco の躰にしみついた Design Pattern の匂いにひかれて危険な奴らが集まってくる
+
+次回『出会い』~
+rubyco の飲む Sun の Java は、苦い
+
+http://www.asahi-net.or.jp/~KC2H-MSM/pbsb/pbsbvtms.htm{(参考)}
+
+---
+
+今は後悔している。
+
+<<[wifky] rawhtml 改良中>>
+
+* ```((html 番号))``` という形式だけでなく、
+  ```((任意の名前))```で呼び出せるようにした。
+* 呼び出し時の引数を $1〜$9 という形で HTMLコードに埋め込めるようにした。
+
+使用例：
+
+設定で「sm」という名前で
+
+8<
+<div style="width:318px; border:solid 1px #CCC;"><iframe src="http://www.nicovideo.jp/thumb?v=sm$1" width="100%" height="198" scrolling="no" border="0" frameborder="0"><p style="font-size:12px; padding:4px;">Please watch with browser supporting iframe-tag</p></iframe></div>
+>8
+
+を定義。ページ上で
+
+8<
+((sm 138195))
+>8
+
+と記述すると、次のようになる。
+
+((sm 138195))
+
+:追記
+:: 眠れないので、そのまま @nifty + wifky 1.0.3 でテストもやって、公開した。

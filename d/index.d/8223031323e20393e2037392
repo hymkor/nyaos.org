@@ -1,0 +1,77 @@
+<<[C++] こうですか！分かりません！>>
+
+:zetamatta
+::なんというか、マルチバイト文字列を扱うためのポータブルな方法ってないのかしら。Windows だと、MultiByteToWideChar を使って、ワイド文字列に変換して、wstring に変換するのがよろしいか？ [http://twitter.com/zetamatta/status/243870663243354112]
+:future_ta
+::@zetamatta どういう状態を想定しているのか不明ですが、typedef std::basic_string<TCAHR> tstring;としておいて、setlocaleをしておくとファイルの読み書きとか内部処理では特に意識する必要は無くなるんじゃないかな？ [http://twitter.com/future_ta/status/243871254791192577]
+
+こうですか！分かりません！
+
+8<
+#include <tchar.h>
+#include <stdio.h>
+
+int _tmain(int argc,_TCHAR **argv)
+{
+    return _tprintf(_T("[%s]"),argv[0]);
+}
+>8
+
+一応、MinGW gcc 4.5.2 でコンパイルできたので Ok なんですが、
+ポータブルなんかなー
+
+:zetamatta
+::@future_ta 自前の cp/mv/rm とかを作ろうとか思ってるんで、必要最小限のことを言うと、マルチバイト文字の2バイト文字の中の \ を、パス区切りの \ と誤認しないように扱いたいだけなんですよ。が、せっかく作るので、環境依存部は減らしておきたいなという [http://twitter.com/zetamatta/status/243877250838192128]
+
+まぁ、考えてみれば、NYAOS の上で動かすことを前提にしている時点で、
+ネイティブUnicode対応(=同時3ヶ国語文字混在対応)できないわけで、
+それ考えると http://msdn.microsoft.com/en-us/library/dd318664(v=vs.85){IsDBCSLeadByte}
+でいいかなという気もしてきた。
+
+いや、当初は argv[] も、Unicode で取れたらとか思ってたんですがね。
+
+<<<参考>>>
+
+* http://www.ruche-home.net/program/tips/unicode{プログラミング/小ネタ集/Unicode対応コーディング - ルーチェ's Homepage}
+
+<<[C][C++] ANSI Cの罪>>
+
+:zetamatta
+::ANSI Cの罪の一つは、charを unsigned char ではなく、signed char にしたことだな。委員会の独り善がりな「綺麗な仕様」で、どれだけ余計なコードが必要になったことか。int に代入する度に(c & 255)しなきゃ、マイナスになっちまう意味が分かるか [http://twitter.com/zetamatta/status/243890155709153281]
+
+そのくせ、isspace とか isalpha などに (-128)～(-2) の値を与えたりできないのは、どうかと
+((fn http://www.kijineko.co.jp/tech/superstitions/parameter-of-isalpha-is-char.html{[迷信] isalpha 関数の引数は char 型 | 株式会社きじねこ}))
+((fn (-1)は与えることが可能。EOF をそのまま扱えるようにという配慮らしい))。
+
+あと、宣言と定義を明確に分けてしまったのも「仕様上」美しいかもしれないけど、
+実装の手間としてはどうかと。
+
+具体的には、複数のソースから参照される変数は、一ヶ所でしか定義(``int sample=0``)できず、
+ヘッダファイルには宣言(``extern int sample``)だけ書いておかないといけないってこと。
+変数定義をヘッダに書いてしまうと、リンクエラーになる。
+これ、私の記憶が確かなら、昔の K&R 仕様だったら、
+二重定義でもリンカがよしなにしてくれてたと思うんだがなー。
+
+100歩譲って、その仕様がよしとするにして、今度は C++ の仕様と整合性がとれない。
+具体例を上げると、ヘッダファイルで template <class T>foo(T&) を宣言したとして、
+それを include するソースの複数で foo(int) が生成された場合、
+重複する foo(int) を一つにするような仕組みがリンカに期待されている。
+そっちの方がリンカにとっては無茶ぶりちゃうかと。
+
+思うに、カーニハンとリッチー二人の方が、ANSIの委員会よりセンスがあったとしか。
+''(まぁ、委員会にセンスを求めるという方がおかしいのかも)''
+
+<<<追記>>>
+
+いろいろ、ご指摘いただきました。
+
+:cpp_akira
+::委員会で独り善がりって矛盾してる気がする RT @zetamatta: にっき書いた ≫ "MHI 4.0 - $ [C][C++] ANSI Cの罪" nyaos.org/d/index.cgi?p=… [http://twitter.com/cpp_akira/status/243903552546824192]
+:AoiMoe
+::Cでもcharとsigned charとunsigned charは別の型だと思うんだが。ただ、明確に別の型とは書いてないけど。「charはどちらかと同じ表現・振る舞いでないといけない」って書いてあるので、「振る舞い」の解釈によって変わってくる可能性はあるけど。 [http://twitter.com/AoiMoe/status/243920032101457924]
+
+最初のツイートを直してみました。
+
+
+:zetamatta
+::[指摘に従い、文言修正してみた] ANSI Cの罪の一つは、charを0～255ではなく、-128～127にしたことだな。委員会の「綺麗な仕様」で、どれだけ余計なコードが必要になったことか。int に代入する度に(c & 255)しなきゃ、マイナスになっちまう意味が分かるか [http://twitter.com/zetamatta/status/243923930648289280]

@@ -1,0 +1,156 @@
+C++ で例外を参照で補足していいか、不安があったので、実験してみた。
+
+<< ソース>>
+
+<pre>
+    #include <iostream>
+    #include <string>
+    #include <exception>
+    
+    using namespace std;
+    
+    class Sample : public exception {
+	string name;
+    public:
+	Sample(const string &n){
+	    name = n;
+	    cerr << "デフォルトコンストラクタ for " << name << endl;
+	}
+	Sample( const Sample &y ){
+	    name = y.name + '\'';
+	    cerr << "コピーコンストラクタ for " << name << endl;
+	}
+	const string &who() const { return name; }
+	~Sample(){
+	    cerr << "デストラクタ for " << name << endl;
+	}
+    };
+    
+    void sub()
+    {
+	Sample x("sub::local");
+	cerr << "--- サブルーチン内---\n";
+	throw Sample("sub::temp");
+    }
+    
+    void sub1( Sample s )
+    {
+	cerr << "--- サブルーチン内---\n";
+	cerr << "仮引数の実体 = " << s.who() << endl;
+    }
+    
+    void sub2( const Sample &s )
+    {
+	cerr << "--- サブルーチン内---\n";
+	cerr << "仮引数の実体 = " << s.who() << endl;
+    }
+    
+    int main()
+    {
+	cerr << "\n● 実体で例外を受け取る場合\n";
+	try{
+	    sub();
+	}catch( Sample e ){
+	    cerr << "--- catch ブロック---\n";
+	    cerr << "仮引数の実体 = #" << e.who() << endl;
+	}
+	cerr << "\n● 参照で例外を受け取る場合\n";
+	try{
+	    sub();
+	}catch( const Sample &e ){
+	    cerr << "--- catch ブロック---\n";
+	    cerr << "仮引数の実体 = #" << e.who() << endl;
+	}
+    
+	Sample s("main::local");
+	cerr << "\n● 実体で引数を渡す場合(通常オブジェクト)\n";
+	sub1( s );
+    
+	cerr << "\n● 実体で引数を渡す場合(一時オブジェクト)\n";
+	sub1( Sample("main::temp1") );
+    
+	cerr << "\n● 参照で引数を渡す場合(通常オブジェクト)\n";
+	sub2( s );
+    
+	cerr << "\n● 参照で引数を渡す場合(一時オブジェクト)\n";
+	sub2( Sample("main::temp2") );
+	
+	cerr << "\n● 終了\n";
+	return 0;
+    }
+</pre>
+
+<<<< 結果>>>>
+
+<pre>
+    ● 実体で例外を受け取る場合
+    デフォルトコンストラクタ for sub::local
+    --- サブルーチン内---
+    デフォルトコンストラクタ for sub::temp
+    コピーコンストラクタ for sub::temp'
+    デストラクタ for sub::temp
+    デストラクタ for sub::local
+    コピーコンストラクタ for sub::temp''
+    --- catch ブロック---
+    仮引数の実体 = #sub::temp''
+    デストラクタ for sub::temp'
+    デストラクタ for sub::temp''
+ 
+    ● 参照で例外を受け取る場合
+    デフォルトコンストラクタ for sub::local
+    --- サブルーチン内---
+    デフォルトコンストラクタ for sub::temp
+    コピーコンストラクタ for sub::temp'
+    デストラクタ for sub::temp
+    デストラクタ for sub::local
+    --- catch ブロック---
+    仮引数の実体 = #sub::temp'
+    デストラクタ for sub::temp'
+    デフォルトコンストラクタ for main::local
+ 
+    ● 実体で引数を渡す場合(通常オブジェクト)
+    コピーコンストラクタ for main::local'
+    --- サブルーチン内---
+    仮引数の実体 = main::local'
+    デストラクタ for main::local'
+ 
+    ● 実体で引数を渡す場合(一時オブジェクト)
+    デフォルトコンストラクタ for main::temp1
+    --- サブルーチン内---
+    仮引数の実体 = main::temp1
+    デストラクタ for main::temp1
+ 
+    ● 参照で引数を渡す場合(通常オブジェクト)
+    --- サブルーチン内---
+    仮引数の実体 = main::local
+ 
+    ● 参照で引数を渡す場合(一時オブジェクト)
+    デフォルトコンストラクタ for main::temp2
+    --- サブルーチン内---
+    仮引数の実体 = main::temp2
+    デストラクタ for main::temp2
+ 
+    ● 終了
+    デストラクタ for main::local
+</pre>
+
+<< 結論>>
+
+特に問題なく見える。
+むしろ、値渡しだと、コンストラクタの呼び出し回数が3回と多過ぎるので、
+参照渡しの方が望ましいくらいだ。
+
+<< ウェブによると>>
+
+<<<< [Borland - Tips:C++Builder|http://www.borland.co.jp/tips/cbuilder/cb001/delbcb_7.html]>>>>
+
+曰く
+
+* C++ 例外は，参照，ポインタ，または値によって補足される。
+* TObject から派生した例外だけが参照またはポインタによって補足される。
+* TObject 例外を値で補足しようとするとコンパイルエラーとなる。
+
+<< 考察>>
+
+* 値渡しにすると、派生クラスの例外オブジェクトを、基底クラスの例外として受け取ることができない ⇒ '''原則的には参照で受け取るべき'''
+* コンストラクタ・デストラクタの処理順からすると、例外オブジェクトの本体は、スタック上ではなく、static な領域に置かれている可能性が高い。

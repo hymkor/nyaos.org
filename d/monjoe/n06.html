@@ -1,0 +1,850 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="robots" contents="noindex, nofollow" />
+<title>高速増殖ログ「もんじょ」Part6
+</title>
+    <style type="text/css">
+    <!--
+	.FIRSTLETTER{font-size:xx-large}
+	P.SAY1{color:#FF00FF;font-size:large;text-align:center}
+	P.SAY2{color:#FFFF00;font-size:large;text-align:center}
+        P.SEP{text-align:center;color:silver;font-weight:bold}
+	DIV.FOOTNOTE{font-size:x-small}
+	DIV.COMMENT{text-indent:12pt}
+	.H{font-weight:bold;font-size:large}
+.H{
+  font-size:large;font-weight:bold
+}
+H1{
+  text-align:right;
+  border-style:solid;border-width:0px 0px 4px 0px;border-color:white;
+  color:snow;
+  font-size:large;
+  clear: both;
+  width: auto;
+}
+H2{
+  border:none;
+  background-color:#444444;
+  font-size:large;
+  width:auto;
+}
+H2 SMALL{
+  font-size:small;
+  line-height:large;
+}
+H3{
+  border-style:solid;border-width:0px 0px 0px 20px;border-color:silver;
+  font-size:medium;
+  text-indent:5pt
+}
+.BOX{
+  border-style:solid;border-color:white;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  text-decoration:underbar;white-space:pre
+}
+.XOB{
+  border-style:solid;border-color:gray;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  background-color:white;color:black;white-space:pre
+}
+DT{ color:silver;font-weight:bold; }
+EM{ color:gray;font-weight:bold;font-style:normal }
+STRONG{ color:red }
+B.PLASMA{
+    color:red;background-color:#440000;font-size:xx-small;font-weight:bold;
+}
+B.DOKEN{
+    color:#FFFF00;background-color:#444400;font-size:xx-small;font-weight:bold;
+}
+DIV.D{
+    text-indent:12pt
+}
+A:hover{
+  background-color:#440000
+}
+    -->
+    </style>
+</head>
+<body text="white" bgcolor="black" link="silver" vlink="gray">
+<!--start-->
+<DIV ALIGN=RIGHT><TABLE><TR><TD><DIV CLASS="BOX"><A HREF="n05.html">前頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="n07.html">次頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="http://hp.vector.co.jp/authors/VA009797/">扉頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="index.html">目次</A></DIV></TD></TR></TABLE></DIV>
+
+
+<!--section-->
+<H2><A NAME="2003.05.04">神の最前線プログラマ</A>
+<SMALL>　(2003.05.04)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.05.04.1" href="#2003.05.04.1"
+ style="text-decoration:none">休</a></td></tr></table>
+みだけど、がんがん働いています。本日(4日)は、さすがに職場には私一人<sup style="font-size:x-small"><a href="#2003.05.04.1.1" title="別の部門には人が来てるようですけどね" name="2003.05.04.1.1.">*1</a></sup>。独りだと話し掛けられることが一切ないので、ごっつ集中できます。</p>
+<p align="center" class="SAY1"> 独りなのに話し掛けられたら<br />
+    別の意味でごっつ怖いですけど </p>
+
+
+<p>まぁ、なんつーか、プログラミングには集中が大切なので、本来隔離環境が欲しいところなんですが、悲しいかな、サラリーマンである限り、それは望むべくもなく…。こんな時、個人事業主で自宅で仕事ができる友人が、誠にうらやましい事、この上なく。</p>
+<p>そんなこんなで結構がんばったのでありますが、残念ながら目標には辿り着けず…。明日は知人の送別会(?)が昼からありますので、残った仕事は朝と晩で片付けるとしませふ。とほほ。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.05.04.1.1" href="#2003.05.04.1.1.">*1</a></sup>別の部門には人が来てるようですけどね</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.05.04.2" href="#2003.05.04.2"
+ style="text-decoration:none">P</a></td></tr></table>
+erl についての疑問もだいたいは氷解したわけですが、未だ一つだけ釈然としない事柄があります。</p>
+<p>「<tt>foo-&gt;{'bar'}</tt>」という記述を「<tt>foo-&gt;{bar}</tt>」と書いてもSyntax 上 Ok なのは、どういう理屈なんでしょう。いやね、「<tt>print foo;</tt>」で「<tt>foo</tt>」と表示されたところから、$ , @ , % がついていない単語は文字列扱いされるんだろうなぁとは思うんですが。どうもその辺りをしっかりと解説してくれているドキュメントが見付からないのが、気持ち悪くて。</p>
+<p>しかし、ワタシって昔からこうですね。</p>
+<ul>
+<li>初めてサーブレット＆ JSP プログラミングしたときも、リクエストオブジェクト(HttpServletRequest)へのsetAttribute/getAttribute や、セッションの原理が分からず、進捗が遅かった。</li>
+<li>Perl のコードの最適化を任されたことがあったが、<tt>-&gt;</tt>の意味がこのころ良くわかっていなかったので、遅々として進まず。結局、別件の緊急事態に対応しなくてはならなくなり、別の人に任せてしまった。</li>
+</ul>
+
+<p>今なら、ほぼ完璧に分かる気がするのになぁ。<sup style="font-size:x-small"><a href="#2003.05.04.2.1" title="気がするだけです" name="2003.05.04.2.1.">*2</a></sup>
+
+</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.05.04.2.1" href="#2003.05.04.2.1.">*2</a></sup>気がするだけです</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.05.04.3" href="#2003.05.04.3"
+ style="text-decoration:none">も</a></td></tr></table>
+うすぐ、77777 ですね。どなたが取ってくださるでしょう。連絡いただければ、晒し者にして差し上げます<em>(コラ)</em>。</p>
+<p>自分で取ったら禿鬱なので、気をつけなくては…</p>
+<ul>
+<li><a href="http://news.tbs.co.jp/newseye/tbs_newseye739729.html" target="_blank">謎の白装束集団、今度は岐阜の山中に</a>
+(<a href="http://sawadaspecial.com/mt/archives/000242.html" target="_blank">sawadaspecial.com</a>より)
+    <div class="COMMENT"> 本ページは背景黒いので、スカラー波除けのマークをおけません。しくしく。</div>
+</li>
+<li><a href="http://headlines.yahoo.co.jp/hl?a=20030502-00000007-mai-l28" target="_blank">イラク戦争で「人間の盾」、高薮繁子さんが尼崎市で報告会 ／阪神</a>
+    <div class="COMMENT"> 日本で講演しても仕方ない<sup style="font-size:x-small"><a href="#2003.05.04.3.1" title="既に問題意識を持っている人しか来ない" name="2003.05.04.3.1.">*3</a></sup>
+	ので、米国でやっていただきたく。 </div>
+</li>
+<li><b class="doken">2ch</b>
+    <a href="http://ex.2ch.net/test/read.cgi/entrance/1051114316/" target="_blank">神の最前線カメラマン！</a>
+    <div class="COMMENT"> 知らない人いないと思いますが<em>(読者がみんな、２ちゃんねらと思うな、コラ)</em>、一応リンク。</div>
+</li>
+<li><b class="doken">2ch</b>
+    <a href="http://pc2.2ch.net/test/read.cgi/win/1018358871/" target="_blank">ショッキングなマイドキュメント</a>
+    <em>(←スレ中にグロ画像のリンクが混ざっているようなので注意!)</em>
+<div class="COMMENT"> 余談ですが、環境変数 HOME の先と<a href="http://hp.vector.co.jp/authors/VA003457/" target="_blank">jvim 3</a>
+    のショートカットの作業フォルダをマイドキュメントに指定してから、ちょっとだけ幸せになりました。</div>
+<div class="COMMENT"> さらに余談ですが、<a href="http://www.future-ta.com/future/" target="_blank">知人</a>曰く「マルチユーザ環境(NT/2000/XP)では、『マイドキュメント』はユーザ単位であるからいいけど、『マイコンピュータ』は違うだろ。正確には『ディスコンピュータ(This Computer)』だろ」と。ごもっとも。</div>
+</li>
+<li><b class="doken">2ch</b>
+    <a href="http://pc2.2ch.net/test/read.cgi/win/1040896557/" target="_blank">OSの差が戦力の決定的差でないことを教えてやる！！</a>(Win板)
+    <div class="COMMENT"> シャア専用板ぢゃないのに…</div>
+</li>
+<li><b class="doken">/.jp</b>
+<a href="http://slashdot.jp/article.pl?sid=03/04/23/0324235&amp;topic=15&amp;mode=thread" target="_blank">OpenBSD: 文字列処理のクリーンアップ</a>
+    <div class="COMMENT"> だいぶと前の記事ですが…。ちなみに、NYAxS は grep しましたが、printf/strcpy/strcat は一つも検出されませんでした。const char * なポインタ以外、みんな NnString ですからね。しかし、OpenBSD にある strlcpy が ANSI-C にも欲しかったなぁ。実際、strncpy は怖くて役に立ちませぬ。</div>
+</li>
+<li><a href="http://www.kaoriya.net/" target="_blank">KaoriYa.net - gvim バージョン1.1正式版</a>
+    <div class="COMMENT"> 起動速度で30〜40%ほど高速化したとのことで、jvim 3 に比べると遜色もなくなったようですので、乗り換えることにしました。モードによってカーソル形状/色が変わるので、かなり快適です。でも、拡張操作が微妙に違っていやぁ〜ん。<sup style="font-size:x-small"><a href="#2003.05.04.3.2" title="具体的にはクリップボード操作のキー押下数が増えているのと、ISO-2022JP や 日本語EUC を直接編集できなくなっているのが鬱" name="2003.05.04.3.2.">*4</a></sup></div>
+</li>
+<li><a href="http://www15.cds.ne.jp/~fujisawa/" target="_blank">殺人魚雷仮説事務所</a>
+    (<a href="http://char-custom.net/" target="_blank">シャア専用ポータル</a>より)
+    <div class="COMMENT"> <a href="http://www15.cds.ne.jp/~fujisawa/oekaki3/bbsnote.cgi" target="_blank">お絵かき掲示板</a>
+	では、サク祭りが開催中です。<b>超</b>量産型モビルスーツ「サク」(<b>ザ</b>クにあらず)については、ガンダムエースの最新号のトニーたけざき氏の漫画参照のこと。</div>
+</li>
+<li><a href="http://hw001.gate01.com/otu-man/web_mandam.htm" target="_blank">うぇぶまんだむ</a>
+    (<a href="http://char-custom.net/" target="_blank">シャア専用ポータル</a>より)
+    <div class="COMMENT"> ビグザムネタ満載！ビグザム Seed がワラタ。</div>
+</li>
+<li><a href="http://www.asahi.com/science/update/0503/002.html" target="_blank">京大原子炉、０６年３月に休止 廃炉費用１００億円超か</a>
+    (<a href="http://4049.nwr.jp/diary/d200305a.html#03-5" target="_blank">ねこぽん@4049</a>さんトコより)
+    <div class="COMMENT"> あぁ、原子力パワーが…(ちゃかしてすみません)
+
+</div>
+</li>
+</ul>
+
+<p>今週は NYAxS ソース解説、お休みです<em>(← 続けるつもりあったのか)</em>
+
+</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.05.04.3.1" href="#2003.05.04.3.1.">*3</a></sup>既に問題意識を持っている人しか来ない</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.05.04.3.2" href="#2003.05.04.3.2.">*4</a></sup>具体的にはクリップボード操作のキー押下数が増えているのと、
+	ISO-2022JP や 日本語EUC を直接編集できなくなっているのが鬱</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.05.02">断固拒否するする</A>
+<SMALL>　(2003.05.02)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.05.02.1" href="#2003.05.02.1"
+ style="text-decoration:none">本</a></td></tr></table>
+文書でもよく登場する、同期入社の“Ｉ”嬢曰く、わたしの口癖は「ぷしゅ〜」<sup style="font-size:x-small"><a href="#2003.05.02.1.1" title="ため息の代替行為。「はぁぁ」というと、はた目印象悪いからね" name="2003.05.02.1.1.">*5</a></sup>「いやはや」「断固拒否！」だそうな。</p>
+<p>これらはやや意識的に言っているところもあるので、一概に口癖とも言えないのだが…ただ、インパクトがあるから、印象に残っているだけのような気がしなくもない。まぁ、いいか。</p>
+<p>いやはや。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.05.02.1.1" href="#2003.05.02.1.1.">*5</a></sup>ため息の代替行為。「はぁぁ」というと、
+はた目印象悪いからね</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.05.02.2" href="#2003.05.02.2"
+ style="text-decoration:none">Ｇ</a></td></tr></table>
+Ｗは１連休を３回も堪能できました/できます/できそうです。すばらしい。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.05.02.3" href="#2003.05.02.3"
+ style="text-decoration:none">O</a></td></tr></table>
+S/2使いの<a href="http://hp.vector.co.jp/authors/VA016875/try18.html#4-29" target="_blank">皆</a><a href="http://hp.vector.co.jp/authors/VA014690/Libr/Misc033.html#d2003-04-30" target="_blank">さ</a><a href="http://www.asahi-net.or.jp/~SU2N-NI/nikkj/0304.htm#d30" target="_blank">ま</a>の間で話題沸騰の「ヒカルの碁」最終回。</p>
+<p>だが、あれが最後の「ヒカルの碁」とは思えない。今にきっと、第二・第三のヒカルの碁が連載されるに違いない。その時我々はどうすればいいのだ。</p>
+<p>読めばいいのだ。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.05.02.4" href="#2003.05.02.4"
+ style="text-decoration:none">コ</a></td></tr></table>
+<a href="http://hpmboard2.nifty.com/cgi-bin/bbs_by_date.cgi?user_id=ZXH02315" target="_blank">マンドライン掲示板</a>に、設置の趣旨に反することを書かれたので、とりあえず遺憾の意を表明してみた。どうせ、閑古鳥鳴いてるし、閉じちゃてもよかったんですけどね。</p>
+<ul>
+<li><a href="http://www.hotwired.co.jp/news/news/culture/story/20030424205.html" target="_blank">作成者本人が死亡したウェブログはどうなる？</a>
+    (<a href="http://www.pluto.dti.ne.jp/~nkf/diary/03apr_b.html#030428b" target="_blank">1人ベンチで思うこと</a>より)
+    <div class="COMMENT"> わたしの場合、Vector のページはずっと残るが、@nifty のページは支払いできないので、多分、削除される運命にありますね。結局、古いものだけが残るか。</div>
+</li>
+<li><b class="doken">Flash</b>
+    <a href="http://www.deanliou.com/WinRG/winrg.htm" target="_blank">WindowsRG Fullscreen Demo</a>
+    (<a href="http://kitaj.no-ip.com/tdiary/20030429.html#p01" target="_blank">今日のなんでやねん</a>より)
+    <div class="COMMENT"> おもしろー。ブラウザの外でこんなメッセージ出続けたら、ぶち切れますけど(藁)
+
+</div>
+</li>
+</ul>
+
+<p>「<a href="http://kitaj.no-ip.com/tdiary/" target="_blank">今日のなんでやねん</a>」は楽しい記事(!?)が多いので、調子こいて、ほいほいリンク張ってたら、(ご本人かプログラムか分かりませんが)
+<a href="http://kitaj.no-ip.com/iraira/" target="_blank">補足されてしまっていた</a>ようで。とりあえず激しく恐縮。</p>
+<!--section-->
+<H2><A NAME="2003.04.27">リファレンスマニア</A>
+<SMALL>　(2003.04.27)</SMALL></H2>
+
+
+
+<img src="./n06.files/03-04-27_23-15.jpg" align="right"
+ width=120 height="128" />
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.27.1" href="#2003.04.27.1"
+ style="text-decoration:none">独</a></td></tr></table>
+り夜道を帰るワタシ。いつも通る道だけど、あいかわらず、怖いなぁ。</p>
+<p>一時期は怖い話にはまって、2ch の<a href="http://hobby2.2ch.net/occult/" target="_blank">オカルト超常現象板</a>とか<a href="http://www.currymania.info/" target="_blank">２ちゃんねるのこわい話</a>とかよく読んでいたもんですが、最近は飽きてしまいました。</p>
+<p>怖いほど、飽きっぽいなぁ。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.27.2" href="#2003.04.27.2"
+ style="text-decoration:none">昨</a></td></tr></table>
+日、リンク張った、<a href="http://tohoho.wakusei.ne.jp/wwwperl.htm" target="_blank">とほほのperl入門</a>
+のおかげでようやく、Perl のリファレンスが分かったような気がしました。要は<code> -&gt; </code>を誤解してました。というか、<code>$foo{'bar'}</code> と <code>$foo-&gt;{'bar'}</code>
+に違いがないように錯覚してました。</p>
+<p align="center" class="SAY1"> 激しくおーい </p>
+
+
+<p>いや、違いがないはずがないだろう! と問い詰められたら、3秒で分かりますけど、なんとなく、リファレンスというと、Java とか Ruby のそれを連想してしまって、漠然と直接参照と間接参照の区別がないような気がするではないですか。</p>
+<p align="center" class="SAY2"> しないしない </p>
+
+
+<p>結局、C言語の<code> foo-&gt;bar が<code> (*foo).bar </code>のエイリアスなのと同様、<code>$foo-&gt;{'bar'}</code>は <code>${$foo}{'bar'}</code>のエイリアスなんですよね<sup style="font-size:x-small"><a href="#2003.04.27.2.1" title="違ったら、どなたかご教授 please!" name="2003.04.27.2.1.">*6</a></sup>。だいたいリファレンス(参照)なんて表現するから分からなくなるのです。結局、まるっきりポインタではないですか。いやはや。</p>
+<p>でも、これで私は Perl で大きなデータ構造も扱えるようになりました。今まで業務で Ruby を使うと、とても快適な反面、(Ruby 使いを育てない限り)「一生保守を背負う罠」が待ちうけており、かなり諸刃の剣でした。しかし、Perl で作れば「SE なら Perlくらい勉強せいや、ゴルァ」と言い放つことができます。これは(・∇・)イイ。今からでも遅くないから、こっそりと Perl にツールを移植しましょう<em>(実はそんな暇はどこにもない罠)</em>。</p>
+<p>それにしても、つくづく不思議なのは、Perl のクラス。リファレンス＋ハッシュを構造体的に使ってきた名残<sup style="font-size:x-small"><a href="#2003.04.27.2.2" title="勝手な推測ですが" name="2003.04.27.2.2.">*7</a></sup>
+とはいえ、もう少し分かりやすい文法を作る機会はなかったものでしょうか。互換性の維持とは辛いものですねぇ。</p>
+<ul>
+<li><a href="http://sed.sourceforge.net/" target="_blank">sed.sf.net - The SED $HOME</a>
+    <div class="COMMENT"> sed でゲームまで作りますか!!</div>
+</li>
+<li><a href="http://home.attbi.com/~bernhard36/honda-ad.html" target="_blank">英国の HONDA Accord の CM</a>
+    (<a href="http://dempa.gozans.com/wara/" target="_blank">藁ちゃんねる</a>より)
+    <div class="COMMENT"> すごいなぁ。撮影の時、何回やり直したんだろう。<sup style="font-size:x-small"><a href="#2003.04.27.2.3" title="CGという説がありますが、どうなんでしょうか…" name="2003.04.27.2.3.">*8</a></sup></div>
+</li>
+<li><a href="http://www.geocities.co.jp/Playtown-Dice/2612/index.html" target="_blank">「天空の城ラピュタ」のページ！！！</a>
+    <div class="COMMENT"> こだわりだなぁ…。ラピュタはいい冒険活劇でしたねぇ。</div>
+</li>
+<li><a href="http://www.kt.rim.or.jp/~sugasawa/" target="_blank">Tack'ns - 痛快エッセイ</a>
+    (<a href="http://www.asahi-net.or.jp/~SU2N-NI/nikkj/0304.htm#d27" target="_blank">日日に森の下つゆ</a>より)
+    <div class="COMMENT"> えー、自分で昨日<a href="http://www.kt.rim.or.jp/~sugasawa/sub/powerpoint.html" target="_blank">パワーポイントがプレゼンテーションをダメにする</a>
+    へリンクしておきながら、nii.n さんにリンクしてもらうまで、サイトのホームの方はチェックしていなかったりして(藁)。なかなか考えさせられる文章が多いんですが、量が多いので、ちびちび読んで行くことにしまふ。</div>
+</li>
+<li><a href="http://homepage1.nifty.com/McLaren/news/630427.htm" target="_blank">「ベーマガ」、エロゲー雑誌として早くも復刊</a>
+    <div class="COMMENT"> ひどいよー、うわぁぁぁん。<sup style="font-size:x-small"><a href="#2003.04.27.2.4" title="嘘ニュースなので、本気にしないように" name="2003.04.27.2.4.">*9</a></sup></div>
+</li>
+<li><b class="doken">TV(関西)</b><a href="http://www.fujitv.co.jp/jp/b_hp/0401kins/index.html" target="_blank">放送禁止</a>
+    <div class="COMMENT"> 途中までマジメな<em>(拉致関係？の)</em>ドキュメンタリー番組かと思ったのに…、超能力者のおっさんが登場してから、急に嘘臭くなりました。結局、フィクションだったようで<em>(関東方面では 4/1 放映)</em>。途中で使用した題材は本当だと断ったところを見ると、言いたいのは「事実を都合よくに並べると、幾らでも嘘話をでっちあげられるから騙されないようにしろ」ということかな？<em>(関係スレ：<a href="http://hobby2.2ch.net/test/read.cgi/occult/1051462128/" target="_blank">放　送　禁　止</a>[オカルト板],
+	<a href="http://live5.2ch.net/test/read.cgi/livecx/1051462151/" target="_blank">実況 ◆ フジテレビ 4101</a>[番組ch(フジ)])</em>
+
+</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.04.27.2.1" href="#2003.04.27.2.1.">*6</a></sup>違ったら、どなたかご教授 please!</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.27.2.2" href="#2003.04.27.2.2.">*7</a></sup>勝手な推測ですが</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.27.2.3" href="#2003.04.27.2.3.">*8</a></sup>CGという説がありますが、どうなんでしょうか…</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.27.2.4" href="#2003.04.27.2.4.">*9</a></sup>嘘ニュースなので、本気にしないように</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.04.26">醤油解説</A>
+<SMALL>　(2003.04.26)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.26.1" href="#2003.04.26.1"
+ style="text-decoration:none">N</a></td></tr></table>
+YAxS ソース解説、<a href="../nya/doc/02.html">続き</a>を書きました。はたして、どれだけ読者がいるものやら。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.26.2" href="#2003.04.26.2"
+ style="text-decoration:none">W</a></td></tr></table>
+ord 2000 は、文章の数だけ、独立したウインドウを開く。Excel 2000 は、ブックの数に関わらず、ウインドウは一つ。ただし、Ctrl-TAB やら、タスクバーで、タブブラウザっぽく切り替えができる。</p>
+<p>同じ Office ソフトなのに、ふるまいに統一が取れていないのはどうかと…。Microsoft らしいな。PowerPoint は…、そういえば、最近全然 PowerPoint 使わないな。なんでだろう。昔は、Word 代わりによく使っていたんだけど…。</p>
+<ul>
+<li><a href="http://210.143.110.44/diaryweb/?200304c&amp;to=200304262#200304262" target="_blank">PowerPoint擁護論</a>(inside out)</li>
+<li><a href="http://www.kt.rim.or.jp/~sugasawa/sub/powerpoint.html" target="_blank">パワーポイントがプレゼンテーションをダメにする</a>(inside out より)
+    <div class="COMMENT"> 「W」も「B」もしらない私は語る資格なし[w</div>
+</li>
+<li><a href="http://www.pure.ne.jp/~learner/program/" target="_blank">Programming note</a></li>
+<li><a href="http://tohoho.wakusei.ne.jp/wwwperl.htm" target="_blank">とほほのperl入門</a>
+    <div class="COMMENT"> Perl 5 のクラスとリファレンス(参照の方)について、よー分からんので…。書籍を探しましたが、CGI 関係ばっか。いや、Ruby でやりたいのは山々なんですけどね。Perl の方が使える場が多いのは確かで…。いやはや。</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.04.25">真夜中のシューティングプログラマ</A>
+<SMALL>　(2003.04.25)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.25.1" href="#2003.04.25.1"
+ style="text-decoration:none">な</a></td></tr></table>
+んと、驚いたことに、連休が休めそうなのです。カレンダーの赤色で書かれている日はお休みなのです。家でゴロゴロしてても怒られません。</p>
+<p align="center" class="SAY1"> まるでいっぱしの<br />サラリーマンみたいだ！ </p>
+
+
+<p>奇跡だ、ピクニックだ！どうだ、“Ｙ”よ、うらやましいだろう！</p>
+<p align="center" class="SAY2"> と昨日まで<br />かなり本気で思ってたんですが </p>
+
+
+<p>いざ、休みの直前になると、今までやってきた“やっつけ”仕事のフォローやら、作業漏れやら、至急とりまとめないといけないことやら、例によってイロイロ TO DO が湧いてきます。</p>
+<p>で、まぁ、仕方ないか。やっぱり休日出社してやろうかと思っていたら、他にも出てくると表明する人が次々現れてきました<sup style="font-size:x-small"><a href="#2003.04.25.1.1" title="ワタシが出社すると言ったのがまずかったのかもしれません" name="2003.04.25.1.1.">*10</a></sup>。いや、みなさんにはゆっくり休んでいただきたいんですが…<sup style="font-size:x-small"><a href="#2003.04.25.1.2" title="無論、遊びにいっていただいてもいいんですし" name="2003.04.25.1.2.">*11</a></sup>
+
+</p>
+<p>結局、当初の予想通り。すみませんね…無理なスケジュールしいちゃって…。・゜・（ノД`）・゜・。<sup style="font-size:x-small"><a href="#2003.04.25.1.3" title="あぁ、もう、こんな仕事いやだ。今年度中に絶対辞めるぞ！" name="2003.04.25.1.3.">*12</a></sup>
+
+</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.04.25.1.1" href="#2003.04.25.1.1.">*10</a></sup>ワタシが出社すると言ったのがまずかったのかもしれません</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.25.1.2" href="#2003.04.25.1.2.">*11</a></sup>無論、遊びにいっていただいてもいいんですし</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.25.1.3" href="#2003.04.25.1.3.">*12</a></sup>あぁ、もう、こんな仕事いやだ。今年度中に絶対辞めるぞ！</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.25.2" href="#2003.04.25.2"
+ style="text-decoration:none">巷</a></td></tr></table>
+で、weblog とか blog とか、ウェブ日記とかいろいろな呼び方がある読み物が、米国で過大評価されたり、日本で過小評価されたりしているようです<em>(何をいまさら)</em>。私自身といえば、このような日記状読み物は体系づけて整理されておらず、そのままでは余り価値のないもの…みたいに思っていました。</p>
+<p>が、よくよく考えると、日記状読み物とその他の文書の違いって、結局、雑誌と単行本の違いと同じようなもんなんですよね。価値の減衰率はかなり高いし<sup style="font-size:x-small"><a href="#2003.04.25.2.1" title="すぐ古新聞になっちゃう" name="2003.04.25.2.1.">*13</a></sup>、検索性もよろしくはない<sup style="font-size:x-small"><a href="#2003.04.25.2.2" title="もっとも検索エンジンで、力任せに探せるから、大したデメリットでもないけど" name="2003.04.25.2.2.">*14</a></sup>。けれども、リアルタイム性が高く、情報の鮮度が高い。何より書き手も書きやすいし、読み手も読みやすい。コミュニケーションが成立しやすい。それなりの評価に値するものですよね。</p>
+<p>とはいえ、やっぱり、きちんと「テーマ」を決めた、まとまった「文章」<em>(もんじょにあらず)</em>も書きたいと思うことも多々あります。ということで、そういうのを書く練習がてらに、NYAxS のドキュメントを整備しているわけですが…気がつけば、ほとんど「もんじょ」と化してますね。まぁ、同じフォーマッタ使っているから当たり前なんですが。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.04.25.2.1" href="#2003.04.25.2.1.">*13</a></sup>すぐ古新聞になっちゃう</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.25.2.2" href="#2003.04.25.2.2.">*14</a></sup>もっとも検索エンジンで、力任せに探せるから、
+    大したデメリットでもないけど</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.25.3" href="#2003.04.25.3"
+ style="text-decoration:none">課</a></td></tr></table>
+長できます、部長できますというだけの人はお払い箱になる世の中になったと言われているが、今の現場を見ると、リーダとかマネージャとかプロジェクトを回す人・管理する人が圧倒的に足りないように見える。</p>
+<p align="center" class="SAY1"> ちょっとお払い箱にしすぎたんちゃうの？</p>
+
+
+<p>わたしは、逆にプログラム作るだけの人、インフラ整備するだけの人になりたいのに、許してもらえない。調整ごとや駆け引きじみた交渉事が一番苦手なのに。物覚えがとてつもなく悪いのも手伝って<sup style="font-size:x-small"><a href="#2003.04.25.3.1" title="どうも、体系付けられていない…情報量だけが圧倒的に多いお話というのを理解するのが苦手なんですよ。よくいる、数学とか物理とかは得意だけど、化学とか、その他は苦手というタイプです…って、化学工学科あったんちゃうんかい＞ワシ" name="2003.04.25.3.1.">*15</a></sup>
+、神経が磨り減る毎日。あと、1,2年くらいなら我慢できるが、それ以上はとても無理だす。</p>
+<p>まぁ、頭が回ってなくて、鬱状態になっているから、そういう発想が出てくるのかもしれませんが、どちらにしても、あまりもう、この状態が長続きしないような気がします。はたして、今後、どうなることやら…。生暖かく見守ってください<sup style="font-size:x-small"><a href="#2003.04.25.3.2" title="あまり真剣に心配しないでください。こっちが気を使ってしまうので…。できれば、あくまで他人事として興味本位で関心を持つ程度でお願いします" name="2003.04.25.3.2.">*16</a></sup>。</p>
+<ul>
+<li><a href="http://www.h5.dion.ne.jp/~tamainu/danmaku.htm" target="_blank">STGと弾幕美を語ろう</a>
+    (<a href="http://sawadaspecial.com/mt/archives/000232.html" target="_blank">sawadaspecial.com</a>より)
+    <div class="COMMENT"> 儂は実は、シューティングゲームが好きじゃったんじゃ。じゃがのー、気がつけば、ゲーセンは格闘ゲームばかりになっていてのー。しくしくしく。ワシが最後に燃えた STG は魔法警備隊ガンホーキぢゃった…。</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.04.25.3.1" href="#2003.04.25.3.1.">*15</a></sup>どうも、体系付けられていない…情報量だけが圧倒的に多い
+    お話というのを理解するのが苦手なんですよ。
+    よくいる、数学とか物理とかは得意だけど、化学とか、
+    その他は苦手というタイプです…って、
+    化学工学科あったんちゃうんかい＞ワシ</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.25.3.2" href="#2003.04.25.3.2.">*16</a></sup>あまり真剣に心配しないでください。こっちが気を使ってしまうので…。
+できれば、あくまで他人事として興味本位で関心を持つ程度でお願いします</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.04.21">御堂筋を駆ける</A>
+<SMALL>　(2003.04.21)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.21.1" href="#2003.04.21.1"
+ style="text-decoration:none">御</a></td></tr></table>
+堂筋線の女性専用車両。<img src="./n06.files/03-04-20_12-55.jpg" align="right" />
+女性専用の運用時間外に撮影したので、正確には元女性専用車両ですが。色合いが素敵すぎです。</p>
+<p>一般には好評ということですが、本車両の導入により、本線を利用している視覚障害者の皆様が、苦労して習得した通勤/通学のコースを変えざるを得なくなったであろうことを忘れてはいけないですね。てっとり早い解決法には、それなりの「何か」が犠牲になっていることがよくあるということです。</p>
+<p>同様に「無理」を重ねると、「何か」が犠牲になることを…いや「何」でもないです。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.21.2" href="#2003.04.21.2"
+ style="text-decoration:none">ワ</a></td></tr></table>
+タシが持っている、もう一つのページ：<a href="http://homepage2.nifty.com/hayamatta/" target="_blank">http://homepage2.nifty.com/hayamatta/</A>
+は、今まで簡単な目次だけがおいてあったわけですが、もったいないので、本ページのミラーにしました。といっても、本当に二つおくわけではなく、<a href="http://hp.vector.co.jp/authors/VA009797/" target="_blank">http://hp.vector.co.jp/authors/VA009797/</A>
+を１フレームとして取り込むようにしただけですが。</p>
+<p align="center" class="SAY1">それ、ミラーぢゃありません！</p>
+
+
+<p>これのメリットは、カウンタがそのまま使える。デメリットはフレーム未対応のブラウザでは利用できない・vector.co.jp が落ちたら皆落ちるということでしょうかね<em>(意味なし)</em>。</p>
+<p>まぁ、本当の目的は別のところにあるということで。参考：<a href="http://www.nifty.com/url/qa.htm#q6" target="_blank">@nifty - URL転送サービスのフレーム転送</a>
+
+</p>
+<ul>
+<li><a href="http://lion-x.hp.infoseek.co.jp/" target="_blank">大雷音寺動画館</a>
+  (<a href="http://a.hatena.ne.jp/nii/simple" target="_blank">ヒビ漏りアンテナ</a>より)
+  <div class="COMMENT"> 機動戦士アッガイ…前にも一度リンク張ったような気がしますが…なんと、連載してたのか！！知らなかった。</div>
+</li>
+<li><a href="http://yamato.channel.or.jp/" target="_blank">宇宙戦艦ヤマト発信！</a>
+    (<a href="http://www.asahi-net.or.jp/~SU2N-NI/nikkj/0304.htm#d20" target="_blank">nii.n さんとこ</a>より)
+    <div class="COMMENT"> ヤマトいいなぁ<em>(しみじみ)</em>。<sup style="font-size:x-small"><a href="#2003.04.21.2.1" title="そんなこと言ってると、ほのぼのレイクの飛行船がやってくるぞ！" name="2003.04.21.2.1.">*17</a></sup>
+
+</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.04.21.2.1" href="#2003.04.21.2.1.">*17</a></sup>そんなこと言ってると、
+	ほのぼのレイクの飛行船がやってくるぞ！</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.04.19">マルコヴィッチのモナー穴</A>
+<SMALL>　(2003.04.19)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.19.1" href="#2003.04.19.1"
+ style="text-decoration:none">休</a></td></tr></table>
+みってイイな！ のんびりと自宅で</p>
+<ul>
+<li><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B000083G92/qid=1050747185/sr=1-6/ref=sr_1_2_6/249-1824766-2490764" target="_blank">キングゲイナー vol.3</a></li>
+<li><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B00008BDC9/qid=1050747117/sr=1-3/ref=sr_1_2_3/249-1824766-2490764" target="_blank">攻殻機動隊 STAND ALONE COMPLEX vol.4</a></li>
+<li><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B000083G93/ref=sr_aps_d_1/249-1824766-2490764" target="_blank"><tt>.hack/SIGN</tt> vol.8</a>
+
+</li>
+</ul>
+
+<p>を鑑賞でございます。相変わらず、管野よう子の音楽いいな！近所で 4/1 に新装した書店にも、やっと寄れました。</p>
+<ul>
+<li><a href="http://www.bk1.co.jp/cgi-bin/srch/srch_detail.cgi/3e3fd73de34fb01040d7?aid=&amp;bibid=02233505&amp;volno=0000" target="_blank">ファイブスター物語XI</a></li>
+<li><a href="http://www.bk1.co.jp/cgi-bin/srch/srch_detail.cgi/3e3fd73de34fb01040d7?aid=&amp;bibid=02251369&amp;volno=0000" target="_blank">暗黒のシステムインテグレーション</a>
+
+</li>
+</ul>
+
+<p>いつも帰り道にあるのに、いつも通るのは、閉店した後。23時閉店なのに寄れない儂って…しくしくしく。</p>
+<p>でも、明日は出勤だ。がんがるぞー。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.19.2" href="#2003.04.19.2"
+ style="text-decoration:none">N</a></td></tr></table>
+YA☆S のソースについて、ちょっと<a href="../nya/doc/01.html">解説</a>
+を書いてます。フォーマットはモンジョ形式。なんだかんだ言って、一番慣れてますからね。</p>
+<p>もしかしたら、文章の前後関係がおかしくなっているかもしれません。というのも、文章書く時にまずは書きたいところから書いて、それから全体の構成を見なおして、前後の段落を入れかえるということをよくするもんですから。</p>
+<p>しかし、先は長い…今はライブラリの解説で精一杯。</p>
+<ul>
+<li><a href="http://www.os-omicron.org/~takano/private/trans/bongo-bong_j.html" target="_blank">Unix をもう少しマシなものにしよう</a>
+    (<a href="http://kitaj.no-ip.com/tdiary/20030419.html#p02" target="_blank">今日のなんでやねん</a>より)</li>
+<li><b class="doken">2ch</b>
+    <a href="http://aa.2ch.net/test/read.cgi/mona/1049211613/" target="_blank">モナー穴(7不思議)</a></li>
+<li><b class="doken">2ch</b>
+    <a href="http://aa.2ch.net/mona/kako/1023/10238/1023873413.html" target="_blank">やたー【モナモナ】できたよー</a>
+    <div class="COMMENT"> DAT落ち後、html化された古いスレですが、面白かったので…。</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.04.18">最終日東館壁際の攻防</A>
+<SMALL>　(2003.04.18)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.18.1" href="#2003.04.18.1"
+ style="text-decoration:none">疲</a></td></tr></table>
+労物質が全身に隅々まで行き渡って、頭痛いわ、体だるいわの状態になり、根性も枯渇してしまったので、週末目前の金曜日に至って、志半ばにしてお休みをとってしまいますた。</p>
+<p>遅れた分は日曜くらいにがんばりますわ＞各位<em>(って、読んでねーよ！)</em>
+
+</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.18.2" href="#2003.04.18.2"
+ style="text-decoration:none">ご</a></td></tr></table>
+感想ありがとございます＞<a href="http://hp.vector.co.jp/authors/VA016875/try18.html#4-12" target="_blank">Averageさん</a>
+・<a href="http://www11.ocn.ne.jp/~os2warp5/Tuushin.htm#(2003.4.11)" target="_blank">曲がりシッポさん</a>
+
+</p>
+<p>掲載されるよう、かなり狙った書き方をしたので、現在の文体とは違った印象を受けられたでしょうね。でも、そんなに昔の文体に近かったかな。</p>
+<p>元原稿のウェブへのアップですが…やっちゃってもいいものやら、悪いものやら。UNiX MAGAZINE で連載されていた<a href="http://namazu.org/~satoru/" target="_blank">高林哲さん</a>は、翌月にウェブへ公開されていたようですが…。ソフトバンクはどうなんでしょうね。まぁ、著者なんだから、遠慮する必要はないような気もしますが。</p>
+<p>ところで、ソース解説なんていりますかね？NYA*S なんていうプログラムはそれ一つで完結したソフトウェアなんで、読んでも余り得るものがないような気もするんですが。書いても単なる自己満足で終わりそうなんで、今まで敢えて手をつけなかったんですが。うーん。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.18.3" href="#2003.04.18.3"
+ style="text-decoration:none">某</a></td></tr></table>
+知人“Ｆ”から「最終日東館壁際」の意味ってなんだと聞かれました。</p>
+<p>調査してみると<em>(するなよ)</em>、漫画「<a href="http://www.bk1.co.jp/cgi-bin/srch/srch_detail.cgi/3e3fd73de34fb01040d7?aid=&amp;bibid=02174033&amp;volno=0000" target="_blank">ラブやん</a>」で、「このペド野郎ッ ロリッ 最終日東館壁際ッ!!!」という罵り文句で使われているのが判明。なーんとなく、コミックマーケットで、ある層の店が出店される場所/時間のように推測されるが、ウェブだけではどうにも詳細は不明。分かる人には言うまでも無い事実なのか…</p>
+<p>どなたか、詳細解説希望！<em>(けちけちせず、<a href="http://www.hatena.ne.jp/" target="_blank">はてな</a>で聞けよ！)</em>
+
+</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.18.4" href="#2003.04.18.4"
+ style="text-decoration:none">携</a></td></tr></table>
+帯とか PDA 向きにライト版のページ<a href="http://hp.vector.co.jp/authors/VA009797/j.html" target="_blank">TINY INTERFACE</a>
+を作ってみました。最新の文書１日分しか載せてませんが、サイズでかすぎで読めないケースも減るんじゃないかと思います。SJIS にしたので、対応機種も増えることでしょう。って、そんなことしてまで読んでいる人がいるとも思えませんが(笑)
+<em>(つーか、お前会社休んで何やってんだよ！)</em>
+
+</p>
+<ul>
+<li><a href="http://www.zdnet.co.jp/news/0304/17/nebt_05.html" target="_blank">Mozillaの「Phoenix」ブラウザ、名称めぐり窮地に？</a>
+    <div class="COMMENT"> Firebird って、正直<strong>ださい</strong>名前だと思ったので、ちょうどよかったような。</div>
+</li>
+<li><a href="http://www.holonlinux.com/product/xonwin/xow2.html" target="_blank">XonWindows2</a>
+    <div class="COMMENT"> 買ったんですが、X サーバがうまく動作しません。最初にディスクフルで、インストール失敗したのがまずかったかなー。アンインストール＆再インストールもしたんですけどね。ちなみに環境は CD-ROM が壊れた Windows2000 の デスクトップPC。</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.04.17">鬱るんです</A>
+<SMALL>　(2003.04.17)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.17.1" href="#2003.04.17.1"
+ style="text-decoration:none">原</a></td></tr></table>
+稿料出た！ ⇒ 所得税引かれてた！</p>
+<p align="center" class="SAY1"> (´・ω・｀）ショボーン </p>
+
+
+<p>休日出勤申請した! ⇒ 承認された! ⇒ 出勤した ⇒ 勤怠つけた ⇒ 差し戻された！<sup style="font-size:x-small"><a href="#2003.04.17.1.1" title="いや、多分、振り替えにしろとかいう意味でしょうが、そんな日はない" name="2003.04.17.1.1.">*18</a></sup>
+
+</p>
+<p align="center" class="SAY1"> (´・ω・｀）ショボーン </p>
+
+
+<p>苦労した！ ⇒ でも、誰も見てくれていない！</p>
+<p align="center" class="SAY1"> (´・ω・｀）ショボーン </p>
+
+
+<p>一番パフォーマンスの悪い奴しぼりだせと言われた ⇒ ワシが一番パフォーマンス悪い!
+
+</p>
+<p align="center" class="SAY1"> (´・ω・｀）ショボーン </p>
+
+
+<p>決断を求められた！ ⇒ 何か目が回っていて、考えが全然まとまらない。気分が悪くて、吐き気までしてきた…もうだめぽ</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.04.17.1.1" href="#2003.04.17.1.1.">*18</a></sup>いや、多分、振り替えにしろとかいう意味でしょうが、そんな日はない</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.04.13">The Late Racing</A>
+<SMALL>　(2003.04.13)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.13.1" href="#2003.04.13.1"
+ style="text-decoration:none">意</a></td></tr></table>
+味もなく、のどかな風景を載せてみる。<img src="./n06.files/03-04-07_09-03.jpg" align="right" />
+<img src="./n06.files/03-04-13_14-09.jpg" align="right" />
+だが、しかし、これを撮っている際の私の心境はのどかどころの話ではない…ことになっている。なぜなら、もう始業の時刻であるのに、自宅近くの駅から撮っているのである<sup style="font-size:x-small"><a href="#2003.04.13.1.1" title="厳密には写真の一方だけです" name="2003.04.13.1.1.">*19</a></sup>。</p>
+<p>しかし、心配ご無用！こんなこともあろうかと、遅れる旨は電話をかけて連絡済みである。だが、いつまでもこんなことを続けていてはチームの要員に対して示しがつかない。そこで、この<STRIKE>DIO</STRIKE>タワシは考える。なぜ、遅刻するのであろうか。</p>
+<p>答えは簡単である。寝るのが遅いからである。なぜ、寝るのが遅いのか…それは帰宅が遅いから。今プロジェクトは「炎立つ」である。毎日毎日終電である。これでは寝不足になっても仕方あるまい。しかしながら、これについては他の皆と条件は同じ。皆は遅刻せずに出社している…なーんでか。</p>
+<p align="center" class="SAY1"> えぇい！ おいらは家が遠いんだよ！ </p>
+
+
+<p>ということで、翌日遅刻しないためであることを強調し、22:00 退社を My Rule とすることを<em>(本当に)</em>宣言したのであった。そうこれなら、ゆっくり風呂入って、メールの返事を書き<sup style="font-size:x-small"><a href="#2003.04.13.1.2" title="メールなんて書かずにさっさと寝ろよといわれるかもしれないが、勤務中に私用のメールなど一切書かない私にとっては、決して削ることのできない作業である。" name="2003.04.13.1.2.">*20</a></sup>、十分に眠れる時間は確保できるのである。これを実現するため、携帯電話のアラームを 21:45 に鳴るようセッティングし、なんとか人間的な生活を維持しつつ、難局を乗り切る計画は始動した……かのように見えた。</p>
+<p align="center" class="SAY2"> やっぱり、だめぽ </p>
+
+
+<p>帰ろうとすると邪魔が入るし、なんだかんだ言って、どうしても終電になってしまふ。結局、１週間のうち、22時に退社できたのは１日だけ。それでも時間が足らず、土日も出社してます<sup style="font-size:x-small"><a href="#2003.04.13.1.3" title="今年度残業時間 部門 No.1 をつっぱしってます" name="2003.04.13.1.3.">*21</a></sup>。もう会社の近くに下宿でもせんと、だめかな。</p>
+<ul>
+<li><b class="doken">Book</b>
+<a href="http://www.bk1.co.jp/cgi-bin/srch/srch_detail.cgi/3e3fd73de34fb01040d7?aid=&amp;bibid=02309650&amp;volno=0000" target="_blank">夢魔の王子 グイン・サーガ ８９</a>
+    <div class="COMMENT"> おや、アトキアのトールさん、黒竜将軍になってたんですか？「７人の魔道師」と設定が変わっているような…、はて？</div>
+</li>
+<li><a href="http://sawadaspecial.com/mt/archives/000214.html" target="_blank">sawadaspecial.com の擬音リンクス</a>
+    <div class="COMMENT"> 擬音好きにはたまりません。ずきゅーそ。</div>
+</li>
+<li><a href="http://www.fides.dti.ne.jp/~oka-t/cpp-labyrinth.html" target="_blank">C++ ラビリンス</a>
+    (<a href="http://kitaj.no-ip.com/tdiary/20030406.html#p02" target="_blank">今日のなんでやねん</a>より)
+    <div class="COMMENT"> これ読むと、やっぱ、ワシは C++ が好きなんだなぁとシミジミ。今の案件も C++ にしときゃよかった。先輩とか、結構 C++ 知ってる人多かったしなぁ。</div>
+</li>
+<li><b class="doken">Flash</b><a href="http://yuna.dip.jp/chiba.html" target="_blank">千葉! 滋賀!! 佐賀!!!</a>
+    (<a href="http://www.misokichi.com/" target="_blank">鈴木みそホームページ</a>より)
+    <div class="COMMENT"> 「新橋！」に似てますね。でも、おもしろい。</div>
+</li>
+<li><b class="doken">Flash</b>
+    <a href="http://www.geocities.co.jp/Technopolis/8161/" target="_blank">乾電池サイト</a></li>
+<li><b class="doken">2ch</b>
+    <a href="http://comic.2ch.net/test/read.cgi/shar/1049512584/-100" target="_blank">神聖モテモテガンダム</a>
+    <div class="COMMENT"> ぎゃわ〜。<sup style="font-size:x-small"><a href="#2003.04.13.1.4" title="決して「ぎょえ〜」ではありません。その差は微細にして多大なのです。" name="2003.04.13.1.4.">*22</a></sup></div>
+</li>
+<li><a href="http://www.teppi.com/topics/oracle.html" target="_blank">Oracle DBA 実験室</a></li>
+<li><a href="http://oln.oracle.co.jp/oln/japan/profile.main?cid=12" target="_blank">Oracle データベース管理 -Oracle8i Step up-</a>
+    <div class="COMMENT"> フラッシュで勉強できます。有償なものですが、無料で利用できるページもあります。</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.04.13.1.1" href="#2003.04.13.1.1.">*19</a></sup>厳密には写真の一方だけです</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.13.1.2" href="#2003.04.13.1.2.">*20</a></sup>メールなんて書かずにさっさと寝ろよといわれるかもしれないが、
+    勤務中に私用のメールなど一切書かない私にとっては、
+    決して削ることのできない作業である。
+</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.13.1.3" href="#2003.04.13.1.3.">*21</a></sup>今年度残業時間 部門 No.1 をつっぱしってます</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.04.13.1.4" href="#2003.04.13.1.4.">*22</a></sup>決して「ぎょえ〜」ではありません。その差は微細にして多大なのです。</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.04.06">エイプリルブルー</A>
+<SMALL>　(2003.04.06)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.06.1" href="#2003.04.06.1"
+ style="text-decoration:none">い</a></td></tr></table>
+やはや、死ぬかと思いました。</p>
+<p>一応、復活はしたのですが、どうも蘇生が失敗気味だったようで、頭の回転がよろしくありません。どれくらいよくないかというと、エディタでソースをスクロールさせると、見えなくなった部分にあった関数名が分からなくなってしまうくらいです。</p>
+<p align="center" class="SAY1"> その記憶力 = 80桁×40行程度 </p>
+
+
+<p>もう今後はプログラミングできんのちゃうかと思ったくらいですわ。幸い、昨日・今日になってボチボチ回復してきたのか、ようやっと、満足に１本コードアップ。やっとかい。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.04.06.2" href="#2003.04.06.2"
+ style="text-decoration:none">入</a></td></tr></table>
+社以来の友人が退職。「出所者を見送る囚人」の心境を実感。</p>
+<p align="center" class="SAY2"> 漏れも、漏れも </p>
+
+
+<p>いつかはね…。</p>
+<ul>
+<li><b class="doken">2ch</b>
+    <a href="http://pc2.2ch.net/test/read.cgi/tech/1044210976/" target="_blank">&quot;Code of the Nerds&quot; Digital Mars C/C++</a>
+    <div class="COMMENT"> Digital Mars C/C++ のスレ。フリーのC/C++コンパイラなんだけど、なんで注目されないかなー。不遇だ！</div>
+</li>
+<li><a href="http://www.asahi.com/national/update/0326/003.html" target="_blank">イラクに残る市民団体代表「脱出考えている」と緊急声明</a>
+    <div class="COMMENT"> 「イラクの市民の生命と生存手段を守る行動は一定の目的を果たした」“一定の目的”って具体的に何？</div>
+</li>
+<li><a href="http://village.infoweb.ne.jp/~qadhafi/tvp.htm" target="_blank">ＴＶ欄パロのページ</a>
+/ <a href="http://www.edit.ne.jp/~shake/tvran.html" target="_blank">TV欄のページ</a>
+    (<a href="http://www.sawadaspecial.com/" target="_blank">sawadaspecial.com</a>より)
+
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.03.26">666 Internal Hayamar Error</A>
+<SMALL>　(2003.03.26)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.03.26.1" href="#2003.03.26.1"
+ style="text-decoration:none">昨</a></td></tr></table>
+晩は、隣人に風邪を感染させそうな勢いだったので、定時ダッシュ。かなり苦しかったので、飯食べて、薬のんで、そのまま寝てました。</p>
+<p align="center" class="SAY1"> 翌日の昼まで </p>
+
+
+<p>そのまま電話かけて、会社休みました。</p>
+<p>夜になると、ふとんの中でウェブ見られるくらいまでは回復してきました。明日は出社しないとね。でも、弱音吐きそうだ<tt>.:∵</tt>
+<em>(←吐いてる吐いてる)</em>。</p>
+<ul>
+<li><a href="http://slashdot.jp/article.pl?sid=03/03/23/163215" target="_blank">天本英世さん逝去</a></li>
+<li><a href="http://slashdot.jp/article.pl?sid=03/03/25/1445204" target="_blank">「マイコンBASICマガジン」休刊へ</a>
+    <div class="COMMENT"> 悲しいニュースばかりだ、うわぁーーーーん。</div>
+</li>
+<li><a href="http://slashdot.jp/article.pl?sid=03/03/24/0110223" target="_blank">クッキー特許発覚とAmazonがウェブ広告の特許を申請</a>
+    <div class="COMMENT"> 最低だな、Amazon.</div>
+</li>
+<li><a href="http://pc.watch.impress.co.jp/docs/2003/0325/epson.htm" target="_blank">エプソン、3万8千円の業務用USBテンキーボード</a>
+    <div class="COMMENT"> 特注することを考えると、非常によさそうですね。まじにめも。</div>
+</li>
+<li><a href="http://slashdot.jp/article.pl?sid=03/03/26/0814239" target="_blank">Red Hat 9、もうすぐリリース</a>
+    <div class="COMMENT"> ＝ Red Hat 6 のサポート終了ということですか。まぁ、いいけどね。どうせ、それ以前に Oracle のサポート切れちゃうから、Advanced Server に移行しないといけないし。</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.03.23">げほげほ…だめぽ</A>
+<SMALL>　(2003.03.23)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.03.23.1" href="#2003.03.23.1"
+ style="text-decoration:none">昨</a></td></tr></table>
+日は休日出勤だったんですが、行く途中、ソフマップに寄ってみました。がーん、VAIO C1MZX 販売終了してたよ…。前の C1MSX もこんな調子で買い損ねてしまったなぁ。慎重すぎ＞わし。今度出たら、もう通販で買ってしまおう。</p>
+<p>んでもって今日。本当は出社するつもりでしたが、なんか喉の調子も悪く、ちょっとしんどかったので、挫けて休んでしまいました。そしたら、案の定、午後からどんどん辛くなってきました。こりゃ、完全に風邪ひいてるではないですか。</p>
+<p>うーん、来週の週末はまたスキーなのだが…、耐えられるか、わし。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.03.23.2" href="#2003.03.23.2"
+ style="text-decoration:none">再</a></td></tr></table>
+び私が購読を始めました <a href="http://www.sankei.co.jp" target="_blank">産経新聞</a>で<a href="http://www.sankei.co.jp/news/030322/morning/column.htm" target="_blank">誉められていた</a>ので、読んで見ました、<a href="http://www.kantei.go.jp/jp/koizumispeech/2003/03/20kaiken.html" target="_blank">小泉首相の演説</a>。</p>
+<p align="center" class="SAY2"> やるな、小泉首相 </p>
+
+
+<p>とはいえ、産経はちょっと右寄りなところがあり、たまたまその主張が産経好みだったから誉めたというのも無きにしもあらず…かな。概ね同意なんですけどね。なんだかんだ言って、日本を守ってくれるのは、自衛隊と米軍だけなんですよ。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.03.23.3" href="#2003.03.23.3"
+ style="text-decoration:none">ウ</a></td></tr></table>
+ェブブラウザとして Opera を使っているのは前にも書いたと思いますが、最近、マウスジェスチャーとやらを覚えました。右ボタンを動かしながら、マウスカーソルを動かすと、いろんな操作ができるというものですが、マウスの移動量が思った以上に少なめで、重宝しそうです。</p>
+<p>私は「→」進む、「←」戻る、「↓→」でクローズ、「↑←」で上位フォルダー移動などを専ら利用していますが、特にタブブラウザ化で、やたらクローズの回数が増えており、[X]ボタン/タブタイトルまでマウスカーソルを移動しなくて済むのでかなり楽です。</p>
+<p align="center" class="SAY1"> 錯覚かもしれませんが</p>
+
+
+<p>これで、当分 Opera 6 を捨てられません、はい</p>
+<p align="center" class="SAY2"> 7 じゃなくて 6 かよ！</p>
+
+
+<p>Mozilla もサポートしてたような気もしますけどね。</p>
+<ul>
+<li><a href="http://www.playoffline.com/fc/slide/" target="_blank">世界初&quot;カセットずらし&quot;をエミュレートしてみる</a>
+    (<a href="http://210.143.110.44/diaryweb/?200303c&amp;to=200303222#200303222" target="_blank">hirax.net</a>
+    より)
+    <div class="COMMENT"> すごいもんですね。故障の類の不可解な現象を、見事に原理まで説明したところ、本来の意味(?)でのシミューレション/エミュレーションかと。すばらしい。</div>
+</li>
+<li><a href="http://slashdot.jp/article.pl?sid=03/03/22/0059239" target="_blank"><tt>[/.]</tt> 世界中でウェブサーバのクラッキングが急増</a>
+    <div class="COMMENT"> 注目すべきは、<a href="http://slashdot.jp/comments.pl?sid=82701&amp;op=&amp;threshold=-1&amp;commentsort=0&amp;mode=thread&amp;startat=&amp;pid=284066#284094" target="_blank">このコメント</a>以降のスレッド。物理的に(勉強すれば)出来ることと、マンパワー的に(人材不足で)できないことの違いに対する理解の差が出てますね。</div>
+</li>
+<li><a href="http://www.geinin.jp/" target="_blank">geinin.jp</a>
+(<a href="http://members.jcom.home.ne.jp/sarasiru/nikki.html#2003_3_18" target="_blank">Tentative</a>より)
+    <div class="COMMENT"> 芸人さん情報サイトだそうです。芸人さんの経歴とか本名とかが載っていて、それだけでも結構へーという感じです。</div>
+</li>
+<li><a href="http://www.akaokoichi.net/weblog/" target="_blank">日本ウェブログ学会</a>
+    (<a href="http://members.jcom.home.ne.jp/sarasiru/nikki.html#2003_3_14" target="_blank">TentativeName.</a>より)
+    <div class="COMMENT"> なんだかなー。(参考：<a href="http://jba.ja.bz/archives/cat_forum.php" target="_blank">Japan Blogging Association</a>)</div>
+</li>
+<li><a href="http://www.routrek.co.jp/product/guevara.html" target="_blank">Terminal Emulator &lt;Guevara&gt;</a>
+    (<a href="http://kitaj.no-ip.com/tdiary/20030323.html#p07" target="_blank">今日のなんでやねん</a>より)
+    <div class="COMMENT"> タブ型Windows用ターミナル、ついにキターーーー。こんなソフトを待ってましたよ。しかも日本語版。でも、要<a href="http://www.routrek.co.jp/download/dotnetfx.exe" target="_blank"><tt>.net</tt> Framework (22MB)</a>なのが…。ちょっと、古いマシンでは重いですね。</div>
+</li>
+</ul>
+
+
+<!--section-->
+<!--index:2003.05.04:神の最前線プログラマ-->
+<!--index:2003.05.02:断固拒否するする-->
+<!--index:2003.04.27:リファレンスマニア-->
+<!--index:2003.04.26:醤油解説-->
+<!--index:2003.04.25:真夜中のシューティングプログラマ-->
+<!--index:2003.04.21:御堂筋を駆ける-->
+<!--index:2003.04.19:マルコヴィッチのモナー穴-->
+<!--index:2003.04.18:最終日東館壁際の攻防-->
+<!--index:2003.04.17:鬱るんです-->
+<!--index:2003.04.13:The Late Racing-->
+<!--index:2003.04.06:エイプリルブルー-->
+<!--index:2003.03.26:666 Internal Hayamar Error-->
+<!--index:2003.03.23:げほげほ…だめぽ-->
+</body>
+</HTML>

@@ -1,0 +1,30 @@
+!!! ((title [Perl] strictモジュールがある時だけ use strict したい))
+
+「今時 strict モジュールが無い環境なんてあるの？」って感じですが、
+@nifty の http://homepage.nifty.com/athomepage.htm{旧@homepage} なんかはそうです。
+もっとも、さすがに新規登録はもうやってないようです。
+
+* http://iandeth.dyndns.org/mt/ian/archives/000592.html{iandeth. - Perl の use と require の違い}
+
+をヒントに書いてみました。
+
+8<
+BEGIN{
+    eval{ require 'strict.pm';   }; strict  ->import() unless $@;
+    eval{ require 'warnings.pm'; }; warnings->import() unless $@;
+}
+>8
+
+試しに、いきなり「$ver = "hoge";」という文を入れてみたら、ちゃんと
+8<
+$ perl wifky.pl
+Global symbol "$ver" requires explicit package name at wifky.pl line 9.
+Execution of wifky.pl aborted due to compilation errors.
+>8
+
+となりました。これを、このまま @homepage へアップしたところ、
+@homepage には strict モジュールがないため、エラーもなく動作しました。
+
+@nifty 対応をうたっている wifky は今までテスト中は use strict して、
+配布する際に外すってことをやってましたが、
+今後はそういうことをしなくて済みそうです。

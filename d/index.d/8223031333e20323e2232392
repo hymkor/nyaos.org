@@ -1,0 +1,38 @@
+<<NYAOS内蔵LuaのDBCS対応>>
+
+文字列リテラルの中に「ソ」とか「ゾ」等、2バイト目に \ や ] が含まれる文字があっても、
+文字列終結とみなさないという修正を Lua 本体にしたんですけどね
+
+* https://bitbucket.org/zetamatta/nyaos3000/downloads/lua-5.2.1-dbcspatch-20130221.diff.gz
+
+これを含む NYAOS のバージョンナンバーどうしましょうかね。
+まぁ、素直にマイナーバージョン(a.b.c_d の c)を上げときますか。
+
+ちなみに、触ったのはリテラルだけで、string.* 系関数には何ら手を入れていません。
+そういう人は「パターン」ではなく、COM の方を使えばいいと思いまーす。
+
+8<
+local re=nyaos.create_object("VBScript.RegExp")
+
+re.Pattern = "[いえ]"
+re.IgnoreCase = true
+re.Global = true
+
+local match=re:Execute("あいうえお")
+for i=0,match.Count-1 do
+    print( (i+1) .. ":" .. match:Item(i).Value )
+end
+>8
+
+8<
+[C:Hayama]
+$ nyaos regtest.lua
+1:い
+2:え
+[C:Hayama]
+$
+>8
+
+しかし、Lua のメソッドコールで「:」を使わなくてはいけないのをよく忘れてしまうなぁ。
+
+* 参考: http://officetanaka.net/excel/vba/tips/tips38.htm{Office TANAKA - Excel VBA Tips[正規表現によるマッチング]}

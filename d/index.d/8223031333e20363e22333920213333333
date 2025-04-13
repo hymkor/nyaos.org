@@ -1,0 +1,44 @@
+!!! ((title 超タイニーコマンドラインシェル NYAOS-2199 #golangjp))
+
+補完がねぇ、ヒストリもねぇ、SET もねぇし、CD もねぇ！
+おら、こんなコマンドラインシェル嫌だぁ～、
+おら、こんなコマンドラインシェル嫌だぁ～
+
+8<
+package main
+
+import "fmt"
+import "os"
+import "os/exec"
+//import "strings"
+//import "reflect"
+
+import "bitbucket.org/zetamatta/conio"
+
+func main(){
+        wd,_ := os.Getwd()
+        for{
+                fmt.Printf("%s\n$ ",wd)
+                line := conio.ReadLine()
+                if line == "exit" {
+                        break
+                }
+                //argv := strings.Split(line," ")
+                //if len(argv) <= 0 {
+                //      continue
+                //}
+                cmd := exec.Command("cmd.exe","/c",line)
+                cmd.Stdin  = os.Stdin
+                cmd.Stdout = os.Stdout
+                cmd.Stderr = os.Stderr
+                cmd.Run()
+        }
+}
+>8
+
+えーと、カレントディレクトリで「nyaos4k.go」という名前で保存してもらって、
+「go get」「go run nyaos4k.go」で動くと思います。
+処理は全て CMD.EXE 丸投げですわ。
+
+いや、https://twitter.com/hymkor/status/347871697573117952{NYAOS-4000} は、まじめに作りますよ、えぇ。
+ただ、健康とか家の問題で、いつベーパーウェアになるか、分かったもんではありませんが。

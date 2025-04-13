@@ -1,0 +1,106 @@
+<<((lb))tDiary((rb)) 改名 >>
+
+RemoteTD は、EditialT と改名しました。
+ダウンロードは[p/index.html|http://nyaos.org/p/index.html]より、どうぞ。
+使い方も、RD 形式で、=begin 〜 =end 行に書いておきました。
+(ただし、rdtool でコンパイルしてねーから、文法エラーになるかもしんないけど)
+
+わたしの場合、日記は書き溜めて((fn 日付は最後の日のしちまっている))、
+推敲して Up というパターンが多いから、やっぱり作って正解でした。
+起動するのに、いちいちコマンドプロンプトを起動させないと
+いけないのが面倒ですが。
+
+<<((lb))NYAOS((rb)) 挑戦状キターーーーー>>
+
+トップページで、
+
+<blockquote>
+There are no pages written with English but here. Have any complaint ,
+send me it with e-mail. I can't say that zero is the possibility to 
+re-write pages with English.
+</blockquote>
+
+だなんて、えー格好して書いてたら、本当に
+
+<blockquote>
+Is there a chance for me to see an english description of NYA*?
+</blockquote>
+
+って来ちゃったよ。
+どうやら、今まで、NYAOS 1.65 (当然ながら for OS/2)を
+(英語の)ドキュメント無しで使っていたという兵(つわもの)のようで…。
+南蛮の OS/2 user のパワーを侮っていたよ。
+
+とりあえず、うろたえることにしよう。
+（返事早く書いてやれって）
+
+<<オージンジ！オージンジ！>>
+
+セキュアルームに置いてある PC が Windows98 ってのは、どうよ。
+クライアントプログラムの動作要件、満たしてないぢゃん。
+んでもって、USB メモリが認識できなくて、
+フロッピードライブもついてないと来た日には、
+手足を縛った状態で、決死のダイビングしろって言ってるようなもんだ。
+代わりの PC を持ち込むことは禁止されているし。
+
+これで、どうやってメンテナンスをしろと…。
+telnet さえ出来りゃいいってもんぢゃねーぞ。いや、確かに昔
+「telnet さえできりゃ、どこでも仕事できるぞ、はっはっは」
+と豪語したことはあるけどさ。
+
+セキュリティー強化っていうのは理解できるんだけど、
+最終的には、モラルの問題なんだよね。。。
+持ち出す奴は、どんなに塀を高くしても、持ち出すと。
+
+こうして、効率を落すようなシバリを作るなら、
+それなりに別方面で負担が軽くなるような支援が欲しいところだけど、
+今のところ、担当者の頭数を減らす一方だからなぁ。
+サポート範囲が広くなり、てんやわんやになって、ぶち切れですよ。
+
+:P.S.
+:: 客先常駐が解除されたわけぢゃないですよ。今、当番ぢゃないだけ。
+
+<<((lb))おさんぽ((rb)) うろうろ>>
+
+* http://www4.ocn.ne.jp/~tmf00a/ASKJOHN.htm{
+    ASK JOHN ふぁんくらぶ(暫定版)} 
+    (http://sodium.dnsalias.com/sodium/diary/20040523.html#p03{
+	sodiumイオンにっき（Reprise）}より)
+((br))　海外のアニメファン。怖るべし。
+* http://www.enpitu.ne.jp/usr9/99905/{タクシーよもやま話}
+    (http://papalagi.org/diary/200405.html#20040524{
+	hard で loxse な 日々}より)
+((br))　あとで読む
+*  http://www.page.sannet.ne.jp/mnagai/msj/pgm_lang.htm{
+    マイクロソフト・ジョークス／プログラミング言語が女性なら}
+    (Dr.Hammer より)
+* http://support.microsoft.com/default.aspx?scid=kb;JA;190355{
+    190355 - クイック起動ツール バーに ((lb))デスクトップの表示((rb)) アイコンを
+    再登録する方法} 
+    ( http://www.otsune.com/diary/2004/05/24.html#200405242{
+	void GraphicWizardsLair( void ); // }より)
+* http://x51.org/x/04/05/2658.php{X51.ORG : チワワは犬に非ず}
+((br))　そうか、猿だったのか（違います）
+* http://jeff.ecjapan.jp/archives/000144.html{srd.yahoo.co.jpの謎}
+((br))　そうそう、気になってたんですよ、これ。
+	たまに リファラに残ってんですよね。
+* http://japan.cnet.com/news/ent/story/0,2000047623,20068910,00.htm?ref=rss{
+    住商情報システム、プログラミング言語「Curl」の知的財産を買収}
+((br))　<cite>「Javaと異なり、クライアント側でプログラム処理を行う
+	    リッチクライアント型の言語だ」</cite>
+((br))　あのー、アプレットの立場は…。
+	今なら<strike>逝ける</strike>と思うんですが、
+	Javaアプレットも(無理かな？)。
+	ぼちぼち見直されなかな。
+* http://www108.sakura.ne.jp/~fun_bolt/bbsnote.cgi?fc=repost&l=1564{
+    Ａ級ヘビーモビル　ゴッジェ}
+((br))　今、http://www108.sakura.ne.jp/~fun_bolt/{糞ボルト＠落描道場}では、
+	ヘビーモビル祭りが開催されているようです。
+* http://www.atmarkit.co.jp/flinux/rensai/linuxtips/594bigwindowmv.html{
+    ＠IT：デスクトップよりも大きいウィンドウを操作するには}
+((br))　そうだったのか！
+* http://www.seraphyware.jp/dev/tips/java.tips.designbycontract.html{
+    正しく安全な例外処理}
+    (http://www.fieldnotes.jp/?date=20040528{ふぃーるどのーつ}より)
+((br))　C++ の throw の扱いは、確かにちょっと意味ないねぇ。
+    Java の throw<b>s</b>相当まで厳しければいいのに。

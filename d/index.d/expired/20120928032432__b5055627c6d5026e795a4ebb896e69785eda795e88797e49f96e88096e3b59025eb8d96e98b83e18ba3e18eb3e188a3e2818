@@ -1,0 +1,96 @@
+!!! 元ネタ
+
+!! http://d.hatena.ne.jp/kiyohero/20051030/1130689308{ため日記 - プログラミング講座第2回}
+
+8<
+#!/usr/bin/perl
+use strict;
+
+my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime(time);
+my $date = sprintf("%04d/%02d/%02d %02d:%02d:%02d", $year + 1900, $mon + 1, $mday, $hour, $min, $sec);
+print $date;
+>8
+
+確かに格好はよくないかもしれないが、
+
+* 誰でも意味が分かる
+* 組み込み関数だけなので速い
+* たいていの環境で動く
+
+という長所があり、そう悪くないと思う。
+
+!!! マジ方面
+
+!! http://d.hatena.ne.jp/naoya/20051031/1130710931{
+    naoyaのはてなダイアリー 
+    - きよへろのPerlコードをリファクタしようのコーナー No.2}
+
+8<
+#!/usr/local/bin/perl
+use strict;
+use warnings;
+use Time::Piece;
+
+my $lt = localtime;
+printf "%s %s\n", $lt->ymd('/'), $lt->hms;
+>8
+
+格好いいが、非標準ライブラリを使っており、
+自由度の高い環境でないと使用は難しい。
+
+!! http://nais.to/~yto/clog/2005-10-31-1.html{[を] Perlリファクタリング道場（偽） 2}
+
+8<
+use POSIX strftime;
+my $date = strftime "%Y/%m/%d %H:%M:%S", localtime;
+print $date,"\n";  
+>8
+
+標準ライブラリを使っており、おすすめの方法だと思う。
+
+!! http://d.hatena.ne.jp/hyuki/20051031{結城浩のはてな日記}
+
+8<
+print ''.localtime;
+>8
+
+localtime からスカラーコンテキストで値を取り出すとは、
+さすがとしか言いようがない。
+表示が YYYY/MM/DD HH24:MI:SS であれば、完璧だったのだが。
+おしい。
+
+
+!! [[わし@11/03|(2005.11.03)]]
+
+8<
+my @tm=localtime;
+printf('%04d/%02d/%02d %02d:%02d:%02d',1900+$tm[5],1+$tm[4],@tm[3,2,1,0]);
+>8
+
+ため日記のコードをコンパクトにしただけ。わし的スタンダード。
+
+!!! ネタ方面
+
+!! [[わし@10/31|(2005.10.31)]]
+
+8<
+print `date "+%Y/%m/%d %H:%M:%S"`;
+>8
+
+!! [いろいろ再構築したいリストラ日記
+    |http://www7.plala.or.jp/yatonokami/nikki/diary_now.html]
+
+8<
+#!/usr/bin/perl
+exec date
+>8
+
+!! http://la.ma.la/blog/diary_200511011141.htm{最速インターフェース研究会 :: 現在の日時を返すスクリプト}
+
+8<
+#!/usr/bin/perl
+print `ruby -e "puts Time.now.strftime('%Y/%m/%d')"`
+>8
+
+
+

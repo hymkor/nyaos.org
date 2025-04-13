@@ -1,0 +1,276 @@
+<HTML>
+<HEAD>
+    <META NAME="ROBOTS" CONTENTS="NOINDEX, NOFOLLOW" />
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+    <TITLE>The HAYAMA Script Part-VIII</TITLE>
+    <STYLE TYPE="text/css">
+    <!--
+	.X{color:black;background-color:white;font-weight:bold}
+    -->
+    </STYLE>
+</HEAD>
+<BODY	bgcolor="#000000" text="#FFFFFF" link="#00FF00" vlink="#00AA00"
+	alink = "#FF0000">
+<DIV ALIGN=RIGHT>
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><A HREF="10.html">未来へ</A>
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><a href="8.html">過去へ</A>　
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><a href="./index.html">目次へ</A>　
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><A HREF="../index.html">扉頁へ</A>
+</DIV>
+<HR>
+
+<H3><A NAME="past"><FONT COLOR="#00FFFF"><I
+>♪ がっこう、過去、しずかに〜</I></FONT></A> (3/21)</H3>
+
+<FONT SIZE=7>大</FONT>
+<BR>学の後輩から、ぼちぼちアカウント消しますよ〜という連絡が来ました。
+で、思い出したのが、旧約葉山文書(余談)。
+他の人がリンクで引用していたので、これだけを ferrari6 の方へ<!--
+-->置きっぱなしにしていたわけですが、万が一に供え、
+本ベクターページの方へ引越しました。
+テキストファイル９個だから、軽い軽い。
+<P>
+で、ひさびさに、<A HREF="yodan.html">旧約葉山文書</A>を読む。
+<P ALIGN=CENTER>
+  <FONT COLOR="#FF00FF" SIZE=+1>う〜む、こいつはもう、恥かしい</FONT>
+</P>
+なんか「もしかしたら、半年、一年バージョンアップできないかもしれません」
+などと言っている…。この一年をふりかえると、大学時代とペースが<!--
+-->変わっとらんでわないか。
+葉山文書も更新頻度こそ、週一に落ちているけど、一回あたりの量は増えているし…。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>バ</FONT><BR>
+ージョンアップといえば、何と二月は全くソフトをリリースしていなかっ<!--
+-->たんですねぇ〜わたし。正確には 50日ですか。う〜ん。
+ということで、この連休の第１日目は eff の ver.up(0.04→0.10)をするとともに、
+ちびちび、bugfix をしていた NYAOS を 1.49 として公開しました。
+両者ともに、結構なバグをかかえていたので、
+いい加減早く出さないといけなかったんですが、
+最近は仲々ゆっくり腰を落着けて、プログラムを触れる気分になれなかったもので、
+えらくお待たせいたしました。
+<P>
+でも、一番、お待たせしているのは ELL なんですよね。
+本当だったら、ELL 1.11 は ELL 1.10 の出した直後にでも出そうと思って<!--
+-->んですが、ついつい、後回しにしてしまって、そのあげく、未だに出して<!--
+-->いない始末。う〜ん、ごめんなさい。
+これから、すぐに出すとはお約束できかねますが、eff と NYAOS も落ちついたら、
+さっさと出しますので。m(__)m
+
+<HR>
+
+<H3><A NAME="love2emx09d"><FONT COLOR="#00FFFF"><I
+>0.9d へ愛を込めて...</I></FONT></A> (3/14)</H3>
+
+<FONT SIZE=7>つ</FONT><BR>
+いに、emx 0.9d に手を出してしまった…。
+ELL と NYAOS のコードで、さっそく try〜throw〜catch を使ってしまいました。
+でも、外部から見える機能が増えるわけではないので、
+使用者の方々にしてみれば、ダウンロードする手間が増えるだけの
+迷惑に違いありませんね。でも〜、
+<P ALIGN=CENTER>
+<FONT SIZE=+1 COLOR="#FFFF00">GCCの新しい機能が使いたいんだよぉぉぉ</FONT>
+</P>
+みなさま、プログラマーの自己満足を許してくださいませ！
+しかし、ふと疑問が…
+<P ALIGN=CENTER>
+  <FONT SIZE=+1 COLOR="#FF00FF">emx って、いつ 1.0 になるんだ？</FONT>
+</P>
+もしかして、永遠の 0.9 シリーズ？
+<P>
+余談ですが、emxlibc?.dll を使っていると、
+_nls_is_dbcs_lead関数が使えないのは 0.9c 同様なのが残念。
+というわけで、ずーっと、自前の DBCSテーブル取得ルーチンを使っている始末。
+DLL を使わなければいいんですけどね。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>◎</FONT><BR>
+S/2 がふっとんでしまったぁぁぁぁぁぁー。
+前から(いや今でも)、その徴候はあって
+(前にも書いたけど)shutdown時に sendmail を終了させようとすると凍って、
+CTRL-ALT-DEL しか効かなくなることが多かったんですよね。
+その度に、別ドライブで起動させて、chkdsk をかけていたのだけれども、
+最近、それをさぼっていたら…見事にとんでしまったというわけです。
+この徴候 FX00505 を適用してからのものなんで…やめといた方がよかったのかな。
+<P>
+さいわい、ディスクが飛んだわけではなく、GUI が死んだだけのようなので、
+別ドライブにOSだけ再インストールして、
+従来のドライブのホームディレクトリ以下をそのまま利用することにしました。
+死んだのは書き欠けのメールのみ。あぁ、よかった。
+<P>
+しかし、その際に NYAOS のバグ発見。
+どうも CANNA.DLL が存在するのに、TCP/IP で loopback のホスト名？<!--
+-->の設定がされていないと、見事に落ちてしまうのですな。
+(cannaserver が起動していない程度ではへーき)。
+一応、いろいろとエラーチェックの if を入れたものの、
+余り、NYAOS を満足に使えない環境というのも居心地が悪いので、<!--
+-->さっさと設定してしまったので、もはやエラーチェック不能。
+どうしよ…。また、設定外すかな…でも、いちいち、リブートすんの面倒だし…
+<P ALIGN=CENTER>
+	<FONT COLOR="#FFFF00" SIZE=+1>まぁ、いいか</FONT><BR>
+	<FONT COLOR="#FF00FF" SIZE=+1>おい…</FONT>
+</P>
+<FONT SIZE=7>Ｎ</FONT><BR>ifty Serve へ入って、ほぼ一ヶ月。
+ほとんど busy 状態にはならないので、ネットサーフィン(死語…恥ずかしー)に
+ついてはほとんど不満なし。
+メイルを pop で取得できるのもよし！
+フォーラムの記事を nntp で取得できるのもよし！
+羽曳野から市内局番で電話できるアクセスポイント(八尾)があるのもよし！
+だが、しかし、
+<P ALIGN=CENTER>
+	<FONT SIZE=7 COLOR="#FF00FF">くわっ！</FONT>
+</P>
+メイルで、From: のアドレスを <SPAN CLASS=X>あぼーん</SPAN>@ijk.com にしても、
+強制的に ZX<SPAN CLASS=X>あぼーん</SPAN>@nifty.ne.jp になってしまうのが、なんとも…。
+他に市内局番のプロバイダーというと、asahi-net があるけど、
+メイルアドレスだけでプロバイダー変わるのもなぁー。う〜む。
+<P>
+聞くところによると、xxxxx.<SPAN CLASS=X>あぼーん</SPAN>@nifty.ne.jp みたいなメイルアドレスは
+申請できるみたいなんですけどね。
+でも、これじゃあ、メイルアドレスをプロバイダと独立させておくメリットが
+なくなりますし。くまったなぁ。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<A HREF="http://hp.vector.co.jp/authors/VA014690/Misc.html#99.3.8"
+><FONT SIZE=7>Ｓ</FONT><BR>
+tallman 氏が、Linux の名称を GNU/Linux あるいは Lignux にしろ〜
+とおっしゃっているつー</A>のは、ちょっと前くらいの、
+Linux Japan にも書いてありましたね。
+結局は、Linux Community の方々は、丁重に無視したそうですけど。
+<P>
+私は、Linux の Linux たるアイデンティティーはカーネルしか無いんだから、
+名称は Linux でいいんでないかと思います。
+だって、GNU のソフトは、多くの UNIX系OS、OS/2 でも動く、
+OS を越えたものっていうイメージがありますし。
+まぁ、そこんとこの判断は、パッケージを作る側の判断なんでしょうが…。
+Debian は「Debian GNU/Linux」って名前にしてますしね。
+<P>
+ところで、Richard M.Stallman 氏の略称として、Linux Japan で
+RMS って書いてましたけど、RMS と書くとつい、
+リック=ディアスの型番を思い出すのは私だけでしょうなぁ。
+<BR>＃ RMS-99 だったかな。ちなみに、RMS-100(MSN-100)は百式。
+<BR>＃ 永野氏デザインのモビルスーツはどことなく、モータヘッド。
+<P>
+しかし、このページ(というか私)。更新が週一なので、
+毎日に近い更新の方へのコメントが全く追いつかない
+(いや、必ずしもしなくてもいいんだけども)。
+そればかりか、忘れていると二週間後になってしまふ。
+こりゃ、いかんというわけで、更新の頻度を高くしたいのだが
+<P ALIGN=CENTER>
+	<FONT SIZE=+1 COLOR="#FF00FF">タイトルを思いつかないよ〜</FONT>
+</P>
+面白いかは、どうかは別にしまして...
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>よ</FONT><BR>
+く考えると、私は会社の現チームでまともにコーディングさせて<!--
+-->もらった記憶が無いぞ。
+いや、ちょっと前に Java とか CORBA とかやったけど、
+それは出稼ぎ先のチームだったし…。
+現チームでは、データ構造とかアルゴリズムとかで全然悩んだ記憶がない…
+う〜ん、もうちょっと自己主張した方がいいのかな。
+最近…というか、毎日のように自分の将来のことばかり考える毎日。
+<BR>＃ スパルタカス的日本語につき、ツッコミ無用アルヨ
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>Ｗ</FONT><BR>hyPic 警報発令。
+信頼できる筋<FONT SIZE=-1 COLOR="#888888">(注意 原作者本人)</FONT>によると、
+オリジナル WhyPic の 1.3 がでそうな雰囲気が漂ってます。
+(なんかベンチマーク結果とか、見せてくれたしぃぃぃ)
+<P>
+当初、K6 に特化した機能(3D NOW だっけか)のみの高速化だけかと思いきや、
+Pentium系でも FPU のレジスタを転送用の転用しての高速化を実現したそうです。
+ただ、K6 の機能を使ったソフトは、<!--
+-->その部分のソース配布に制限がついてしまうそうで…
+どうする、YG師！
+
+<HR>
+<H3><A NAME="netsaver"><FONT COLOR="#00FFFF"><I
+>たたかえ、僕らのネットセイバー</I></FONT></A> (3/7)</H3>
+
+<FONT SIZE=7>気</FONT><BR>
+がつくと、<A HREF="http://www.nhash.pos.to/nhash/Pages/aboutns.html"
+>NetSaver のページ</A>が引越しをしていた...
+ロゴもかっこよくなっているような気がしないでもないし。
+<P>
+NetSaver を簡単に言うと、情報量がほとんどないわりに、
+転送量だけは多くて、ブラウザによっては全く読めないようなページを作るのを
+やめようという<B>運動</B>(?)です。
+<P>
+かくゆう本ページも Web Explorer では、
+読めんことはないけど、ちょっとみっともないんですけどね
+(&lt;P ALIGN=CENTER&gt;〜&lt;/P&gt; とテーブルがひっかかるはず)。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>本</FONT><BR>当は、この日曜は出勤するつもりだったのですが、
+土曜の晩に<A HREF="http://www.future-ta.com/future/"
+>友人</A>宅で飲んだ、そのダメージが残っていて、
+結局休んでしまいました。とほほ。
+昼起きたら、14:30 だったからなぁ
+(また、ガサラキ見られなかった…)。
+まぁ、会社の誰かに日曜出社するって言ってなかったから、
+別に問題はないのだけれども…
+<P>
+月曜日、朝一で出社しないといけないや、こりゃ。
+<BR>＃ それでも間に合うか心配であるのだが...
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>N</FONT><BR>YAOS のバグリポートをいただきました。
+ある条件が揃うと「<TT>bindkey[enter]</TT>」で NYAOS が落ちてしまう模様。
+とりあえず、nyaos.rc はいただいているので、その条件を調べるのは
+時間の問題なんですが、時間と体力が今無いので、
+しばらく先になりそうです。もうしわけありません。
+<P>
+ということで、今週の更新は、このあたりにさせていただきます。
+真ゲッターロボでも見ながら、休養をとろう(って、もう夕方ぢゃん)。
+<P>
+しかし、いつまでもこのように時間の無い体制というのも、
+かなんことだなぁ。なんとかしないと…(どうするんだ!?)
+<HR>
+<FONT COLOR="#EEEEAA">▼</FONT><a href="8.html">過去へ</A>　
+<FONT COLOR="#EEEEAA">▼</FONT><a href="./index.html">目次へ</A>　
+<FONT COLOR="#EEEEAA">▼</FONT><A HREF="../index.html">扉頁へ</A>
+</BODY>
+</HTML>

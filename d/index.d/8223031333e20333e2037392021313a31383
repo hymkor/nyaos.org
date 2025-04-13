@@ -1,0 +1,39 @@
+<<((title [NYAOS][Vista][7] UAC が ln (fsutil.exe) の実行を阻止するのを回避する方法))>>
+
+せめて、sudo みたいに実行時にパスワードを入力すれば実行できるようにしたいね！
+
++ 最新の https://bitbucket.org/zetamatta/_nya.d/src/31e61ec998244a37b6ed538cbfd18023e2a407fc/ln.lua?at=default{ln.lnk} を落としてきて、更新する
++ GUI 操作で、CMD.EXE なり ckw か NYAOS を「管理者として実行(A)」
++ そのプロンプトから「net user administrator /active:yes」を実行して、
+  組み込みアカウントの「Administrator」を有効にする
++ 「コントロール パネル」→「ユーザー アカウントと家族のための安全設定」→「ユーザー アカウント」→「アカウントの管理」→「アカウントの変更」で、administor にパスワードを設定しておく
++ _nya に「option runas administrator」の一行を追加する
+
+これで UAC をオフにしなくとも ln (の背後にいる fsutil.exe など)が使えるようになる
+
+8<
+[C:Hayama]
+$ ls
+Contacts/          Links/             Saved Games/       agent.log
+Desktop/           MagicBriefcase.lnk Searches/          vimfiles/
+Documents/         Mercurial.ini      Videos/
+Downloads/         Music/             Virtual Machines/
+Favorites/         Pictures/          Wiki変更案.txt
+[C:Hayama]
+$ ln Wiki変更案.txt hoge.txt
+administrator のパスワードを入力してください:
+fsutil hardlink create "C:\Users\Hayama\hoge.txt" "C:\Users\Hayama\Wiki変更案.txt" をユーザー "HAYAMA-PC\administrator" として開始しています...
+[C:Hayama]
+$ ls
+Contacts/          Links/             Saved Games/       agent.log
+Desktop/           MagicBriefcase.lnk Searches/          hoge.txt
+Documents/         Mercurial.ini      Videos/            vimfiles/
+Downloads/         Music/             Virtual Machines/
+Favorites/         Pictures/          Wiki変更案.txt
+[C:Hayama]
+$
+>8
+
+今のところ、fsutil.exe のメッセージが一瞬で消えてしまうので、その辺、改善したいもんだね！
+
+* 参考：http://mikisky40.web.fc2.com/kohza/kohza54.html{やさしい講座　～第54回 Vista の機能をもっと深く知る ユーザーアカウント制御機能～}

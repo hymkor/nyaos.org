@@ -1,0 +1,35 @@
+* やはり、リアルタイムで反映されないと、イマイチだな ＞
+http://hpcgi2.nifty.com/hayamatta/wifky.pl?p=%5Bplugin%5D+%A1%D6%A4%CF%A4%C6%A5%D6%A1%D7%A5%A4%A5%F3%A5%AF%A5%EB%A1%BC%A5%C9{はてブぷらぐいん}
+
+<<タブ展開と古きコマンドども>>
+
+* http://blog.livedoor.jp/dankogai/archives/50475459.html{404 Blog Not Found:タブのスペース化はタブ幅よりも重要である}
+* http://gauc.no-ip.org/wiki.cgi/private?page=Blog%2F2006%2D4%2D30{Blog/2006-4-30 - Rocco の日記 - タブのスペース化はタブ幅よりも重要である}
+
+ふむ、1タブは 8 桁分、インデントは 4 文字単位というのが、
+古くからの伝統だと考えてきたのですが
+(emacs の Cモードって、そんな感じて展開しない？)、
+そうでもなさそうなので、wifky 1.0.1 くらいから、
+全部空白化するようにしました。
+
+しかし、
+[/usr/bin/expand|http://www.linux.or.jp/JM/html/GNU_textutils/man1/expand.1.html]
+というタブ展開の専用コマンドが標準であるのに、なんで、みんなわざわざ 1-Linear 
+を書くんでしょうかね。vi からなら「!G expand↓」だけで一発変換なのに。
+
+要は知られていないということですが、
+古くからあるコマンドには、こういった
+「なんで、こんなことくらいで専用コマンドがあるの！？」
+的な単機能なものが多いですね。
+
+:http://www.linux.or.jp/JM/html/GlNU_textutils/man1/tac.1.html{tac}
+:: テキストを行を逆順に出力する。
+: http://www.linux.or.jp/JM/html/GNU_sh-utils/man1/yes.1.html{yes}
+:: 同じ文字列を無限に出力する(「y」以外も使えることに注意)。
+: http://www.linux.or.jp/JM/html/gnumaniak/man1/seq.1.html{seq}
+:: 「seq 1 10」で 1 から 10 を表示する。
+
+たいてのものは、gawk , Perl で代替できるんですが。
+でも、シェルスクリプトのほんの一角のしょうもない用途に、
+仰々しく Perl が出てくると、ちょっとアンバランスが気がするので、
+こういったコマンドは重宝しています。

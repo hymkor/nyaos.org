@@ -1,0 +1,8 @@
+||| UNIX/Linux | Windowsコマンドプロンプト
+|| su       | runas
+|| ifconfig | ipconfig
+|| grep     | findstr
+|| rm -rf   | rmdir /s
+|| diff     | fc ((fn * 実際は fc では差が分かりにくいので、完全一致しているかどうかくらいにしか使えない))
+
+* 余談ですが、vim ユーザならば、ファイルの比較は vimdiff (``vim -d FILE1 FILE2``) が便利です。

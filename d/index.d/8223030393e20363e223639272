@@ -1,0 +1,41 @@
+<<[Lua] Lua でも split を>>
+
+* >>{(2009.06.23)#p1}{[Lua] Lua にだって join はあるもん！}
+
+散々探したが、やはり Lua には split は無い。
+
+まぁ、イタレータを使わなきゃならんけど、
+まがりなりにもスクリプト言語だから、
+文字列を分割するのは、そう難しくはない。
+
+8<
+function split_as_csv(line)
+    local result= {}
+    for e in string.gmatch(line.."," , "([^,]*)," ) do
+        table.insert(result,e)
+    end
+    return result
+end
+
+csv=split_as_csv("foo,bar,,gar")
+for i=1,#csv do
+    print(csv[i])
+end
+>8
+
+文字列をカンマで分割する例。
+パターンマッチで、非カンマな部分を抽出してるだけ。
+ただ、連続するカンマの間に 0 文字の項目があると見做すために、
+少々めんどいパターンになっている。
+
+で、実行すると、こうなる。
+
+8<
+$ lua foo.lua
+foo
+bar
+
+gar
+>8
+
+ふむ、普通。

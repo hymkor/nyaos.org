@@ -1,0 +1,16 @@
+<<SEO対策>>
+
+Google で「日本語のページを検索」で、NYACUS を検索した時、
+http://nyaos.org/index.cgi?p=FrontPage.ja がトップに出ない。
+
+よく考えると、他の日本語ページからのリンクが未だ残っている
+
+* http://nyaos.org/p/nya/index_ja.html
+* http://nyaos.org/index_ja.html
+
+のリダイレクト先が http://nyaos.org/ という英語ページになっていた。
+これは、日本語のページとしてのSEO的にアレだ。
+
+ということで、リダイレクト先を
+http://nyaos.org/index.cgi?p=FrontPage.ja 
+にしてみた。どうだろうか？

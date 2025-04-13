@@ -1,0 +1,7 @@
+仮想サーバのクローンを作って、Mac アドレスを変更しても、
+うまく NIC が起動しない。
+
+http://d.hatena.ne.jp/ktat/20090716/1247745069{NICのデバイス名(eth0とか)が変わったら? - Practice of Programming}
+
+* /etc/udev/rules.d/70-persistent-net.rules を修正
+* rmmod e1000 ; modprobe e1000 ; service network restart で直った

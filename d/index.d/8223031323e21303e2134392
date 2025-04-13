@@ -1,0 +1,96 @@
+<<[メモ][CMD.EXE] バッククォート的なアレ>>
+
+WindowsXPのCMD.EXEでバッククォート的なことは、for文で出来る。
+
+nyados.cpp から「``#define VER "3.3.4_0"``」という行のバージョン文字列を取得するには
+
+8<
+@echo off
+for /F "tokens=3" %%s in ('findstr /R /C:"#define VER " nyados.cpp') do (
+    echo %%~s
+)
+>8
+
+8<
+$ ./mkpack_.cmd
+3.3.4_0
+>8
+
+で出来る。オプションについての詳しい解説は「for /?」「findstr /?」で確認可能
+(なので、敢えて書かない)。
+
+OS/2 の for は、以上の拡張には対応していない模様。
+よって、nyaos のビルドスクリプトには使えなさげ。とほほ
+
+<<[Lua] ソースからのバージョン文字列の抽出>>
+
+8<
+lua -e "for line in io.lines('nyados.cpp') do local m=line:match('#define VER \034([^\034]+)\034');if m then print(m) end end"
+>8
+
+nyaos のビルドの過程で、Lua の実行ファイルが得られるので、
+OS/2 ならまだこっちの方が使えるか。
+
+<<[Lua] なんとなく作った、NYAOS配布パッケージ作成スクリプト>>
+
+awk で出来ることは、だいたい Pure な Lua でも出来る。
+まぁ、冗長にはなるけどね。
+
+8<
+local dir={}
+local fd=io.popen('cmd /c \034dir /b\034','r')
+for line in fd:lines() do
+    line = string.gsub(line,'%s*$','')
+    dir[line] = true
+end
+io.close(fd)
+
+for line in io.lines('nyados.cpp') do
+    local m=string.match(line,'^#define VER \034([^\034]+)\034')
+    if m then
+        local OS=os.getenv('OS')
+        if OS and OS == 'Windows_NT' then
+            OS = 'win'
+        else
+            OS = 'os2'
+        end
+        local binzip = 'nyaos-'..m..'-'..OS..'.zip'
+        if not dir[binzip] then
+            os.execute('zip -9 '..binzip..
+                ' nyaos.exe nyaos_ja.txt nyaos_en.txt _nya')
+            os.execute('attrib +r '..binzip)
+        end
+        local srczip = 'nyaos-'..m..'-src.zip'
+        if not dir[srczip] then
+            os.execute('hg archive -t zip '..srczip)
+            os.execute('attrib +r '..srczip)
+        end
+        os.exit()
+    end
+end
+>8
+
+一部、ダブルクォートを \034 と表現しているのは、
+インラインで Lua を書く時の癖みたいなもんです。
+
+<<[nfutils] 不具合はリリースした途端に出始めるもんだね>>
+
+http://www.nyaos.org/index.cgi?p=NYAOS+3000{nfutils} ==0.1_2=={ 0.1_3} を公開しました。
+
+* (0.1_0 → 0.1_1)
+** rm: 途中で存在しないファイルがあると、そこで削除を止めてしまわないようにした
+* (0.1_1 → 0.1_2)
+** rm: READONLY属性のついたファイルを消せなかった問題を修正
+* (0.1_2 → 0.1_3) '''[追記]'''
+** rm -f 時に READONLY 属性のついたファイルが消せなかった問題を修正
+
+あれですね。原稿を印刷してみて、はじめて誤字脱字に気付くみたいな
+
+<<NYAOS 3.3.4_0 を公開しました>>
+
+http://www.nyaos.org/index.cgi?p=NYAOS+3000
+
+* ウインドウタイトルを変更できるようになった(Windowsのみ) (@nocd5 氏コードマージ)
+* 内蔵 cls コマンド
+* カレントディレクトリ=%USERPROFILE% の時に、同じ_nyaを2回読み込まないようにした
+* g++ 4.7.0 警告対応

@@ -1,0 +1,21 @@
+<<<
+
+Part-I
+    OTRS と OTRS AG の歴史
+    担当者と顧客フロントエンドの概要
+    キュー構造の作成
+
+Part-II
+    管理者フロントエンドの説明
+    ( Config.pm )
+    SysConfig の説明
+
+Part-III
+    OTRS-ITSM の追加機能
+    タイプ・サービス・SLA・CMDB
+    OTRS-ITSM の管理者フロントエンド
+
+Part-IV
+    ITSM 変更管理機能
+
+>>>

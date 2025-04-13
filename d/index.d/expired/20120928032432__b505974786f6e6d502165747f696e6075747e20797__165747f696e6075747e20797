@@ -1,0 +1,145 @@
+"""
+autoinput.py - Yet another fileinput.py :
+
+* It can change the record separetor like AWK and Perl,
+  with the keyword parameter "rs" of getline() and input() 
+    or the global variable RS.
+
+* It *chops* record separetor automatically.
+
+* It has global variables like AWK:
+    - autoinput.FILENAME as fileinput.filename() 
+    - autoinput.NR       as fileinput.lineno()
+    - autoinput.FNR      as fileinput.filelineno()
+    - autoinput.RS       as record seperator (not supported by fileinput)
+      (default:"\n")
+    - autoinput.FS       as field seperator  (not supported by fileinput)
+      (default:None - not spliting automatically)
+
+* It is compatible with fileinput but keyword parameter: inplace.
+
+* It decodes data read (default:"utf8"->unicode)
+"""
+
+import codecs
+import sys
+import re
+
+NR = 0
+RS = "\n"
+FS = None
+_READ_MORE_LINE = True
+_READ_MORE_FILE = True
+
+def _preprocess(line,fs):
+    global NR,FNR
+    NR  += 1
+    FNR += 1
+    if fs is None:
+        a = fsf.split(line)
+        a.insert(0,line)
+        return tuple(a)
+    return line
+
+def getline(src="-",rs=None,encoding="utf8",fs=None):
+    """ awk-like getline.
+
+        <awk-code>
+            RS="\\n\\n"
+            while( (getline line < fname) > 0 ){
+                print line
+            }
+            close(fname)
+
+        <python with autoinput.py>
+            import autoinput
+            for line in autoinput.getline(fname,"\\n\\n"):
+                print line
+            # does not need close()
+
+        If fs is not None:
+
+            import autoinput
+            for line,col1,col2 in autoinput.getline(fname,rs="\n\n",fs="\s+"):
+                print line
+            # does not need close()
+
+    """
+    
+    global FNR,FILENAME,_READ_MORE_LINE
+
+    if src == "-" :
+        fp = sys.stdin
+    else:
+        fp = file(src)
+    fp = codecs.getreader(encoding)(fp)
+    rs = (rs or RS)
+    fs = (fs or FS)
+    if isinstance(fs,str):
+        fs = re.compile(fs)
+
+    FILENAME = src
+    FNR = 0
+    lines = []
+    while _READ_MORE_LINE :
+        while len(lines) <= 1:
+            buffer = fp.read(1024)
+            if not buffer:
+                if lines :
+                    yield _preprocess( lines[0] , fs )
+                if src != "-" :
+                    fp.close()
+                _READ_MORE_LINE = True
+                return
+            if lines :
+                lines = (lines[0]+buffer).split(rs)
+            else:
+                lines = buffer.split(rs)
+        yield _preprocess( lines.pop(0) , fs )
+    _READ_MORE_LINE = True
+
+def input(*opt):
+    """ 
+    """
+
+    global _READ_MORE_FILE
+    if len(sys.argv) > 1 :
+        for fn in sys.argv[1:]:
+            for line in getline(fn,*opt):
+                yield line
+            if not _READ_MORE_FILE : break
+    else:
+        for line in getline("-",*opt):
+            yield line
+    _READ_MORE_FILE = True
+
+def filename():
+    return FILENAME
+
+def lineno():
+    return NR
+
+def filelineno():
+    return FNR
+
+def isfirstline():
+    return FNR==1
+
+def isstdin():
+    return FILENAME == "-"
+
+def nextfile():
+    _READ_MORE_LINE = False
+
+def close():
+    _READ_MORE_LINE = False
+    _READ_MORE_FILE = False
+
+def _test():
+    print "Test 1: Record Seperator"
+    for line in input("\n\n"):
+        print "--(%d)--" % lineno()
+        print line
+
+if __name__ == '__main__' :
+    _test()

@@ -1,0 +1,82 @@
+http://my.opera.com/community/customize/skins/{
+Opera のスキンを換え}てみた。
+http://my.opera.com/community/customize/skins/comments.pl?t=read&c=20&skinid=2042&s=4{Neo}という奴にしたが、なかなか、よろしい。
+
+当分、これでいこう。
+
+<<((lb))D((rb)) ある日、stdin をば>>
+
+“Ｆ”氏のアレを待ちきれないので、
+標準入力向けのコードフィルターを作ろうとした
+（アプローチが正しいとか間違っているとか、
+細かいことは気にしないことにした）。
+
+<pre>
+import std.stream;
+
+int main(char[][] args){
+    char s;
+    while( stdin.read(s) , s != '\n' ){
+	stdout.printf("[%02X]",s);
+    }
+    stdout.printf("\n");
+    return 0;
+}
+</pre>
+
+ふむ。
+
+<pre>
+[d:rmcloned]dmd tststdin.d
+d:\usr\dmd\bin\..\..\dm\bin\link.exe tststdin,,,user32+kernel32/noi;
+[d:rmcloned]tststdin
+hogehoge
+[41AC68][41AC6F][41AC67][41AC65][41AC68][41AC6F][41AC67][41AC65][41AC0D]
+[d:rmcloned]tststdin
+ふむ。
+Error: not enough data in stream
+[d:rmcloned]
+</pre>
+
+>> もしかして、最上位ビットが立ってると、EOF 扱いなのか！？ <<
+
+もう…やめ！
+
+<<今週の「義経」>>
+
+松坂慶子は、何をやらせても、松坂慶子だなぁ。
+
+それは、シュワルツェネッガーに、
+何をやらせても、シュワルツェネッガーであるが如し。
+
+<<((lb))おさんぽ((rb)) 今日もどこかで痴財バトル>>
+
+@nifty の迷惑メールブロックって、日本語メールぜんぜん弾かないな…。
+だいぶと学習させてるつもりだったんだが。
+
+* http://1870.hito.thebbs.jp/Patron/1103510211{
+    猫にあわびを食べさせると耳が落ちる}
+    (http://www.zianplus.net/cgi-bin/zianews/index.cgi{自動ニュース作成}より)
+((br))　ギザ耳猫。かわいそ。
+    人間の食べ物を安易にネコにあげるもんぢゃありません。
+* http://sky.haun.org/d/?20050204#04-1{
+    特許侵害により一太郎の販売停止破棄を求めた裁判についてのおかしな解釈}
+(http://diary.imou.to/~AoiMoe/2005.02/early.html#2005.02.04_s02{
+    某日記(最新の5日間)}より)
+((br))　さすが、偉い人は目の付けどころがシャープだな、松下ぢゃなくて
+    （座蒲団、みんな持ってちまいな！）。
+* http://itpro.nikkeibp.co.jp/free/NT/NEWS/20050203/155693/{
+    リッチ・クライアント開発言語「Curl」の採用企業が増加，
+    Webサービスにも対応予定 : IT Pro ニュース}
+(http://www.rubyist.net/~matz/20050205.html#p02{Matz にっき}より)
+((br))　ふむ、マーケティングが積極的だと、企業は採用しやすいところがあるなぁ。
+    マネージャは技術者より、よその営業に魅かれやすい？
+* http://www.itmedia.co.jp/news/articles/0502/04/news044.html{
+    ITmediaニュース：「株式会社空調服」誕生}
+    (http://risky-safety.org/~zinnia/d/2005/02/#20050206-t4-h1-p0{
+	Zinnia hacks tomorrow.}より)
+((br))　これで、デザインがよければ…。
+    あと、空調背広も欲しいなぁ（←クーラーの効いた部屋に入ると死ぬ予感）
+
+http((null))://www.linux.<b>or</b>.jp/JM/ を http((null))://www.linux.<b>co</b>.jp/JM/
+と間違えて「あれ〜、JM なくなっちゃったよ〜」と困った奴は誰だ！俺だ！

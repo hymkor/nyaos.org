@@ -1,0 +1,20 @@
+<<<
+I try to translate OTRS with Japanese.
+
+But, though I edit /opt/otrs/Custom/Kernel/Language/ja.pm(*) , there is a sentense not changed to Japanese I write.
+(*) I copy it from /opt/otrs/Kernel/Language/ja.pm
+
+
+the 2255th line on ja.pm:
+
+-------------------------------------------------------
+       'Defines the format of responses in the ticket compose screen of the agent interface ($QData{"OrigFrom"} is From 1:1, $QData{"OrigFromName"} is only realname of From).' => 'xxxxxxxx',
+--------------------------------------------------------
+
+Though I write any words onto 'xxxxxxxx', the view will not change not at all.
+
+This is the description of the SysConfig setting: 'Ticket::Frontend::ResponseFormat' in the page: 'Ticket -> Frontend::Agent::Ticket::ViewCompose'.
+
+
+What should I do ?
+>>>

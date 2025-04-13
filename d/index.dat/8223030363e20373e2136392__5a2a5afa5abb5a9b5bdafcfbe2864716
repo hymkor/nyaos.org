@@ -1,0 +1,133 @@
+<html>
+<head>
+<script language="JavaScript">
+<!--
+    /*** アクセスログとワークファイルの設定 ***/
+    var access_log="C:\\アクセスログ.txt";
+    var work_file ="C:\\最新状態.txt";
+    /******************************************/
+
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
+
+    function logger(stamp,message){
+        if( stamp == null ){
+            stamp = ( new Date() ).toLocaleString();
+        }
+        var msg = stamp + " " + message ;
+        document.form1.log.value += msg + "\n";
+        var fo = fso.OpenTextFile(access_log,8,true);
+        fo.WriteLine(msg);
+        fo.close();
+    }
+
+    function heartbeat(){
+        var now=new Date();
+        /*** 前回の起動時刻を読み出す ***/
+        var rs = fso.OpenTextFile(work_file,1,true);
+        var last_count = (rs.AtEndOfStream ? 0 : rs.ReadLine());
+        var last_stamp = (rs.AtEndOfStream ? "[不明]" : rs.ReadLine() );
+        rs.close();
+        if( now - last_count > 5000 ){
+            logger( last_stamp , "shutdown");
+            document.form1.last.value = last_stamp;
+            logger( null , "startup" );
+            document.form1.start.value=now.toLocaleString();
+        }
+
+        /*** 現在時刻を記録する ***/
+        var ws = fso.OpenTextFile(work_file,2,true);
+        ws.WriteLine( now.getTime() );
+        ws.WriteLine( now.toLocaleString() );
+        ws.close();
+        document.form1.now.value=now.toLocaleString();
+    }
+
+    function do_update(){
+        if( document.form1.worker.value == "---" ){
+            alert("作業者名を選んでください");
+            return;
+        }
+        if( document.form1.task.value == "---" ){
+            alert("作業内容を選んでください");
+            return;
+        }
+        if( document.form1.client.value == "---" ){
+            alert("依頼者を選んでください");
+            return;
+        }
+        logger( null ,
+                "login    作業者:" + document.form1.worker.value + 
+                ", 依頼者:"    + document.form1.client.value +
+                ", 作業内容:"  + document.form1.task.value   +
+                ", 詳細:"      + document.form1.detail.value );
+        document.form1.worker.selectedIndex = 0;
+        document.form1.task.selectedIndex = 0;
+        document.form1.client.selectedIndex = 0;
+        document.form1.detail.selectedIndex = 0;
+        return 0;
+    }
+    function startup(){
+        setInterval(heartbeat,1000);
+
+        var node=document.getElementById("anchor2accesslog");
+        node.href = "file:///" + access_log;
+    }
+// -->
+</script>
+</head>
+<body onLoad="JavaScript:startup();">
+<h1>端末使用記録フォーム</h1>
+<p>
+この HTML アプリケーションは、
+タイマで稼働時間を記録しているため、
+終了させないでください。
+</p>
+<form name="form1">
+<dl>
+<dt>担当者</dt>
+<dd><select name="worker" id="worker">
+        <option value="---">作業者名を選んでください</option>
+        <option value="○下">○下</option>
+        <option value="×口">×口</option>
+        <option value="▲山">▲山</option>
+        <option value="◎川">◎川</option>
+    </select>
+</dd>
+<dt>タスク：</dt>
+<dd>
+    <select name="task">
+        <option value="---"     >作業内容を選んでください</option>
+        <option value="ログ回収">ログ回収</option>
+        <option value="障害調査(アプリケーション)">障害調査(アプリケーション)</option>
+        <option value="リリース">リリース</option>
+        <option value="障害対応(重障害)">障害対応(重障害)</option>
+        <option value="システム監視">システム監視</option>
+        <option value="システム再起動">システム再起動</option>
+    </select>
+</dd>
+<dt>依頼者：</dt>
+<dd><select name="client" id="client">
+        <option value="---">依頼者を選んでください</option>
+        <option value="あの人">あの人</option>
+        <option value="この人">この人</option>
+        <option value="その人">その人</option>
+        <option value="その他">その他</option>
+    </select>
+<dd>
+<dt>作業詳細</dt>
+<dd><input type="text" name="detail" value="" size="80">
+<dt><input type="button" value="更新" onClick="do_update()"></dt>
+</dl>
+<dl>
+<dt>前回起動時刻</dt>
+<dd><input type="text" name="last"  value="" size="40" readonly></dd>
+<dt>起動時刻</dt>
+<dd><input type="text" name="start" value="" size="40" readonly></dd>
+<dt>現在時刻</dt>
+<dd><input type="text" name="now"   value="" size="40" readonly></dd>
+</dl>
+<textarea name="log" cols="80" rows="5" readonly></textarea>
+</form>
+<a href="" id="anchor2accesslog">これまでのアクセスログ</a>
+</body>
+</html>

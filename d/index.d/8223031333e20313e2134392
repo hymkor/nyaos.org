@@ -1,0 +1,13 @@
+<<[NYAOS][wifky] ちょっとがんばった>>
+
+* NYAOS
+** https://bitbucket.org/zetamatta/nyaos3000/issue/12/ignores-utf8-chars-with-chcp-65001-on{zetamatta / nyaos3000 / issues / #12 - Ignores utf8 chars with chcp 65001 on Windows — Bitbucket}
+*** これ対応しようと思ったら、内部コードをDBCSからユニコード(というかワイドキャラクターですな？)にする必要があり、ほとんどのコードに変更が必要になるので、「'''wont fix'''」とさせていただきました。
+まぁ、いずれにせよ、やるなら「NYAOS-4000」ということになるでしょう。
+** https://bitbucket.org/zetamatta/nyaos3000/issue/14/prompt{zetamatta / nyaos3000 / issues / #14 - promptで色付け気の$が出せない — Bitbucket}
+*** 検証結果。再現の結果、仕様動作と確認。
+* wifky
+** http://sourceforge.jp/ticket/browse.php?group_id=2334&tid=30500{チケット #30500: 0ページの時にプラグインマネージャが誤動作する - A Single File Wiki - wifky! - SourceForge.JP}
+*** 直しますた → http://wifky.sourceforge.jp/cgi-bin/index.cgi?p=%282013.01.14%29+wifky+1.5.11_6+%A4%F2%B8%F8%B3%AB%A4%B7%A4%DE%A4%B7%A4%BF{(2013.01.14) wifky 1.5.11_6 を公開しました}
+
+3件処理したけど、コード書いたのは1件だけだな…はは

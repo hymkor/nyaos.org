@@ -1,0 +1,272 @@
+<HTML>
+<HEAD>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+  <LINK REL="stylesheet" TYPE="text/css" HREF="../gray.css" />
+  <TITLE>私は REXX が嫌いだ！</TITLE>
+</HEAD>
+<BODY bgcolor="black" text="white" link="silver" vlink="gray" alink="red">
+
+<DIV ALIGN="RIGHT">
+<TABLE>
+<TR>
+  <TD><DIV CLASS="BOX"><A HREF="../warp/nyaos.html">NYAOS</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../../homepage/warp/eff.html"
+      >eff</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../warp/ell.html">ELL &amp; etc</A></DIV></TD>
+  <TD><DIV CLASS="BOX"><A HREF="../warp/port.html">移植物</A></DIV></TD>
+  <TD><DIV CLASS="XOB">REXX</DIV></TD>
+</TR>
+</TABLE>
+</DIV>
+
+<H1>私は REXX が嫌いだ！</H1>
+
+<UL>
+<LI>連想配列の出来損いのステムなんか嫌い。<!--
+--><LI>「,」を使う行の継続なんて嫌い。<!--
+--><LI>中途半端に C 言語の真似をした文法なんて嫌い。<!--
+--><LI>IF〜ELSE IF とさして変わらない役立たずの SELECT なんて嫌い。<!--
+--><LI>Classic REXX と互換の欠けている Object REXX なんて嫌い。<!--
+--><LI>「…//…」を引数に渡せない REXX なんて嫌い。<!--
+--><LI>UNIX 使いの神経を逆撫でするような記号体系なんて嫌い。<!--
+--><LI>タブを空白扱いしてくれない parse なんて嫌い。<!--
+-->(みんなが言うほど万能ぢゃないし…機能が重複しすぎ)
+<LI>みんな、みんな、だいっきらい。<!--
+--></UL>
+<P>というわけで、そんなタワシが作った REXX スクリプト/REXX用ライブラリ<!--
+-->を紹介しよう！<A HREF="#nazo">なぜなら…</A>
+</P>
+
+<H2 CLASS=AQUA><A NAME="rlp">RLP - ReXX Local Pages </A></H2>
+
+<P>ReXX 命令や式を以下のように HTML 内に組み込むことができる、<!--
+-->HTML用プリプロセッサです。JSP をヒントに作りました。</P>
+
+<PRE STYLE="margin-left:2em">
+&lt;HTML&gt;
+&lt;BODY&gt;
+<!-- -->% DO I=1 TO 10
+ほげほげ([<!-- -->% i %<!-- -->]番目)&lt;BR&gt;
+<!-- -->% END
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</PRE>
+<P>この rlp ファイルは、<!--
+-->rlp.cmd によって次のように変換されます。<!--
+-->(rlp sample.rlp &gt; sample.html)
+</P>
+<PRE STYLE="margin-left:2em">
+&lt;HTML&gt;
+&lt;BODY&gt;
+ほげほげ(1番目)&lt;BR&gt;
+ほげほげ(2番目)&lt;BR&gt;
+ほげほげ(3番目)&lt;BR&gt;
+ほげほげ(4番目)&lt;BR&gt;
+ほげほげ(5番目)&lt;BR&gt;
+ほげほげ(6番目)&lt;BR&gt;
+ほげほげ(7番目)&lt;BR&gt;
+ほげほげ(8番目)&lt;BR&gt;
+ほげほげ(9番目)&lt;BR&gt;
+ほげほげ(10番目)&lt;BR&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</PRE>
+
+<P>他の機能として次のようなものがあります。</P>
+
+<UL>
+<LI>他の HTMLファイル の include 機能<!--
+--><LI>他の ReXX スクリプトの関数を呼び出し(import 機能)。<!--
+--><LI>倍角文字の直後の改行をコメントで囲んで、空白文字化の抑制。<!--
+--></UL>
+<P>基本的に、ローカルディレクトリの中で、静的にHTML ファイルを生成<!--
+-->させて、HTML執筆の補助をさせるのを目的としています。JSP や CGI
+のように、動的に動作を変えるものではないので、ご注意を…。<!--
+--></P>
+
+<TABLE ALIGN="CENTER"><TR><TD BGCOLOR="white">
+<TABLE CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="black">
+  <TD>1.01</TD>
+  <TD><A HREF="rlp101.zip" STYLE="white-space:pre">  5,054 Oct 15 23:27 rlp101.zip </A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+<H3>変更履歴</H3>
+
+<DL>
+  <DT>1.01 (2000/10/15)
+  <DD>同じファイルを二回includeできない蟲を駆除
+  <DT>1.00 (2000/10/14)
+  <DD>初版
+</DL>
+
+<H2><A NAME="effinput">REXX 用１行入力ライブラリ effinput </A></H2>
+
+<P>eff の1行入力ルーチン(クラスだけど)を、REXX で使用できるよう、<!--
+-->DLL化したものです。あいにく、かんなが使えませんが、<!--
+-->ヒストリやファイル名補完などの機能は eff 同様に使用できます。<!--
+--></P>
+<PRE>
+call RxFuncAdd 'effinput','effinput','effinput'
+answer = effinput('Prompt:','DefaultValue')
+</PRE>
+<P>てな感じで、REXX から使ってください。</P>
+
+<TABLE ALIGN=CENTER><TR><TD BGCOLOR="white">
+<TABLE CELLSPACING=1 BORDER=0>
+<TR BGCOLOR="black">
+  <TD>DLLファイルのみ</TD>
+  <TD><A HREF="effinput.zip" STYLE="white-space:pre"> 16,109 Oct  1 12:38 effinput.zip </A></TD>
+</TR>
+<TR BGCOLOR="black">
+  <TD>ソース込み</TD>
+  <TD><A HREF="effinput-src.zip" STYLE="white-space:pre"> 72,069 Oct  1 12:38 effinput-src.zip </A></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
+
+
+<P>DLL は単独で配布するのも、他のソフトに添付するのも全くの自由です。<!--
+-->作者(葉山)に連絡する必要もありませんし、effinput のソースやドキュメント<!--
+-->を添付しなくても構いません。<!--
+-->また、http://hp.vector.co.jp/authors/VA009797/rexx/effinput.zip
+に直接リンクを張っても構いません。<!--
+--></P>
+<P>
+なお、使用には 例によって、0.9d FIX02 以降の<!--
+--><A HREF="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+>emx.dll , emxlibcs.dll , emxwrap.dll</A>の三点セットが必要です。<!--
+--></P>
+
+<H2 CLASS=AQUA><A NAME="rename4cd">CDRecord/2 用ファイル改名支援スクリプト<!--
+-->rename4cd.cmd </A></H2>
+
+<P><A HREF="http://www.geocities.com/SiliconValley/Sector/5785/cdrecord/cdrecordmain.htm">CDRecord/2</A>
+で、CD-R を焼こうとする場合、「.」が複数ついていたり、<!--
+-->日本語ファイル名が入っていたりして、<!--
+-->意図通り焼けない場合が多々あります。で、本プログラムは<!--
+--></P>
+<OL>
+<LI>「.」を複数持つファイル名は、最後のもの以外を「_」に変更する。<!--
+--><LI>日本語を持つファイル名は、新ファイル名を入力を促す。<!--
+--></OL>
+<P>などして、CD-R に焼けるファイル名に改名するのを支援する<!--
+-->REXX スクリプトです。<!--
+--><A HREF="../warp/ell.html#easido">EAs,I do</A>がある場合、<!--
+-->以前のファイル名を拡張属性 .HISTORY に「rename from 旧ファイル名」<!--
+-->という形で保存できます。<!--
+-->なお、ディレクトリ名がひっかかる場合はお手あげですので、<!--
+-->手動でお願いします。<!--
+--></P>
+<P CLASS=SAY1 ALIGN=CENTER>
+誰か CDRecord/2 を日本語対応にしてくれぇぇ!
+</P>
+
+<DIV ALIGN="CENTER">
+  <SPAN CLASS="O">
+    <A HREF="rename4cd.zip">  1,339 Oct  1 12:38 rename4cd.zip </A>
+  </SPAN>
+</DIV>
+
+
+<P>使用には、<A HREF="./effinput.zip">effinput.dll</A> ,
+0.9d FIX02以降の<!--
+--><A HREF="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+>emx.dll,<WBR>emxlibcs.dll,<WBR>emxwrap.dll</A>が必要です、<!--
+-->REXX プログラムなのに…。<!--
+--></P>
+
+<H2 CLASS=AQUA><A NAME="emxchk">emx リビジョンチェッカ</A></H2>
+
+<P>OS/2 で普及しているフリーの開発環境として emx/gcc があり、<!--
+-->利用している方も多いと思います。しかしながら、OS/2 magazine 休刊後、<!--
+-->定期的に最新版をCD-ROMにて供給する媒体がなくなった為、プログラム<!--
+-->開発側と利用側で、使用する DLL(ダイナミックリンクライブラリー)の<!--
+-->バージョンが合致せず、動作しないというトラブルが見受けられるよう<!--
+-->になりました。<!--
+--></P>
+<P>こういう場合、インストーラー等で、emx のバージョンが古いという旨の<!--
+-->警告を出してやるのが親切というものでしょう。<!--
+--></P>
+<P>そこで、emx 付属の emxrev.cmd を参考に、プログラム開発側の想定した<!--
+-->バージョンの DLL が存在するかをチェックするスクリプトを REXX で<!--
+-->作成しました。本プログラムはフリーウェア開発者がインストーラーなどに<!--
+-->組み込むことを想定したものです。<!--
+--></P>
+
+<DIV ALIGN="CENTER">
+  <SPAN CLASS="O">
+    <A HREF="emxchk.lzh">  3,952 Oct  1 12:38 emxchk.lzh </A>
+  </SPAN>
+</DIV>
+
+<P>など、本プログラムは karl 1.15 にも含まれています。<!--
+-->(ドキュメントは入ってませんけど)
+</P>
+
+<H2 CLASS=AQUA><A NAME="exclude">Exclude.CMD</A></H2>
+
+<P> C言語のファイル中の不要な #include &lt;〜&gt;を列挙するREXX
+    スクリプトです。emx/gcc専用で、かつ、grep が必要となります。
+    内部で鬼のように gcc を呼び出します。
+</P>
+<DIV ALIGN=CENTER>
+  <SPAN CLASS="O">
+    <A HREF="exclude2.lzh">  1,086 Oct  1 12:38 exclude2.lzh </A>
+  </SPAN>
+</DIV>
+
+<H3>変更履歴</H3>
+
+<UL>
+  <LI>1998/9/12 公開</LI>
+  <LI>1998/9/16 虫繕 SysFileSearch を RxFuncAdd していなかったのを修正。</LI>
+</UL>
+
+<H2 CLASS=AQUA><A NAME="VFATSYNC">VFATSYNC</A></H2>
+
+<P>VFAT の LONGNAME を、EA の LONGNAME にコンバートします。<!--
+--></P>
+
+
+<DIV ALIGN=CENTER>
+  <SPAN CLASS="O">
+    <A HREF="vfatsync.lzh">  2,421 Oct  1 12:38 vfatsync.lzh </A>
+  </SPAN>
+</DIV>
+
+
+<P>別に VFAT を解析するわけではなくて、<!--
+-->Windows95 上で「<TT>dir /s \ &gt;vfatdir</TT>」<!--
+-->を実行して得られたリダイレクト出力を読んで、<!--
+-->各ファイルの拡張属性に書き込むだけの単純なプログラムです。<!--
+--></P>
+<P>
+<A NAME="nazo">さて</A>、実際のところ、<!--
+-->それほど嫌いなのに何で使っているかというと、<!--
+--></P>
+<UL>
+<LI>ほぼ全ての OS/2 に標準装備されている。<!--
+--><LI>文字列操作が perl ほどではないが、Cよりは楽。<!--
+--><LI>拡張属性に対する操作が可能<!--
+--></UL>
+<P>などの点が見過ごせないからである。<!--
+-->(とは言いつつ、拙作の<A HREF="../warp/ell.html#easido">EAs,I do</A>を<!--
+-->用いれば、拡張属性の操作は perl でも awk でも出来るのだが…)
+</P>
+<P>特に perl とか awk などはいくら慣れているといっても、<!--
+-->配布する際、perl や awk がインストールされているのはまず期待できない。<!--
+-->使用者に予備知識無しに使えるスクリプト言語は、<!--
+-->悲しいかな、今のところ REXX だけなのである。<!--
+--></P>
+<P>最近は Java でやろうかとも考えているが、<!--
+-->Java は Warp 4 以降が標準なので、ちょっと使えない。<!--
+-->OS/2 を使っている限りは、標準スクリプト言語たる REXX とつきあって<!--
+-->いかねばならんのだろうなぁ〜。<!--
+--></P>
+
+<A HREF="../index.html">ホーム</A>へ<!--
+--></BODY>
+</HTML>

@@ -1,0 +1,88 @@
+<<[Python] ユーザディレクトリにeasy_installしたEGGモジュールは単純にsys.pathに加えてもimportできない場合がある>>
+
+http://sakura.ne.jp/{SAKURA Internet}のレンタルサーバに、tweepy モジュールを入れようとしたところ、
+コマンドラインでは動くが、cron では動かないという現象が発生した。
+
+SAKURA Internet の FreeBSD サーバには Python 2.7 と easy_install がプリインストールされているが、
+私の契約では root 権限はない。
+そこで tweepy は、自分のホームディレクトリ以下に easy_install した。
+
+8<
+$ easy_install --install-dir=~/local/lib/python2.7 tweepy
+>8
+
+コマンドラインでテストする時は .bashrc に次のような行を追加して、PYTHONPATH を設定した。
+
+8<
+export PYTHONPATH=$HOME/local/lib/python2.7:$HOME/local/lib/python2.7/site-packages:$HOME/src/pythonlib
+>8
+
+この状態の python で import tweepy したところ、問題なく動作した。
+
+----
+
+さて、cron の場合、.bashrc が読み込まれないので、Python スクリプトの中でライブラリの検索パスを追加してやる必要がある。ということで、以下のようなコードを書いた。
+
+8<
+import os.path
+import sys
+
+for d in [
+    "~/src/pythonlib",
+    "~/local/lib/python2.7",
+    "~/local/lib/python2.7/site-packages" ]:
+    sys.path.append(os.path.expanduser(d))
+
+import tweepy
+>8
+
+結果を言うと、どうしても import tweepy だけがエラーになってしまう。
+import できる他のモジュールと比較してみると、
+
+* Mercurial などは、site-packages の下に mercurial というディレクトリが存在する。
+* インストールディレクトリ($HOME/local/lib/python2.7/)以下を見ると、
+  そこに ```__init__.py``` などが存在する。
+* $HOME/src/pythonlib に置いた、自作のモジュール twit_profile.py は問題なく、import できる。
+* tweepy については、tweepy.py というファイルや tweepy/ というディレクトリは存在せず、
+  tweepy-1.9-py2.7.egg という EGG ファイルだけが存在している。
+
+つまり、import できないのは EGG ファイルだけということになる。
+
+EGG ファイルについては詳しくは知らないのだが、Java で言うところの jar ファイルのようなもので、
+パッケージのまま実行可能な実行ファイルらしい。
+
+実際、less などで見てみると、ヘッダ「PK」がついている。ZIP形式だ。
+unzip -l してみると：
+
+8<
+$ unzip -l tweepy-1.9-py2.7.egg
+Archive:  tweepy-1.9-py2.7.egg
+  Length     Date   Time    Name
+ --------    ----   ----    ----
+        1  03-17-12 02:00   EGG-INFO/dependency_links.txt
+      268  03-17-12 02:00   EGG-INFO/PKG-INFO
+      361  03-17-12 02:00   EGG-INFO/SOURCES.txt
+        7  03-17-12 02:00   EGG-INFO/top_level.txt
+        1  03-17-12 02:00   EGG-INFO/zip-safe
+      705  03-17-12 01:54   tweepy/__init__.py
+     1264  03-17-12 02:00   tweepy/__init__.pyc
+    23252  03-17-12 01:52   tweepy/api.py
+    15285  03-17-12 02:00   tweepy/api.pyc
+  :以下省略
+>8
+
+もしかして、展開してみたら動くかな？
+
+8<
+$ cd site-packages/
+$ unzip ../tweepy-1.9-py2.7.egg
+$ rm -rf EGG-INFO/
+>8
+
+>> 動きました <<
+
+理由は明確ではないが、EGG ファイルを検索していると思わしき、site.py をざっと見たところ、
+EGG ファイルを検出するのは Python インタープリタ起動直後のみらしい。
+
+まぁ、きょうび、お安く仮想サーバが借りられて、root権限も手に入って普通だろうから、
+こんな問題で苦労する人はもう居ないんでしょうねぇ。

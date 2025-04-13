@@ -1,0 +1,25 @@
+!!! Perl による uuencode もどき〜[[(2005.10.22)]]
+
+8<
+    perl -e 'undef $/;print pack("u*",<>);'
+    perl -e 'undef $/;print unpack("u*",<>);'
+>8
+
+!!! URL で使える文字だけに任意を変換〜[[(2005.10.22)']]
+
+* MIME-encode 風ではあるが、記号部分が微妙に違うのに注意。
+* uuencode によって生じる改行コード(LF)をドットに変え、強制的に一行にしている。
+
+8<
+sub mmencode{
+    my $u=pack('u*',shift);
+    $u =~ tr/\040-\140\n\r/A-Za-z0-9_.-/;
+    $u;
+}
+
+sub mmdecode{
+    my $u=shift;
+    $u =~ tr/A-Za-z0-9_.-/\040-\140\n/;
+    unpack('u*',$u);
+}
+>8

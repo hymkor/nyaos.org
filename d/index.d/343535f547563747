@@ -1,0 +1,11 @@
+div.commentshort p{
+    margin-left:1cm;
+    text-indent:-1cm;
+}
+
+div.header ul{
+    text-align:left;
+    color:white;
+}
+
+h3{clear:both}

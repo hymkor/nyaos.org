@@ -1,0 +1,136 @@
+!!! Excel でスクリプトレビュー
+
+日頃、メンテナンスにおいては、作業時間が限られているため、
+スクリプトを用意して、手作業を極力廃することになる。
+が、完全自動というのは、スクリプトを用意すること自体の工数が
+膨らんでしまうし、例外などを完璧にカバーしきれない怖れもある。
+
+それゆえ、エラーになってもすぐストップできるよう、
+数行しかないスクリプトを多数用意して、
+それらを逐次コマンドラインから呼び出してゆく…
+というようなやり方が多くなる。
+
+そうして作られた諸スクリプトは、
+チームリーダー・プロジェクトマネージャーにレビューしてもらうため、
+印刷することになるのだが、何も考えずに用意すると、
+「ちょっとしか書かれていない印刷物」を「多数」作ってしまい、
+「環境に厳しいエンジニア」と社内で高く認知されてしまう。
+これは出来れば避けたいところだ。
+
+そこで、今回のメンテにおいては、試験的に次のような Excelシートで、
+スクリプトの「原本」を書いてみた。
+
+<<{Excelでスクリプトレビュー.png}
+
+A列目がスクリプトの通し番号,B列目がスクリプトファイル名,C列目が行番号,
+E列がスクリプトの各行で、D列はその行の意味を示す。
+これで一覧性はバッチリ、アホでも分かるというものだ。
+
+さて、本番のスクリプトは、このシートの E 列をコピーして、B列にあるファイル名にペーストすればいい。が、原本を変更する度にコピペするのはたいへんだ。
+ということで、このシートから各スクリプトを生成する
+スクリプトを JScript を書いてみた。
+
+8<
+var remheader = { "":"" , ".sh":"# " , ".sql":"rem " };
+
+/* Excel ファイルのフルパス名を第一引数から取り出す */
+if( WScript.Arguments.Count() <= 0 ){
+    WScript.Echo( "Usage: cscript //nologo mkscript.js XLSFILENAME" );
+    WScript.Quit();
+}
+
+var xlsfn = WScript.Arguments(0).replace("/","\\");
+if( xlsfn.substring(0,1) != "\\" ){
+    var objWshShell = new ActiveXObject("WScript.Shell");
+    xlsfn = objWshShell.CurrentDirectory + "\\" + xlsfn ;
+}
+
+/* Excel オブジェクトを作成する */
+var xls = GetObject( xlsfn );
+var sheet = xls.Sheets("Scripts");
+
+/* シートの内容を読み取り、
+ *    スクリプト名 → スクリプトの内容
+ * という形式のハッシュを作成する。
+ */
+var script_collection={};
+var script;
+var script_nm="";
+var suffix="";
+
+for( lnum = 2 ; (script = sheet.Cells(lnum,5).Value) != undefined ; ++lnum ){
+    if( script.substring( script.length-1 ) != "\n" ){
+	script += "\n";
+    }
+    script += "\n";
+
+    var nm1 = sheet.Cells(lnum,2).Value ;
+    if( nm1 != undefined  &&  nm1 != "" ){
+	if( sheet.Cells(lnum,1).Value < 0 ){
+	    script_nm="";
+	    suffix = "";
+	}else{
+	    WScript.Echo("Read: " + nm1 )
+	    script_nm=nm1;
+	    suffix = nm1.substring( nm1.indexOf(".") );
+	}
+	script_collection[ script_nm ] = ""
+    }
+    if( suffix != undefined && script_nm != "" && suffix in remheader ){
+	script = remheader[suffix] +
+	         (sheet.Cells(lnum,4).Value).replace("\n","") + 
+	         "\n" +
+	         script ;
+    }
+    script_collection[ script_nm ] += script;
+}
+xls.close();
+xls = null;
+
+/* スクリプトをファイルとして出力する */
+var fsobj=new ActiveXObject("Scripting.FileSystemObject");
+
+for( var fname in script_collection ){
+    if( fname != "" ){
+	WScript.Echo("Write: " + fname );
+	var fp = fsobj.CreateTextFile( fname , true , false );
+	fp.Write( script_collection[fname] );
+	fp.Close();
+    }
+}
+>8
+
+``cscript mkscript.js 手順書.xls`` とすると、
+手順書.xls 内のシート「Script」の中のセルを読み取って、
+記載のスクリプトを自動で作成してくれる。
+しかも、D列をコメント出力までしてくれる。
+さすが俺。でもね…書いてみてから、気がついた：
+
+>> こんなことする奴ぁ、馬鹿です <<
+
+スクリプトはコンパイルなしにサクっと実行できるのがメリットなんだから、
+こんな原本を Office で書くみたいなことをするのは長所を殺すだけだ。
+しかも、これ、偉いさんウケばかり考えた、
+プログラミング素人が考えたネタっぽくて、我ながら厨くさく感じた。
+
+まぁ、逆にスクリプトを読んで、
+報告用のExcel シートを出力するようにしたらマシかもしれないが、
+それはそれで、原本のファイル数が多くなるので、
+管理がめんどそうだ。
+
+---
+
+ところで、プログラミング言語のソースってのは、
+一枚板の textarea で表現できうるものばかりで、
+言語の統合環境といえば、予約語の色を変えるといった修飾で表現される程度の
+ものだけだと思う(その手の統合環境はあまり使ったことがないので、
+そうではないのかもしれないが)
+
+上のようなことをやっていて気がついたのだけれども、
+もっと表計算ソフト状の統合環境で、
+列に意味を持たせるようなことをやってもおもしろいかもしれないね。
+Python のインデント ⇒ その統合環境の列みたいな感じで。
+
+>> と、また馬鹿なことを言ってみる <<
+
+が、まぁ、いいじゃないか、年末年始なんだから 

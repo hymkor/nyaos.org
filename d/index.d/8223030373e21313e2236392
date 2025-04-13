@@ -1,0 +1,103 @@
+「お金ないから、早く帰り?」と上から言われるが、
+よく考えると、残業代出ない身の上なので
+
+ドラえもん談「いや、その理屈はおかしい」 
+
+---
+
+「今期のベストオブ屈辱だ」―― よい言葉を会得した、全国100万人の屈辱erの一員として
+
+!!! 意地が悪いのかな？
+
+http://arton.no-ip.info/diary/20071126.html#p01{意地が悪い}より：
+
+8<
+Use exit() or Ctrl-D (i.e. EOF) to exit
+わかっているなら、終われ。
+>8
+
+はて、本当に分かっているのだろうか。
+前に一度取り上げた気がするが、念の為、ちょっと確認してみた。
+
+!! Python 2.4
+
+8<
+Python 2.4.3 (#2, Nov  7 2006, 13:07:47)
+[GCC 3.4.4 [FreeBSD] 20050518] on freebsd6
+Type "help", "copyright", "credits" or "license" for more information.
+>>> exit
+'Use Ctrl-D (i.e. EOF) to exit.'
+>>> type(exit)
+<type 'str'>
+>>> exit()
+Traceback (most recent call last):
+File "<stdin>", line 1, in ?
+TypeError: 'str' object is not callable
+>>> import sys;sys.exit()
+[nyaos@www1082 ~]$
+>8
+
+ふむ、やっぱり記憶どおり、Python インタプリタは「わかっちゃいねぇ」。
+exit とタイプされて、単に変数 exit に入っている文字列を出しているだけなのだ。
+意地が悪いのではなく、わかっちゃいなかったのである。
+
+でも、よく見ると、メッセージが微妙に違う。今度は Python 2.5 でやってみよう。
+
+!! Python 2.5
+
+8<
+>>> exit
+Use exit() or Ctrl-D (i.e. EOF) to exit
+>>> type(exit)
+<class 'site.Quitter'>
+>>> help(exit)
+Help on Quitter in module site object:
+
+class Quitter(__builtin__.object)
+|  Methods defined here:
+|
+|  __call__(self, code=None)
+|
+|  __init__(self, name)
+|
+|  __repr__(self)
+|
+|  ----------------------------------------------------------------------
+|  Data descriptors defined here:
+|
+|  __dict__
+|      dictionary for instance variables (if defined)
+|
+|  __weakref__
+|      list of weak references to the object (if defined)
+>8
+
+exit が、Quitter というインテリなオブジェクトになってやがる。
+
+>> こいつ分かってて、わざわざエラーにしてやがる <<
+
+確かに意地が汚い。極悪だ。
+
+!! 結論
+
+* Python 2.4 は分かっちゃいない。論外だ。
+*  Python 2.5 は分かってくるくせにやってくれない。意地が悪い。
+
+!! 番外
+
+分かってて、かつ意地が良い exit があってもいいじゃないか。
+
+8<
+>>> import sys
+>>> class goodexit(object):
+...    def __call__(self):sys.exit()
+...    def __repr__(self):sys.exit()
+...
+>>> exit = goodexit()
+>>>
+>>> exit
+$
+>8
+
+やたー、ばんざーい。
+(代入の時に終了してしまわないのは、Python に代入式がないおかげだな)

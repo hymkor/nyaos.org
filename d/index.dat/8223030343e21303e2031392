@@ -1,0 +1,88 @@
+<<ThinkPad セットアップ続き>>
+
+ターミナルエミューレータ ck のオプションに -md sjis が抜けていた。
+これで「実」とか一部の漢字の文字化けも解消した。
+w3m もソースからコンパイルだ。
+
+ALTIME と SKKIME のセットアップは完了した。
+しかし、ThinkPad では ESC の位置が遠すぎるな。F1 の彼方だ。
+すごい速度だぜ（分かるか？）。
+
+まぁ、よくよく考えると、半角/全角ボタンは普通の IME 
+の時にしか利用しないので、 不要だ！
+ESC 扱いにしてしまえ！
+
+>> 完璧すぎる <<
+
+少なくとも、当部門では、このマシンを普通に使える奴は、これでいない。
+あとは、Office とか Notes とか Oracle Client とか Ultima Online とかだが、
+これらの導入は CD-ROM ドライブがある時にするか。
+
+あえて、NYACUS とかを入れていないところに、
+わたしの堕落っぷりの片鱗が伺える。
+もう、メンテしないつもりなのか？ こいつは？
+
+<<UNDO 表領域が壊れた>>
+
+開発環境の DB の UNDO 表領域が壊れた。
+何とか直したので、今後のために、メモ。
+
+1. 新規に、別の UNDO 表領域を作成する.
+
+<pre>
+    create undo tablespace undo02 DATAFILE
+    '/oradata/sckamedb/oradata05/df/undo02_01.dbf'
+    size 256M reuse
+    AUTOEXTEND ON NEXT 5120K MAXSIZE UNLIMITED ;
+</pre>
+
+2. UNDO 表領域を変更する。
+
+* 現行UNDO表領域
+    :: <code>alter system set undo_tablespace=undo02 ;</code>
+* 再起動時UNDO表領域
+    :: 初期パラメータファイルに <code>undo_tablespace=undo02 ;</code>
+
+3. データベースを再起動する。(しなくていいかもしれんけど)
+
+4. 壊れた UNDO 表領域を offline にする。
+
+<pre>
+    alter tablespace undo01 offline ;
+</pre>
+
+5. 壊れた UNDO 表領域を削除する。
+
+<pre>
+    drop tablespace undo01 ;
+</pre>
+
+6. 物理的にデータファイルを削除しておく
+
+<pre>
+    rm /oradata/sckamedb/oradata05/df/undo01_01.dbf
+</pre>
+
+うっかりと、データファイルを offline にしてしまうと、
+表領域を offline できず、またデータファイル自体も online にできない。
+次のように online 化する。
+
+1. メディアリカバリを実施
+
+<pre>
+    recover automatic datafile
+    '/oradata/sckamedb/oradata05/df/undo01_01.dbf';
+</pre>
+
+2. オンライン化する
+
+<pre>
+    alter database datafile
+    '/oradata/sckamedb/oradata05/df/undo01_02.dbf'
+    online ;
+</pre>
+
+<<<【参考文献】>>>
+
+* Oracle9i バックアップ および リカバリ概要 リリース2(9.2) p.3-11
+* Oracle9i データベース管理者ガイド リリース2(9.2) p.11-22

@@ -1,0 +1,49 @@
+!!! ((title [NYAOS] pairs のかわりに ```__iter__``` を用意))
+
+COM オブジェクトでコレクションの列挙を、pairs で出来るようにしていたんだけど、
+pairs って、キーと値のペアを列挙する関数だから、
+値しか返さないコレクションの列挙だと不自然になるんだよな。
+
+8<
+local shell = nyaos.create_object("WScript.Shell")
+for e in pairs(shell.SpecialFolders) do
+    print(e)
+end
+>8
+
+一つしか返さないのに、どこが「pairs」じゃと。
+そこで、COMオブジェクトには先日の>>{(2013.03.23) 0852}{_((null))_put_((null))_} に倣った名前の、```__iter__``` というメソッド名を用意した。
+(https://bitbucket.org/zetamatta/nyaos3000/commits/de745b698e8b6f664a52afd9d7b2e8f37aa1f2ed{
+commit - de745b698e8b})
+
+8<
+local shell = nyaos.create_object("WScript.Shell")
+for e in shell.SpecialFolders:__iter__() do
+    print(e)
+end
+>8
+
+8<
+$ nyaos bar.lua
+C:\Documents and Settings\All Users\デスクトップ
+C:\Documents and Settings\All Users\スタート メニュー
+C:\Documents and Settings\All Users\スタート メニュー\プログラム
+C:\Documents and Settings\All Users\スタート メニュー\プログラム\スタートアップ
+C:\Documents and Settings\hayama\デスクトップ
+C:\Documents and Settings\hayama\Application Data
+C:\Documents and Settings\hayama\PrintHood
+C:\Documents and Settings\hayama\Templates
+C:\WINDOWS\Fonts
+C:\Documents and Settings\hayama\NetHood
+C:\Documents and Settings\hayama\デスクトップ
+C:\Documents and Settings\hayama\スタート メニュー
+C:\Documents and Settings\hayama\SendTo
+C:\Documents and Settings\hayama\Recent
+C:\Documents and Settings\hayama\スタート メニュー\プログラム\スタートアップ
+C:\Documents and Settings\hayama\Favorites
+C:\Documents and Settings\hayama\My Documents
+C:\Documents and Settings\hayama\スタート メニュー\プログラム
+>8
+
+まぁ、こんなものかな。本当はキー名が取れるのが一番いいんだが。
+あと、```__put__``` もそうだけど、名前は変えた方がいいかもしれないな。

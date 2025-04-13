@@ -1,0 +1,1743 @@
+<HTML>
+<HEAD>
+  <TITLE>Nyaos Manual</TITLE>
+  <STYLE TYPE="text/css">
+  <!--
+	H1{color:#EEEEAA;text-align:right;font-family:helv}
+	H2{color:red;border:outset}
+	H3{color:aqua;font-style:italic}
+  -->
+  </STYLE>
+</HEAD>
+<BODY text="#FFFFFF" bgcolor="#000000" link="#00FF00"
+      vlink="#00CC00" alink="#FF0000" >
+
+<H1>The Documnent of<BR>Nihongo Yet Another Os/2 Shell</H1>
+<HR WIDTH=60%
+><PRE STYLE="text-align:center;font-size:12pt;line-height:12pt"
+><DIV ALIGN=CENTER
+>┏┓┳┳  ┳┏━┓┏━┓┏━┓
+┃┃┃┗━┫┣━┫┃  ┃┗━┓
+┻┗┛┗━┛┻  ┻┗━┛┗━┛
+Free Software
+- Nihongo Yet Another Os/2 Shell -
+1996-2000 (c) HAYAMA,Kaoru
+</DIV></PRE>
+<HR WIDTH=60%>
+
+<H3>目次</H3>
+<DL>
+<DT>１．<A HREF="#first">はじめに</A>
+ <DD>	1.1 <A HREF="#whats">NYAOSとは!?</A>
+ <DD>	1.2 <A HREF="#needs">必要なソフトウェア</A>
+<DT>２．<A HREF="#how2use">使用方法</A>
+ <DD>	2.1 <A HREF="#install">インストール</A>
+ <DD>	2.2 <A HREF="#how2run">起動方法</A>
+<DT>３．<A HREF="#keybindings">キー操作</A>
+ <DD>	3.1 <A HREF="#defaultkey">デフォルトの操作</A>
+ <DD>	3.2 <A HREF="#vzkey">Vz互換ヒストリの使い方</A>
+ <DD>	3.3 <A HREF="#wordstarkey">Wordstarモード</A>
+ <DD>	3.4 <A HREF="#henkan">変換型ファイル名補完</A>
+<DT>４．<A HREF="#commands">内蔵コマンドリファレンス</A>
+ <DD>	<A HREF="#cmd-alias">alias</A> ,
+	<A HREF="#cmd-bind">bind</A>
+	<A HREF="#cmd-bindkey">bindkey</A> ,
+	<A HREF="#cmd-cd">cd</A> ,
+	<A HREF="#cmd-cds">cds</A> ,
+	<A HREF="#cmd-comment">comment</A> ,
+	<A HREF="#cmd-dirs">dirs</A> ,
+	<A HREF="#cmd-drvalias">drvalias</A> ,
+	<A HREF="#cmd-echo">echo</A> ,
+	<A HREF="#cmd-exec">exec</A> ,
+	<A HREF="#cmd-exit">exit</A> ,
+	<A HREF="#cmd-foreach">foreach</A> ,
+	<A HREF="#cmd-history">history</A> ,
+	<A HREF="#cmd-hotkey">hotkey</A> ,
+	<A HREF="#cmd-lecho">lecho</A> ,
+	<A HREF="#cmd-let">let</A> ,
+	<A HREF="#cmd-ls">ls</A> ,
+	<A HREF="#cmd-open">open</A> ,
+	<A HREF="#cmd-option">option</A> ,
+	<A HREF="#cmd-pushd">pushd</A> ,
+	<A HREF="#cmd-popd">popd</A> ,
+	<A HREF="#cmd-pwd">pwd</A> ,
+	<A HREF="#cmd-rehash">rehash</A> ,
+	<A HREF="#cmd-source">source</A> , 
+	<A HREF="#cmd-unalias">unalias</A> ,
+	<A HREF="#cmd-which">which</a>
+<DT>５．<A HREF="#replaces">置換</A>
+ <DD>	5.1 <A HREF="#dots">「...」「....」</A>
+ <DD>	5.2 <A HREF="#his-rep">ヒストリ(履歴)を参照する置換</A>
+ <DD>	5.3 <A HREF="#env-rep">環境変数(シェル変数)を参照する置換</A>
+ <DD>	5.4 <A HREF="#singlequot">シングルクォートの変換</A>
+ <DD>	5.5 <A HREF="#backquot">逆クォートの置換</A>
+ <DD>	5.6 <A HREF="#terminate">命令の区切文字に関する置換</A>
+ <DD>	5.7 <A HREF="#prompt">拡張プロンプト</A>
+ <DD>	5.8 <A HREF="#redirect">拡張リダイレクト</A>
+<DT>６．<A HREF="#script">スクリプト実行支援</A>
+ <DD>	6.1 <A HREF="#unixscript">UNIX(#!)型スクリプト</A>
+ <DD>	6.2 <A HREF="#sos">COM(SOS)型スクリプト</A>
+ <DD>	6.3 <A HREF="#java">Java アプリケーション</A>
+<DT>７．<A HREF="#shellenv">シェル変数</A>
+<DT>８．<A HREF="#pipe">子プロセスからの環境操作</A>
+<DT>９．<A HREF="#doki">製作動機</A>
+<DT>１０．<A HREF="#limits">制限事項</A>
+<DT>１１．<A HREF="#thanks">最後に</A>
+</DL>
+
+なお、変更履歴についてはファイル<A HREF="./history">history</A>参照のこと。
+
+
+<H2><A NAME="first">■■■■  １．はじめに  ■■■■</A></H2>
+
+<H3><A NAME="whats">★ 1.1 NYAOS とは!?</A></H3>
+
+<P>NYAOS(Nihongo Yet Another Os/2 Shell)は、 tcshの操作性と、<!--
+-->YAOSの実装方法を参考に、「日本語バッチソ」をモット－としつつも、<!--
+-->便利なものは何でもとり入れようという無節操な姿勢で製作された、<!--
+-->ＯＳ／２用コマンドラインシェルです。
+</P>
+<P>
+主な特徴:
+<UL>
+  <LI>	カスタマイズ可能な編集機能(<A HREF="#tcshkey">tcsh</A>型/<!--
+	--><A HREF="#wordstarkey">Vz</A>型)
+  <LI>	コマンドファイル(*.CMD,REXX)と共存可能な<!--
+	--><A HREF="#unixscript">「#!」型スクリプト</A>の実行機能
+  <LI>	DOS の <A HREF="#sos">SOSスクリプト</A>をシームレスに実行
+  <LI>	コマンドラインからファイルをWP-Objectとして開く事ができる
+	(<A HREF="#cmd-open">open</A>命令)。
+  <LI>	ファイル名／コマンド名補完機能(tcsh型/<A HREF="#henkan">DOS</A>型)
+  <LI>	拡張属性.LONGNAME/.COMMENTも表示できる内蔵カラー
+	<A HREF="#cmd-ls">ls</A>
+  <LI>	履歴機能(<A HREF="#vzkey">Vz</A>/bash/<A HREF="#tcshkey">tcsh</A>型)
+  <LI>	別名機能(<A HREF="#cmd-alias">alias</A>)。<!--
+	-->命令毎にワイルドカードの展開指定可能
+  <LI>	拡張<A HREF="#cmd-cd">chdir</A
+	>とディレクトリスタック(<A HREF="#cmd-pushd">pushd</A
+	>/<A HREF="#cmd-popd">popd</A>/<A HREF="#cmd-dirs">dirs</A>命令)
+  <LI>	csh ライクな <A HREF="#cmd-foreach">foreach</A>
+  <LI>	「&amp;」「|&amp;」「;」「~」「`」「'」を csh 的に解釈。
+  <LI>	「~:」をブートドライブ文字へ、「...」を「..\..」へ置換
+  <LI>	<A HREF="#prompt">拡張プロンプト</A
+	>(多ドライブのカレントディレクトリ,ヒストリ番号 etc )
+  <LI>	xterm , 外部からのtelnet , Mule の Shellモードでも使用できる。
+  <LI>	「かんな」による日本語入力サポート(canna.dll他が必要)
+  <LI>	拡張<A HREF="#cmd-set">set</A>(重複チェック付加算)。
+</UL>
+</P>
+
+<H3><A NAME="needs">★ 1.2 必要なソフトウェア</A></H3>
+
+NYAOS を利用するには次のソフトウェアが必要です。
+<UL>
+  <LI>IBM OS/2 Warp J4
+  <LI>emx ランタイムＤＬＬ<BR>
+	emx 0.9d FIX03 以降の emxrt.zip に含まれる
+	<OL>
+		<LI>emx.dll
+		<LI>emxlibcs.dll
+		<LI>emxwarp.dll
+	</OL>
+	を CONFIG.SYS の LIBPATH の差すディレクトリの一つに置いておく<!--
+	-->必要があります。
+</UL>
+かな漢字変換システム「かんな」を NYAOS から利用するには、以下が必要です。
+<UL>
+  <LI>OS/2用かんな<BR>
+	　OS2CANNA.ZIP を展開。ドキュメントに従って、インストールしてください。
+  <LI>OS/2用かんなクライアント用ＤＬＬ<BR>
+	　OS2CAN-C.ZIP(タイムスタンプ 98/3/13以降)に含まれる canna.dll
+	を CONFIG.SYS の LIBPATH の差すディレクトリの一つに置いておく<!--
+	-->必要があります。
+</UL>
+
+
+<H2><A NAME="how2use">■■■■  ２．使用方法  ■■■■</A></H2>
+
+<H3><A NAME="install">★ 2.1 インストール</A></H3>
+
+install.cmd を実行すると、
+<UL>
+  <LI>NYAOS に必要な DLL ファイルの存在のチェック。
+  <LI>デスクトップへのアイコン登録(ウインドウ表示と全画面表示)。
+</UL>
+が行なわれます。特にファイルのコピーなどは行われません。<!--
+-->かんなを使うには、さらに次のような操作が必要です。
+<UL>
+　<LI>かんな 本体をインストール(cannaserver を動かす)
+　<LI>LIBPATH の差すディレクトリの一つへ canna.dll をコピー
+　<LI>nyaos.rc に「set CANNAHOST=<I>かんなホスト名</I>」という行を加える
+</UL>
+<P ALIGN=CENTER>
+  <SMALL>(*) ホームディレクトリ…環境変数 HOME の差すディレクトリ</SMALL>
+</P>
+<P>
+なお、カスタマイズファイルが見付からないなどのエラーが生じる場合は<!--
+-->nyaos.rc に<PRE>
+	set CANNYA=＜かんなシステムのドライブ＞［,＜カスタマイズファイル名＞］
+</PRE>という定義を加えるなどしてください。<!--
+-->カスタマイズファイル名は省略できます。<!--
+-->なお、NYAOS はカスタマイズファイルを
+<OL>
+  <LI> %CANNYA%のファイル名
+  <LI> %HOME%/.canna
+  <LI> %CANNYA%のドライブの /usr/local/canna/lib/default.canna
+  <LI> %SCRIPTPATH%のドライブの /usr/local/canna/lib/default.canna
+</OL>
+の順に探します。
+
+<H3><A NAME="how2run">★ 2.2 起動方法 </A></H3>
+
+<P>
+<UL>
+  <LI>NYAOSアイコンをダブルクリックする。
+  <LI>NYAOSアイコンにフォルダーをドロップする。
+  <LI>OS/2 プロンプトから 「(パス名)nyaos↓」と入力する。
+</UL>
+のいずれの方法でも NYAOS を起動させることができます。
+</P>
+<P>
+なお、NYAOS のコマンドラインパラメーターは以下の通りです。
+<PRE>
+	NYAOS {-オプション} [起動ディレクトリ] ↓
+</PRE>
+で起動します。起動オプションは次のようなものがあります。
+<DL>
+<DT>{/k|-k} command
+<DD>	commandを実行後、プロンプトを表示します。
+	タイトルロゴは表示しません。
+	nyaos.rc / .nyaos / _nyaos を読み込みません。
+
+<DT>{/c|-c} command
+<DD>	commandを実行して、即、終了します。
+	タイトルロゴは表示しません。
+	nyaos.rc / .nyaos / _nyaos を読み込みません。
+
+<DT>{/q|-q}
+<DD>	タイトルロゴを表示させません。
+
+<DT>{/f|-f}
+<DD>	nyaos.rc / .nyaos / _nyaos を実行させません。
+
+<DT>{/g|-g} ＷxＨ (Ｗ,Ｈは十進数,「x」は半角英小文字)
+<DD>	ウインドウサイズをＷ桁Ｈ行にします。「mode coＷ,Ｈ」を最初に<!--
+	-->実行するだけなので、プロンプト窓を最大化(Shiftを押しながら、<!--
+	-->タイトルバーをダブルクリックすればよかったっけ)していないと<!--
+	-->意味がありません。
+
+<DT>{-h|/h} ディレクトリ
+<DD>	ホームディレクトリを指定し、環境変数HOMEに反映させます。-c や -k
+	の前に指定してください。
+<DT>-z
+	キーバインドを WordStar ライクにします。<!--
+	-->「<TT>nyaos -k &quot;bind ws&quot;</TT>」と同じです。
+</DL>
+NYAOS は起動時に次の順にファイルを検索して、最初に見付けたものを実行します。
+<PRE>
+	 カレントディレクトリの .nyaos → _nyaos → nyaos.rc
+	→ ホームディレクトリの .nyaos → _nyaos → nyaos.rc
+</PRE>
+これらは REXX でも記述できます(誰もやらんか（笑）)
+</P>
+
+<H2><A NAME="keybindings">■■■■  ３．キー操作  ■■■■</A></H2>
+
+基本的に tcsh をベースに Vz ライクなヒストリを交えたキーバインドと<!--
+-->なっていますが、次のコマンドで変更することができます。
+<DL>
+  <DT>	<TT>bind tcsh</TT>
+  <DD>	ヒストリ参照も、tcsh と同じにします。
+  <DT>	<TT>bind ws</TT>
+  <DD>	ダイヤモンドカーソルをベースとしたバインドに変更します。<!--
+	-->「nyaos -z」で起動した場合と同じです。
+  <DT>  <TT>bind nyaos</TT>
+  <DD>  デフォルトのバインドへ戻します。
+</DL>
+
+<H3><A NAME="defaultkey">★ 3.1  デフォルトの操作</A></H3>
+
+「C-」はCTRLキ－と同時に押すことを示します。
+<DL COMPACT>
+<DT>C-m Enter
+<DD>	入力終結
+<DT>C-f →
+<DD>	カーソルを右へ移動
+<DT>C-b ←
+<DD>	左へ移動
+<DT>Delete
+<DD>	カーソル上の文字を削除
+<DT>C-d
+<DD>	カーソル上の文字を削除。末尾では補完候補ファイル一覧
+<DT>
+<DD>	オプションで NYAOS を終了する。
+<DT>Insert
+<DD>	上書きモードと挿入モードを切り換えます。
+<DT>C-h BS
+<DD>	カーソル前の文字を削除
+<DT>C-a Home
+<DD>	カーソルを入力文字列先頭へ移動
+<DT>C-e End
+<DD>	カーソルを入力文字列末尾へ移動
+<DT>C-u Esc
+<DD>	入力文字列をキャンセル
+<DT>C-k 
+<DD>	カーソル以降の文字を削除(クリップボードへもコピー)
+<DT>C-p ↑
+<DD>	ヒストリ参照 過去方向(Vz型)
+<DT>C-n ↓
+<DD>	未来方向(Vz型)
+<DT>C-r
+<DD>	過去方向(bash型インクリメンタルサーチ)
+<DT>C-s
+<DD>	未来方向(bash型インクリメンタルサーチ)
+<DT>C-l
+<DD>	画面クリア
+<DT>C-t
+<DD>	カーソル左の二文字を入れ換える。
+<DT>Alt-f
+<DD>	カーソルを次の単語の先頭へ
+<DT>Alt-b
+<DD>	カーソルを今の単語の先頭へ
+<DT>C-i Tab
+<DD>	TCSH型のファイル名補完 (二回打つと、候補ファイル一覧)
+<DT>C-Tab Alt-Enter
+<DD>	変換型のファイル名補完
+<DT>C-v
+<DD>	続いて入力される制御文字をそのまま受け入れます(^@ 除く)
+<DT>F1
+<DD>	ファイル名をフルパスへ変換する
+<DT>F2
+<DD>	ファイル名をＵＲＬ形式("file://c|～")へ変換する。
+<DT>C-Space
+<DD>	カーソル位置にマークをつけます。
+<DT>C-w Alt-X C-Del
+<DD>	マークからカーソル位置までのクリップボードへコピーした後に削除します。
+<DT>Alt-w Alt-C C-Ins
+<DD>	マークからカーソル位置までをクリップボードへコピーします。
+<DT>C-y Alt-V Alt-Ins
+<DD>	クリップボードの内容をペーストします。
+</DL>
+
+<H3><A NAME="vzkey">★ 3.2  Vz 互換ヒストリの使い方</A></H3>
+
+コマンド名の入力途中で C-p をタイプすると、それまで入力した文字列を<!--
+-->含む入力行の残り全てが呼び出されます。(以下 ■ はカーソル)
+<PRE>
+	[C:/] echo ahaha ihihi ufufu
+	[C:/] ec■
+		↓[C-p]
+	[C:/] echo ahaha ihihi ufufu■
+</PRE>
+引数の入力中に C-p をタイプすると、過去に入力した引数を呼び出します。
+<PRE>
+	[C:/] echo ufufu
+	[C:/] echo ahaha ihihi
+	[C:/] echo ■
+		↓[C-p]  ↑[C-n]
+	[C:/] echo ahaha■
+		↓[C-p]  ↑[C-n]
+	[C:/] echo ihihi■
+		↓[C-p]  ↑[C-n]
+	[C:/] echo ufufu■
+		：
+</PRE>
+
+<H3><A NAME="wordstarkey">★ 3.3  Vz型キーバインド</A></H3>
+
+「bind ws」と入力すると、次のようなキーバインドで編集することができます。<!--
+-->なお「^」はCTRLキ－を同時に押すことを示します。
+
+<DL COMPACT>
+<DT>^M Enter
+<DD>	入力終結
+<DT>^D →
+<DD>	カーソルを右へ移動
+<DT>^S ←
+<DD>	カーソルを左へ移動
+<DT>^G Delete
+<DD>	カーソル上の文字を削除
+<DT>^H BS
+<DD>	カーソル前の文字を削除
+<DT>^I Tab
+<DD>	ファイル名補完 (二回打つと、候補ファイル一覧)
+<DT>^A Home
+<DD>	カーソルを入力文字列先頭へ移動
+<DT>   End
+<DD>	カーソルを入力文字列末尾へ移動
+<DT>^U Esc
+<DD>	入力文字列をキャンセル
+<DT>^E ↑
+<DD>	ヒストリ参照 過去方向(Vz型)
+<DT>^X ↓
+<DD>	未来方向(Vz型)
+<DT>^L
+<DD>	画面クリア
+<DT>^F
+<DD>	カーソルを次の単語の先頭へ
+<DT>^A
+<DD>	カーソルを今の単語の先頭へ
+<DT>^Tab Alt-Enter
+<DD>	変換型のファイル名補完
+<DT>^V
+<DD>	続いて入力される制御文字をそのまま受け入れます。(^@除く)
+<DT>F1
+<DD>	ファイル名をフルパスへ変換する
+<DT>F2
+<DD>	ファイル名をＵＲＬ形式("file://c|～")へ変換する。
+<DT>^B
+<DD>	カーソル位置にマークをつけます。
+<DT>^Y Alt-X ^Del
+<DD>	マークからカーソル位置までのクリップボードへコピーした後に削除します。
+<DT>^K Alt-C ^Ins
+<DD>	マークからカーソル位置までをクリップボードへコピーします。
+<DT>^J Alt-V Alt-Ins
+<DD>	クリップボードの内容をペーストします。
+</DL>
+
+<H3><A NAME="henkan">★ 3.4  変換型ファイル名補完</A></H3>
+
+<P>
+Ctrl-TAB , ALT-RETURN での補完では、最初のキー操作以降、次のようなキーで<!--
+-->ファイル名を選択します。
+</P>
+
+<DL COMPACT>
+<DT>↓ C-t C-TAB TAB ALT-RETURN
+<DD>	次候補
+<DT>↑ ALT-BACKSPACE
+<DD> 	前候補
+<DT>← C-g ESC
+<DD>	キャンセル
+<DT>→ C-m Enter
+<DD>	候補を確定する。
+<DT>その他
+<DD>	候補を確定後、キーの機能を実行する。
+</DL>
+
+<H2><A NAME="commands">■■■■  ４． 内蔵コマンド  ■■■■</A></H2>
+
+<P>
+NYAOS では通常 CMD.EXE で使えるコマンドの他に、<!--
+-->次のような内蔵コマンドが利用できます。
+</P>
+
+<H3>・<A NAME="cmd-alias">alias</A></H3>
+<H4>構文1:alias 別名 [[=] "置き換える構文"]</H4>
+	別名を登録します。置き換える構文は範囲を明示する為に<!--
+	-->引用符で囲んでください。<!--
+	-->引数が無い場合、それまで定義した別名の一覧を表示します。<!--
+	-->置き換える構文中には、次のマクロが使えます。<!--
+	-->構文を省略した時は、既存の別名の定義内容を表示します。
+<DL COMPACT>
+<DT><TT>%<I>n</I></TT>
+<DD>	<I>n</I>番目の引数 (<I>n</I>は数字)
+<DT><TT>%*</TT>
+<DD>引数全体
+<DT><TT>%<I>n</I>*</TT>
+<DD>	<I>n</I>番目以降の引数
+<DT><TT>%<I>n</I>:h</TT>
+<DD>	<I>n</I>番目の引数のディレクトリ部分
+<DT><TT>%<I>n</I>:t</TT>
+<DD>	<I>n</I>番目の引数のディレクトリ以外の部分
+<DT><TT>%<I>n</I>:r</TT>
+<DD>	<I>n</I>番目の引数の拡張子以外の部分
+<DT><TT>%<I>n</I>:e</TT>
+<DD>	<I>n</I>番目の引数の拡張子部分
+<DT><TT>%@,%n@</TT>
+<DD>	基本的に「%*」,「%n*」と同じですが、次のような置換をします。
+	<OL>
+	  <LI>引数の先頭の「-」を「/」に置換。
+	  <LI>引用符に囲まれていない「/」を「\」に置換。
+	  <LI>引数の末尾が「/」「\」ならば、「.」を追加。
+	</OL>
+	これらは主に、move や copy など OS/2風のオプション指定文字(/)、<!--
+	-->パス区切文字(\)しか使えないコマンドで、UNIX風の同文字(-,/)を<!--
+	-->使いたい場合などに使います。該当するコマンドは .nyaos などで
+<PRE>
+	alias dir=dir %@
+	alias copy=copy %@
+	alias move=move %@
+</PRE>
+	と指定しておけばよいでしょう。
+
+<DT><TT>%\</TT>
+<DD>	直前の文字が「\」や「/」なら空文字列へ、さもなければ「\」へ
+<DT><TT>%/</TT>
+<DD>	 直前の文字が「\」や「/」なら空文字列へ、さもなければ「/」へ
+<DT><TT>%+* , %+n* , %+@ , %+n@ %+n</TT>
+<DD>	ワイルドカードを展開する他は、<TT>%* , %n* , %@ , %n@ , %n</TT><!--
+	-->と同じです。展開できるワイルドカードは今のところ * と ?<!--
+	-->だけです。
+
+<DT>&quot;&quot;(連続する二つの引用符)
+<DD>	一つの引用符に置換します。
+<PRE>
+	[E:/] alias foo=&quot;echo &quot;&quot;ahaha&quot;&quot;&quot;
+	[E:/] alias
+	foo=echo &quot;ahaha&quot;
+</PRE>
+</DL>
+
+<H4>構文2:alias -s</H4>
+
+alias の一覧を、それぞれ「alias 別名=&quot;内容&quot;」という形式に<!--
+-->直して、標準出力に出力します。これをリダイレクトしておけば、<!--
+-->alias のセーブすることができます。別の NYAOS などで、ロード<!--
+-->するには、リダイレクトしたファイルをそのまま source すれば<!--
+-->Ok です。
+
+<H3>・<A NAME="cmd-bind">bind</A> {<A NAME="tcshkey">tcsh</A>|ws}</H3>
+	キ－バインドを一括変更します。wsはwordstar系です。
+
+<H3>・<A NAME="cmd-bindkey">bindkey</A> キ－の名前  機能名</H3>
+	キ－に個別に機能を割り当てます。キ－の名前として次のものが使えます。
+<PRE>
+	ALT_0		ALT_1		ALT_2		ALT_3
+	ALT_4		ALT_5		ALT_6		ALT_7
+	ALT_8		ALT_9		ALT_A		ALT_B
+	ALT_BACKSLASH	ALT_BACKSPACE	ALT_C		ALT_COMMA
+	ALT_D		ALT_DEL		ALT_DOWN	ALT_E
+	ALT_END		ALT_EQUAL	ALT_ESC		ALT_F
+	ALT_F1		ALT_F10		ALT_F11		ALT_F12
+	ALT_F2		ALT_F3		ALT_F4		ALT_F5
+	ALT_F6		ALT_F7		ALT_F8		ALT_F9
+	ALT_G		ALT_H		ALT_HOME	ALT_I
+	ALT_INS		ALT_J		ALT_K		ALT_L
+	ALT_LEFT	ALT_LEFT_BRACKET		ALT_LEFT_QUOTE
+	ALT_M		ALT_MINUS	ALT_N		ALT_O
+	ALT_P		ALT_PAD_ASTERISK		ALT_PAD_ENTER
+	ALT_PAD_MINUS	ALT_PAD_PLUS	ALT_PAD_SLASH	ALT_PAGEDOWN
+	ALT_PAGEUP	ALT_PERIOD	ALT_Q		ALT_R
+	ALT_RETURN	ALT_RIGHT	ALT_RIGHT_BRACKET
+	ALT_RIGHT_QUOTE	ALT_S		ALT_SEMICOLON	ALT_SLASH
+	ALT_SPACE	ALT_T		ALT_TAB		ALT_U
+	ALT_UP		ALT_V		ALT_W		ALT_X
+	ALT_Y		ALT_Z		BACKSPACE	BACKTAB
+	CENTER		CTRL_A		CTRL_AT		CTRL_B
+	CTRL_C		CTRL_CENTER	CTRL_D		CTRL_DEL
+	CTRL_DOWN	CTRL_E		CTRL_END	CTRL_F
+	CTRL_F1		CTRL_F10	CTRL_F11	CTRL_F12
+	CTRL_F2		CTRL_F3		CTRL_F4		CTRL_F5
+	CTRL_F6		CTRL_F7		CTRL_F8		CTRL_F9
+	CTRL_G		CTRL_H		CTRL_HOME	CTRL_I
+	CTRL_INS	CTRL_J		CTRL_K		CTRL_L
+	CTRL_LEFT	CTRL_M		CTRL_N		CTRL_O
+	CTRL_P		CTRL_PAD_ASTERISK		CTRL_PAD_MINUS
+	CTRL_PAD_PLUS	CTRL_PAD_SLASH	CTRL_PAGEDOWN	CTRL_PAGEUP
+	CTRL_PRTSC	CTRL_Q		CTRL_R		CTRL_RIGHT
+	CTRL_S		CTRL_SPACE	CTRL_T		CTRL_TAB
+	CTRL_U		CTRL_UP		CTRL_V		CTRL_W
+	CTRL_X		CTRL_Y		CTRL_Z		DEL
+	DOWN		END		ENTER		ESCAPE
+	F1		F10		F11		F12
+	F2		F3		F4		F5
+	F6		F7		F8		F9
+	HOME		INS		LEFT		PAGEDOWN
+	PAGEUP		RETURN		RIGHT		SHIFT_DEL
+	SHIFT_F1	SHIFT_F10	SHIFT_F11	SHIFT_F12
+	SHIFT_F2	SHIFT_F3	SHIFT_F4	SHIFT_F5
+	SHIFT_F6	SHIFT_F7	SHIFT_F8	SHIFT_F9
+	SHIFT_INS	SPACE		TAB		UP
+</PRE>
+	機能名としては次のものが使えます。
+<PRE>
+	accept_line , newline	入力終結
+	backward_char		カ－ソルを左へ移動
+	backward_delete_char	カ－ソルの左の文字を削除
+	backward_word		前の単語の先頭へ移動
+	beginning_of_line	先頭へ移動
+	bye			NYAOS終了
+	clear_screen		画面消去＆再表示
+	complete		TCSH型補完／補完リスト
+	complete_first		変換型補完：最初の候補
+	complete_to_fullpath	フルパスへの変換
+	complete_to_url		URL形式への変換
+	copy			マーク～カーソル間の文字列を
+					クリップボードへ複写
+	cut			マーク～カーソル間の文字列を
+					クリップボードへ移動
+	delete_char		カ－ソル位置の文字を削除
+	delete_char_or_list	一字削除／補完リスト
+	end_of_line		末尾へ移動
+	forward_char		カ－ソルを右へ移動
+	forward_word		次の単語の先頭へ移動
+	kill_line               カ－ソル以降の文字を削除
+	kill_top_of_line	カーソル以前の文字を削除
+	kill_whole_line		入力文字全廃棄
+	mark			カーソル位置をマークする
+	next_history , down_history
+				最近の履歴参照
+	paste			クリップボードの内容を挿入する。
+	previous_history , up_history
+				過去の履歴参照
+	quoted_insert		制御文字の入力
+	vz_prev_history		Vz型の履歴参照(過去方向)
+	vz_next_history		　　　　　　　(未来方向)
+	self_insert		表示可能文字なら一字挿入
+				さもなければ何もしない
+	i_search	インクリメンタルサーチによる過去の履歴参照
+	rev_i_search	インクリメンタルサーチによる最近の履歴参照
+	swapchars	カーソル左の二文字を入れ換える。
+</PRE>
+	次の機能は、変換型補完モードでのみ割り振られますので、<!--
+	-->上に上げた機能と同じキーに設定することができます。
+<PRE>
+	complete_fix		補完内容確定
+	complete_next		次の補完候補へ
+	complete_prev		前の補完候補へ
+	complete_cancel		補完結果をキャンセル
+	complete_default	確定後、そのキーの一般モードでの
+				機能を呼び出します。
+</PRE>
+
+
+
+<H3>・<A NAME="cmd-cd">cd</A> [-p] ディレクトリ名</H3>
+	カレントディレクトリを変更します。ディレクトリ名を省略した場合、<!--
+	-->「<A HREF="#cmd-option">option</A> +<A HREF="#cd_goto_home"
+	>cd_goto_home</A>」が実行されていれば、環境変数HOMEの示す<!--
+	-->ディレクトリへ移動。さもなければ、カレントディレクトリ名を<!--
+	-->表示します。ディレクトリ名として「-」を指定すると、直前の<!--
+	-->ディレクトリへ移動します。
+	<DL>
+	  <DT>-p
+	  <DD>ディレクトリが存在しない場合、環境変数CDPATHで指定される<!--
+		-->ディレクトリ下も検索します。デフォルトにしたい場合は<!--
+		-->alias cd=&quot;cd -p&quot;を実行してください。
+	</DL>
+
+<H3>・<A NAME="cmd-cds">cds</A> dir-1 dir-2<BR>
+・cd {-s|-t} dir-1 [dir-2] ...</H3>
+
+	「cd e:/usr/local/bin」のように長い絶対パスを入力を「cds u lo b」<!--
+	-->のように、途中の経由ディレクトリ名を短縮して書くことが<!--
+	-->できます。パスは空白で区切り、対象のドライブを<!--
+	-->「set cdshort=e: i: c:」と設定しておく必要があります。<!--
+	-->「cd -s」は cds と等価です。
+<P>
+	「cd -t」は基本的に「cds」と同じですが、部分ディレクトリ名は、<!--
+	-->ディレクトリ名の先頭からしかマッチしません。<!--
+	-->つまり、\os2\boot に対し、「cd -s 2 b」や「cds 2 b」<!--
+	-->では移動できますが、「cd -t 2 b」ではできません。
+
+<H3>・<A NAME="cmd-dirs">dirs [-v]</A></H3>
+	カレントディレクトリとディレクトリスタックの内容を表示します。<!--
+	-->詳しくは「<A HREF="#cmd-pushd">pushd</A>」参照のこと。
+
+<DL COMPACT>
+<DT>-v <DD>ディレクトリスタックを「番号 ディレクトリ」の形式で一覧します。
+</DL>
+
+
+<H3><A NAME="cmd-drvalias">・drvalias drv1=drv2</A></H3>
+	以後、ドライブ文字drv1をドライブ文字drv2へ変換します。<!--
+	-->ドライブ文字のエイリアスと考えてください。
+
+<H3><A NAME="cmd-echo">・echo</A></H3>
+	次のような文字列は、後に続く文字に変換して出力されます。
+<PRE>
+	^a … ベル
+	^n … 改行復帰文字
+	^v … 垂直タブ
+	^r … 復帰文字
+	^f … 改頁文字
+	^e … ESC(0x1b)文字
+	^c … そこで出力を打切り、改行せずに終わる
+	&quot;&quot;(連続する二つの引用符) , ^q
+	   … 単一の「"」(^" は廃止しました)
+	^^ … 「^」
+	^033 ^0 など「^」の後に3桁以内の8進数
+	   … その8進数をASCIIコ－ドとする文字
+</PRE>
+	CMD.EXE native の echo とは違い、単一の引用符は表示されません。
+	(注) 以上の機能は、echo を先頭で使った場合のみ有効です。
+<PRE>
+	[E:] echo &quot;aha&quot;&quot;ha&quot; & echo &quot;ufu&quot;&quot;fu&quot;
+</PRE>
+	と入力した場合、後者の echo は CMD.EXE 内蔵版 echoが呼び<!--
+	-->出されますので、画面には、
+<PRE>
+	aha&quot;ha
+	&quot;ufu&quot;&quot;fu&quot;
+</PRE>
+	と表示されます。(それにしても、例外が多いプログラムだなぁ...)
+
+<H3>・<A NAME="cmd-exec">exec</A> コマンド名 {引数}</H3>
+	NYAOS を終了し、かわりにコマンドを起動します。
+
+<H3>・<A NAME="cmd-exit">exit</A></H3>
+	NYAOSを終了します。
+
+<H3>・<A NAME="cmd-foreach">foreach</A> [-ivn] 変数名 値-1 値-2 ... 値-n<BR>
+　　:<BR>
+　end</H3>
+
+<P>	
+同じコマンド(群)を引数を変えながら実行するときに利用します。<!--
+-->cshのforeachと違い、名前-1...名前-n を括弧で囲んではいけません。<!--
+-->また、ネストもできません。
+</P>
+<P>
+foreach を実行すると「?」、あるいは、環境変数NYAOSPROMPT2で<!--
+-->指示したプロンプトを表示して端末からのコマンド行入力を促<!--
+-->しますので、繰り返すコマンドを入力してください。コマンド<!--
+-->は複数実行が可能なので、それらを逐次入力後、「end」か「^Z」<!--
+-->の入力をもって、終了してください。
+</P>
+<P>
+「source」や「-k」オプションで読み込まれるファイル中で使用<!--
+-->するときは、コマンドは端末からではなく、そのファイルの続<!--
+-->く行から取り込まれます。繰り返しコマンドの後には end行を<!--
+-->おいてください。なお、REXXでファイルが記述されている場合、<!--
+-->foreach は使えませんので、かわりに REXX命令のDO..ENDを使って<!--
+-->ください。
+</P>
+<P>
+コマンド行中の「$」+ 変数名 を 名前-1...名前-n に順に置換して<!--
+-->実行します。「$」の後の変数名が、foreach 直後の引数と異なる場合、<!--
+-->環境変数とみなします。<!--
+-->変数名は「${変数名}」「$(変数名)」「%変数名%」と書いても構いません。
+</P>
+<P>
+変数名の直後に以下の修飾子を置いて、
+文字列の一部を抽出することもできます。
+<PRE>
+	$i:h or %i:h% … $i のディレクトリ部分を取り出す。
+	$i:t or %i:t% … $i のディレクトリ部分以外を取り出す。
+	$i:r or %i:r% … $i の拡張子を除いた部分を取り出す。
+	$i:e or %i:e% … $i の拡張子を取り出す。
+</PRE>
+</P>
+<P>
+一連の繰り返し命令の出力をリダイレクトする時は「^Z」で終了せず、
+<PRE>
+	end &gt; ファイル名
+	end | コマンド 引数 ...
+</PRE>
+で終了してください。
+<DL COMPACT>
+	<DT>-i<DD>コマンドのリターンコードが 0 でなくとも実行を中断しない。
+	<DT>-n<DD>実行すべきコマンドを(標準出力に)表示するだけで
+		実際には実行しない。
+	<DT>-v<DD>実行すべきコマンドを(標準エラー出力に)表示した後実行する。
+</DL>
+</P>
+
+<H3>・<A NAME="cmd-history">history</A> [n]</H3>
+	保存されている、n回前までの履歴を表示します。nを指定しない<!--
+	-->と全ての履歴を表示します。これをリダイレクトして、ファイ<!--
+	-->ルに保存すると、別の nyaos で「source -h」によって読み込む<!--
+	-->ことができます。
+
+<H3>・<A NAME="cmd-hotkey">hotkey</A> キーの名前  プログラム名</H3>
+	キーに実行プログラムを割り当てます。
+
+<H3>・<A NAME="cmd-lecho">lecho</A> 引数1 引数2 ...</H3>
+	デバッグ用のコマンドです。引数がどのように評価されているのか<!--
+	-->確認できます。コマンド名自身がどのように置換されるかは、<!--
+	-->which を使って確認してください。
+
+<H3>・<A NAME="cmd-let">let</A> シェル変数名[=値] …</H3>
+	シェル変数に値を設定します。
+	詳細は「<A HREF="#shellenv">７.シェル変数</A>」を参照ください。
+
+<H3>・<A NAME="cmd-ls">ls</A> {-オプション} {ファイル/ディレクトリ名... }</H3>
+	カラー ls です。
+<DIV ALIGN=CENTER>
+<TABLE>
+<TR>
+<TD>-a , --all</TD>
+<TD>HIDDEN属性、「.」で始まるファイルも表示する。</TD>
+</TR>
+
+<TR>
+<TD>-l</TD>
+<TD>サイズや変更日時も表示する。</TD>
+</TR>
+
+<TR>
+<TD>-B , --ignore-backups</TD>
+<TD>末尾がチルダのファイルを表示しない。</TD>
+</TR>
+
+<TR>
+<TD>-o , --color</TD>
+<TD>カラー表示(default)</TD>
+</TR>
+
+<TR>
+<TD>-F , --classify</TD>
+<TD>ファイル名の末尾に / や * を付ける(default)</TD>
+</TR>
+
+<TR>
+<TD>-R , --recursive</TD>
+<TD>ディレクトリを再帰的に表示する。</TD>
+</TR>
+
+<TR>
+<TD>-r , --reverse</TD>
+<TD>逆にソートする。</TD>
+</TR>
+
+<TR>
+<TD>-U</TD>
+<TD>ソートしない。</TD>
+</TR>
+
+<TR>
+<TD>-X</TD>
+<TD>拡張子でソートする。</TD>
+</TR>
+
+<TR>
+<TD>-S</TD>
+<TD>サイズ順にソート</TD>
+</TR>
+
+<TR>
+<TD>-c</TD>
+<TD>ファイルを作成した日時でソート・表示する。</TD>
+</TR>
+
+<TR>
+<TD>-t</TD>
+<TD>最後に書き込みを行った日時でソート・表示する。</TD>
+</TR>
+
+<TR>
+<TD>-u</TD>
+<TD>最後にアクセスした日時でソート・表示する。</TD>
+</TR>
+
+<TR>
+<TD COLSPAN=2>(以下、独自オプション)</TD>
+</TR>
+
+<TR>
+<TD>--longname</TD>
+<TD>ロングネーム(ＷＰＳでの名前)を表示</TD>
+</TR>
+
+<TR>
+<TD>-j , --subject</TD>
+<TD>.SUBJECT拡張属性を表示</TD>
+</TR>
+
+<TR>
+<TD>-H , --inline-comment</TD>
+<TD>一つ目のコメントをインラインで表示</TD>
+</TR>
+
+<TR>
+<TD>--multi-comment</TD>
+<TD>全コメントを表示</TD>
+</TR>
+
+<TR>
+<TD>-E</TD>
+<TD>「--subject --longname --inline-comment」と等価</TD>
+</TR>
+
+<TR>
+<TD>-P , --more</TD>
+<TD>１ページづつ表示</TD>
+</TR>
+
+<TR>
+<TD>-O , --no-color</TD>
+<TD>カラー表示を抑制します。</TD>
+</TR>
+
+<TR>
+<TD>-2 , --numeric-sort</TD>
+<TD>ファイル名中の数字を数値として比較してソート</TD>
+</TR>
+
+<TR>
+<TD>-3 , --virge</TD>
+<TD>スクロールを３行ごとに行う。</TD>
+</TR>
+
+<TR>
+<TD>-_ , --ignore-underbar</TD>
+<TD>アンダーバーで始まるファイルを表示しない。</TD>
+</TR>
+
+<TR>
+<TD>-,</TD>
+<TD>ファイルサイズを三桁ごとに , で区切る。</TD>
+</TR>
+
+</TABLE>
+</DIV>
+
+上以外のオプションが指定された場合、外部の ls.exe を呼び出します。<!--
+-->当然ながら、この場合、PATH上に ls.exe が必要となります。<!--
+-->リダイレクト/パイプ出力する際は、デフォルトでカラー表示や、<!--
+-->ファイル名の後に / や * といった文字を付加しません。<!--
+-->必要な場合 -o や -F をつける必要があります。
+</P>
+<P>
+オプションをデフォルト化するには、エイリアスを使って
+<P ALIGN=CENTER>
+		<A HREF="cmd-alias">alias</A> ls="ls -o"
+</P>
+<P>などと入力してください。</P>
+<P>
+	色の変更は、けんと(田村健人)氏のcolor-lsと同じで、次のように行います。
+<P ALIGN=CENTER>
+		set LS_COLORS=xx=string:xx=string:xx=string...
+</P>
+<P>
+設定項目(xx)は、以下のものがあります。
+<DIV ALIGN=CENTER>
+<TABLE RULES=GROUPS>
+<THEAD>
+<TR><TD>項目</TD><TD>default</TD><TD>設定する内容</TD></TR>
+</THEAD>
+<TBODY>
+<TR><TD>lc</TD>	<TD>\e[</TD>	<TD>Left code</TD></TR>
+<TR><TD>rc</TD>	<TD>m</TD>	<TD>Right code</TD></TR>
+<TR><TD>ec</TD>	<TD>\e[0m</TD>	<TD>End code</TD></TR>
+<TR><TD>fi</TD>	<TD>1</TD>	<TD>Normal file (以降 type code)</TD></TR>
+<TR><TD>di</TD>	<TD>32;1</TD>	<TD>Directory</TD></TR>
+<TR><TD>sy</TD>	<TD>31;1</TD>	<TD>System file</TD></TR>
+<TR><TD>ro</TD>	<TD>33;1</TD>	<TD>Read-only file</TD></TR>
+<TR><TD>hi</TD>	<TD>44;37;1</TD><TD>Hidden file</TD></TR>
+<TR><TD>ex</TD>	<TD>35;1</TD>	<TD>Executable file</TD></TR>
+<TR><TD>cm</TD>	<TD>44;37;1</TD><TD>コメントの色指定</TD></TR>
+<TR><TD>ln</TD>	<TD>41;37;1</TD><TD>WPSでの名前の色指定</TD></TR>
+<TR><TD>sj</TD> <TD>42:37;1</TD><TD>サブジェクトの色指定</TD></TR>
+</TBODY>
+</TABLE>
+</DIV>
+ファイルは
+<PRE>
+	&lt;left code&gt; &lt;type code&gt; &lt;right code&gt; filename &lt;end code&gt;
+</PRE>
+と表示されます。
+</P>
+
+<H3>・<A NAME="cmd-open">open</A> {-オプション} ファイル名</H3>
+<H3>　open {-オプション} &quot;&lt;オブジェクトID&gt;&quot;</H3>
+<H3>　open {-オプション} [オブジェクトID]  ←省略可の[..]に非ず</H3>
+
+<P>
+ファイル、あるいは、オブジェクトをワークプレイスシェルで開きます。<!--
+-->オブジェクトIDは不等号の&lt;と&gt;を含むので、二重引用符で囲むか、<!--
+-->不等号&lt;&gt;を[]に置き換えて入力してください。ファイル名を省略すると、<!--
+-->カレントディレクトリをフォルダとして開きます。
+</P>
+<P>
+オプション：
+<TABLE>
+<TR>
+<TD>-p , -s</TD>
+<TD>プロパティー(設定ノートブック)を開きます。</TD>
+</TR>
+
+<TR>
+<TD>-i</TD>
+<TD>アイコン表示で開きます(*)。</TD>
+</TR>
+
+<TR>
+<TD>-t</TD>
+<TD>ツリー表示で開きます(*)。</TD>
+</TR>
+
+<TR>
+<TD>-d</TD>
+<TD>詳細表示で開きます(*)。</TD>
+</TR>
+
+<TR>
+<TD>-o xxxx</TD>
+<TD>xxxx で指定される形で開きます。 例えば「-i」は「-o ICON」と等価です。</TD>
+</TR>
+</TABLE>
+(*) フォルダー/ディレクトリの場合のみです。
+</P>
+
+<H3>・<A NAME="cmd-option">option {[+/-]スイッチ名 }</A></H3>
+
+<P>
+オプションを選択します。「option +echo」「option script」(以上有効化)<!--
+-->「option -amp_start」(無効)というように指定します。<!--
+-->オプションには次のようなものがあります。括弧内はデフォルトです。
+</P>
+
+<DL>
+<DT><A NAME="amp_detach">amp_detach</A> (-)
+<DD>
+「&amp;」がコマンド末尾にあれば、裏のセッションで起動します(detach)。<!--
+-->ただし、内蔵コマンドには働きません。amp_start より優先します。
+
+<DT><A NAME="amp_start">amp_start</A> (+)
+<DD> 「&amp;」がコマンド末尾にあれば、別のセッションで起動します(start)。<!--
+-->ただし、内蔵コマンドには働きません。
+
+<DT><A NAME="auto_close">auto_close</A> (+)
+<DD>
+末尾に「&amp;」を付けて、VIOプログラムを別セッション実行して、<!--
+-->終了する時にウインドウを自動的にクローズさせます(start /F /C)。<!--
+-->「option amp_start」が＋でなければなりません。
+
+<DT><A NAME="opt-a-hist">anywhere_history</A> (+)
+<DD>
+「!」による履歴置換機能をコマンドラインの先頭以外でも適用させます。
+
+<DT><A NAME="opt-backquote">backquote</A> (+)
+<DD>
+逆クォートによる置換を許可(+)/禁止(-)します。
+
+<DT><A NAME="opt-bq-in-qt">backquote_in_quote</A> (-)
+<DD>引用符の中の逆クォートの置換を許可します。
+
+<DT>beep (+)
+<DD>BEEP音を許可します。
+
+<DT>complete_etc (+)
+<DD>オプション文字列や&lt;WP_START&gt;なども補完候補に含めます。
+
+<DT><A NAME="cd_goto_home">cd_goto_home</A> (-)
+<DD>	　「cd」だけの入力で、環境変数HOMEの示すディレクトリへ移動します。
+
+<DT>	cmdlike_crlf (-)
+<DD>	　コマンド実行後、プロンプト表示前に改行します(CMD.EXE互換表示)。
+
+<DT>	complete_hidden (-)
+<DD>	　HIDDEN属性のファイルを補完リストに入れます。
+
+<DT>	complete_tail_slash (-)
+<DD>	  補完時に加えるディレクトリの末尾を「\」ではなく「/」にします。
+
+<DT>	complete_tilda (-)
+<DD>	　末尾がチルダのファイルを補完リストに入れます。
+
+<!-- <DT><A NAME="conv_complete">conv_complete</A> (-)
+<DD>	　変換型のファイル名補完を行います。 -->
+
+<DT>	ctrl_d_eof (-)
+<DD>	  Ctrl+D で NYAOSを終了します。
+
+<DT>	ctrl_z_eof (+)
+<DD>	　Ctrl+Z でNYAOSを終了します。
+
+<DT>	debug (-)
+<DD>	　NYAOS の置換処理を逐次表示します。
+
+<DT>	direct_key (-)
+<DD>	　有効にすると、キー入力方法を変更します。
+	速くなるはずでしたが、速くなりません(笑)。
+	さらに、XFree86 上で動かなくなってしまいます。
+
+<DT><A NAME="opt-dots">dots</A> (+)
+<DD>	　空白に続く...(3個以上のドット)を..\..の形式に変換します。
+
+<DT>	echo (-)
+<DD>	  CMD.EXE に実際に渡される文字列を表示します。
+
+<DT>	history_in_doublequote (-)
+<DD>	　ダブルクォート間の「!」もヒストリ変換します。
+	シングルクォート間の「!」はこのオプションに関わらず変換しません。
+
+<DT>	honest (-)
+<DD>	　有効にすると、終了時に かんな の Warning などを洗いざらい白状します。
+
+<DT>	icanna (-)
+<DD>	　かんな変換をしないようにします。
+
+<DT>	ignore_cases (+)
+<DD>	　内臓コマンドの大文字・小文字を区別させません。
+
+<DT>	<A NAME="noclobber">noclobber</A> (-)
+<DD>	　リダイレクトによるファイル上書きを禁止します。
+	チェックできるのは、直接キーボードからタイプした<!--
+	-->ファイル名だけで、source で読み込むファイル や<!--
+	--> nyaos.rc 、alias の内側に記述された<!--
+	-->ファイル名についてはノーチェックです<!--
+	-->(上書きされてしまいます)。<!--
+	-->このオプションが設定されている時に上書きするには<!--
+	-->「&gt;!」「&gt;&gt;!」「2&gt;!」などの記号を利用します。
+
+<DT>	prompt_even_piped (+)
+<DD>	　標準入力が端末でない場合でも、プロンプトを表示します(for Mule)。
+
+<DT>	printexitvalue (+)
+<DD>	　外部コマンドのエラーコードが非０の時、画面にその値を表示します。
+
+<DT>	script (+)
+<DD>	  スクリプト実行支援機能を有効にします。
+
+<DT>	script_cache (-)
+<DD>	　スクリプトに対し、実行する命令をキャッシングします。
+
+<DT>	semicolon (+)
+<DD>	　空白に続く「;」をstartを実行しない「&」に置換します。
+
+<DT>	single_quote (-)
+<DD>	　シングルクォートをダブルクォートに置換します。シングルクォート<!--
+	-->内の文字列の評価ルールはダブルクォートと若干異なりますので、<!--
+	-->注意が必要です。
+
+<DT><A NAME="opt-sla2bs">slash_to_backslash_after_tilda (+)
+<DD>	  空白に続くチルダ文字「~」より後の「/」を「\」に置換します。
+	  次の tilda_home が ON になっている必要があります。
+
+<DT>	sos (-)
+<DD>	  SOSスクリプトの実行を許可します。
+
+<DT><A NAME="opt-tilda">tilda_home</A> (+)
+<DD>	  空白に続くチルダ文字「~」を環境変数HOMEの値へ置き換えます。
+
+<DT><A NAME="opt-tilda-without-root">tilda_without_root</A> (-)
+<DD>	　直後に \ や / の続かないチルダを %HOME%\..\ に変換します。
+
+<DT><A NAME="opt-vio">vio</A> (+)
+<DD>	  VIOの機能を使用します。プロンプト表示後、VIOでカ－ソルを<!--
+	-->強制表示させ、Promptの$Iの前後のアトリビュートを保存します。
+	off(-)状態では、画面表示にはエスケ－プシ－ケンスしか使用しません。
+</DL>
+なお、以上のオプションは NYAOS 起動の際に<PRE>
+	nyaos --<I>option</I>+ (有効化)
+	nyaos --<I>option</I>- (無効化)
+</PRE>のように変更させることもできます。
+
+
+
+<H3>・<A NAME="cmd-pushd">pushd [-p|-s|-t|-v]<!--
+	-->{ディレクトリ名 | +<I>ｎ</I>}</A></H3>
+
+現在のカレントディレクトリをスタックに保存し、指定した<!--
+-->ディレクトリへ移動します。<!--
+-->cdpath や cd-short のオプションも cdと同様に使えます。<!--
+-->ディレクトリ名を省略すると、カレントディレクトリとスタック<!--
+-->トップを交換します。ディレクトリ名として「-」を指定すると、<!--
+-->直前のディレクトリへ移動します。
+<DL COMPACT>
+<DT>-v <DD>ディレクトリスタックを「番号 ディレクトリ」の形式で一覧します。
+<DT>+<I>ｎ</I>
+<DD>ディレクトリスタックを回転させて、ｎ番目のディレクトリをカレント<!--
+-->ディレクトリにします。
+</DL>
+
+<H3>・<A NAME="cmd-popd">popd [-v] [+<I>n</I>]</A></H3>
+スタックのトップに保存されているディレクトリにchdirし、<!--
+-->スタックトップを廃棄します。
+<DL COMPACT>
+<DT>-v <DD>ディレクトリスタックを「番号 ディレクトリ」の形式で一覧します。
+<DT>+<I>n</I>(n:数字)
+<DD><I>n</I>番目のスタックに移動する。
+</DL>
+
+
+
+<H3>・<A NAME="cmd-pwd">pwd</A></H3>
+カレントディレクトリを表示します。
+
+<H3>・<A NAME="cmd-rehash">rehash</A></H3>
+
+コマンド名補完・スクリプト実行の為のキャッシュを更新します。
+オプションとしては次のようなものがあります。
+<DL>
+  <DT>-n</DT>
+  <DD>	キャッシュが空の時だけ、キャッシュを読み込む。<!--
+	-->1.61 より、キャッシュを同一マシンで動く全 NYAOS のプロセスで<!--
+	-->共有するようになりました。そのため、nyaos.rc に「rehash」を<!--
+	-->入れておくと、せっかくキャッシュが読み込まれているのに、<!--
+	-->読み込み直すため、不経済です。かといって、入れないと、<!--
+	-->正真正銘の最初の補完の際に時間がかかってしまいます。<!--
+	-->「rehash -n」は、nyaos.rc 専用のオプションと考えればよいと<!--
+	-->思います。</DD>
+  <DT>-q</DT>
+  <DD>寡黙になる</DD>
+</DL>
+
+
+<H3>・<A NAME="cmd-set">set</A></H3>
+
+通常の set の機能に加え、「+=」という演算子が使えます。<!--
+-->基本的に「set X+=A」は「set X=A;%X%」なのですが、<!--
+-->「;」で区切られた要素の重複チェックも行います。<PRE>
+		[C:\] set X=A;B;C
+		[C:\] set X+=C
+		[C:\] set X
+		C;A;B
+</PRE>PATHの設定などに便利なはずです。
+
+
+<H3>・<A NAME="cmd-source">source</A>{-h|-e} ファイル名 {引数}</H3>
+ファイルに記述された環境設定やエイリアス定義を読み込みます。<!--
+-->ファイルの最初の行を /*..*/ で始めれば、REXXで記述することも<!--
+-->できます。この場合のみ、引数をARG関数などで参照できます。
+
+<DL COMPACT>
+  <DT>-h
+  <DD>	過去に「history &gt; ファイル名」で保存したヒストリを、<!--
+	-->現在の NYAOS のヒストリに読み込みます。
+  <DT>-e
+  <DD>	エラーメッセージをファイルより読み込みます
+</DL>
+
+<H3>・<A NAME="cmd-unalias">unalias</A></H3>
+
+別名を破棄します。詳しくは「<A HREF="#cmd-alias">alias</A
+>」参照のこと。
+
+<H3>・<A NAME="cmd-which">which</A> コマンド名</H3>
+
+<P>
+実行されるコマンドの絶対パスを表示します。
+エイリアスやスクリプトの場合は、置換の結果をまず表示します。
+</P>
+<P>
+内蔵コマンドを使いたくない場合は、<A HREF="#cmd-alias">alias</A>で<!--
+-->回避することができます。例えば、<A HREF="#cmd-ls">ls</A>コマンド<!--
+-->をもっと高機能な外部のlsと置き換えたい場合は、
+<PRE>
+	alias ls=ls.exe
+</PRE>
+と別名定義してください。ただし、ls に限って言えば、未サポートの<!--
+-->オプションを見付けた場合、自動的に外部の ls.exe を呼び出すので、<!--
+-->特に<A HREF="#cmd-alias">alias</A> の必要はありません。
+</P>
+
+<H2><A NAME="replaces">■■■■  ５．置換  ■■■■</A></H2>
+
+NYAOS は入力文字列を様々に置換することによって、tcsh ライクな文法を<!--
+-->実現しています。その一つ一つを以下で説明します。
+
+<H3><A NAME="dots">★ 5.1  「...」「....」</A></H3>
+
+空白に続く n個(n>2)のドットを次のように置換します。
+<PRE>
+	...	→ ..\..
+	....	→ ..\..\..
+	.....	→ ..\..\..\..
+</PRE>
+  <TT><A HREF="#cmd-option">option</A> -<A HREF="#opt-dots">dots</A></TT>
+でこの置換を抑制できます。
+
+
+<H3><A NAME="his-rep">★ 5.2  ヒストリ(履歴)を参照する置換</A></H3>
+
+<PRE>
+	!!	一つ前の入力文字列へ
+	!n	最初から n 番目に入力文字列へ
+	!-n	n 個前に入力した文字列へ
+	!str	str から始まる、最も最近の入力文字列へ
+	!?str?	str を含む、最も最近の入力文字列へ
+</PRE>
+<DL>
+  <DT><A HREF="#cmd-option">option</A>
+	+<A HREF="#opt-a-hist">anywhere_history</A>
+  <DD>任意の位置の「!」を対象とする。
+  <DT><A HREF="#cmd-option">option</A>
+	-<A HREF="#opt-a-hist">anywhere_history</A>
+  <DD>先頭の「!」だけを対象とする。
+</DL>
+  ヒストリ置換には次のような語尾をつけることができます。
+<PRE>
+	:0	コマンド名を引用する。
+	:m	m 番目の引数だけを引用する。
+	:m-n	m 番目から n番目までの引数を引用する。
+	:-n	コマンド名と n 番目までの引数を引用する。
+	^	最初の引数だけを抜き出す。
+	$	最後の引数だけを抜き出す。
+	*	全ての引数を引用する。
+</PRE>
+なお、以上の語尾を ! の直後につけると、直前の入力に対する操作となります。
+
+<H3><A NAME="env-rep">★ 5.3 環境変数を参照する置換</A></H3>
+
+<UL>
+  <LI><TT>%環境変数名%</TT> → その環境変数の内容
+  <LI><TT>%環境変数名:h%</TT> → 環境変数の中のパス名のディレクトリ部分
+  <LI><TT>%環境変数名:t%</TT> → 環境変数の中のパス名のディレクトリ以外の部分
+  <LI><TT>%環境変数名:r%</TT> → 環境変数の中のパス名の拡張子以外の部分
+  <LI><TT>%環境変数名:e%</TT> → 環境変数の中のパス名の拡張子部分
+  <LI>%HOME% が x:\foo の時、<BR>
+	<BLOCKQUOTE>
+	「~/bar」→「x:\foo\bar」<BR>
+	「~bar」 →「x:\foo\..\bar」<BR>
+	</BLOCKQUOTE>
+</UL>
+と置換します。また「~:」(チルダ+コロン)はブートドライブ名に置換します。
+<DL>
+  <DT><A HREF="#cmd-option">option</A>
+	(+/-)<A HREF="#opt-tilda">tilda_home</A>
+  <DD>	チルダを置換する/しない。
+  <DT><A HREF="#cmd-option">option</A>
+	+<A HREF="#opt-sla2bs">slash_to_backslash_after_tilda</A>
+  <DD>	チルダ以降の「/」を全て「\」へ変換する(括弧内参照)。
+</DL>
+
+<H3><A NAME="singlequot">★ 5.4 シングルクォートの変換</A></H3>
+
+シングルクォートをダブルクォートに変換します。ただし、<!--
+-->ダブルクォートにすでに囲まれているものは除きます。また、<!--
+-->シングルクォートに囲まれているダブルクォートは、<!--
+-->ダブルクォート二個に変換します。
+
+<H3><A NAME="backquot">★ 5.5 逆クォートによる置換</A></H3>
+
+逆クォート「`」で囲まれた文字列をコマンドとして実行して、<!--
+-->その標準出力と置き換えます。ただし、逆クォート内に<!--
+-->内蔵コマンドは置けません。逆クォート自身をコマンドに<!--
+-->渡したい時は、逆クォートを二つ連続して書いてください。
+
+<DL>
+  <DT>	'..`～`..' (シングルクォートに囲まれた逆クォート)
+  <DD>		→ 置換しない。そのまま。
+
+  <DT>	"..`～`.." (ダブルクォートに囲まれた逆クォート)
+  <DD>		→ ～の標準出力と置換する。
+
+  <DT>	...`～`...  (クォートの類に囲まれていない逆クォート)
+  <DD>		→ ～の標準出力と置換する。ただし、複数の空白や改行文字などは
+		   一個の空白となる。
+</DL>
+<DL>
+  <DT><A HREF="#cmd-option">option</A>
+	(+/-)<A HREF="#opt-backquote">backquote</A>
+  <DD>	逆クォートの置換を許可/禁止します。
+  <DT><A HREF="#cmd-option">option</A>
+	(+/-)<A HREF="#opt-bq-in-qt">backquote_in_quote</A>
+  <DD>	引用符内の逆クォートも対象に含める/含めない。
+</DL>
+
+<H3><A NAME="terminate">★ 5.6 命令の区切文字に関する置換</A></H3>
+
+<DL>
+<DT>「A &amp; B &amp;」→ 「start A &amp; start B」
+<DD>	A,B をそれぞれ別のセッションで実行する。
+	<A HREF="#cmd-option">option</A>
+	<A HREF="#amp_start">amp_start</A> を設定している際のみ有効です。
+
+<DT>「A &amp; B &amp;」→ 「detach A &amp; detach B」
+<DD>	A,B をそれぞれ裏のセッションで実行する。
+	<A HREF="#cmd-option">option</A>
+	<A HREF="#amp_start">amp_detach</A> を設定している際のみ有効です。
+
+<DT>  「A |&amp; B 」→ 「A 2&gt;&amp;1 | B」
+<DD>	A の標準出力・標準エラー出力を、Bの標準入力へパイプする。
+
+<DT>  「A ; B」,「A &amp;; B」→ 「A &amp; B」
+<DD>	A , B を逐次実行します。<A HREF="#cmd-option">option</A>
+	<A HREF="#amp_start">amp_start</A> を設定している時に「&amp;」の
+	代わりに用います。前者は<A HREF="#cmd-option">option</A>
+	<A HREF="#opt-semicolon">semicolon</A> を設定している場合のみ
+	有効で、かつ「;」の直前に一つ以上の空白が必要です。
+</DL>
+  これらの置換は、A,B は内部コマンドの場合、うまく実行されません。
+
+
+<H3><A NAME="prompt">★ 5.7 拡張プロンプト</A></H3>
+
+通常のCMD.EXEでも使える文字に加えて、以下が<A HREF="#shellenv"
+>シェル変数</A>／環境変数PROMPTで使用できます。
+<TABLE>
+<TR>
+<TD>$ZA</TD>
+<TD>ベル</TD>
+</TR>
+
+<TR>
+<TD>$ZH $!</TD>
+<TD>ヒストリ番号</TD>
+</TR>
+
+<TR>
+<TD>$ZV $@</TD>
+<TD>カレントドライブのボリュームラベル</TD>
+</TR>
+
+<TR>
+<TD>$ZP</TD>
+<TD>カレントディレクトリ(ＥＡロングネームへの変換を行う)</TD>
+</TR>
+
+<TR>
+<TD>$W</TD>
+<TD>カレントディレクトリ($HOME→「~」の変換を行う)</TD>
+</TR>
+
+<TR>
+<TD>${..}</TD>
+<TD>中括弧で囲まれた文字のドライブのカレントディレクトリを<!--
+-->画面最上行に表示する。例: ${cdef}</TD>
+</TR>
+
+</TABLE>
+
+<A HREF="#shellenv">シェル変数</A>PROMPT には、拡張マクロを使ったプロンプトを。
+環境変数PROMPT には、CMD.EXE でも使えるマクロだけのプロンプトを定義することを
+お薦めします。
+<PRE>
+[例]
+	let prompt=$w[$zh]
+	set prompt=[$p]
+</PRE>
+環境変数 NYAOSPROMPT も同様に使用できます。
+
+<H3><A NAME="redirect">★ 5.8 拡張リダイレクト</A></H3>
+
+<P>
+CMD.EXE で通常使える「&gt;」「&gt;&gt;」「2&gt;」「2&gt;&gt;」<!--
+-->「2&amp;&gt;1」「|」の他に次のようなものが使えます。
+<DL COMPACT>
+  <DT>&gt;&amp; ファイル名
+  <DD>	標準出力・標準エラー出力ともに、一つのファイルへリダイレクトします。
+
+  <DT>|& コマンド名
+  <DD>標準出力・標準エラー出力ともに、別のコマンドの標準入力へ接続します。
+</DL>
+</P>
+<P>
+<A HREF="#noclobber">option +noclobber</A>を用いると、<!--
+-->リダイレクトで上書きを禁止することができます。
+<DL COMPACT>
+  <DT>&gt;! ファイル名
+  <DT>2&gt;! ファイル名
+  <DT>&gt;&amp! ファイル名
+  <DD>	同名のファイルが既に存在しても、上書きします。<!--
+	-->「option noclobber」で、<!--
+	-->上書き禁止モードになっていても有効です。
+</DL>
+</P>
+
+<H2><A NAME="script">■■■■  ６．スクリプト実行支援  ■■■■</A></H2>
+
+<H3><A NAME="unixscript">★ 6.1  UNIX(#!)型スクリプト</A></H3>
+
+<P>
+UNIX(というか、そのシェル)では、
+<OL>
+  <LI>テキストファイルの先頭を「#!」で始め、
+  <LI>その直後にインタープリタのコマンド名、および、オプションを書き、
+  <LI>そのテキストファイルの実行属性を立てて(chmod +x)
+</OL>
+おけば、そのテキストファイル(スクリプト)をあたかも単独のコマンドであるかの
+ように、実行する機能があります。
+</P>
+<P>
+具体的には、例えば test.plというファイルが<PRE>
+	#!/usr/local/bin/perl
+</PRE>という行で始まっている場合、<PRE>
+	test.pl param-1 param-2 ...
+</PRE>という入力が<PRE>
+	/usr/local/bin/perl test.pl param-1 param-2 ...
+</PRE>と等価になります。これを NYAOS に取り入れてみました。
+</P>
+<P>
+UNIXとの違いは次のような点があります。
+<OL>
+  <LI>実行属性がファイルの基本属性にはないので、「#!」で始まるかどうか<!--
+	-->だけを調べている。
+  <LI>スクリプトの検索は、環境変数PATHではなく、SCRIPTPATHで行う。
+  <LI>環境変数 SCRIPTDRIVE にドライブ名を定義しておけば、<!--
+	-->インタープリタ名が「\」ではなく「/」で始まっている場合に、<!--
+	-->そのドライブ名をインタープリタ名の前に挿入する。
+  <LI>拡張子を省略した場合、EXE , CMD , COM , 拡張子無しの<!--
+	-->順にファイルを検索する。
+</OL>
+</P>
+<P>
+1.は拡張属性を用いてもよかったのですが、<!--
+-->ディスクアクセスが増えるだけなので、見送りました。
+</P>
+<P>
+2.は PATHを使うと、多くのディレクトリを検索しなければいけないので、<!--
+-->ディスクアクセスの節約を考えた上の仕様です。
+</P>
+<P>
+3.は、よく「#!/usr/local/bin/perl」と指定している<!--
+-->スクリプトに対する対応です。<!--
+-->UNIXのスクリプトをそのまま使えるようにしました。
+</P>
+<P>
+環境変数の定義の例を次に示します。<PRE>
+	set SCRIPTPATH=.;e:/usr/script;e:/usr/bin
+	set SCRIPTDRIVE=e:
+</PRE>
+以上の置換の対象は、入力した最初の単語だけではなく、<!--
+-->「|」や「&amp;」の直後にも適用されるので、<!--
+-->スクリプトのフィルタ的使用も可能です。
+</P>
+
+<DL>
+<DT>(注意)
+<DD>
+一度、実行したスクリプトについては、使用インタープリタ名を記憶し、<!--
+-->次回以降、そちらを利用します。その為「#!」行を変更しても、<!--
+-->実際の実行に反映されない場合があります。その際は「rehash」<!--
+-->と入力してください。
+</DL>
+
+<H3><A NAME="sos">★ 6.2 COM(SOS)型スクリプト</A></H3>
+
+NYAOS は SOS で作られたスクリプトを DOSプロンプトではなく、OS/2<!--
+-->プロンプトで実行することも出来ます。SOS(Script language and Other
+application execution Support)は、奈良女子大学の新出尚之先生の<!--
+-->開発された、DOS上で「#!」相当の機能を実現するソフトウェアです。
+<P>
+SOSによるスクリプトは、もちろん OS/2 上でも動くのですが、見かけ上、<!--
+-->COMファイルなので、実行の度に PC-DOS窓が開いてしまい、あまり美しく<!--
+-->動作できるとは言えません。
+<P>
+そこで、NYAOS は
+<UL>
+  <LI>拡張子が COM である。
+  <LI>そのファイルは、環境変数SCRIPTPATHが差すディレクトリ上に存在する
+  <LI>二行目の二文字目以降に「soshdr/Nide」という文字がある
+  <LI>最初の 14 行が全て表示可能文字であり、先頭の文字が #;%:' のいずれかである
+</UL>
+場合、そのファイルを SOSスクリプトだと判断して、SOSヘッダの動作を<!--
+-->OS/2 プロンプトでエミュレート(というほどのものではないが)する機能を<!--
+-->追加しました。
+<P>
+基本動作は、「#!」形式のスクリプトと同じで<!--
+-->、コマンドラインの置換で実現されています。<!--
+-->この機能によって、DOS/OS/2共用のスクリプトを作ることができます。<!--
+-->なお、拡張子「.com」の入力は省略できます。
+
+<H3><A NAME="java">★ 6.3 Java アプリケーション</A></H3>
+
+<P>Java アプリケーション XXX.class を実行する際、<!--
+-->通常は「java XXX」と入力する必要があります。<!--
+-->NYAOS では、これを単に「XXX.class」と入力して実行することができます。
+</P>
+<P>一見、文字数が増えるので、メリットが無いように見えますが、<!--
+-->１カラム目から CLASSファイル名を書くので、コマンド名補完が効きますので、<!--
+-->TABキーだけで「.class」部分も入力でき、<!--
+-->手間的には多少は楽になると思います。
+</P>
+<P>なお、コマンド名補完は、環境変数 CLASSPATH にリストアップされている、<!--
+-->ディレクトリ上の .class ファイルのみ有効です。<!--
+-->zip/jar アーカイブの中までは検索しません。
+<P>
+なお、java コマンドに渡す引数は、環境(シェル)変数 JAVAOPT に設定してください。
+</P>
+
+<H2><A NAME="shellenv">■■■■ ７．シェル変数  ■■■■</A></H2>
+
+<P>
+シェル変数とは、NYAOS内でしか参照できない環境変数のようなものです。
+NYAOS で用いる変数と、他の(NYAOSから呼び出される)アプリケーションで
+使用する変数がバッティングしないように用意したものです。
+</P>
+<P>
+シェル変数の設定には「<A HREF="#cmd-let">let</A>」を使います。
+csh の set コマンドとほぼ同じように使います。
+<PRE>
+　　・シェル変数への代入：
+		let VAR1=VALUE1 VAR2=VALUE2 … ↓
+	「=」の前後に空白が入ってはいけません。
+
+　　・シェル変数の参照：
+		let VAR1 VAR2 ↓
+		echo %VAR1% %VAR2% ↓
+	二番目の記法では環境変数と区別がつきません。
+
+　　・定義されている全シェル変数の列挙
+		let ↓
+
+　　・シェル変数の削除
+		let VAR1= ↓
+</PRE>
+</P>
+<P>
+従来の NYAOSの内蔵コマンドで、環境変数を参照するものは、全てシェル<!--
+-->変数も参照するようになります。該当するシェル変数が未定義の場合、<!--
+-->同名の環境変数を参照します。<!--
+-->シェル変数名は大文字・小文字を区別しません。
+</P>
+<P>
+特殊なシェル変数として次のようなものがあります
+<DL COMPACT>
+<DT>ATEXIT
+<DD>	NYAOS 終了時に実行すべきコマンドを設定できます。
+<DT>CWD
+<DD>	現在のカレントディレクトリを保持しています。
+<DT>NOTPATHCHAR
+<DD>	補完の際に、パス名に含めて欲しくない文字を定義できます。<!--
+	-->例えば、「let NOTPATHCHAR="+-;@"」としておけば、「netselect <!--
+	-->@~/hobb」と入力している時、「@」が邪魔で補完できないというのを<!--
+	-->回避できます。
+</DL>
+</P>
+
+<H2><A NAME="pipe">■■■■ ８．子プロセスからの環境操作  ■■■■</A></H2>
+
+<P>通常、子プロセスは、親プロセスの環境(カレントディレクトリ・環境変数)<!--
+-->を操作することはできませんが、NYAOS は外部に対して、名前付きパイプを<!--
+-->公開しており、こちらにコマンドを書き込むことによって、子プロセスより<!--
+-->環境を変更することができます。
+</P>
+<P>使い方ですが、名前付きパイプのパイプ名は、環境変数 PIPE2NYAOS に格納<!--
+-->されています。このパイプに普通コマンドラインに入力する文字列を書きこむ<!--
+-->だけで Ok です。
+</P>
+<PRE>
+	例１：NYAOS のカレントディレクトリの操作
+		[C:\usr\src\nyaos] echo %PIPE2NYAOS%
+		\PIPE\NYAOS.1574
+		[C:\usr\src\nyaos] copy con \PIPE\NYAOS.1574
+		cd ..
+		^Z
+		[C:\usr\src] _
+
+	例２：NYAOS の環境変数の操作
+		[C:\] echo %hogehoge%
+
+		[C:\] copy con %PIPE2NYAOS%
+		set hogehoge=uhauha
+		^Z
+		[C:\] echo %hogehoge%
+		uhauha
+		[C:\] _
+
+	例３：パッケージに同梱した writer.cc を参照ください。
+
+</PRE>
+<P>パイプのバッファは 512 bytes しか確保していませんので、<!--
+-->あまり大量に書き込むとデッドロックに陥ります。<!--
+-->使用はほどほどにしてください。
+</P>
+
+
+<H2><A NAME="doki">■■■■ ９．製作動機  ■■■■</A></H2>
+
+<P>
+このプログラムを開発するまで、自分は<A
+HREF="http://www.iti.gov.sg/staff/cplee/">LEE Cjin Pheow</A
+>氏作の「Yet Another OS/2 Shell」を使っていました。
+それは生のCMD.EXEに比べると、非常に快適な環境だったのですが、<!--
+-->次のような不満がありました。
+<OL>
+  <LI>dir命令の起動が遅い。
+  <LI>ファイル名補完時に開かれる窓の枠が日本語環境だと見事に化ける。
+  <LI>倍角文字の右側にカーソルが移動する。
+</OL>
+</P>
+<P>
+そこで、自分で OS/2 のコマンドラインのシェルを作ろうと思い至ったわけです。
+製作にあっては、以下のような目標を立てました。
+<OL>
+  <LI>入力関係は、ほか(例えばエディタ)でも簡単に転用できるような
+	C++クラスとする。
+  <LI>DOS(VDM)でも使用できる。
+  <LI>ファイル名補完は、できるだけ tcsh を目指す。
+  <LI>全機能(パイプやリダイレクト)を自分で作るのではなく、
+	CMD.EXE を system 関数で呼び出すだけのプログラムとする。
+  <LI> 内蔵lsを用意する。
+  <LI>人に配るなら、エイリアスやヒストリーが必要。
+</OL>
+</P>
+<P>
+1.0 の時点では、3.がまだまだでしたが、自分ではほぼ満足いくところ<!--
+-->までできましたので、公開に踏みきりました。2. は当初DOS-Extender
+RSX.EXE を使うことで実現できていたのですが、
+<UL>
+  <LI>RSX.EXE 自身がコンベンショナルメモリをかなり消費するので、NYAOSの上
+    で大きなプログラムを起動できない。
+  <LI>環境によっては、実行もできないという報告がある。
+  <LI>OS/2 の API 関数をあまり積極的に使えない。
+</UL>
+などの理由で、現在は VDM のサポートをやめています。
+</P>
+<P>
+名前については、YAOSの日本語対応パッチと勘違いされないか心配ですが、<!--
+-->ゴロのよさから、YAOS に"N"を付けて NYAOS --- Nihongo Yet Another
+Os/2 Shell としました。(でも、将来的には名前を変えるかも...)
+</P>
+<P>
+これからの展望としては
+<UL>
+ <LI>クラス設計の失敗から転用しずらくなったエディタ部の再構築
+ <LI>CMD.EXE を利用しない、独立シェル化
+ <LI>コマンド実行部とエディタ部をそれぞれ、汎用ＤＬＬ化
+</UL>
+などを考えています。ですが、これらは仲々難しく、
+当分先のことになると思われます。
+</P>
+
+
+<H2><A NAME="limits">■■■■  １０．制限事項  ■■■■</A></H2>
+
+<UL>
+<LI>
+「<A HREF="#cmd-option">option</A> -<A HREF="#opt-vio">vio</A>」の時に、<!--
+-->環境変数 Prompt/NyaosPrompt で $I,${...} を使うと、<!--
+-->アトリビュートが初期化されてしまいます。プロンプトでエスケープ<!--
+-->シーケンスを使う場合、$I,${...} は先頭に置いてください。
+<P>
+<LI>
+普通に環境変数を操作するような、OS/2 のコマンドファイルを実行しても、<!--
+-->親プロセスの NYAOSには反映されません(<A HREF="#pipe">８．</A>の<!--
+-->名前付きパイプを使えば別ですが)。環境変数の設定は、「~/.nyaos」<!--
+-->に定義するか、<P ALIGN=CENTER>
+	<A HREF="#cmd-source">source</A> コマンドファイル名
+</P>で実行してください。
+<P>
+<LI>
+NYAOS は mode 命令を監視して、可能な限り、画面サイズを環境変数 COLUMNS<!--
+--> やLINES に反映させますが、バッチファイル中の mode 命令にまでは目が<!--
+-->届きません。
+「~/.nyaos」や<A HREF="#cmd-source">source</A>で読み込むファイルは大丈夫です。
+<P>
+<LI>CMD.EXE の for命令は「for %%i in (*.cc) do echo %%i」のように、
+	「%%」を「%」の代わりに使用してください。<!--
+	-->これは NYAOS の環境変数置換機能が「%%」を<!--
+	-->「%」へ変換してしまうからです。
+<P>
+<LI>「内蔵ls | more」が Ctrl-C で終了できません。
+	Ctrl-Break で代用してください。
+	ただし、普段 Ctrl-Break は NYAOS 自身を終了させますので、
+	注意してください。
+</UL>
+
+<H2><A NAME="thanks">■■■■  １１．最後に  ■■■■</A></H2>
+
+<P>
+当プログラムはフリーソフトウェアであり、使用は自由であり無料です。<!--
+-->著作権は作者 : 葉山 薫 にあり、放棄はしておりません。<!--
+-->配布・転載は歓迎ですが、当ドキュメントを必ず実行ファイルに添付してください。
+</P>
+<P>
+ソースリストは別のパッケージ(tar+bzip2 によるアーカイブ)に含まれています。<!--
+-->こちらは GNU General Public Licence に従って、改変・再配布できます。
+</P>
+<P>
+当プログラムを使用してうえで生じたいかなる損害についても、作者は責任を<!--
+-->負いませんが、バグリポートを送っていただければ、次のバージョンでは、<!--
+-->できるだけバグを修正させていただきます。
+</P>
+<P>
+NYAOS の最新版は
+<DIV ALIGN=CENTER>
+   <A HREF="http://hp.vector.co.jp/authors/VA009797/warp/nyaos.html"
+   >http://hp.vector.co.jp/authors/VA009797/warp/nyaos.html</A>
+</DIV>
+より入手可能です。</P>
+<P>
+最後になりましたが、NYAOSの開発に際して協力いただきました、
+<PRE>
+   金島 岳  さん、宇野 篤也さん、山田 秀雄さん、奥西 藤和さん、
+   吉田 孝一さん、松尾 浩  さん、我那覇 誠さん、赤木 有一さん、
+   近藤 弘康さん、羽生 匡之さん、清水 洋  さん、相澤 邦彦さん、
+   さとうひろもとさん、品野 竜太さん、大島 幸一さん、上野 博さん、
+   我澤 賢之さん、松村 興さん、山野＠ＮＥＬさん、大久保 均さん、
+   崎濱 たつひでさん、橋本 出さん、Altair☆さん、畠山 明さん、
+   Kai Eversさん、吉田かつひささん、織華さん、葛原 賢二さん、
+   今井 優さん、Chris Hellwigさん、小林 敬太郎さん、FRIES さん、
+   中山 靖さん、Jeff R. さん、中川 貴之さん、たが まさひろさん、
+   大黒 義裕さん、 そして Sukisuki-OS/2 Mailing List の皆様方
+</PRE>
+に、この場を借りてお礼申し上げます。ありがとうございました。
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,74 @@
+!!! inetd の設定
+
+* /etc/inetd.conf で設定
+* 再起動は kill -HUP (inetd の pid) など
+
+!!! アクセス制御(TCP Wrappers)
+
+/etc/hosts.allow と /etc/hosts.deny
+
+!!! xinetd の設定
+
+!!! sendmail (MTA: Mail Transfer Agent)
+
+!! メールリレー
+
+* /etc/mail/access ファイルで設定する
+** 「ホスト名△{RELAY or REJECT}」
+
+!! メール転送とエイリアス
+
+* /etc/aliases を編集 → newalias コマンドを発行 → /etc/alias.db が更新され有効になる
+* ~/.forward ファイル
+
+!!! メールキュー
+
+mailq … 未送信メール・送信失敗メールの確認
+
+!!! Apache
+
+* 起動
+** /etc/rc.d/init.d/httpd start (起動スクリプトによるスタート)
+** /usr/local/apache/bin/apachectl start (制御コマンド)
+* 設定ファイル
+** /etc/httpd/conf/ 以下
+** /usr/local/apache/conf/ 以下
+** httpd.conf
+
+!!! NFS
+
+* /etc/exports … エクスポートするディレクトリ
+** 「公開ディレクトリ名△アクセス許可ホスト(オプション)」
+* NFS を mount する時は 「``-t nfs``」が必要
+
+!!! Samba
+
+* smbd …ファイルとプリンタの共用
+* nmbd …ブラウズ機能と(NetBIOSによる)名前解決
+* smb.conf … 設定ファイル
+
+!!! DNS サービス
+
+!! リゾルバ
+
+* /etc/hosts
+* NIS(NIS+)
+* DNS
+
+* /etc/nsswitch.conf (/etc/hosts.conf) で順番を決める。
+* DNSサーバは /etc/resolv.conf で指定する。
+
+!! bind
+
+* サーバデーモンは named。
+* bind 4 の設定ファイル … /etc/named.boot
+* bind 8 の設定ファイル … /etc/named.cnof
+
+ゾーンファイルのレコード
+
+|| SOA | 管理情報
+|| NS | ネームサーバ
+|| MX | メールサーバ(正引き)
+|| A | ホスト名に対応するIPアドレス(正引き)
+|| CNAME | ホスト名の別名(正引き)
+|| PTR | IPアドレスに大するホスト名(逆引き)

@@ -1,0 +1,23 @@
+<<今日のひとこと>>
+
+8月30日の日記が、8月31日の日記の要約になっている件について
+
+<<今月のひとこと>>
+
+連載時のニアの「にやり顔(?)」が、単行本で修正されている件について
+
+<<Project XGAWK>>
+
+http://d.hatena.ne.jp/Rocco/20050831#p2{Rocco の日記}より：
+
+<blockquote>
+PostgreSQL の読み込みは libdbi を使って、MySQL をはじめ多くのデータベースに対応させようと、開発者のひとりである Andrew J. Schorr も言っています。
+</blockquote>
+
+>> Oracle! Oracle! Oracle! <<
+
+正直、Perl/DBI は、メソッドのネーミングが今一(selectall_arrayref…って)。
+Ruby/OCI は全ての SQL 発行が「exec」で統一されていて、カクイイ。
+xgawk では、格好よいネーミングになればいいのになぁ。
+
+

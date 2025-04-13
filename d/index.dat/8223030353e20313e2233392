@@ -1,0 +1,81 @@
+<<hoge.txt grep bar | sort>>
+
+ずいぶん、いろんな人にリンクしてもらったようで。
+もーちとセクションタイトルをマシなものにすればよかった。
+
+この手のテクは UNIX板で定期的に湧いてくるシェル系のスレに
+ちょくちょく出ているみたいなので、シェルを勉強中の若い人は、
+ヲチする価値あると思う。
+なんだかんだ言って、現場では sh とか awk がまだまだ使われてるしねぇ。
+（一部で悪名高き「
+http://www.amazon.co.jp/exec/obidos/ASIN/4756107850/249-0190012-6728352{
+たのしい UNIX}」は、まだまだ多くの職場に転がってて、みんな読んでる）
+
+ところで、この書き方については、実のところ、トリッキーで
+「職場で自分しか分からない」とかいうことになりかねないので、
+スクリプトで書くのは余りお勧めしない。
+（ソースコードはショーじゃないんだから、
+なるべく誰にでもすぐ分かる書き方をすべき）
+
+<<((lb))D((rb)) 腐ったストリームの方程式>>
+
+ふむ、future氏は、引き続き、Ｄ言語ライブラリの
+MultiBytes 対応をやってくれているようである。良き哉。
+
+* http://www.future-ta.com/future/blog/index.php?itemid=62{
+    でぃげんごのひょうじゅんしゅつりょくたいおう - 未来創世記}
+* http://www.future-ta.com/future/blog/index.php?itemid=61{
+    でぃげんごのひきすうのたいおう - 未来創世記}
+
+ところで、かなり本気でやっているようだが、本業の方は、大丈夫か？ 
+謝罪と賠償を要求しても、一銭も出んぞｗ
+
+ちょっとまじレスすると、できれば標準に取り込んでもらえるような
+方向に進んでもらいたいなーというのが本音。
+ローカルでしか使われないライブラリで終わって欲しくない。
+日本のＤコミュニティーと連携をとりたいところだな。
+
+:(追記)
+:: Ｄのメーリングリスト入ったが、半年間、メールが流れていない模様。駄目だ… orz
+
+<<連中にhttp://www5a.biglobe.ne.jp/~parari/uo/skill/provocation.html{
+    煽動(Provocation)}をかけたのは誰だ？>>
+
+http://www.tbs.co.jp/program/sundayjapon.html{サンデー・ジャポン}
+を見る。これ、明らかに、朝日に味方してるねぇ。
+
+あそこまで新聞社があからさまに捏造するなんて、
+信じられないかもしれないけどね。
+
+反○○の先鋒たる安倍氏たたきに、目下腐敗中の NHK が
+見事に利用されたといったところですか。
+
+* http://hiddennews.cocolog-nifty.com/gloomynews/2005/01/post_5.html{
+    暗いニュースリンク: コンドリーザ・ライス：
+	「津波災害は米国にとって素晴らしい機会」}
+    (http://www.annie.ne.jp/~hachi/aketekure/diary.shtml#050120{
+    「算数できんの気にし過ぎとや」日記}より)
+((br))　ライスって…頭悪そうに見えて、やっぱり頭悪いのか？
+* http://www.wikiroom.com/windows/?FrontPage{
+    Win2ch Wiki}
+    (http://www.otsune.com/diary/2005/01/22.html#200501221{
+	void GraphicWizardsLair( void ); //}より)
+((br))　ふむ、とりあえず、メモ。
+* http://www.kanzaki.com/docs/Style/URI.html{
+    クールなURIは変わらない -- Style Guide for Online Hypertext }
+    (http://www.remus.dti.ne.jp/~a-satomi/nikki/2005/01a.html#d23n01{
+	ねこめしにっき（2005年1月）}より)
+((br))　ふっふっふ。当ページも「
+    http://hp.vector.co.jp/authors/VA009797/script/second.html{
+    新約葉山文書}
+    」(第二部)以来、URI は一切変わっていないのです。
+    おかげで、サイトが３つのドメイン(ベクター、ニフティ、ロリポップ)
+    に分散していて、個人的には、かなり気持ち悪いのではありますが、
+    過去の被リンクが切るわけにはまいりませんことよ。
+((br))　なお、「http://hp.vector.co.jp/authors/VA009797/script/today.html{
+    近況報告}」(第零部)「
+    http://hp.vector.co.jp/authors/VA009797/script/yodan.html{旧約葉山文書}
+    」(第一部)に関しては、大学追い出されたんで、仕方ありませんのことよ
+    （つーか、そのサーバ、そもそも、もうねぇし）。許せよ。
+((br))　あ、NYAOS 2.xx のサポートページは、かなり、ころころ変わってるわ。すみません。
+    (でも、旧URL から自動転送はされるんですよ)

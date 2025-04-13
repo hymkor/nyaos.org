@@ -1,0 +1,85 @@
+<<新人歓迎会のダメージで、血液がドロドロだぜ>>
+
+飲み過ぎはイクナイ！
+
+<<メーカーサポートは情報をサマライズしてくれない>>
+
+個々の現象について、詳細情報をフィルタリングなしにバババと出すだけで、
+それらがどういう因果関係で起きたとか、分析の類を一切しようとしない。
+無論、結論なんてどこにも無い。
+質問された個々のことを、それぞれ答えるだけ。
+こっちで話をまとめて、図作って、あってる？と再三確認。
+
+ミドルウェアについても、開発元のメールの無想転送としか思えぬふしがある。
+ハードウェアベンダーって、そんなもんか？ 世界最大級の某社でも？
+
+営業さんは一所懸命なんだけどねぇ。
+
+<<[wifky] 新規ページの作成を制限できない件について>>
+
+UN*X 系であれば、<code>chmod -w wifky.dat/</code>すればよろし。
+だが、Windows はどうするか？
+
+>> 見捨てるか？ <<
+
+「<code>attrib +r .</code>」はエラーにならないようだが、
+しっかりとファイルは新規作成できてしまう。
+Windows でディレクトリの読み込み専用属性って、
+設定できるけど、意味ないのか？
+
+フラグ見て、新規ページ作成時にパスワードを要求するか否かを
+決めるしかないのかなぁ（正直、めんどい）
+
+ちなみに、ページの凍結は、ページファイルに対して
+「<code>chmod -w</code>」して、フラグがわりにしてます。
+
+<<ssh が標準入力を喰らっちまう件について>>
+
+自分自身のソースを表示するだけのシェル：
+
+<pre>
+    [hayama@localhost hayama]$ cat cat_ssh1.sh
+    #!/bin/bash
+
+    cat $0 | while read line
+    do
+        ssh localhost "echo \"[${line}]\""
+    done
+</pre>
+
+これが、なぜか最初の行しか表示されない。
+
+<pre>
+    [hayama@localhost hayama]$ bash cat_ssh1.sh
+    [#!/bin/bash]
+    [hayama@localhost hayama]$
+</pre>
+
+ssh の標準入力を塞ぐと、きちんと動く。
+
+<pre>
+    [hayama@localhost hayama]$ cat cat_ssh2.sh
+    #!/bin/bash
+
+    cat $0 | while read line
+    do
+        ssh localhost "echo \"[${line}]\"" 0<&-
+    done
+    [hayama@localhost hayama]$ diff cat_ssh1.sh cat_ssh2.sh
+    5c5
+    <     ssh localhost "echo \"[${line}]\""
+    ---
+    >     ssh localhost "echo \"[${line}]\"" 0<&-
+    [hayama@localhost hayama]$ bash cat_ssh2.sh
+    [#!/bin/bash]
+    []
+    [cat bash | while read line]
+    [do]
+    [ssh localhost echo [] 0<&-]
+    [done]
+    [hayama@localhost hayama]$
+</pre>
+
+>> そういうもんですか？ <<
+
+

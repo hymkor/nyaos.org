@@ -1,0 +1,208 @@
+<<((lb))D((rb)) やたー、フィルタできたよー>>
+
+いろいろ手間かけて、調べてくれたみたいで、どうもありがとう＞Ｆ殿。
+
+<blockquote>
+    自力解決となると、フルスクラッチでUNICODEなAPIを使うライブラリを
+    作るしか無いかと思われまする。
+</blockquote>
+
+と、http://nyaos.org/d/?date=20050117#c02{Mr.F もおっしゃる}ので、
+なんとか根性出して、自力で、標準/ファイル出力する際に SJIS 化する
+フィルタークラス SJIStream を作ってみました。
+
+<pre>
+private import std.stream;
+private import std.string;
+
+extern(Windows) export int WideCharToMultiByte(
+     uint  CodePage,
+     uint  dwFlags,
+     char* lpWideCharStr,
+     int   cchWideChar,
+     char* lpMultiByteStr,
+     int   cbMultiByte,
+     char* lpDefaultChar,
+     bool* lpUsedDefaultChar );
+
+class SJIStream : Stream {
+    Stream base;
+
+    this( Stream base1 ){
+	base = base1;
+    }
+    uint readBlock(void *buffer,uint size){
+	return base.readBlock(buffer,size);
+    }
+    ulong seek(long offset, SeekPos rel){
+	return base.seek(offset,rel);
+    }
+
+    void write(wchar[] ws){
+	auto ubyte[]   result;
+
+	result.length = WideCharToMultiByte(
+	    0, 0, cast(char*)(ws.ptr), ws.length ,
+	    null, 0, null, null);
+
+	WideCharToMultiByte(
+	    0, 0, cast(char*)(ws.ptr), ws.length ,
+	    cast(char*)( result.ptr ), result.length, null, null);
+
+	base.writeBlock( result.ptr , result.length  );
+    }
+    void write(char[] s){
+	write( std.utf.toUTF16(s) );
+    }
+
+    uint writeBlock(void *buffer,uint size){
+	auto char[] s;
+	s.length   = size;
+	s[0..size] = (cast(char*)( buffer ))[0..size];
+	write( s );
+	return size;
+    }
+    static SJIStream jout;
+    static this(){
+	jout=new SJIStream(std.stream.stdout);
+    }
+}
+alias SJIStream.jout jout;
+
+/++++
+void main(){
+    jout.writeLine("あいうえお");
+    SJIStream fp=new SJIStream( new File("hoge",FileMode.Out) );
+    // File fp = new File("hoge",FileMode.Out);
+    fp.writef("ほげほげ[%s]\n","いひひ");
+    fp.close();
+}
+++++/
+// vim:set jcode=T
+</pre>
+
+utf8 で「sjistream.d」という名前でセーブして使って欲しい（←誰が？）。
+まぁ、なんつーか、
+
+* メソッド write と writeBlock の主従関係がひっくり返っている
+* utf8 → utf16 → SJIS と変換しまくりのオーバヘッドが激しく重そう
+
+のがアレだが、まぁ、当面の逃げ道としてはよしとしておこう。
+オブジェクトだけ差し変えれば、write , writeLine , writef 等の
+メソッドが一律 SJIS 対応になるわけだし、ソースを書く側の負担は
+これでちょっと減るような気がする。
+
+しかし
+
+<blockquote>
+    正直バグと言い切っても良いと思う、それもかなりしょうも無い類の…(--;）
+</blockquote>
+
+はショックだなぁ。DigitalMars って、結構、評価していたんだが。
+もっと難しい問題かと思ってたよ。
+
+<<今週のジャンプ>>
+
+デスノート急展開。
+
+>> 月の悪人面がすばらしい。<<
+
+オレたちのバカ殿 ―― これ、魁クロマティ学園の
+<strike>パクリ</strike>カバー漫画ですな。
+
+<<((lb))おさんぽ((rb)) 禿しく同意しまくる今日このごろ>>
+
+>> ぜんざいが食べたい！ <<
+
+* http://homepage3.nifty.com/dochikushow/{
+    島国大和のど畜生}2005年01月18日：最近の若手芸人の話
+    ((br))　曰く『他の人をあげつらう事で笑いを取るというタイプの人が
+	多くてゲンナリする』
+    ((br))　―― まったく同感。芸がないし、不愉快だ。
+	それに子供のいじめの原因にもなるんじゃないかのぉ。
+* http://sho.tdiary.net/20050114.html#p02{
+    たださん、新銀河帝国興亡史を酷評す}
+((br))　よくぞ言ってくださった。
+    故アイザック=アシモフが泣いているよ、ほんと。
+    キラースリーＢは、読者皆殺しですわ。
+    と、ハードカバー版を買った私には批判する資格があると思うが、どうよ。
+* http://tenant.depart.livedoor.com/t/livedoorshop/item_detail?id=346276{
+	コレジャナイロボ}・
+    http://tenant.depart.livedoor.com/t/livedoorshop/item_detail?id=346280{
+	巻物レター}・
+    http://tenant.depart.livedoor.com/t/livedoorshop/item_detail?id=346274{
+	自爆ボタンDX 通常版}・
+    http://tenant.depart.livedoor.com/t/livedoorshop/item_detail?id=346275{
+	武器ストラップ}
+((br))　なんですか、この livedoor のすばからしいラインナップは！!
+    http://www108.sakura.ne.jp/~fun_bolt/bbsnote.cgi?fc=repost&l=2455{
+    糞ボルト＠落描道場}にもコレジャナイロボ登場。
+* http://fuji.sakura.ne.jp/~yada/ruby/20050116.html#p01{
+    Super YADA 週記:「携帯はブルジョア」主義者なら、ヴォダ}
+    ((br))　見たところ、vodafone だめだめですな。海に投げ捨てにまいるか？
+* http://diary.imou.to/~AoiMoe/2005.01/middle.html#2005.01.14_s03{
+    某日記: Unicode はなぜ使われないのか}
+((br))　英語圏の人が下手に Unicode を実装すると、
+    ASCII と UTF8 の区別をつけず、API をごちゃまぜで使ってしまうので、
+    何もしないより遥かに始末が悪いという、
+    「下手な実装休むに似たり」の実例に遭遇してしまいましたわ。orz
+* http://www.tetris1d.org/{tetris1d.org}
+    (http://nws.2log.net/archives/blog20050118.html{NOT WILD STYLE}より)
+((br))　おぉ、新型のテトリスですが…<big>ちょっと待て、おい</big>
+
+* http://pc5.2ch.net/test/read.cgi/pc2nanmin/1106019763/{
+    2ch: Pen4で自作機組むって言ったら兄貴に殴られました 3}
+((br))　３スレ目が立ちました。>>1 より：
+    『このスレは今世紀最強のお笑いAMD自作伝道師バルケンとその軍団、
+	そしてバルケンの弟こと御庭番の伝説を語り継ぐスレです』
+* http://www.mainichi-msn.co.jp/today/news/20050118k0000e040056000c.html{
+    センター試験：問題内容が試験前にネット掲示板に}
+    (http://sodium.dnsalias.com/sodium/diary/20050118.html#p04{
+	sodium イオンにっき}より)
+((br))　何に驚いたかというと、産経新聞に「２ちゃんねる」という名前が出ていたこと。
+    今まで NHK((fn 関西圏では NHK は 2ch なのです))との混同を避けてか、
+    「インターネットの掲示板」としか表現されていなかったのに。
+* http://www.itmedia.co.jp/news/articles/0501/18/news016.html{
+    ITmediaニュース：Panix.com、「不可能なはず」のドメイン乗っ取りに遭う}
+((br))　なんか、1,2日遅れで ITmedia でニュース出てますね。思ったより情報量なし。
+
+* http://www.epsondirect.co.jp/nt340/detail04.htm#01{
+    EPSON の NT340 のノーブルレッドが X1 turbo っぽくて素敵}
+    (http://d.hatena.ne.jp/logion/20050118#p1{tacoworks 活動記録}より)
+((br))　FM-7er なので、X1 には思い入れはないものの…、
+    普通のマシンでの赤い筐体は非常に魅力があります。
+    あとトラックポイントがあればなぁ。
+    そして、もうちょっとピンクっぽかったら、
+    ３ば…げふんげふん…いや、なんでもありません。
+* http://www.geocities.jp/kenichiokuyama/read.science.html{
+    fj の教祖様の蔵書/既読書・科学/数学}
+    (http://slashdot.jp/journal.pl?op=display&uid=2487&id=274866{
+	okky の日記 (2487)}より)
+((br))　読みたくなってきたぞ、読みたくなってきたぞ、読みたくなってきたぞ。
+* ((lb))FLASH((rb)) http://www.studio-ipyou.net/project/gyakusai/gks01-large.html{
+    逆転極東裁判 従軍慰安婦問題検証編}
+    (http://www.zianplus.net/cgi-bin/zianews/index.cgi{自動ニュース作成}より)
+
+<<Phobos だめだめ>>
+
+http://nyaos.org/d/?date=20050118#c01{
+本日のコメント欄}で、Ｆ氏が Phobos をいろいろ見てくれている模様。
+
+>> 乙カレー！ <<
+
+Phobos.lib のビルドは、何となく、VC++ ではなく、
+Digitalmars C++ でやったらスムーズにいけてたんじゃないかなー
+という気がするんだが、まぁ、それはおいとくとして。
+
+もし、これをデバッグできたら、Ｆ氏は D プログラマの神になれるかもしれん。
+が、ちょっと気になるのが、日本で D 言語を触ってられる方は
+たくさんいらっしゃると思うのだが、なんで、誰も Phobos.lib のデバッグを
+試みなかったのだろうか。UTF-8 ベースではなく、完全に SJIS 
+ベースにせにゃならんと皆さん思ってらしたん/かしらん。
+それとも、DigitalMars がパッチの受入れを拒否をしたのだろうか。
+
+とりあえずは、本ページのコメント欄は狭っくるしいと思うので、
+自ページで、のびのびリポートしていただいた方がよろしいような気がするが、
+どうでっしゃろ。
+
+

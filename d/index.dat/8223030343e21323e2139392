@@ -1,0 +1,65 @@
+
+<<驚愕のインタビュー>>
+
+* http://jp.rubyist.net/magazine/?0004-Hotlinks{
+    Rubyist Magazine： ただただし さんインタビュー}
+    (http://www.hyuki.com/tf/20041218222555.html{textfile.org}より)
+
+本篇も楽しく読ませていただきました…が、それよりも
+
+<blockquote>
+…tDiary はサイドバーはかならずフッターに入れましょうと
+	    いう方針が打ち出されているので…
+</blockquote>
+
+>> なんだってーーー(AA略)<<
+
+わしゃ、知らんかっとったよ。
+確かに w3m でやっていて、サイドバーが頭に出てくるのは、
+うざいといえば、うざかった。
+
+ということで、サイドバーをフッタへ移動させました。
+ただ、それだけでは、w3m で表示させた時にタイトルがトップに出ないので、
+
+<pre>
+    <h1 style="display:none">妄想最速理論</h1>
+</pre>
+
+というのを先頭に入れました。これで、どうだ！
+（いや、どうだと言われても。
+それより、バージョンを早く 2.00 に上げてみては、どうですかと言われるがオチ）
+
+:(追記)
+:: <h1> が二つあるのもおかしいなぁということで、
+    根本的にレイアウト変えてみました。どうだしょう。
+
+<<前向きに、残り二週間で、いいことさがそうか>>
+
+* http://www.hyuki.com/ring/ring.cgi{「よかった探しリース」}
+    (http://www.sabamiso.net/yoggy/tdiary/?date=20041217#p02{yoggy's diary}より)
+
+今年よかったことを紹介する WebRing 。参加しようかなと思ったけど…
+
+>> 今年よかったことありませんでしたから！ <<
+
+残念!
+
+<<((lb))おさんぽ((rb)) うろうろ>>
+
+* http://www-6.ibm.com/jp/developerworks/linux/041217/j_l-memory.html{
+    IBM dW : Linux : メモリー管理の内側 - Japan}
+(http://www.ku3g.org/negi/diary/?20041217#200412171{ねぎ式}より)
+    :: メモメモ。こういうのを知っておく(つーか、想像しておくのは)のは、
+	プログラマのたしなみだな。
+* http://www.cppreference.com/{C/C++ Reference}
+    (http://apollo.u-gakugei.ac.jp/~yoshiki/chalow/2004-12-18.html#2004-12-18-1{
+    Y's memo}より)
+    :: 英語だけど、使える。。。でも、仕事では使う機会なし(涙)
+* http://blog.hj.to/isami/archives/000605.html{
+    BSD magazine 休刊}
+    (http://sodium.dnsalias.com/sodium/diary/20041218.html#p07{
+	sodiumイオンにっき}より)
+    :: 5年も続いていたのか…。BSD の良さは分かる人には分かるんだが…。
+	Linux のように IBM , Oracle がサポートしてくれていたら、
+	状況も違っていたんだろうが。。
+	大手で分かっていたのは、Apple だけか。

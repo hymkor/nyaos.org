@@ -1,0 +1,8 @@
+2006/07/10 16:12:10	NoGood	直感的には「Error=`toal_program | gawk '{print $2}' | grep 'Error' | wc -l`」ですかね〜。
+2006/07/10 16:38:33	iyahaya	$1 に Error が入ってたら、どうするんですか(笑）
+2006/07/10 22:07:21	NoGood	あぁっ、grep してるのは hoge2.txt だとばかり… orz
+2006/07/10 22:30:54	future	おおっ、私もそう思っていた〜！てっきり$2ni
+2006/07/10 22:31:37	future^r^n	にErrorが入っているのを確認しているものと…
+2006/07/11 00:09:21	iyahaya	ふむ、今日は大漁ですなぁ(汗)
+2006/07/12 01:00:36	yato	こうすればっ！ Error=`toal_program | gawk '{print $2 > "hoge2.txt" ; print $0 }' | grep 'Error' | wc -l`
+2006/07/12 23:57:10	iyahaya	やるな、ブライト！

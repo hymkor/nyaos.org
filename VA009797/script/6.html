@@ -1,0 +1,125 @@
+<HTML>
+<HEAD>
+    <META NAME="ROBOTS" CONTENTS="NOINDEX, NOFOLLOW" />
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+    <TITLE>The HAYAMA Script Part-VII</TITLE>
+</HEAD>
+<BODY bgcolor="#FFFFFF" text="#000000"
+ link="#FF0000" vlink="#880000" alink="#FF0000">
+
+<DIV ALIGN=RIGHT>
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><A HREF="7.html">未来へ</A>
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><a href="5.html">過去へ</A>　
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><a href="./index.html">目次へ</A>　
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT><A HREF="../index.html">扉頁へ</A>
+</DIV>
+<HR>
+<H3><A NAME="himazone23"><FONT COLOR="#000044"><I
+>HIMAZONE 23</I></FONT> (1/2)</H3>
+
+<FONT SIZE=7>新</FONT><BR>年、あけましておめでとうございます。
+お正月から、真っ黒なページというのもアレなんで、
+白地をベースとしたお正月仕様にしてみましたが、いかがでしょうか。
+扉ページについては隅々まで凝ってみました。
+普段のページと違うところはいくつあるでしょうか？
+<P>
+まぁ、そのうち戻すつもりではありますが、
+しばしの間、趣向の違う「はやまったページ」をお楽しみ下さいませ。
+(といっても、内容は変わら〜ん;-)
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>Ｅ</FONT><BR>LL 1.10 を公開しました。
+1.05 以来、一年ぶりの ver.up です、はい。
+<P>
+eff用に作った、字句解析クラスを使わずに放りっぱなしだったので、
+テストの意味もかねて、ELL の設定ファイルの文法を言語っぽくしてみました。
+しかし、使ってみると、やはり欲しいのが、例外機能(try〜catch〜throw)。
+字句解析・構文解析つーのは、性質上例外だらけですからね。
+チェック用の if 文だらけになってしまいます。
+(しかも、goto まで使ってしまった)
+<P>
+聞くところによると、emx 0.9d は例外処理が使えるレベルになっているそうです。
+今回の emx リリースを一番喜んでいるのは僕かもしれませんね。
+まだ、結構 buggy そうなので、FIX が進んで屍が十分積み重なったころを
+見計らって download することにしませう(卑怯)。
+OS/2 World誌の CD-ROM に載せてくれるとごっつー嬉しいなぁ。
+<P>
+さて、ELL の話の戻りますと、今回の 1.10 から同一拡張子でも複数の<!--
+-->書庫タイプに関連付けできるようになりました。
+判別情報として、書庫の何バイト目から、どういう文字列があるかというのを、
+ELL.CFG の address文 と keyword文で指定します。
+これによって、自己解凍型書庫も閲覧ができるようになりました。
+ただ、ちと、情報が無いので、判定できないケースが結構あるんですよね。
+特に、
+<UL>
+  <LI>*.LZH書庫については、3種類のアーカイバ(内藤氏版、平松氏版、<!--
+	-->米国版)で微妙に違いがあるのに、判別不能。
+  <LI>(Info-Zipではなく)PKZIP による自己解凍型書庫が判別不能
+</UL>
+だったりします。そのあたりの情報がありましたら、メイルくださ〜い。
+また、標準装備以外の書庫タイプについての情報もお待ちしておりますです。
+<P>
+しかし、先日優先順位を公表したのに全く無視しておりますなぁ、私。
+eff はどこへいったんだぁ〜。
+実はこの年末年始も最初は eff の書庫対応にまず手を付けようと<!--
+-->したんですね。しかし、まぁ、結構というか、かなり、ややこしい。
+我ながら、よくこんなもん作ったもんだ(3年前は若かった?)。
+というわけで、ELL のルーチンを使い回しできないかなぁ〜と思って、
+ソースを見直している間に改良したくなってきたというわけです。
+<P>
+この調子だと、多分、eff の方、アーカイブ対応前に、
+まず、設定ファイル(EFF.CFG)対応になると思われます。
+文法も ELL.CFG と似たような感じになりそうな雰囲気。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>12</FONT><BR>月30日、会社が昼過ぎで終ったので、日本橋に寄る
+(さすがに東京には寄れない m(__)m )。
+買ったものはといえば
+<UL>
+  <LI> 真ゲッターロボ シングルＣＤ
+  <LI> 岸和田博士の科学的愛情 逆襲篇(ドラマＣＤ)
+  <LI> 超感覚ANALマン(漫画)
+</UL>
+う〜む、電器製品が全然な〜い。
+しかし、メガゾーン23 の完璧箱(ただし中古)があるとは思わなかった<!--
+-->(どこへ行ってたんだ)。
+悩んだあげく結局買わなかった…買っときゃよかったかな。
+アニメだいすき４で PART-II にハマったのはよいものの、
+すでにブームから5年くらい経っていたので、
+当時はグッズが全然なかったのだな…。
+今は昔の話よ。
+<P ALIGN=CENTER>
+	<BIG>
+	<FONT COLOR="#555511">≡</FONT
+	><FONT COLOR="#888833">≡</FONT
+	><FONT COLOR="#AAAA44">≡</FONT
+	><FONT COLOR="#EEEEAA">≡★</FONT>
+	</BIG>
+</P>
+<FONT SIZE=7>こ</FONT><BR>
+のページを upload しようとして、夜中、yyy-net につなごうとしたら、
+大阪にも、岸和田にも、堺にもつながらない。
+Ｑ２系プロバイダだから、こんなこと滅多になかったのに、さすが正月。
+…と思ってたら、単にモデムの線が抜けていただけだった。
+正月だから、まぬけ時空は発生しているようだ。
+
+<HR>
+
+<FONT COLOR="#EEEEAA">▼</FONT><a href="5.html">過去へ</A>　
+<FONT COLOR="#EEEEAA">▼</FONT><a href="./index.html">目次へ</A>　
+<FONT COLOR="#EEEEAA">▼</FONT><A HREF="../index.html">扉頁へ</A>
+
+</BODY>
+</HTML>

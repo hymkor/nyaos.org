@@ -1,0 +1,24 @@
+<<[NYAOS] CMD.EXE のバッチファイルを source する>>
+
+CMD.EXE のバッチファイルも近年かなり高機能化し、NYAOS では source できないものも多くなっています。
+
+その結果「環境変数を設定する(CMD.EXE向けの)バッチファイル」を呼び出せないという困った問題が出てきています。普通はそういうバッチファイルを呼び出してから、連続して NYAOS を起動するという回避策を取らざるを得ないのですが、一つ一つショートカットや別バッチを作成するのも勝手が悪い話です。
+
+そこで、それを解決する新たな source 文を Lua で作ってみました。
+
+<<{cmdsource.lua}:
+((ref_text cmdsource.lua))
+
+利用例：(VC++ の環境変数設定バッチを実行して、読み込ませています)
+
+8<
+[C:\] source cmdsource.lua
+[C:\] cmdsource "C:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86
+>8
+
+原理としては、CMD.EXE にバッチを実行させてから、同じ CMD.EXE に環境変数の内容を一時ファイルに出力させ、それを NYAOS 側で読み込むということをさせています。
+
+:(2010.07.24 修正)
+:: 変数 left,right に local がついてなかったので追加
+:(2013.08.23 追記)
+:: 最新版は、https://bitbucket.org/zetamatta/_nya.d/src{bitbucket}からどうぞ

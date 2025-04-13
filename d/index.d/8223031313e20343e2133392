@@ -1,0 +1,106 @@
+<<Lua/Python を利用して整形>>
+
+* http://okwave.jp/qa/q6660984.html{awkを使用して整形 | OKWave}
+** via http://www.kt.rim.or.jp/~kbk/zakkicho/11/zakkicho1104b.html#D20110412-3{ときどきの雑記帖 混迷編2011年4月(中旬) - このスクリプトは}
+
+Lua でやってみた：
+
+8<
+function split(s)
+    local list={}
+    for fragment in string.gmatch(s,'%S+') do
+        table.insert(list,fragment)
+    end
+    return list
+end
+
+local timeline={}
+local disktype={}
+local last_time=nil
+for line in io.lines() do
+    local cols=split(line)
+    if #cols == 3 then
+        table.insert( timeline , { 
+            time=cols[1],
+            [ cols[2] ]= cols[3]
+        })
+        disktype[ cols[2] ]=1
+    else
+        timeline[#timeline][ cols[1] ] = cols[2]
+        disktype[ cols[1] ]=1
+    end
+end
+
+local disklist={}
+for key,val in pairs(disktype) do
+    table.insert( disklist , key )
+end
+table.sort( disklist )
+
+for i=1,#timeline do
+    for j=1,#disklist do
+        print(  timeline[i].time ..' '..
+                disklist[j] ..' '..
+                (timeline[i][disklist[j]] or 0)
+        )
+    end
+end
+>8
+
+8<
+$ lua foo.lua < data.txt
+10:00:00 disk1 10
+10:00:00 disk2 15
+10:00:00 disk3 0
+10:00:00 disk4 14
+10:00:05 disk1 13
+10:00:05 disk2 0
+10:00:05 disk3 20
+10:00:05 disk4 0
+10:00:10 disk1 30
+10:00:10 disk2 0
+10:00:10 disk3 0
+10:00:10 disk4 0
+>8
+
+いちいち split関数を作ってやらないといけないのが面倒なんですよね、Lua は。
+標準関数にあればいいのに。
+
+一方、Python だと、こんな感じ。ライブラリがあると嬉しいな
+
+8<
+import fileinput
+
+timeline = []
+disktype = set()
+for line in fileinput.input():
+    cols = line.split()
+    if len(cols) == 3 :
+        timeline.append( { 'time':cols[0] , cols[1]:cols[2] } )
+        disktype.add( cols[1] )
+    else:
+        timeline[-1][ cols[0] ] = cols[1]
+        disktype.add( cols[0] )
+disktype = sorted( disktype )
+for t in timeline:
+    for d in disktype:
+        print t['time'],d,t.get(d,0)
+>8
+
+<<職場の皆さんと花見に行ってきた>>
+
+場所はhttp://www.enjoytokyo.jp/amuse/spot/l_00015482/{芝公園}(だったと思う)
+
+<<{m2011041316490000.JPG}<<{m2011041316490001.JPG}
+
+結構、明るいうちから行きました。
+「なぜ、平日なのに…」とかは…'''尋くな！'''
+
+<<{m2011041316490003.JPG}
+
+ブルーシートの上の食糧が少ないようですが、この後、ドミノピザが3セット程到着。
+おいしかった！
+
+<<{m2011041318380000.JPG}
+
+日の暮れてきたので、早々に退散。月が美しいですね。

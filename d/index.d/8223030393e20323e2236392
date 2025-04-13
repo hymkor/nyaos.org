@@ -1,0 +1,35 @@
+<<[Lua] 弱点…か？>>
+
+よく考えると、Lua には ``use strict;`` に相当するものが無いんだよな。
+
+Perl で ``use strict;`` を宣言すると
+my 宣言していない変数をパッケージ名無しで利用した時に、エラーになる。
+だから、my を忘れて、うっかりグローバル変数を使っちゃうということは
+実は滅多にない。
+
+:[急募!]
+:: Lua で local 宣言していない変数を使うと、エラーになるようにする方法
+
+----
+
+ところで自分はよく``use strict;`` と``use warnings;``、
+どっちがどっちだったか分からんようになるので、
+上記ももしかしたら逆かもしれん。
+
+未定義値(undef)で演算するとエラーになるのは ``use warnings;`` の方だっけ？
+ちなみに、Lua は未定義値(nil)で演算すると、普通にエラーになります。
+
+8<
+> print(a+4)
+stdin:1: attempt to perform arithmetic on global 'a' (a nil value)
+stack traceback:
+        stdin:1: in main chunk
+        [C]: ?
+> print(a.."x")
+stdin:1: attempt to concatenate global 'a' (a nil value)
+stack traceback:
+        stdin:1: in main chunk
+        [C]: ?
+>8
+
+その辺は、ぬかりがなくてよかった。

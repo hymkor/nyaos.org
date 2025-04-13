@@ -1,0 +1,70 @@
+<<[Python3] printの括弧が気に入らない人の為のソリューション>>
+
+括弧が嫌なら ```<<``` を使えばいいのよ
+
+8<
+#!/usr/local/bin/python3.0
+
+import sys
+
+class ostream(object) :
+    def __init__(self,fd=sys.stdout):
+        self.sep = ""
+        self.fd = fd
+
+    def __lshift__(self,data):
+        if hasattr(data,'__call__'):
+            data(self)
+        else:
+            print( self.sep , data , file=self.fd , end="" , sep="" )
+            self.sep = " "
+        return self
+
+    def endl(self):
+        self.sep = ""
+        print()
+
+cout = ostream()
+endl = ostream.endl
+
+cout << "ahaha" << 1 << 3 << endl
+>8
+
+8<
+$ c:\Python31\python.exe cout.py
+ahaha 1 3
+>8
+
+!! Python 2 でも動くようにしてみた。
+
+print ではなく、sys.write を使うようにしただけ
+
+8<
+import sys
+
+class ostream(object) :
+    def __init__(self,fd=sys.stdout):
+        self.sep = ""
+        self.fd = fd
+
+    def __lshift__(self,data):
+        if hasattr(data,'__call__'):
+            data(self)
+        else:
+            if self.sep :
+                self.fd.write( self.sep )
+            self.fd.write( str(data) )
+            self.sep = " "
+        return self
+
+    def endl(self):
+        self.sep = ""
+        self.fd.write("\n")
+
+cout = ostream()
+endl = ostream.endl
+
+cout << "ahaha" << 1 << 3 << endl
+>8
+
+

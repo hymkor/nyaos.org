@@ -1,0 +1,81 @@
+<<昨日>>
+
+ちょっと気軽に始めた調査の先には、実は深い闇が隠されていた。
+
+んなわけで、本来、ちょっと暇になるはずだったのに、
+また終電帰宅になってしまったよ。
+金曜の終電は、歌う人とか、騒ぐ人が多いから、やなんだよなー。
+
+<<シンボリックリンクのパーミッションどないど？>>
+
+シンボリックリンクを消されないようにするには、どうすればよいのだろう。
+人に聞かれたのだが、分からんかった。
+(ANT か rsync だから知らんが、ディレクトリの同期ツールが消してしまって困ってるそうな)
+
+普通に ln -s すると、パーミッションが 777 になってしまう。
+chmod で変更すると、シンボリックリンク自身ではなく、
+リンクの差す先のパーミッションを変更されてしまう。
+
+info chmod すると
+
+"" chmod never changes the permissions of symbolic links; the chmod system call  cannot change their permissions.  This is not a problem since the permissions of symbolic links are never used.  However, for  each  symbolic link listed on the command line, chmod changes the permissions of the pointed-to file.  In contrast, chmod ignores symbolic links encountered during recursive directory traversals.
+
+えーと
+
+"" chmod は、シンボリックリンクのパーミッションを決して変更しない。chmod のシステムコールがリンクのパーミッションを変更出来ないのである。これはシンボリックリンクのパーミッションが利用されないため、問題ではない。
+けれども(?)、コマンドライン上の各シンボリックリンクについて、chmod は差しているファイルのパーミッションを変更する。ディレクトリを再帰的に見ている時は chmod はシンボリックリンクを無視する
+
+かな（よー訳せん単語は無視無視←こら）
+
+普通はあれ？ シンボリックリンクの置いてあるディレクトリを変更不可にするのか悩
+
+<<RevisionistWiki Period 6>>
+
+wifky とだいたい同時期に登場したので、こそーりとヲチし続けている、RevisionistWiki。
+全面的な改装を進められているそうで。
+(← 3/20の情報を今頃「そうで」なんて言ってるワタシ)
+
+ふむ、たいていのソフトウェアというのは使えるレベルのものが出来た後、
+何らかの形で「再構築」が必要になるものですね。
+tDiary も 1.0 → 1.5/2.0 でデータ構造とか変わったっぽいですし。
+
+かく言う wifky も、もうとっくに再構築の季節なんですが、
+互換性を損ねると、コンテンツの移行のお願いをしなくちゃいけないし、
+自分の「にっき」で使えなくなりそうなので、今一、腰が上がらないのです。
+
+しかし、Ruby の強力なクラスの一つ PStore に
+http://scl.littlestar.jp/revwiki/view.cgi?period5_%E4%BB%A5%E5%89%8D%E3%81%AE%E5%95%8F%E9%A1%8C%E7%82%B9{
+バージョン間(1.6〜1.8)の互換性問題}があったとは。
+なかなか、うまいこといかんものですねぇ。
+
+<<ECMAScript の連想配列っぷりが素敵>>
+
+awk っぽく、「``element`` in ``container``」形式を、
+for でも if でも使えるのがいいですね。
+今日では、どこの WindowsPC でも動くのがよい。
+
+ということで「sort|uniq」を JScript で書いてみる
+((fn 同一行をまとめるだけで、sort してねーですけど))。
+
+8<
+var stdin=WScript.Stdin;
+
+var lines={};
+while( !stdin.AtEndOfStream ){
+    var line=stdin.ReadLine();
+    lines[ line ] = 1;
+}
+
+for(var line in lines){
+    WScript.Echo( line );
+}
+>8
+
+でも
+
+* ファイル開くのがメンドイ(よって、標準入力だけ相手にしたのだが)
+* Windows のオブジェクトは、一様にシンボルがゴテゴテして、やだ。
+* Cygterm だと、コンソールから EOF を送れない…
+* たまにウィルス扱いされてしまうことがある。
+
+うわん

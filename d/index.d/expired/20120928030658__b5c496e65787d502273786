@@ -1,0 +1,47 @@
+今や利用が推奨されない rsh の導入手順。ssh 使おうな！
+
+1. rpm -qa rsh-server して rsh が入っているかを確認。
+
+入っていなければ 1〜2 を実施
+
+2. OS に応じた rsh-server*.rpm を ftp://ftp.redhat.com よりダウンロードする。
+
+(保守機(RH7)の場合は、rsh-server-0.17.2.2.i386.rpm )
+
+3. root になって、導入する
+
+<pre>
+    # rpm -ivh rsh-server-*.rpm
+</pre>
+
+失敗したら、一度削除して、他のバージョンを探す。
+
+<pre>
+    (# rpm -e rsh-server)
+</pre>
+
+4. /etc/xinetd.d/{rsh,rexec} において、disable=yes になっていたら、disable=no にする。
+
+5. xinetd を再起動する。
+
+<pre>
+    # /etc/init.d/xinetd restart
+</pre>
+
+6. /etc/hosts.equiv に、接続可能なエントリを加える。
+
+行の形式は次の通り
+
+<pre>
+    ホスト名 ユーザ名
+</pre>
+
+7. 被ログインされるユーザの ~/.rhosts にエントリを加える。
+
+行形式は次の通り
+
+<pre>
+    ホスト名 ユーザ名
+</pre>
+
+* /etc/hosts.equiv を設定していれば、~/.rhosts の設定は要らないらしい

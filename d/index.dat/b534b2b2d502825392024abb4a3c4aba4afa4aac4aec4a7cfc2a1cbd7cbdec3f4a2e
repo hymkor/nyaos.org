@@ -1,0 +1,83 @@
+<<+ 連想配列>>
+
+Perl ライクな連想配列も使えます。
+
+<<<ソース>>>
+
+<pre>
+    #include <string>
+    #include <map>
+    #include <cstdio>
+
+    using namespace std;
+
+    int main()
+    {
+	map<string,string> foons;
+
+	foons[ "ahaha" ] = "ふ〜ん" ;
+
+	printf("%s\n" , foons[ "ahaha" ].c_str() );
+	printf("%s\n" , foons[ "ihihi" ].c_str() );
+
+	return 0;
+    }
+</pre>
+
+<<<結果>>>
+
+<pre>
+    [C:デスクトップ] $ foo
+    ふ〜ん
+
+    [C:デスクトップ] $ ji fo
+</pre>
+
+* 「map<キーの型,値の型> 連想配列名」という形式で宣言する。
+* 存在しないキーを […] で引くと、型のデフォルトの値が帰る。
+  string の場合、長さ 0 の文字列となるが、元々、長さ 0 の
+  値としてキーが存在したのか判別は […] では出来ない。
+* find というメソッドを使えば、キーが存在しない時を判別できる。
+  が、iterator や pair という別のクラスもしゃしゃり出てくるので、
+  また余裕のある時にでも…。
+
+<pre>
+    #include <string>
+    #include <map>
+    #include <cstdio>
+
+    using namespace std;
+
+    void exists( map<string,string> &hash , const string &key )
+    {
+	map<string,string>::iterator p=hash.find(key);
+	if( p != hash.end() ){
+	    printf("[ %s ] == %s\n" , p->first.c_str() , p->second.c_str() );
+	}else{
+	    printf("[ %s ] == NULL\n" , key.c_str() );
+	}
+    }
+
+    int main()
+    {
+	map<string,string> hash;
+	map<string,string>::iterator p;
+
+	hash[ "ahaha" ] = "ふ〜ん" ;
+	hash[ "ihihi" ] = "";
+
+	exists( hash , "ahaha" );
+	exists( hash , "ihihi" );
+	exists( hash , "ufufu" );
+
+	return 0;
+    }
+</pre>
+
+<<+まとめ>>
+
+map は使えると便利ですが、機能をフルに使おうとすると、
+覚えることが結構多いです。
+まぁ、DB プログラミングにおいては必須ではないので、
+暇な時にでも勉強すればよいでしょう
+（なんちゅー投げやりな）。

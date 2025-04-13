@@ -1,0 +1,108 @@
+* python.jp が落ちているので、itertools のマニュアルが読めん。
+  ダウンロードしておけばよかった。
+
+* 何故だか分からんが、Firefox のアドオンが突如全て効かなくなってしまった。
+** ScratchBook にセーブも出来ないし、
+** はてブもできないし、
+** マウスジェスチャーもできない
+* アドオンのない Firefox は糞
+
+* 原因判明。TAB Mix Plus を更新した後、Firefox を再起動させたのだけれども、
+  実は Firefox が裏で死に切れていなかった模様。
+  表の Firefox を普通に終了させてから、
+  タスクマネージャーで、裏で蠢いている Firefox.exe を強制終了させてから、
+  Firefox を起動したら、直った。
+
+* イノベーションなんていうタイミングないな、ここには。
+** 開発中は時間がない。
+** 保守フェイズになると、もはや触れない。
+* 今回の開発では改善のタイミングを逃してしまった。
+  もう、このモジュールは触ろうというタイミングは二度と来ないだろう。
+
+<<[python] eachで回してるときの次の要素がほしい>>
+
+* http://mono.kmc.gr.jp/~yhara/d/?date=20070612#p04{[ruby][memo] eachで回してるときの次の要素がほしい - Greenbear Diary (2007-06-12)}
+
+例によって、Python で書いてみる。itertools 大好き。
+
+8<
+from itertools import islice,cycle,izip
+
+def ya_each(itr,n=2):
+    itrlist = [ itr ] + [ islice(cycle(itr),skip,None) for skip in xrange(1,n) ]
+    return izip(*itrlist)
+
+for cur,nxt in ya_each(range(10)):
+    print cur,nxt
+>8
+
+8<
+0 1
+1 2
+2 3
+3 4
+4 5
+5 6
+6 7
+7 8
+8 9
+9 0
+>8
+
+要は、循環させてから一個位置をずらしたイタレータを作って、izip で束ねているだけ。
+元のイタレータとくっつけているのは、循環していないイタレータを含ませておかないと、
+izip が終了しないため。
+
+次の次の要素も欲しい時は、次のように第二引数に 3 を渡せばよろしい。
+
+8<
+for cur,nxt,nxt2 in ya_each(range(10),3):
+    print cur,nxt,nxt2
+>8
+
+8<
+0 1 2
+1 2 3
+2 3 4
+3 4 5
+4 5 6
+5 6 7
+6 7 8
+7 8 9
+8 9 0
+9 0 1
+>8
+
+ただ、
+
+* この 3 が正直ダサい。なんとかならんか？
+* 次の要素だけで、前の要素がない。
+
+前の要素1個、今の要素、次の要素1個の固定でよいのであれば、次のような感じか。
+
+8<
+from itertools import chain,izip,islice
+
+def ya_each(itr):
+    return izip( itr , islice(chain(itr,(None,)),1,None), chain((None,),itr) )
+
+for cur,nxt,pre in ya_each( xrange(10) ):
+    print pre,cur,nxt
+>8
+
+ただし、こちらは最初の「前」、最後の「後」が None になる。
+
+8<
+None 0 1
+0 1 2
+1 2 3
+2 3 4
+3 4 5
+4 5 6
+5 6 7
+6 7 8
+7 8 9
+8 9 None
+>8
+
+こっちの方がいいのかな。

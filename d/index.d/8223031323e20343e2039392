@@ -1,0 +1,51 @@
+<<[NYAOS] プロパティーがなんかとれん>>
+
+NYAOS の自動アップデートスクリプトとして
+
+* http://d.hatena.ne.jp/wantora/20120106/1325835542{NYAOSの更新をするコマンドを修正しました - メモ@wantora}
+
+というのを作ってもらっていたんだけども、これの利用には wget が必要だった。
+で、COM を使えば wget 無しで何とかなるかなーとがんばってみたんだが：
+
+8<
+[C:hayama]
+$ cat download.lua
+local http=nyaos.create_object("Microsoft.XMLHTTP")
+http:open("GET","http://www.yahoo.co.jp/",false)
+http:send("")
+print(http.ResponseText)
+[C:hayama]
+$ nyaos -f download.lua
+userdata: 003EE7A0
+>8
+
+あれぇ。ちなみに、JScript で同じことをやると
+
+8<
+$ cat download.js
+var http=new ActiveXObject("Microsoft.XMLHTTP")
+WScript.Echo("pass-1")
+http.Open("GET","http://www.yahoo.co.jp/",false)
+WScript.Echo("pass-2")
+http.Send("")
+WScript.Echo("pass-3")
+WScript.Echo(http.ResponseText)
+[C:hayama]
+$ cscript.exe download.js | head
+Microsoft (R) Windows Script Host Version 5.7
+Copyright (C) Microsoft Corporation 1996-2001. All rights reserved.
+
+pass-1
+pass-2
+pass-3
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+(以下省略)
+>8
+
+うまくできる。
+
+ということは、Microsoft.XMLHTTP の使い方自体は正しくて、
+NYAOSのCOM呼び出しの実装に問題があるってことなんだろうなぁ。うーん

@@ -1,0 +1,299 @@
+<!-- This HTML file is made with RLP -->
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML i18n//EN">
+<HTML>
+<HEAD>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../iyahaya.css">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP">
+<META NAME="Keywords" content="OS/2, Warp, Shell, Commandline, NYAOS">
+<META NAME="description"
+content="NYAOS --- the commandline revolution on OS/2 Warp">
+<TITLE>The NYAOS --- The commandline revolution on OS/2 Warp</TITLE>
+</HEAD>
+<BODY bgcolor = "#000000" text="#FFFFFF" link="#00FF00" vlink="#00AA00">
+<H1 CLASS=GOLD STYLE="text-align:right">
+<DIV STYLE="font-size:small">The free software</DIV>
+<DIV>Nihongo Yet Another<BR>Os/2 Shell</DIV>
+</H1>
+<DIV CLASS=GOLD STYLE="text-align:right" ALIGN=RIGHT>
+- The commandline revolution on OS/2 Warp -</DIV>
+<TABLE ALIGN=RIGHT>
+<TR>
+<TD><DIV STYLE="border:outset;backgroundcolor:#000044"
+><A HREF="nyaosdoc.html">HTML版マニュアル</A></DIV></TD>
+<TD><DIV STYLE="border:outset;backgroundcolor:#000044"
+><A HREF="nyaos-faq.html">HTML版最新FAQ</A></DIV></TD>
+<TD><DIV STYLE="border:outset;backgroundcolor:#000044"
+><A HREF="history.html">変更履歴</A></DIV></TD>
+<TD><DIV STYLE="border:outset;backgroundcolor:#000044"
+><A HREF="nyaos-eng.html">English</A></DIV></TD>
+</TR>
+</TABLE>
+<HR>
+<P>
+Nihongo Yet Another Os/2 Shell -- NYAOS は、<!--
+-->OS/2 のコマンドライン(CMD.EXE)を拡張するフリーソフトウェアです。<!--
+-->使用には CMD.EXE と <B STYLE="color:#FF00FF">0.9d FIX 03</B> 以降の<A
+HREF="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+>emxrt.zip</A>のDLLが必要です(v1.62までは FIX02 でも可)。<!--
+-->主な特徴として次のようなものがあります。<!--
+--><UL>
+<LI>カスタマイズ可能な編集機能(tcsh/Vz)
+<LI>「#!」型スクリプト/SOSスクリプトの実行で、<!--
+-->インタプリタ名の入力を省略できる。<!--
+--><LI>Java アプリケーション実行で、コマンド名「Java」の入力を省略できる。<!--
+--><LI>コマンドラインからファイルをWP-Objectとして開く事ができる。<!--
+--><LI>ファイル名 / コマンド名 / Javaアプリケーション名 補完機能。<!--
+--><LI>拡張属性.LONGNAME/.COMMENTS も表示できる内蔵カラーls
+<LI>履歴機能(Vz/bash/tcsh型)
+<LI>別名機能(alias)。命令毎にワイルドカードの展開指定可能<!--
+--><LI>拡張chdir と ディレクトリスタック<!--
+--><LI>csh ライクな foreach。<!--
+--><LI>「<TT>&amp;</TT>」「<TT>~</TT>」(チルダ)「|&amp;」<!--
+-->「`」(逆クォート)「'」(シングルクォート)を UNIX 的に解釈<!--
+--><LI>拡張プロンプト<!--
+--><LI>xterm , 外部からのtelnet , Mule の Shellモードでも使用できる。<!--
+--><LI>「かんな」による日本語入力サポート(要 canna.dll)
+</UL>
+</P>
+<H2 CLASS=AQUA>What's New</H2>
+<H3 CLASS=RED>リンクの張り間違いを直しました<!--
+--><SPAN>(2000/10/11)</SPAN></H3>
+<P>アーカイブへのリンクが nyaos164.lzh , s2nya164.lzh になってました。<!--
+-->nyaos164.zip , s2nya164.zip の間違いです。<!--
+-->他にも更新日時なども間違えてました。とほほ。<!--
+--></P>
+<H3 CLASS=RED>1.64 を公開しました<!--
+--><SPAN>(2000/<STRIKE>08/20</STRIKE>10/07)</SPAN></H3>
+<DIV STYLE="margin-left:2em;margin-right:2em">
+<P>
+<B>仕様的には 8/20 版スナップショットと同じ</B>ですが、<!--
+-->ソースを一度廃棄し、旧1.62のソースを元に、リモート<!--
+-->にゃおす機能<EM>(子プロセスから、親のNYAOSを操作する機能)</EM>他を<!--
+-->必要最小限の変更で実現しています。ですので、若干、蟲が<!--
+-->消えている可能性があります。<!--
+--></P>
+<P>実のところ、積極的に蟲を探すべきなのですが、作者の環境で再現でき<!--
+-->ないものも多く、虫繕は困難な状況にあります。かといって、スナップ<!--
+-->ショットという中途半端な形のままにしておくのも不本意なので、<!--
+-->とりあえず、蟲含有率の低い形でビルドして、正式公開物とさせていただきます。<!--
+--></P>
+<P>そういうことですので、8/20 スナップショットで特に問題を感じられて<!--
+-->いない方は、1.64 を敢えてダウンロードする必要はございません。<!--
+--></P>
+</DIV>
+<H3 CLASS=RED>08/20版スナップショットを公開しました<!--
+--><SPAN>(2000/08/20)</SPAN></H3>
+<DIV STYLE="margin-left:2em;margin-right:2em">
+<P>7/22版にございました</P>
+<OL>
+<LI>XFree86 環境で、複数の NYAOS が起動できない場合がある。<!--
+--><LI>子プロセスよりの NYAOS 環境操作が二回目以降、うまく動作しない。<!--
+--></OL>
+<P>のうち、2. の蟲を駆除したものです。アーカイブには、実行バイナリと<!--
+-->バグのあったソースの7/29版よりの差分を収録しております。<!--
+--></P>
+</DIV>
+<H3 CLASS=RED>07/22版スナップショットのソースを公開しました<!--
+--><SPAN>(2000/07/29)</SPAN></H3>
+<P STYLE="margin-left:2em;margin-right:2em"
+>7/22版で、XFree86 環境で複数起動できないという不具合の<!--
+-->報告をいただいております。が、作者の元に、XFree86 環境が<!--
+-->なく、すぐに修正できる見込みがありません。<!--
+-->ですので、とりあえず、ソースを公開させていただきます。<!--
+--><EM>(盆くらいには何とかしたいとは思っていますが…)</EM>
+</P>
+<H3 CLASS=RED>07/22版スナップショットを公開しました<!--
+--><SPAN>(2000/07/22)</SPAN></H3>
+<UL>
+<LI>子プロセスから、NYAOS の環境を操作できるようになった。<!--
+--><LI>emx 0.9d FIX<B>03</B> が必要になった。<!--
+--></UL>
+<H3 CLASS=RED>1.62 を公開しました <SPAN>(2000/5/14)</SPAN></H3>
+<P>今回は、バグフィクスのみです。</P>
+<UL>
+<LI>「!?str」でヒストリを参照すると、変な文字が末尾に付加されてしまう。<!--
+--><LI>DHCP 環境で、IP を未取得の場合、起動時に凍ってしまう。<!--
+--><BR>(５秒以上通信ができない場合、かんなを使用しない設定で起動します)
+<LI>bindkey ???? kill_top_of_line で定義したキーをタイプすると、<!--
+-->無限ループに陥って、落ちてしまう。<!--
+--></UL>
+<H2 CLASS=AQUA>ダウンロード</H2>
+<P>バイナリ版の展開には LHA or ZIP を、<!--
+-->ソース版の展開には、tar と bzip2 or gzip を使用してください。<!--
+--></P>
+<PRE STYLE="margin-left:3em;text-indent:-2em">
+例) lha x nyaos160.lzh
+unzip nyaos-20000104.zip
+gzip -dc nyaos160.tgz  | tar xvf -
+bzip2 -dc nyaos-1.49.tar.bz2 | tar xvf -
+</PRE>
+<P>
+http 転送につき、左クリックではブラウザが書庫を文字化けテキストとして、<!--
+-->画面に表示してしまう可能性があります。Shift + 左クリックか、<!--
+-->「名前を付けて保存」でダウンロードしてください。<!--
+--></P>
+<TABLE BORDER=5 CLASS=DOWNLOAD CELLSPACING=0 ALIGN=CENTER>
+<!--#replace{ls4html.com _nya.lst "1.65" *nya*65*}-->
+<!--#auto--><TR>
+<!--#auto-->    <TD ROWSPAN=4>1.65</TD>
+<!--#auto-->    <TD>バイナリ(通常版)</TD>
+<!--#auto-->    <TD><A HREF="nyaos165.zip">185602 May 27 14:04 nyaos165.zip</A></TD>
+<!--#auto--></TR>
+<!--#auto--><TR>
+<!--#auto-->    <TD>ソース</TD>
+<!--#auto-->    <TD><A HREF="nyaos-1.65.tar.bz2">96221 May 27 14:06 nyaos-1.65.tar.bz2</A></TD>
+<!--#auto--></TR>
+<!--#auto--><TR>
+<!--#auto-->    <TD>バイナリ(S2版自己解凍)</TD>
+<!--#auto-->    <TD><A HREF="s2nya165.exe">259845 May 27 14:23 s2nya165.exe</A></TD>
+<!--#auto--></TR>
+<!--#auto--><TR>
+<!--#auto-->    <TD>バイナリ(S2版)</TD>
+<!--#auto-->    <TD><A HREF="s2nya165.zip">165074 May 27 14:06 s2nya165.zip</A></TD>
+<!--#auto--></TR>
+<TR>
+<TD ROWSPAN=4 ALIGN=CENTER>1.64</TD>
+<TD>バイナリ(通常版)</TD>
+<TD><A HREF="nyaos164.zip" STYLE="white-space:pre">179,744 Oct  7 15:50 nyaos164.zip </A></TD>
+</TR>
+<TR>
+<TD>Ｓ２版バイナリ</TD>
+<TD><A HREF="s2nya164.zip" STYLE="white-space:pre">164,994 Oct  7 15:50 s2nya164.zip </A></TD>
+</TR>
+<TR>
+<TD>Ｓ２版バイナリ(自己解凍)</TD>
+<TD><A HREF="s2nya164.exe" STYLE="white-space:pre">259,765 Nov 19 00:37 s2nya164.exe*</A></TD>
+</TR>
+<TR>
+<TD>ソース</TD>
+<TD><A HREF="nyaos-1.64.tar.bz2" STYLE="white-space:pre"> 96,945 Oct  7 15:50 nyaos-1.64.tar.bz2 </A></TD>
+</TR>
+<TR>
+<TD ROWSPAN=3 ALIGN=CENTER>1.62</TD>
+<TD>通常版バイナリ</TD>
+<TD><A HREF="nyaos162.lzh" STYLE="white-space:pre">171,972 Oct  1 12:39 nyaos162.lzh </A></TD>
+</TR>
+<TR>
+<TD>Ｓ２版バイナリ</TD>
+<TD><A HREF="s2nya162.lzh" STYLE="white-space:pre">166,402 Oct  1 12:39 s2nya162.lzh </A></TD>
+</TR>
+<TR>
+<TD>ソース</TD>
+<TD><A HREF="nyaos-1.62.tar.bz2" STYLE="white-space:pre"> 98,658 Oct  1 12:39 nyaos-1.62.tar.bz2 </A></TD>
+</TR>
+<!-- emx runtime routines -->
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER>emx runtime 0.9d FIX03</TD>
+<TD><A HREF="ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9d/emxrt.zip"
+>emxrt.zip at Hobbes</A></TD>
+</TR>
+</TABLE>
+<P>
+<A NAME="whats2">「S2版」</A>とは静的リンクしたもので、<!--
+-->emx の DLL が無くても利用できるバージョンです。<!--
+-->ただし、かんなや、補完キャッシュ共有など、<!--
+-->一部機能の制限があります。ドキュメントなどは<!--
+-->S2版パッケージに含まれていませんので、<!--
+-->通常版バイナリパッケージのものを利用してください。<!--
+--></P>
+<H2 CLASS=AQUA>バグ・不具合</H2>
+<UL>
+<LI>スナップショット版が XFree86 上で複数起動できない場合がある。<!--
+--><LI>1.6x のインストーラが正常に動作しない。<!--
+--><LI>ktermやrxvtの上のnyaosから<A
+HREF="http://hp.vector.co.jp/authors/VA000199/os2/w3m/history.html"
+>w3m</A>を起動すると、終了後にnyaosが<!--
+-->-->妙にCPU負荷を食うようになる。<!--
+--><LI>アイコンクリックで起動すると、「コマンド &amp;」の自動クローズが<!--
+-->-->働かない場合がある(emacsclient等)。<!--
+--><LI>ヒストリ中にリダイレクト先ファイル名やパイプの後の命令が登録されない。<!--
+--><LI>「<TT>ls | more</TT>」 を Ctrl-C で中止できない<!--
+-->-->(Ctrl-Break なら中止できるが、普段だと NYAOS 自身を殺してしまう)。<!--
+--><LI> (画面幅-1)桁目に全角文字を来ると、全体の桁位置がおかしくなってしまう。<!--
+--><LI>MenuBar から起動できない。<!--
+--><LI>XFolder から複数起動できない。<!--
+--><LI>インクリメンタルサーチで、カーソル位置が狂ってしまう。<!--
+--><LI>open が効かない時がある。<!--
+--><LI>ls を Ctrl-C で中断すると core dump することがある。<!--
+--></UL>
+<H2 CLASS=AQUA>To Do</H2>
+<UL>
+<LI>二重 foreach の実現。<!--
+--><LI>クライアント-サーバー型NYAOSで、メモリ消費を抑える。<!--
+--><LI>CMD.EXE から独立させる。<!--
+--><LI>一行 PM-NYAOS。<!--
+--></UL>
+<H2 CLASS=AQUA>連絡先と謝辞</H2>
+感想、バグリポート、提案などはありましたら<!--
+--><a href="mailto:iyamatta.hayama@nifty.ne.jp"
+>iyamatta.hayama@nifty.ne.jp</A
+>まで、メイルください。バグリポートの場合、<!--
+--><UL>
+<LI> 使用している nyaos.rc(.nyaos) の内容<!--
+--><LI> 環境変数/シェル変数の設定<!--
+--><LI> 使用している emx のバージョン。0.9d FIX03 以上が必要です。<!--
+-->emxrev.cmd の表示結果でも Ok です。<!--
+--></UL>
+なども書き沿えてくださると、こちらで状況が把握しやすくなります。<!--
+--><A HREF="nyaos-faq.html">FAQ</A>もありますので、参考にしてください。<!--
+--><P>
+Nihongo Yet Another Os/2 Shell を開発するにあたり<!--
+--></P>
+<NOBR  STYLE="margin-left:2em;margin-right:2em">
+金島 岳さん、 <WBR>
+宇野 篤也さん、 <WBR>
+山田 秀雄さん、 <WBR>
+奥西 藤和さん、 <WBR>
+吉田 孝一さん、 <WBR>
+松尾 浩さん、 <WBR>
+我那覇 誠さん、 <WBR>
+赤木 有一さん、 <WBR>
+近藤 弘康さん、 <WBR>
+羽生 匡之さん、 <WBR>
+清水 洋さん、 <WBR>
+相澤 邦彦さん、 <WBR>
+さとうひろもとさん、 <WBR>
+品野 竜太さん、 <WBR>
+大島 幸一さん、 <WBR>
+上野 博さん、 <WBR>
+我澤 賢之さん、 <WBR>
+松村 興さん、 <WBR>
+山野＠ＮＥＬさん、 <WBR>
+大久保 均さん <WBR>
+崎濱 たつひでさん、 <WBR>
+橋本 出さん、 <WBR>
+Altair☆さん、 <WBR>
+畠山 明さん、 <WBR>
+Kai Eversさん、 <WBR>
+吉田かつひささん、 <WBR>
+織華さん、 <WBR>
+葛原 賢二さん、 <WBR>
+今井 優さん、 <WBR>
+Chris Hellwigさん、 <WBR>
+小林 敬太郎さん、 <WBR>
+FRIESさん、 <WBR>
+中山 靖さん、 <WBR>
+Jeff R.さん、 <WBR>
+中川 貴之さん、 <WBR>
+たが まさひろさん、 <WBR>
+大黒 義裕さん、 <WBR>
+Sukisuki-OS/2 ＭＬのみなさん<!--
+--></NOBR>
+<P>
+に御協力いただきました。この場を借りてお礼申し上げます。<!--
+--></P>
+<HR>
+<TABLE WIDTH=100%><TR><TD>
+<FONT COLOR="#EEEEAA" SIZE=-1>▼</FONT>
+<A HREF="../index.html">はやまったホームページに戻る</A>
+</TD>
+<TD ALIGN=RIGHT><IMG SRC="../img/nyaosbnr.png" WIDTH=88 HEIGHT=31 ALT="NYAOS Banner"
+><IMG SRC="../img/iyabar.png" WIDTH=88 HEIGHT=31 ALT="HAYAMA Banner"
+><IMG SRC="../img/os2m_2.png" WIDTH=88 HEIGHT=32 ALT="OS/2 Made Banner">
+<BR>
+本ページへのリンクは御自由に<!--
+--></TD>
+</TABLE>
+</FONT>
+</BODY>
+</HTML>

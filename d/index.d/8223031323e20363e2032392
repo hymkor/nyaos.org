@@ -1,0 +1,41 @@
+<<NYAOS 3.3.3_0 を公開しました>>
+
+<<<ダウンロード>>>
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS.ORG - NYAOS 3000}
+
+<<<変更点>>>
+
+* cd , pushd で、ディレクトリだけを補完させるようにした。
+** https://bitbucket.org/zetamatta/nyaos3000/issue/8/cd{issues #8}への対応です。
+* COM の定数読み込みを行う、nyaos.const_load を実装
+** こんな感じで使います。
+
+8<
+[c:nyaos3k]
+$ type const_load.lua
+local excel=nyaos.create_object("Excel.Application")
+local excel_const=nyaos.const_load(excel)
+for key,val in pairs(excel_const) do
+    print(key.."="..val)
+end
+[c:nyaos3k]
+$ nyaos const_load.lua | more
+xlSmartTagControlCheckbox=9
+xlNoMailSystem=0
+xlOuterCenterPoint=2
+xlMixedScript=3
+xlLinkStatusCopiedValues=10
+xlQualityStandard=0
+xlDialogNameManager=977
+xlPivotCellGrandTotal=3
+xlInconsistentFormula=4
+>8
+
+* バッチファイル実行時に、実行ファイル名と引数の両方をダブルクォート で囲むと正しく実行できない問題を修正(例: "foo.bat" "arg1")
+** https://bitbucket.org/zetamatta/nyaos3000/issue/9/examplebat-arg1{issues #9}への対応です。
+   CMD.EXE のトリッキーなダブルクォーテーションの扱いによる問題です。
+   対応方法は http://vim-jp.org/blog/2012/02/22/patch_7.3.447.html{vim-jpの記事}
+   を参考にさせていただきました。
+
+最後のバッチファイル実行の件については、そのうち 3.2系列へも反映させます。

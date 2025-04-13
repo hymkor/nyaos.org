@@ -1,0 +1,56 @@
+<<見事に風邪をこじらせたでござるの巻>>
+
+昨日(22日)は、東京の部屋に戻ってから、ほとんど立てん状態になってしまった。
+戻る前にスーパーで買ったゼリーだけ飲んで、あとは意識朦朧状態。
+2,3時間ごとに目が覚めて、twit したり、BGM がわりに ニコニコを聞いてたりしてたけど。
+
+今日(23日)になって、若干回復。
+
+>> 孤独死の危機を回避！ <<
+
+まだ頭痛いし、鼻もグズグズいってるけれども、何とか、やまを越したっぽい。
+天気だし、しんどいけど洗濯するか。
+
+<<[wifky] 1.5.2_0 をリリースしました>>
+
+今日は別段コード触ってないんだけれども、
+前にリリースしてから半年経ってるし、
+あまり、ユーザが使ってるバージョンと剥離があってはいけないので。
+
+中身は微調整とか、(リビジョン0なのに)不具合修正とかばかりで、
+大した変更はありません。
+(本当は 1.5.1_2 の方がいいんだけれども、期間があいているので、
+ 危険性という意味で、マイナーバージョンアップという位置付けがよいと考えました)
+
+<<[Lua] Luaforge にプロジェクト申請してみた>>
+
+oluacle (Lua for Oracle) を LuaForge に置いてもらうべく、
+プロジェクトを申請してみた。
+
+:Project fullname
+:: oluacle (Lua for Oracle)
+:Project Purpose And Summarization
+:: Oluacle project's purpose are:((br))
+(1) For Lua, create library to access Oracle database more easy. (oluacle.dll)((br))
+(2) With Lua, provide the third scripting tool to Oracle not SQL*Plus and PL/SQL (oluacle.exe)
+: Project Public Description
+:: 'oluacle' is a library to access Oracle database.
+Diffences from LuaSQL are:((br))
+* Bind-variable supported.((br))
+* Few Lines required to access database((br))
+* Supports Oracle-database only.
+:Project Unix Name
+:: oluacle
+
+3日以内で、受理か却下か返事してくれるらしい。
+ブツ自体のアップロードはそれからのようだ。
+
+却下になると、LuaSQL が既にあるとか、そんなんだろうなぁ。
+
+<<<追記>>>
+
+承認されました → http://luaforge.net/projects/oluacle/
+
+とりあえず、アーカイブファイルは Up したけれども、
+入りたてだからか、ウェブサーバに ssh できないなぁ。
+ぼちぼちと頑張ろう。

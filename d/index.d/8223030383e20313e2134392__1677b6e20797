@@ -1,0 +1,70 @@
+import sys
+
+def getline(src=sys.stdin,rs="\n"):
+    """ Read one line from src, and yield it as generator.
+        It does not include record seperator.
+    """
+    if isinstance(src,str):
+        fp = file(src)
+    else:
+        fp = src
+    lines = []
+    while True:
+        while len(lines) <= 1:
+            buffer = fp.read(1024)
+            if not buffer:
+                if lines :
+                    yield lines.pop(0)
+                if isinstance(src,str):
+                    fp.close()
+                return
+            if lines :
+                lines = (lines[0]+buffer).split(rs)
+            else:
+                lines = buffer.split(rs)
+            del buffer
+        yield lines.pop(0)
+
+_called_nextfile = False
+def nextfile():
+    """ Tell skiping file to `do' method.
+    """
+    _called_nextfile = True
+
+def do(rs="\n"):
+    """ Readline from files which pointed by sys.argv.
+        It Some of filename mean
+         -       => sys.stdin
+         foo=bar => alter option
+    """
+    global isstdin,option
+    global fnr,nr,_called_nextfile
+    filelist = sys.argv[1:]
+    isstdin = len(filelist) <= 0
+    if isstdin :
+        filelist.append("-")
+
+    for filename in filelist:
+        pos = filename.find("=")
+        if pos >= 0 :
+            option[ filename[:pos] ] = filename[pos+1:]
+        else:
+            fnr = 0
+            for line in getline( (filename,sys.stdin)[filename=="-"],rs):
+                fnr += 1 ; nr += 1
+                yield line
+                if _called_nextfile:
+                    _called_nextfile = False
+                    break
+
+def test():
+    for line in do("\n####"):
+        print "---BEGIN---"
+        print "%s(%d):%s" % (line.filename,line.fnr,line)
+        print "---END---"
+    print "=== script ==="
+    for line in getline(sys.argv[0]):
+        print "%s(%d):%s" % (line.filename,line.fnr,line)
+
+if __name__ == '__main__' :
+    test()

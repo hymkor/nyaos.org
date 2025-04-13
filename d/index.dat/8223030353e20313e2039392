@@ -1,0 +1,160 @@
+<<http://childs.squares.net/d/?date=20050107#p01{
+    Sense of Dary: recent_listの番号違い}>>
+
+TEM 殿曰く：
+
+<blockquote>
+    recent_listで最近の日記を表示するのだが、
+    たまにこの番号と 実際の日記の番号がずれることがある。
+    これは日記の最初に空行を入れるとおきるっぽい。というか起きる
+</blockquote>
+
+わたくしも、この症状に気がついておりました。
+が、めんどいのと忙しいので、ずっと放置でした(ぉぃ)。
+
+過去の ((lb))tDiary-devel((rb)) の投稿記事を追いかけてみると、
+どうも、昨年 8月くらいに直されていた etDiary の問題の一つであった模様です。
+mjDiary は、昨年2月くらいに、etDiary を改造して作りましたから、
+同問題を抱えたままです。
+ということで、メーリングリストに流されていたパッチをあててみました。
+
+>> この俺の目と vi で <<
+
+結構、改変しちゃっていて、そのまま patch あたるとは思えなかったんですよね。。
+独自改造バージョンを勝手に作るから、こんな目にあってしまうのだ。
+ということで、現在、テスト中でございます。
+
+しかし… nil 判定に後置型の「<code>unless オブジェクト名</code>」
+は馴染めんのぉ。
+「<code>if オブジェクト名.nil?</code>」の方が直観的に分かり易いんだが。
+この辺、プログラマの流儀の違いが如実に出るなぁ。
+
+<<http://www.st.rim.or.jp/~nakata/{anhttp} で、tDiary を使う>>
+
+今さらだが、自分の Windows PC 内にテスト環境を作ることにした。
+個人的メモ
+
+* 拡張子 .rb に ActiveScriptingRuby を割当てる。
+* デフォルトインデックスは index.rb にしてしまえ！
+* ActiveScriptingRuby の lib ディレクトリを %RUBYLIB% で指定する。
+* tDiary は EUC ベースなので、サーバのスクリプトは日本語コード無変換の
+    ASCII転送で手元の PC へ DOWNLOAD し、EUC のまま編集する。
+* tdiary.conf の data_path を anhttp のドキュメントパスに変更する。
+
+<<http://d.hatena.ne.jp/w_o/20050108#p2{
+    D の delete がメモリも解放してくれなかったら、どうしよう}>>
+
+<blockquote>
+ぬぬ。どっかでDのdeleteはメモリ解放してくれないとか、
+見た気がしてたんだけど…やっぱりそういうのは
+自分で確認しとかないといけないな。
+</blockquote>
+
+>> どきっ <<
+
+としたので、自分で検証してみました。
+そうです、単なる聞きかじりを知った風に書いてみてしまったのですよ。
+
+というわけで、http://wisdom.sakura.ne.jp/programming/d/d11.html{
+こちらのソース}をベースに、強制 delete したオブジェクトに別ポインタから
+アクセスすると、どうなるか実験です。
+
+<pre>
+import std.stream;
+
+class Point { 
+    int x , y;
+    this(int x , int y) {
+	this.x = x;
+	this.y = y;
+    }
+    ~this() {
+	stdout.printf("Delete Point Object %d, %d\n" , x , y);
+    }
+    int X(){ return x; }
+}
+
+int main() {
+    Point point = new Point(100 , 70);
+    Point point2 = point;
+
+    stdout.printf("Before\n");
+    delete point;
+    stdout.printf("After\n");
+    stdout.printf("%d\n",point2.X() );
+    return 0;
+}
+</pre>
+
+これをコンパイルして、Go!Go!
+
+<pre>
+((lb))C:hayama((rb)) $ dest
+Before
+Delete Point Object 100, 70
+After
+Error: Access Violation
+((lb))C:hayama((rb)) $
+</pre>
+
+やたー、例外でたー（←喜ぶな）。
+ちなみに、二重 delete とか、point2 に auto 指定をしてみると、
+反応が返ってこなくなりました。よしゃー！（よいのか？）
+
+<<((lb))おさんぽ((rb)) うろうろすんなやー>>
+
+* ((lb))FLASH((rb)) http://kimishine.sega.jp/{
+    「きみのためなら死ねる」Web体験版 part-I 一輪車ゲーム}
+    (http://papalagi.org/diary/200501.html#eid10{
+	hard で loxse な日々}より)
+    :: うぅ、一人も運べんです。慎重にやりすぎか。
+	このゲームの BGM もなかなかよろし。
+	「きみしね」のサウトラCD は出ないものか。
+* ((lb))FLASH((rb)) http://tbs701.hp.infoseek.co.jp/mappyondo.swf{
+    マッピー音頭}
+    (http://papalagi.org/diary/200501.html#eid10{
+	hard で loxse な日々}より)
+    :: 何故に今マッピー！？歌詞も微妙に変でよろし。
+	それにしても、本当になぜ、18歳と30歳なんだしょ。
+* http://umi.no-ip.com/simple/pdone.html?id=418{Simple: 
+    年金と少子化問題を解決する究極の方法}
+    :: ふむ。しかし、それは
+	「電源入れなければ、PC がフリーズすることがないよ」
+	と言っているのと何か似ているなぁ。
+	どっちみち、最初に払わずに受けとった人がいる限りは、
+	最後、払ったのにもらえない人が必ず出てくるんだろうなぁ。
+* http://www.hirax.net/diaryweb/2005/01/09.html#200501091{
+    inside out: 津波から逃げきれないときの対処法}
+    :: 「どっかにしがみつくとよい」そうな。
+	覚えておこう。でも、別に海には縁ないしなー
+	（夏でも冬でもヒキコモリ）
+* ((lb))BOOK((rb)) http://www.amazon.co.jp/exec/obidos/ASIN/4043572085/{
+    オールド・ボーイ 角川ホラー文庫}
+    :: 小説版。ほら、あの 15年監禁されたという、日本の漫画が原作の奴です。
+	本屋で手にとって読んで、ちょっとひかれたので、買ってみました。
+	結構読み易いので、当日中に読了。結末は映画と互換のようです、多分。
+    :: しかし、これが「究極の愛」なら、
+	巷に溢れているエロゲはみんnうわなにをするやめろ
+
+<<http://homepage2.nifty.com/hayamatta/monjoe/n13.html#2004.01.09{
+    去年の今頃の自分の日記}を見てみた>>
+
+* 「http://homepage2.nifty.com/hayamatta/monjoe/n13.html#2004.01.09.1{
+	悪霊は去ったかな}
+    」等と言ってる。いやいや、闘いはそれからだ。NEVER END!
+* 知った風に「
+    http://homepage2.nifty.com/hayamatta/monjoe/n13.html#2004.01.09.2{
+	品質とは}」とか「
+    http://homepage2.nifty.com/hayamatta/monjoe/n13.html#2004.01.03.2{
+	EJBダメダメ}」などとを言っている。
+    最近は謙虚になりまして、そういうことは（思っていても）
+    何も言わなくなりました。（守りに入ったなー）
+* http://homepage2.nifty.com/hayamatta/monjoe/n13.html#2004.01.11.1{
+    ココログを試している}。⇒ 結局、ドメインとって、tDiary ユーザとなりました。
+    他にもツールについては、いろいろ(SKKとか)入れて、
+    幸せになっているみたいです。
+
+ふぅ、俺の本質は良い意味でも悪い意味でも変わっちゃいねぇ。
+今年は何とかしたいなぁ。
+
+

@@ -1,0 +1,69 @@
+Perl のメール送信モジュール Mail::Sendmail.pm の導入手順書
+
+<< 1. アーカイブファイルを展開>>
+
+<pre>
+    % gzip -dc Mail-Sendmail-0.78.tar.gz | tar xvf -
+    % cd Mail-Sendmail-0.78/
+    % perl Makefile.PL
+    % make
+</pre>
+
+<< 2. テスト>>
+
+<<< オリジナルのテスト用のスクリプトを保存>>>
+
+<pre>
+    % cp -p test.pl test.pl-original
+</pre>
+
+<<< テスト用 Perl スクリプトを修正>>>
+
+<pre>
+    % vi test.pl
+</pre>
+
+宛先変更：
+<pre>
+    $mail{To}   = 'Sendmail Test <sendmail@alma.ch>';
+</pre>
+
+メールサーバーアドレス変更：
+
+<pre>
+    $server = '194.38.89.3';
+</pre>
+
+(書き込み不可になっているので、vi でセーブする時は
+:w! で強制上書きしてください)
+
+<<< テスト実施>>>
+
+<pre>
+    % make test
+</pre>
+
+メールアドレスの人物にメールが届けば Ok!
+
+<< 3.インストール>>
+
+<<< root になって、perl システムに導入>>>
+
+<pre>
+    % su
+    Password:
+    # make install
+	:
+    # exit
+</pre>
+
+<<< 再度テスト>>>
+
+ディレクトリを変更して、先程のスクリプトを実行して、
+同様にメールが届けば、システムの適切なパスにファイルが
+コピーされていると判断できる。
+
+<pre>
+    % cd ..
+    % perl Mail-Sendmail-0.78/test.pl
+</pre>

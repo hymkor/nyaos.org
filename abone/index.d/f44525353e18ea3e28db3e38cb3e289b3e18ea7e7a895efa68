@@ -1,0 +1,14 @@
+!!! 実行順
+
+* index.pl (/opt/otrs/bin/cgi-bin)
+** Kernel::System::Web::InterfaceAgent->new()->Run()
+
+!!! HTMLのテンプレートファイル
+
+* /opt/otrs/Kernel/Output/HTML/Standard にある *.dtl 
+* ファイル名がフォームパラメータの Action= の右辺に対応する。
+
+<<<
+[otrs@TIS006500001 Standard]$ perl -ne 'while( /\$Text\{"(.*?)"\}/g ){ print $1,"\n"}' *.dtl | sort | uniq | wc -l
+1987
+>>>

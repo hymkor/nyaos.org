@@ -1,0 +1,44 @@
+<<Re: nyacusだとpikがうまく動かない>>
+
+* http://route477.net/d/?date=20100327#p01{Route 477 - nyacusだとpikがうまく動かない}
+
+再現させようとしたんだけれども、道程が遠い…
+
++ ftp://ftp.ruby-lang.org/pub/ruby/binaries/mswin32/ruby-1.9.1-p378-i386-mswin32.zip{
+    ruby-1.9.1-p378-i386-mswin32.zip} のインストール(C:\Ruby19 の下に unzip しただけ)
++ ftp://ftp.ruby-lang.org/pub/ruby/binaries/mswin32/ruby-1.8.7-p249-i386-mswin32.zip{
+    ruby-1.8.7-p249-i386-mswin32.zip} のインストール(C:\Ruby18 の下に unzip しただけ)
++ %PATH% に C:\Ruby18 を追加
++ http://rubyforge.org/frs/download.php/69366/rubygems-1.3.6.zip{rubygems-1.3.6.zip}
+    のインストール(unzip して「``./setup.rb``」)
++ なんかの DLL が無いとか言って、怒られたので、
+  openssl-0.9.8e_WIN32.zip を展開して、DLL を C:\Ruby18\bin の下にコピー
++ gem してみた：
+
+8<
+c:\usr\openssl\bin>gem install pik
+C:/Ruby18/lib/ruby/site_ruby/1.8/rubygems.rb:528: [BUG] Segmentation fault
+ruby 1.8.7 (2010-01-10 patchlevel 249) [i386-mswin32]
+
+
+This application has requested the Runtime to terminate it in an unusual way.
+Please contact the application's support team for more information.
+>8
+
+なんだか、ひとをサポートするどころの話ではなくなってきましたよ。
+見える、この私にもリューベンスの絵が見えるぞ、ララァ。
+
+---
+
+再現させずに推測だけ述べると、
+CMD.EXE は起動時だけでなく普段からレポジトリの PATH を見てるってことなんでしょうね。
+NYACUSは、それやってませんから。
+
+ラッパを組むことで何とか出来るかについては、正直 pik の仕様を理解していないので、
+何とも言えませんが、親プロセスの環境変数を変更するってのは
+標準出力を逆クォートで拾ったり、かなりトリッキーなことをしないといけないので、
+いろいろしんどいでしょうね…。
+
+コマンドラインの中の環境変数をスイッチさせるだけであれば、
+わざわざ大層なシステム入れなくても、
+NYAOS-3000 の内蔵 Lua だけでサクっといけそうな話なんですが。

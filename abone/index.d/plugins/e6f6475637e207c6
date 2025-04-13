@@ -1,0 +1,3 @@
+
+$::PROTOCOL =~ s/ftp/ftp|[Nn]otes/;
+$::RXURL    =~ s/ftp/ftp|[Nn]otes/;

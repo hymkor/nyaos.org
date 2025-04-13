@@ -1,0 +1,166 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="../../gray.css" />
+</head><body>
+<h1>もんじょスタイル(mjDiary)</h1>
+<p>
+tDiary の日記記述フォーマットです。
+etDiary をベースとしており、これに wiki 等の文法を適当に織り込んでいます。
+</p>
+<table border align="center" class="framed"><tr><td> <a href="./mjdiary_style-20050110.zip">mjdiary_style-20050110.zip</a> </td>
+<td>
+    3880 bytes </td>
+</tr></table>
+<ol>
+    <li>zip ファイルを展開。</li>
+    <li>サーバ上の tdiary ディレクトリに mjdiary_style.rb を ASCII 転送。
+	<br>（作ったのが Windows 上なもんで、すみません）</li>
+    <li>tdiary.conf の @style を 'mjdiary' にする。</li>
+</ol>
+<h3>(2005.01.10)</h3>
+<ul>
+    <li><tt>http://～<!-- -->{…}</tt> を
+	&lt;&lt;～&gt;&gt; の中にも書けるようにした。
+    </li>
+    <li>recent_list で、目次の数字がずれるのを修正した。
+	(etDiary の 2004年8月前後の修正を取り込んだだけ)
+    </li>
+    <li>EUC のコメントを入れてしまいました。
+	SJIS にコンバートすると動作しなくなりますので、
+	ftp 転送時はご注意ください。
+    </li>
+</ul>
+<h2>特徴</h2>
+<h3>アンカータグを簡単に書くことができる。</h3>
+<p>
+URL の後に中括弧で囲まれた被アンカー文字列を書くだけで、
+リンクが張れます。
+</p>
+<pre>
+    http://example.net/index.html{ほげほげ}
+	    ↓
+    &lt;a href="http://example.net/index.html" target="_blank"&gt;ほげほげ&lt;/a&gt;
+</pre>
+<p>
+表示上は「<a href="http://example.net/index.html" target="_blank">ほげほげ</a>」のようになります。
+この変換は、http<!-- -->: で始まる文字列のみが対象です。
+</p>
+<h3>箇条書(wiki風)</h3>
+<p>
+先頭が「*」で始まる段落は、&lt;ul&gt;タグに置換されます。
+</p>
+<pre>
+* ひとつ目
+* ふたつ目
+    :: ← 改行させて、1インデント入れる記号
+* みっつ目
+</pre>
+<p>
+次のような表示となります。
+</p>
+<ul>
+<li> ひとつ目</li>
+<li>ふたつ目
+    <br />&emsp; ← 改行させて、1インデント入れる記号</li>
+<li>みっつ目</li>
+</ul>
+<p>
+「<tt>::</tt>」は、&lt;br&gt;&amp;emsp; に変換されますので、
+携帯で見ると化ける場合があります。
+</p>
+<p>
+<h3>DLタグ</h3>
+</p>
+<p>
+先頭が「:」で始まる段落は、〈dl〉になります。
+</p>
+<pre>
+:ひとつ目
+    :: ザク
+:ふたつ目
+    :: グフ
+:みっつ目
+    :: ドム
+</pre>
+<dl>
+<dt></dt>
+<dt>ひとつ目
+</dt>
+<dd> ザク
+</dd>
+<dt>ふたつ目
+</dt>
+<dd> グフ
+</dd>
+<dt>みっつ目
+</dt>
+<dd> ドム</dd>
+</dl>
+<p>
+wiki と違って別に１行に無理矢理収める必要はありません。
+</p>
+<p>
+注意すべき点としては「<code>*</code>」「<code>%</code>」
+「<code>:</code>」「<code>::</code>」の前には空白以外の文字を
+入れてはいけません。
+</p>
+<h3>表</h3>
+<pre>
+|| 枠11 | 枠12
+|| 枠21 | 枠22
+|| わくわくわくわく
+    | うふふふふふ
+</pre>
+<table border align="center" class="framed"><tr><td> 枠11 </td>
+<td> 枠12
+</td>
+</tr>
+<tr><td> 枠21 </td>
+<td> 枠22
+</td>
+</tr>
+<tr><td> わくわくわくわく
+    </td>
+<td> うふふふふふ</td>
+</tr></table>
+<p>
+この表は、class=&quot;framed&quot; とクラス指定されています。
+</p>
+<h3>256倍風センタリング</h3>
+<pre>
+&gt;&gt;こんな風な感じです&lt;&lt;
+</pre>
+<p align="center" class="OxFF">こんな風な
+感じです</p>
+<p>
+HTML的には
+</p>
+<pre>
+&lt;p align="center" align="OxFF"&gt;
+    こんな風な感じです。
+&lt;/p&gt;
+</pre>
+<p>
+となります。なお、最初の 0 はゼロではなく、英字のオーです。
+さらに、大文字・小文字も区別されるので、注意ください（ひどい）
+</p>
+<h1>もんじょテキストフォーマッタ</h1>
+<p>
+上と同じような文法で、ローカルで html を作成するための、フォーマッタです。
+</p>
+<pre>
+    mjdoc.rb foo.css foo.mj &gt;foo.html
+</pre>
+<p>
+のように使用します。だいたいの文法が、もんじょスタイルと同一です。
+</p>
+<table border align="center" class="framed"><tr><td> <a href="./mjdoc.zip">mjdoc.zip</a> </td>
+<td> 
+    1160 bytes</td>
+</tr></table>
+<p>
+このページも、もんじょ形式で作成されています。
+(<a href="./index.txt">ソース</a>)
+</p>
+</body>
+</html>

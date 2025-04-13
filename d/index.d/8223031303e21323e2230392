@@ -1,0 +1,16 @@
+<<NYAOS 3.1.4_1 を公開しました>>
+
+http://twitter.com/#!/takamoto/status/16356016274800640{@takamoto}曰く：
+6<
+* http://d.hatena.ne.jp/wantora/20101212/1292128946 入れるとき気づいたけど -f で読み込むと nyaos.version　と nyaos.argv[0] が空。まあ実害ないけど
+>9
+
+バグリポートありがとうございました。さっそく修正しました。
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS.ORG - NYAOS 3000}
+
+ところで今回でバージョンが 3.1.4_1。
+ちょうどじゃないけどπにかなり近くなりました。
+
+あと 14回不具合を出したら「3.1.4_15」になって更に近くなるけど、
+さすがにそれは出来ません（笑）

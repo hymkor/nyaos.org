@@ -1,0 +1,161 @@
+
+<HTML>
+<HEAD>
+  <link rel="stylesheet" type="text/css" href="gray.css" />
+  <!-- link rel="home" href="http://nyaos.org/" /-->
+  
+  <TITLE>NYAOS Support Page</TITLE>
+  <STYLE TYPE="text/css">
+  <!-- B{color:red}
+       B.KEY{background-color:white;color:black}
+       TABLE.BX TD {
+	  border-width:1px 3px 3px 1px;
+	  border-color:white;
+	  border-style:solid;
+	}
+  -->
+  </STYLE>
+</HEAD>
+<BODY BGCOLOR=black TEXT=white LINK=silver VLINK=gray ALINK=red >
+<div align="right">
+  <a href="./index.html.ja">[Japanese]</a>
+  <a href="./index.html.en">[English]</a>
+</div>
+
+<H1>Nihongo Yet Another OSes Shell<br>support page</h1>
+
+<ul style="text-align:right">
+  <li>Nihongo Yet Another CUI Shell (for NT,2000,XP)</li>
+  <li>Nihongo Yet Another DOS Shell (for DOS,95,98,Me)</li>
+  <li>Nihongo Yet Another OS/2 Shell-II( for OS/2 Warp)</li>
+</ul>
+
+
+
+<P>
+
+  NYAOS (NYACUS,NYADOS,NYAOS-II) is the enhanced commandline shell 
+  for Windows,DOS,OS/2.
+
+</P>
+
+<!-- img alt="‚QF" src="../monjoe/n10.files/ls77l2.png"  align="right" -->
+<UL>
+
+    <li>Line editor like tcsh. 
+        On NYACUS,NYAOS-II , able to read/write clipboard. </li>
+    <li>History like VZ-editor or tcsh-like.</li>
+    <li>Support OS : DOS,Windows95,98,Me,NT,2000,XP,OS/2 Warp</li>
+    <li>Built-in color ls</li>
+    <li>Alias and Function</li>
+    <li>key-binding custom</li>
+    <li>Even if longer string than screen width, 
+        command-line scrolls.</li>
+    <li>Backquote like tcsh</li>
+    <li>Filename completion
+      <ul>
+        <li>Support VFAT (NYADOS)</li>
+        <li>Completion and listing like bash</li>
+        <li>Auto correct filename's case</li>
+        <li>When filename has a white-space, append &quot;</li>
+        <li>Auto corrent slash and backslash</li>
+        <li>Support another completion: one bye one completion.</li>
+      </ul>
+      <dl>
+        <dt>expample</dt>
+        <DD><code>c:/prog</code><b class="KEY">TAB</b>
+            =&gt; <code>&quot;c:/Program Files/&quot;</code></DD>
+        <DD>c<code>:\prog</code><b class="KEY">TAB</b>
+            =&gt; <code>&quot;c:\Program Files\&quot;</code></DD>
+      </dl>
+    </li>
+    <li>Free Software. GNU General Public License</li>
+
+</UL>
+
+
+
+<H2><A NAME="download">Download</A></H2>
+
+<TABLE BORDER align="center" class="LINE">
+
+<TR>
+<td rowspan="4">2.22a<br />(Test)</TD><TD>Source</TD>
+
+  <TD><A HREF="nya222a.zip"><TT>211813 Oct 23 08:56 2004 nya222a.zip</TT></A></TD></TR>
+<TD>NYACUS</TD>
+
+  <TD><A HREF="nyacus222a.zip"><TT>135160 Oct 23 08:56 2004 nyacus222a.zip</TT></A></TD></TR>
+<TD>NYADOS</TD>
+
+  <TD><A HREF="nyados222a.zip"><TT>091152 Oct 23 08:56 2004 nyados222a.zip</TT></A></TD></TR>
+<TD>NYAOS-II</TD>
+
+  <TD><A HREF="nyaos222a.zip"><TT>169041 Oct 23 08:56 2004 nyaos222a.zip</TT></A></TD></TR>
+
+
+<TR>
+<td rowspan="4">2.19<br />(Stable)</TD><TD>Source</TD>
+
+  <TD><A HREF="nya219.zip"><TT>199809 Jan 25 04:55 2004 nya219.zip</TT></A></TD></TR>
+<TD>NYACUS</TD>
+
+  <TD><A HREF="nyacus219.zip"><TT>128271 Jan 25 04:55 2004 nyacus219.zip</TT></A></TD></TR>
+<TD>NYADOS</TD>
+
+  <TD><A HREF="nyados219.zip"><TT>087809 Jan 25 04:55 2004 nyados219.zip</TT></A></TD></TR>
+<TD>NYAOS-II</TD>
+
+  <TD><A HREF="nyaos219.zip"><TT>162721 Jan 25 05:01 2004 nyaos219.zip</TT></A></TD></TR>
+
+
+</TABLE>
+
+<H3>Platform</H3>
+
+<table align="center" class="LINE" border>
+<THEAD>
+<TR>
+
+    <TH ALIGN=CENTER>name</TD>
+    <TH ALIGN=CENTER>support OS</TD>
+    <TH ALIGN=CENTER>compiler to build</TD>
+
+</TR>
+</THEAD>
+<TBODY>
+<TR>
+    <TD>NYADOS</TD>
+    <TD>Windows95,98,Me,DOS</TD>
+    
+    <TD>Digital Mars C++ 8.26n</td>
+</TR>
+<TR>
+    <TD>NYACUS</TD>
+    <TD>Windows95,98,Me,NT,2000,XP</TD>
+    
+    <td>Borland C++ 5.5.1</td>
+</TR>
+<TR>
+    <TD>NYAOS-II</TD>
+    <TD>OS/2 Warp</TD>
+    
+    <td>emx 0.9d/gcc</td>
+</TR>
+</TBODY>
+</TABLE>
+
+<ul>
+  <li><b>The documentations in the archive files have not been 
+      translated to English, yet.</b>
+      They are under creation.
+      <a href="http://www.nyaos.org/index.cgi?p=manual.en">Now 60%</a>
+  </li>
+  <li>To start , type EXE-Filename.  With Ctrl-Z, terminate.</li>
+  <li>NYADOS,NYACUS,NYAOS-II are free softwares.
+      You can copy them with GNU General Public License.</li>
+</ul>
+
+</BODY>
+</HTML>
+

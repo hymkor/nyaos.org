@@ -1,0 +1,33 @@
+<<http://www.itmedia.co.jp/news/articles/0505/25/news086.html{「過失はない」「地震のようなもの」――カカクコム、侵入手口明らかにせず}>>
+
+（http://nnri.dip.jp/~yf/momoka.cgi?op=diary{メッセージ。 - Diary}より）
+
+あー、概ね正論で正しいんだろうけれども、
+客商売で「うちは間違ってへん」は、よろしく無いような。
+ここは少々損失となっても、無条件に補償しますとでも言っておけば、
+被害にあった客を今後の上得意にできる、よい機会だったのだが。
+この辺「お客さんが納得するか否かは、理屈ではなくて、
+感情/心証によるものである」ということを理解されていないような気もする。
+（← 感情/心証を一番理解していないのは、お前だ！
+／ ご指摘の通りでございます。誠に申しわけありません m(__)m ）
+
+もっとも、某Ｙ社のように、たかだか500円/1個人情報程度では
+焼け石に水となりうる可能性もある。セオリー通りにはゆかぬか。
+
+ところで
+
+<pre>
+    [C:デスクトップ] $ w3m -dump_head www.kakaku.com
+    HTTP/1.1 200 OK
+    Content-Length: 50714
+    Content-Type: text/html
+    Content-Location: http://www.kakaku.com/index.html
+    Last-Modified: Thu, 26 May 2005 14:52:40 GMT
+    Accept-Ranges: bytes
+    ETag: "9c539790262c51:37d"
+    Server: Microsoft-IIS/6.0
+    Date: Thu, 26 May 2005 18:13:31 GMT
+    Connection: close
+</pre>
+
+IIS/6.0 ですか。

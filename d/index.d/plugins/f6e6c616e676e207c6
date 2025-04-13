@@ -1,0 +1,30 @@
+package wifky::onlang;
+
+$::inline_plugin{http_accept_language} = sub{
+    $ENV{HTTP_ACCEPT_LANGUAGE};
+};
+
+$::inline_plugin{onlang} = sub{
+    shift;
+    my %lang;
+    for my $lang1 ( split(/,/,$ENV{HTTP_ACCEPT_LANGUAGE} || '') ){
+        my @pair=split(/;q=/,$lang1);
+        $lang{ $pair[0] } = ($pair[1] || 1);
+    }
+
+    my $page;
+    my $prior=0;
+    while( defined(my $arg1=shift) ){
+        my $arg2=shift;
+        if( defined $arg2 ){
+            if( exists $lang{$arg1} && $lang{$arg1} >= $prior ){
+                $page = $arg2;
+                $prior = $lang{$arg1};
+            }
+        }elsif( ! defined $page ){
+            $page = $arg1;
+        }
+    }
+    &::print_page( title=>$page ) if defined $page;
+    '';
+};

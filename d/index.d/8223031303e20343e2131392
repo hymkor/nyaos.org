@@ -1,0 +1,44 @@
+<<[NYAOS-3000] 2.92_0 リリース>>
+
+<<<ダウンロード>>>
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{
+    Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.92_0-win.zip{
+    nyaos3k-2.92_0-win.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.92_0-os2.zip{
+    nyaos3k-2.92_0-os2.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.92_0-src.zip{
+    nyaos3k-2.92_0-src.zip}
+
+<<<変更点>>>
+
+* [仕変]
+** -a の無い ls で、_ で始まるファイルや、Hidden 属性のついたファイルを表示しないようにした。
+** 画面クリアの制御コードを option term_clear ～ で設定できるようにした。
+** カーソルオンの制御コードを option term_cursor_on で設定できるようにした。
+** option +XXX で設定される文字列を「(set)」ではなく、空文字列とした。
+** %% を % へ置換するようにした。
+* [蟲繕]
+** 「http%3a%2f%2fftp.iij.ad.jp%2fpub%2fcygwin%2f」といったディレクリ名にchdir
+  できない問題があったため、関数・source 以外で %0～%9 を空文字列へ変換しない
+  ようにした。
+** 4GB を越えるサイズのファイルのサイズが 0 になっていた不具合を修正
+** source で与えた引数に、%0 %1 両方にコマンド名が入っている不具合を修正
+
+よろしくお願い致します。
+
+<<どうも、Cygwin 1.7 の UTF8 環境で、日本語の記号を使うとズレやすい傾向にある>>
+
+>>{(2010.04.10)}{昨日の w3m のズレ}もそうだけど、
+Cygwin 1.7 の UTF8 で動くコンソールアプリは、
+日本語の記号を使わないようにするのが無難のような気がする。
+
+というわけで、skk.vim の変換記号も次のように変えてみる。
+
+* ▽の変わりに <>
+** ``let g:skk_marker_white = '<>'``
+* ▼の変わりに >>
+** ``let g:skk_marker_black = '>>'``
+
+しばらく、これでいってみよう。SKKIME との違いも意識できるしね。

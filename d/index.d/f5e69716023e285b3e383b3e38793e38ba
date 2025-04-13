@@ -1,0 +1,145 @@
+葉山の使っている _nya (サンプル)
+
+8<
+#
+alias fd find
+alias ll ls -l
+alias cp cp -i
+alias rm rm -i
+alias mv mv -i
+alias zipinfo unzip -l
+alias python26 c:\Python26\python.exe
+alias python31 c:\Python31\python.exe
+alias google "python ""c:\Python26\Scripts\google"""
+
+if '%OS%' == 'Windows_NT' then
+    alias make mingw32-make
+endif
+option savehist ~\_history
+
+set LANG=ja_JP.sjis
+set EDITOR=gvim
+set HGEDITOR=gvim
+set HGMERGE=gvim -d
+set HOME=%USERPROFILE%
+set JAVA_HOME=c:\Program Files\Java\jdk1.6.0_20
+set MULE_HOME=C:\usr\mule-standalone-3.0.1
+folder mule %MULE_HOME%
+set MAVEN_HOME=C:\usr\apache-maven-2.0.11
+set M2_HOME=%MAVEN_HOME%
+set PATH+=%M2_HOME%\bin;%MULE_HOME%\bin
+
+set PATH+=C:\Python26;C:\Python26\Scripts\;C:\Python31;C:\MinGW\bin;C:\Program Files\Lua\5.1;c:\usr\bin
+set PATH+=c:\usr\vim72-kaoriya-w32j
+set PATH+="c:\Program Files\Microsoft Visual Studio 10.0\VC\BIN"
+set PATH+="c:\Program Files\Java\jdk1.6.0_20\bin"
+set PATH+=c:\usr\scala-2.8.0.RC6\bin
+set CYGWIN=nodosfilewarning
+set GOROOT=C:/usr/go
+set GOOS=mingw
+set GOARCH=386
+set PATH+=C:\usr\go\bin
+#set PATH-=C:\cygwin\bin
+
+alias setvc "cmdsource ""C:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"" x86"
+
+if '%OS%' == 'Windows_NT' then
+    set PYTHONPATH+=%USERPROFILE%\lib\python
+endif
+
+if '%nyatype%' == 'NYAOS3K' then
+    bindkey CTRL_SPACE ime-toggle
+    bindkey CTRL_O ime-toggle
+
+    lua_e "
+        function nyaos.keyhook.date(t)
+            if t.key == nyaos.key.F11 then
+                return os.date('%Y%m%d')
+            end
+        end
+        function nyaos.keyhook.time(t)
+            if t.key == nyaos.key.F12 then
+                return os.date('%H%M%S')
+            end
+        end
+        function nyaos.command.luaprint(...)
+            local argv={...}
+            for i,e in pairs(argv) do
+                print(i,e)
+            end
+        end
+
+        --[[
+        function nyaos.filter.env(cmdline)
+            return string.gsub(cmdline,'${([^/}]+)/([^/}]+)/([^}]*)}',
+                function(env,fromstr,tostr)
+                    return string.gsub(os.getenv(env),fromstr,tostr)
+                end
+            )
+        end
+        function nyaos.filter.filter_z(cmdline)
+            print('Z:'..cmdline)
+            return cmdline
+        end
+        function nyaos.filter.filter_a(cmdline)
+            print('A:'..cmdline)
+            return '  '..cmdline
+        end
+        function nyaos.filter.filter_m(cmdline)
+            print('M:'..cmdline)
+            return cmdline
+        end
+        function nyaos.filter(cmdline)
+            print('trace: '..cmdline)
+            return cmdline
+        end
+        -- ]]--
+
+        function nyaos.command.cat(...)
+            local argv={...}
+            local option={}
+            if next(argv) then
+                for i,fname in pairs(argv) do
+                    if fname:sub(1,1)=='-' then
+                        for j=2,fname:len() do
+                            option[ fname:sub(j,j) ] = 1
+                        end
+                    else
+                        local rc,msg=pcall( function()
+                            for line in io.lines(fname) do
+                                if option.n then
+                                    print(('%%6d  %%s'):format(option.n,line))
+                                    option.n = option.n + 1
+                                else
+                                    print(line)
+                                end
+                            end
+                        end)
+                        if not rc then
+                            print( fname..': No such file or directory(lua)' )
+                        end
+                    end
+                end
+            else
+                for line in io.lines() do
+                    print(line)
+                end
+            end
+        end
+
+        --[[
+        function nyaos.filter.auto_cd(argv)
+            local dir=argv:gsub('\034',''):gsub('\\$','')
+            local stat=nyaos.stat(dir)
+            if stat and stat.directory then
+                return 'cd '..argv
+            end
+            return argv
+        end
+        ]]--
+    "
+endif
+#cd %1
+# vim:set ft=text:
+
+>8

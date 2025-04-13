@@ -1,0 +1,20 @@
+<<NYAOS 3.3.4_3 を公開しました>>
+
+http://www.nyaos.org/index.cgi?p=NYAOS+3000{NYAOS.ORG - NYAOS 3000}
+
+* cd SHORTCUT.lnk の時に、ディレクトリ名が 8.3形式の名前に変わってしまう不具合を修正(WINDOWS)
+* cd の後にショートカット名をファイル名補完できなかった問題https://bitbucket.org/zetamatta/nyaos3000/issue/21/cd-lnk{[issue #21]}を修正(WINDOWS)
+* 全補完候補の共通長と補完前文字列の長さがちょうど同じ時に、ファイルの 大文字・小文字の自動補正が効かなかった不具合https://bitbucket.org/zetamatta/nyaos3000/issue/20/----------------------------------{[issue #20]}を修正
+* _nya にショートカットを作成するコマンド(lnk)を追加(WINDOWS)
+* 内蔵Luaで「pairs(COMのコレクションオブジェクト)」を出来るようにした (試作につき、そのうち削除するかもしれません)
+
+会社の開発プロジェクトのフォルダが結構深いところになるので、
+ショートカットで cd しやすくしようとしたら、
+いろいろ不具合が表面化しました。
+
+VisualStudio 開発なので、基本は GUI 操作だけですむんですが、
+自分の場合、会社で使ってる Subversion+TortoiseSVN とは別に、
+ローカルでコマンドライン版 Mercurial を svb の10倍くらい使ってるんですよね。
+
+TortoiseHg を使ってもいいかもしれませんが、
+シェル拡張をあまり入れすぎるのはどうかと思うので。

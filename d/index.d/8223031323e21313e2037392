@@ -1,0 +1,135 @@
+<<[C#] 続・分散パッケージダウンローダーを作ろうとしてます>>
+
+まぁ、基本的なロジックは Python版の作成でだいたい見えてきたので、
+C# (VS2008) で作り始めました。
+
+いきなり全部作るのはしんどいので、まずはウェブにアクセスするところだけ先に作りました。
+えぇ、もちろん、コンソールアプリですよ。
+
+8<
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Summon
+{
+    class Program
+    {
+        static string purename(string uri)
+        {
+            uri = uri.TrimEnd(new char[] { '/' });
+            int lastroot = uri.LastIndexOf('/');
+            return uri.Substring(lastroot + 1);
+        }
+        static void wget(string uri,string fname)
+        {
+            var browser = new System.Net.WebClient();
+            browser.DownloadFile(uri, fname);
+            browser.Dispose();
+        }
+        static string search_latest(string index_uri_, string pattern_)
+        {
+            var index_uri = new Uri(index_uri_);
+            var pattern = new System.Text.RegularExpressions.Regex(pattern_);
+
+            var browser = new System.Net.WebClient();
+            var html = browser.DownloadString(index_uri_);
+            browser.Dispose();
+
+            var mc = System.Text.RegularExpressions.Regex.Matches(
+                html, "<a[^>]+href=\"([^\"]+)\"");
+
+            string hit_uri = "";
+            foreach (System.Text.RegularExpressions.Match m1 in mc)
+            {
+                string g1 = m1.Groups[1].Value;
+                string uri = new Uri(index_uri, g1.Replace("&amp;","&")).AbsoluteUri;
+                if (pattern.IsMatch(uri))
+                {
+                    if (string.Compare(uri, hit_uri) > 0)
+                    {
+                        hit_uri = uri;
+                    }
+                }
+            }
+            return hit_uri;
+        }
+        static string where_to_redirect(string uri)
+        {
+            var browser = new System.Net.WebClient();
+            string html = browser.DownloadString(uri);
+            browser.Dispose();
+            var mc = System.Text.RegularExpressions.Regex.Matches(html, "<meta[^>]*url=([^\"> ]+)\"",
+                System.Text.RegularExpressions.RegexOptions.Singleline |
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase );
+            foreach(System.Text.RegularExpressions.Match m1 in mc)
+            {
+                return new Uri(new Uri(uri),m1.Groups[1].Value.Replace("&amp;","&")).AbsoluteUri;
+            }
+            return null;
+        }
+
+        static void Main(string[] args)
+        {
+            bool redirect = false;
+            int argsbase = 0;
+
+            if ( args.Length > 0 && args[0] == "-r")
+            {
+                redirect = true;
+                argsbase = 1;
+            }
+            
+            if (args.Length-argsbase < 2)
+            {
+                Console.Write("Usage: Summon.exe [-r] INDEX-URL PATTERN\n");
+                return;
+            }
+
+            Console.WriteLine("Searching " + args[argsbase]);
+            string target_uri = search_latest(args[argsbase], args[argsbase+1]);
+            string fname = purename(target_uri);
+            Console.WriteLine("Download: " + target_uri);
+            if (redirect)
+            {
+                target_uri = where_to_redirect(target_uri);
+                if (target_uri == null)
+                {
+                    Console.WriteLine("redirected url not found.");
+                    return;
+                }
+                Console.WriteLine("Redirect to " + target_uri);
+            }
+            
+            Console.Write("Save as " + fname);
+            wget(target_uri,fname);
+            Console.WriteLine(" done");
+            return;
+        }
+    }
+}
+>8
+
+''ライブラリが充実してて、俺、大歓喜。
+でも、一つ一つググらないと、どんなクラスがあるか分からないから、もどかしいわ。''
+
+8<
+[c:Release]
+$ summon -r http://sourceforge.jp/projects/ttssh2/releases/ /teraterm-.*\.zip/
+Searching http://sourceforge.jp/projects/ttssh2/releases/
+Download: http://sourceforge.jp/projects/ttssh2/downloads/56762/teraterm-4.75.zip/
+Redirect to http://sourceforge.jp/frs/redir.php?m=jaist&f=%2Fttssh2%2F56762%2Fteraterm-4.75.zip
+Save as teraterm-4.75.zip done
+[c:Release]
+>8
+
+実行ファイル名は暫定的に「summon.exe」。
+アプリケーションを召喚する的な意味で。
+とりあえず「ZIPファイルのURLが書かれたページの URL」と
+「ダウンロードURLのパターン」をパラメータで指定する形にしてます。
+
+あとは、アプリケーション名と各URLの対応関係を記したレポジトリ的なファイルを読み込む部分と、
+例外関係を作り込めばよいでしょう。
+人間が編集しやすいレポジトリ的なファイルを読み込む方法としては、
+どういうもの(方法)が一番いいんでしょうね、C# 的に。

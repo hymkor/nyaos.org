@@ -1,0 +1,8 @@
+!!! http://www.mulesoft.org/documentation/display/MULE3INTRO/Loan+Broker+Example{Loan Broker Example - Mule 3.x Getting Started Guide - mulesoft.org}
+
+* ``remember 'payload' is a Map/String,String/ from the previous transformer``
+* 「previous transformer」とは
+     ``<http:body-to-parameter-map-transformer name="HttpRequestToMap"/>``
+* このページは、groovy を mule-config.xml にインラインで書いている、よいサンプル
+
+

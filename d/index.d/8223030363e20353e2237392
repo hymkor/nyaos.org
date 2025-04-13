@@ -1,0 +1,54 @@
+<<その程度 期待したれば 技術かも>>
+
+<<{その程度期待したれば技術かも.jpg}
+
+"" 期待した技術も、いざ身につけてみれば「その程度かと」
+"" 感じ、とるにとらないものに感じてしまう。
+"" どこまでがんばっても、自分のコンプレックスを解消することは
+"" 無理なんだなぁ。
+
+誰が、今のワタシの心境をうたえと言えといった（笑） ≫ こゐふき
+
+<<VC#で遊んでみる>>
+
+ちょっと前の日経ソフトウェア(2006.03)についてきた CD-ROM の Visual Studio Express の VC# 2005 Express 日本語版を入れてみた。
+
+正直、全然作法が違う言語というのは非常に学び辛いのであるが、
+Java の経験がほんのちょっとだけあるので、
+それと似た C# は学び易かろうと、甘く考えてみたわけだ。
+
+ヘルプ片手に、sample.txt にテキストボックスの内容を書き出すプログラムを書いてみる。コードを色々補完してくれるので、楽だ。
+<<{VC#の練習.gif}
+
+8<
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+namespace WindowsApplication1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            using (StreamWriter sw = new StreamWriter("c:\\sample.txt", true, Encoding.GetEncoding("shift_jis"), 256))
+            {
+                sw.WriteLine( textBox1.Text );
+            }
+        }
+    }
+}
+
+>8
+
+そのうち、飽きるに 2000点。

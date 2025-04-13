@@ -1,0 +1,51 @@
+Linux の方がインストールしやすい。
+
+!!! ツールのダウンロード
+
+http://code.google.com/intl/ja/apis/v8/intro.html
+
+8<
+# yum install gcc
+# yum install gcc-c++
+# yum install subversion
+# yum install scons
+>8
+
+!!! ソースのダウンロード
+
+!! プロクシーの設定
+
+8<
+$ mkdir .subversion
+$ vi servers
+>8
+
+8<
+[global]
+http-proxy-host = tisproxy.tis.co.jp
+http-proxy-port = 8080
+>8
+
+!! Subversion 経由のダウンロード
+
+8<
+$ svn checkout http://v8.googlecode.com/svn/trunk/ v8
+>8
+
+!!! ビルド
+
+http://code.google.com/intl/ja-JP/apis/v8/build.html
+
+!! ライブラリ作成
+
+8<
+$ scons
+>8
+
+!! インタラクティブシェル作成
+
+8<
+$ scons d8
+>8
+
+「d8」というバイナリが出来る。

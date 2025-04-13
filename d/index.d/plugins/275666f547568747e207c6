@@ -1,0 +1,5 @@
+$main::inline_plugin{ref_text} = sub {
+    '<pre>' . &enc(
+	&read_object( $_[0]->{title},$_[0]->{argv} )
+    ) . '</pre>';
+};

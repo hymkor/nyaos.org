@@ -1,0 +1,39 @@
+!!! ((title [NYAOS][Lua] グローバルな環境変数の操作：リベンジ編))
+
+前回、>>{(2013.03.17) 1828}{[NYAOS] グローバルな環境変数の<del>操作</del><ins>参照</ins>}で、
+システム全体の環境変数の参照はできても、変更ができないという、非常にくやしい結果となった。
+これは
+
+8<
+ActiveXObject:Item("key")=val
+>8
+
+というプロパティーの設定の仕方が Lua の文法上困難であるためだ。そこで代替手段として
+
+8<
+ActiveXObject:__put__("Item","key",val)
+>8
+
+という方法を用意した。
+(at commit https://bitbucket.org/zetamatta/nyaos3000/commits/321a2ce85a7d482479bd2962416cc4b8b2ab3771{
+321a2ce85a7d482479bd2962416cc4b8b2ab3771 })
+
+これで
+
+8<
+local shell=nyaos.create_object("WScript.Shell")
+local sysEnv=shell:Environment("System")
+
+sysEnv:__put__("Item","HOGEHOGE","AHAHAHA")
+>8
+
+みたいな感じで、グローバルな環境変数を設定できる
+
+実行すると、2,3秒ほど時間がかかるので、
+その後「マイコンピュータ」のプロパティー
+→ 詳細設定
+→ 環境変数
+→ システム環境変数
+を見ると、変数 HOGEHOGE に 値 AHAHAHA が設定されていることが分かる。
+
+NYAOS の次のバージョン(3.3.7_0) に反映予定。

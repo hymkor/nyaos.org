@@ -1,0 +1,95 @@
+!!! [Python][Perl] Python の暗黒面以前に、正規表現のoオプションがなくて絶望した!
+
+* http://d.hatena.ne.jp/hakobe932/20081031/1225465056{
+    正規表現のoオプションにPerlの暗黒面を見た - はこべにっき#}
+* http://d.hatena.ne.jp/rubikitch/20081101/1225480737{
+    正規表現のoオプションにRubyの暗黒面を見た 
+        - ’(rubikitch wanna be (a . lisper))}
+
+ブクマにも書いたんですが、普通に考えたら変数の評価を2回目以降しないようにするから速くなるわけで、当然の話のような…。期待のような動きをするなら o オプションなんていうオプションはそもそも要らないのではないでしょうか。
+
+: (追記)
+:: その批判的なブクマに★をくれた筆者のid:hakobe932氏は男前だと思った
+
+Perl の動きを Python でエミュレートしてみましょう。
+
+8<
+import re
+
+_pattern_cache = None
+def match(pattern,text):
+    global _pattern_cache
+    if _pattern_cache is None:
+        # print "(comment) compliled!"
+        _pattern_cache = re.compile("^%s$" % pattern )
+    return _pattern_cache.search(text)
+
+for text in "vim","vim","vim","vim","vim":
+    if match("vim",text):
+        print "match: vim"
+    else:
+        print "not match: vim"
+
+for text in "emacs","emacs","emacs","emacs","emacs":
+    if match("emacs",text):
+        print "match: emacs"
+    else:
+        print "not match: emacs"
+>8
+
+これは
+
+8<
+match: vim
+match: vim
+match: vim
+match: vim
+match: vim
+not match: emacs
+not match: emacs
+not match: emacs
+not match: emacs
+not match: emacs
+>8
+
+こうなります。本当はこう動いて欲しいという結果である：
+
+8<
+match: vim
+match: vim
+match: vim
+match: vim
+match: vim
+match: emacs
+match: emacs
+match: emacs
+match: emacs
+match: emacs
+>8
+
+を得たいのであれば、match関数の部分を
+
+8<
+_pattern_cache = (None,None)
+def match(pattern,text):
+    global _pattern_cache
+    if _pattern_cache[0] != pattern:
+        # print "(comment) compliled!"
+        _pattern_cache = (pattern,re.compile("^%s$" % pattern ) )
+    return _pattern_cache[1].search(text)
+>8
+
+と修正する必要があります。
+要は「初回であればコンパイルする」というコードを
+「前回と異なっていたらコンパイルする」と改めるわけです。
+
+でも、それは
+「oオプションを使うと，その正規表現のコンパイルが1回しか行われなくなります」
+という仕様と明らかに異なります。さすがに、これを
+
+6<
+Perlの闇は深すぎて，油断するとすぐに真っ黒に染められてしまうので，
+全力で取り扱い注意ということですね
+>9
+
+というのは言い過ぎではないでしょうか？

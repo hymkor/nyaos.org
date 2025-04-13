@@ -1,0 +1,16 @@
+会社から ThinkPad X31 を支給されて、大喜び。
+
+* 丈夫そうだ
+* トラックポイントまんせー
+
+jvim は、Cygwin 1.5 環境には対応しとらんのじゃろうか。
+ck 使いたさに、ニューマシンは、 XonWindows2 ではなく、
+普通に setup.exe で、Cygwin をセットアップした。
+が、コンパイルが通らん。
+
+* http://hp.vector.co.jp/authors/VA003457/vim/vim3/vim.html{公式サイト}
+    を見ると、Cygwin 1.1 までしか対応しとらん。
+* http://www.holonlinux.com/products/xon/xon2/{ 
+    XonWindows2} は
+    http://www.holonlinux.com/support/FAQ/xon/xon2/list.html{
+    1.3 ベース}だったっぽい。

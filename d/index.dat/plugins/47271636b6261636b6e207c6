@@ -1,0 +1,145 @@
+use Encode;
+use Socket;
+use strict;
+use warnings;
+
+$::action_plugin{tb} = sub{
+    eval{
+        my $url  =$::form{url} or die("Parameter URL not found.");
+        my $page =$::form{p}   or die("Parameter P   not found.");
+        my $fname=&::title2fname($page,"trackback.txt");
+        utime( time() , time() , &::title2fname($page) ) > 0
+            or die("unable to comment to unexistant page.");
+        open(FP,">>${fname}") or die("Can not open $fname for append");
+            my @tm=localtime();
+            my $text = join("\t",map( &::yen($_) 
+                        , sprintf("%04d/%02d/%02d %02d:%02d:%02d"
+                            , 1900+$tm[5],1+$tm[4],@tm[3,2,1,0])
+                        , $url 
+                        , $::form{title}     || $url 
+                        , $::form{blog_name} || ""
+                        , $::form{excerpt}   || "" ) );
+            if( $::form{charset} =~ /s(hift)?[-_]?jis/i ){
+                $text = Encode::decode('shiftjis',$text);
+            }elsif( $::form{charset} =~ /euc[_-]?jp/i ){
+                $text = Encode::decode('euc-jp',$text);
+            }else{
+                $text = Encode::decode('utf8',$text);
+            }
+            $text = substr($text,0,256) if length($text)>256;
+            print FP Encode::encode('euc-jp',$text),"\r\n";
+        close(FP);
+    };
+    if( $@ ){
+        my $message=&::enc($@);
+        print <<HERE;
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="iso-8859-1"?>
+<response>
+<error>1</error>
+<message>${message}</message>
+</response>
+HERE
+    }else{
+        print <<HERE;
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="iso-8859-1"?>
+<response>
+<error>0</error>
+</response>
+HERE
+    }
+    exit(0);
+};
+
+$::inline_plugin{trackback} = sub {
+    my $list=&::read_object($::form{p},'trackback.txt');
+    if( $list ){
+        $list = '<dl>' . join("",
+            map{
+                my ($time,$url,$title,$blog_name,$excerpt)=split(/\t/,$_);
+                sprintf('<dt><a href="%s">%s %s</a>(%s)</dt><dd>%s</dd>'
+                        , &::enc($url) , &::enc($title) , &::enc($blog_name)
+                        , &::enc($time) , &::enc(&::deyen($excerpt)) );
+            } split(/\r?\n/,$list)
+        ) . '</dl>';
+    }
+    local $::me='http://'.$ENV{'HTTP_HOST'}.$ENV{'SCRIPT_NAME'};
+    my $url=&::myurl( { a=>'tb' , p=>$::form{p} } );
+    sprintf('%s<form>Trackback URL: <input type="text" value="%s" size="%d" readonly="readonly" style="font-family:monospace;font-size:small" onClick="this.select();" /></form>'
+            , $list
+            , $url
+            , length($url) );
+};
+
+$::form_list{'600_trackback'} = sub {
+    if( $::form{a} eq 'edt'  &&  &::object_exists($::form{p}) ){
+        &::puts('<h2>Send Trackback</h2>
+            <div>URL: <input type="text" name="trackurl" value="" size="48" /></div>
+            <div><textarea name="excerpt" cols="80" rows="5"></textarea></div><div>'
+        );
+        &::print_signarea('gassword');
+        &::puts('<input type="submit" name="a" value="Send Trackback" /></div>');
+    }
+};
+
+$::action_plugin{'Send Trackback'} = sub {
+    my $trackurl=$::form{trackurl}  or die("Trackback URL not found");
+    $::form{password} = $::form{gassword};
+    &::ninsho();
+
+    if( $trackurl !~ m|^http://([^/]+)| ){
+        die('Invalid URL');
+    }
+    my $host     = $1;
+    my $path     = $';
+    my $ip       = Socket::inet_aton($host) or die("$host not found.");
+    my $port     = getservbyname('http', 'tcp');
+    my $sockaddr = Socket::pack_sockaddr_in($port, $ip);
+    socket(HTTP, Socket::PF_INET, Socket::SOCK_STREAM, 0) 
+        or die("socket error.\n");
+    connect(HTTP, $sockaddr);
+    binmode(HTTP);
+    my $output=select(HTTP); $| = 1; select($output);
+
+    my $blog_name=$::config{sitename};
+    my $page_name=$::form{p};
+    my $excerpt  =$::form{excerpt};
+    Encode::from_to($blog_name,'euc-jp','utf8');
+    Encode::from_to($page_name,'euc-jp','utf8');
+    Encode::from_to($excerpt  ,'euc-jp','utf8');
+
+    my $myurl=sprintf('http://%s%s?p=%s' 
+                , $ENV{'HTTP_HOST'}
+                , $ENV{'SCRIPT_NAME'}
+                , &::percent($page_name) );
+
+    my $body=sprintf('url=%s&charset=utf-8&title=%s&excerpt=%s&blog_name=%s'
+        , &::percent( $myurl )
+        , &::percent( $page_name )
+        , &::percent( $excerpt )
+        , &::percent( $blog_name )
+    );
+
+    print  HTTP "POST $path HTTP/1.1\n";
+    print  HTTP "Host: $host\n";
+    printf HTTP "Content-Length: %d\n",length($body);
+    print  HTTP "Content-Type: application/x-www-form-urlencoded; charset=utf-8\n";
+    print  HTTP "Connection: close\n";
+    print  HTTP "\n";
+    print  HTTP $body;
+
+    &::puts('Content-type: text/html; charset=utf-8','');
+    &::puts('<html><head><title>Trackback Result</title></head><body>');
+    &::puts('<h1>Trackback Result</h1>');
+    &::putenc('<p>From <a href="%s">%s</a> to %s</p><p>' , $myurl , $myurl , $trackurl);
+    while( <HTTP> ){
+        &::puts( &::enc($_).'<br>' );
+    }
+    &::puts('</p></body></html>'); 
+    close(HTTP);
+};
+
+1;

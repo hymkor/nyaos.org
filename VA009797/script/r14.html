@@ -1,0 +1,856 @@
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP" />
+    <TITLE>The dark forced Hayamatta Script 〜 魔界葉山文書</TITLE>
+    <LINK REL="stylesheet" TYPE="text/css" HREF="../iyahaya.css" />
+    <LINK REL="stylesheet" TYPE="text/css" HREF="./r.css" />
+    <META NAME="ROBOTS" CONTENTS="NOINDEX, NOFOLLOW" />
+</HEAD>
+<BODY BGCOLOR="#000000" TEXT="#FFFFFF" LINK="#00FFFF" VLINK="#00CCCC">
+<DIV CLASS=MENU ALIGN=RIGHT>
+    ▼<A HREF="./r15.html">次頁へ</A>
+    ▼<A HREF="./r13.html">前頁へ</A>
+    ▼<A HREF="./index.html">目次へ</A>
+    ▼<A HREF="../index.html">扉ページへ</A>
+</DIV>
+
+<HR />
+
+<H2><A NAME="20010924">Star Trauma - The Next Generation</A>
+    <SPAN>(2001/09/24)</SPAN></H2>
+
+<P><BIG>ま</BIG>
+    た、“Ｄ”を持ってゆくの忘れたよ。
+    電車の中でボー長官。邦題は「新鬱大作戦」。
+    またまた、<A HREF="http://www.f8.dion.ne.jp/~torakun2/butubutuushin.htm"
+    >ざぶとんゲット</A>だぜ<EM>(←今なら漏れなく、そうは問屋が卸しません)</EM>
+</P>
+
+<BR CLEAR />
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>メ</BIG>ーリングリストを全部脱退したら、休日はメールが全然来なくなった。
+    静かだ。
+</P>
+
+<P>今日唯一のメールは、UNIX スクリプト勉強会の<A HREF="study.html">資料</A
+    >の間違いの指摘だった。
+    sh には source がないということ。頭では分かっていたのだが、
+</P>
+<UL>
+    <LI>sh系でインタラクティブに使うシェルだから sh ではあるまい。</LI>
+    <LI>「<TT>.</TT>」は、カレントディレクトリを意味するドットと<!--
+        -->混同しやすい</LI>
+</UL>
+<P>ということで、つい「source ~/.profile」などと書いてしまった、
+    だなんて、言い訳がましいなぁ。鬱。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>N</BIG>YAOS-2(NYAGOS/2) を Windows 上から
+    <A HREF="http://www.digitalmars.com/">Digitalmars C++</A>
+    でもって、クロスコンパイルできるよう、 NYADOS ソース・Makefile を改造。
+    で、何とかコンパイルは通るようになった。だが、リンクができない。
+    LINK386.EXE が必要ぢゃと？ Windows に LINK386.EXE があるかい！
+    つーことで、諦める。結構時間を使ったのだが<EM>(シクシク)</EM>
+</P>
+<P>
+    まぁ、従来通り、emx/gcc でビルトするにも、せめて、レポジトリを
+    マシン間で共有せんことには、ソースが二重管理になっていろいろと
+    都合わろし。
+    ということで、いい加減であった、Warp の LAN 関係の設定をやり直す。
+    なんとか TCP/IP の設定は完了する。
+    VAIO から Warp に telnet して、NYAOS-1 を起動して感動してみる。
+    だが、 NetBEUI<EM>(BIOS?)</EM>の設定がどーもうまくいかん。
+    いろいろとジタバタするが、根性が枯渇してヤメル
+    <EM>(またかい)</EM>
+</P>
+<P>
+    気を取りなおして、今度は VAIO C1R から Linux の追放を決行しようとする。
+    遠い遠い昔、 Red hat Linux 6.1J を VAIO に入れたはいいのだが
+    LAN カードがうまく認識されないわ、別段用途もないわで、
+    結局、ディスクを1GBばかり無駄に食いつづけているような状況だったのだ
+    <EM>(4GB しか容量ないマシンなのに!)</EM>。
+
+    そんなわけで、パーティションを FDISK.EXE で消そうとするが…消えない。<!--
+    -->聞くところによると、Linux の fdisk でないと、<!--
+    -->Linux のパーティションは消せないそうな。
+
+    とはいえ、稼動中の Linux の fdisk で自分自身が乗ったパーティションを<!--
+    -->消すというのも暴挙であるので、せめて CD-ROM ブートして起動した<!--
+    -->Linux からfdisk を使おうとしたが…。<!--
+    -->コマンドラインを出せませんぞ、ジョニー。<!--
+    -->つーか、CD-ROM はブートすれども、途中での CD-ROM の再認識に<!--
+    -->失敗しておる模様。さて、ワタシは以前、どうやって認識させたんだろう。
+</P>
+<P>ものすごい、ヘタレぶり。結局、何一つできてない。超鬱
+<EM>(←なんか三国志の武将みたい)</EM></P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><BIG>暇</BIG>とは口にすれば消えるもの。
+    今週は結構忙しそう。
+    というか、ちょっときついかも。
+</P>
+<P>Perl で、スクリプトを一本書かなくてはいけなくなった。
+    Ruby に慣れすぎた今となっては、Perl はつらい。
+    Perl のヨー分からんオブジェクト指向を勉強せねば。
+</P>
+<P>HP/UX の route コマンドがよー分からん。ただ今、Manual 解読中…。
+    やはり、ワタシは Solaris か Linux が好きだな。
+    UNIX で SJIS は邪道ですよ<EM>(←関係なし)</EM>。
+</P>
+<P>今週は、よくよく考えると、１日少ないんだよな〜。本来喜ぶべきことなのだが…。
+</P>
+
+<BR CLEAR />
+<HR />
+
+<H2><A NAME="20010920">鬱大作戦</A>
+    <SPAN>(2001/09/20)</SPAN></H2>
+
+<P><BIG>鬱</BIG>…それは暇人類に残された最期のフロンティア…なわけない。
+    比較的時間に余裕ができた昨今であるのに関わらず、
+    この鬱状態…なーんでか。
+</P>
+<UL>
+    <LI>電車内読書用に買った“Ｄ”を自宅に忘れてしまったり
+        <EM>(なお、ワタシが“Ｄ”といえば、頭文字ではなく、
+            ヴァンパイアハンターです)</EM>
+    </LI>
+    <LI>気がつくと電車を乗り過ごして、会社が遥か後方の彼方、一万光年に…</LI>
+    <LI>ネットを伝わり、メールを伝わり、
+        文面を伝わる、お怒りの波紋疾走〜うぎゃあ。へこみます</LI>
+    <LI>Nimda なんか、キライダ---って、ワタシは感染してませんよ。
+        仕事が増えたのがね。Outlook Express なんぞ、つかうんぢゃねー。
+    </LI>
+    <LI>たまには気分転換ということで、レンタルビデオ屋によってみた時に限って、
+        会員証を忘れていたり</LI>
+</UL>
+<P>あぁ、でも、あと１日ゆけば、休みなのだ。しかも連休。希望の光よ。
+    でも、またディスクが飛ばないだろうな(笑)。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>最</BIG>近、つーか、今日の散財。ほんと、散財だ。</P>
+<UL>
+    <LI>週刊モーニング</LI>
+    <LI>月刊 ASCII</LI>
+</UL>
+<P>雑誌ばっか。雑誌は気軽に捨てられるけど、単行本は捨てにくい。
+    そして、もはや我が部屋に容量の余裕なし。
+    よって、捨てられる本のみ買う。
+    このような心理が働いていると考えられる。
+</P>
+<P>そういえば、ASCII DOS/V ISSUE って、いつの間になくなったんでしょう。
+    他にも、月刊ＰＣとか、気がつけばイロイロ消えているなぁ。
+    SUPER ASCII とか OS/2 MAGAZINE が消えたときにインパクトは
+    個人的に大きかったのだが、興味のない本にはホント無関心だね。
+</P>
+    
+
+<BR CLEAR />
+<HR />
+
+<H2><A NAME="20010919">髭なりし“Ｄ”</A><SPAN>(2001/09/19)</SPAN></H2>
+
+<P><BIG>か</BIG>つて、その髭ありと研究室で名を馳せた私も
+    <EM>(馳せてません、馳せてません)</EM>
+    リーマンと化し、しばらく一般市民のフリをしていたが、
+    いい加減、もう４年目だし、いいかということで、
+    ここ最近、急速に髭をのばしつつある今日このごろ、
+    いかがお過ごしですか？
+</P>
+<P>この髭ズラで、社内報でバッチソとられてしまいました。
+    と言っても別に何かをやらかしたわけではありません。
+    社員全員の顔写真が載る本です。指名手配ではありません。ないってば。
+</P>
+
+<P>とか何とか言っていたら、大学の先輩から結婚式のご案内が...
+    髭でいくか、それとも髭でいくか…
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>健</BIG>康診断にうつつをぬかしている間に
+    会社では新しいウィルスが暴れていたようで…お疲れさまです。
+    仕事にならないので、とっとと失礼してきました。
+</P>
+<P>とりあえず、私の窓環境は<EM>(もはや‘半分’環境でなくてごめんなさい)</EM></P>
+<UL>
+    <LI>Netscape 4.7<EM>(気がつけば、Moon Browser やめてるよ)</EM></LI>
+    <LI>Edmax 2.84.1F</LI>
+</UL>
+<P>ですので、感染しにくいはずですが、油断はできません。
+    某ウィルス対策ソフトのパターンファイルをしっかりと更新しておきましょう
+    <EM>(と自分に言い聞かせる？ということは…)</EM>。
+</P>
+<P>しかし、どうしてこう、Outlook Express や Internet Express など
+    Microsoft製品はセキュリティーホールが多いかな。
+    いらん機能つけすぎなんだよ。
+    つーか、みんな使うな！んなもん。
+</P>
+<P>ところで健康診断の結果ですが---
+    何と生まれて初めて標準体重より軽くなりました。
+    喜ぶべきか、悲しむべきか。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>最</BIG>近の散財</P>
+
+<UL>
+    <LI>Ｄ−聖魔遍歴</LI>
+    <LI>Windows Power 10月号<EM>(嘘です、買ってません、もらいました)</EM></LI>
+    <LI>UNiX Magazine 10月号</LI>
+</UL>
+<P>夢なりし“Ｄ”の次の巻を勘違いしとりました。北海魔行ではなく、
+    聖魔遍歴でした。Ｄシリーズが続きますねぇ。
+    最後のページみたら、第32刷でした。
+    発売が 1988年ですから、年2,3回増刷しているわけですね。
+</P>
+<P>Windows Power誌。予想通り、薄い本ではありますが、
+    もらいもんに文句を言ってはいけません。
+</P>
+<P>UNiX Magazine。今月は Emacs の特集です。
+    でも、もはや Emacs 使ってませんから、関係ないです。
+    そのかわり、vim 6 も載ってましたので、購入です。
+    気のせいか、ここ最近、vi がブームになってるような気がします
+    <EM>(ワタシだけかも)</EM>。
+    vim 自体は着々とバージョンアップしてたわけですから、
+    「最近」だなんて言ったら失礼ですね。
+    ワタシ自身は専ら、jvim 3 をどこでも使っています。
+    マルチウィンドウが使えると、やっぱり違いますし、
+    SJIS<WBR>/<WBR>EUC<WBR>/<WBR>JIS どれでもこいというのもいいですね。
+</P>
+
+<BR CLEAR />
+<HR />
+
+<H2><A NAME="20010915">にゃーかす ほらー</A>
+    <SPAN>(2001/09/15)</SPAN></H2>
+
+<P><BIG>ぼ</BIG>ちぼち、NYADOSシリーズのバージョンを 2.00 にしようかなと思い、
+    ドキュメント・メッセージの変更に着手しちゃったりなんかして。
+</P>
+<UL>
+    <LI>NYADOS
+        → 現行通り</LI>
+    <LI>NYAGOS   
+        → NYACUS（Nihongo Yet Another Commandline Users' Shell）へ改名</LI>
+    <LI>NYAGOS/2
+        → NYAOS 2.xx シリーズとする</LI>
+</UL>
+<P>バージョンナンバを 2.00 にするのは、NYAOS 1.xx シリーズとの区別のため。
+    あと、使用コンパイラとして、<A HREF="http://www.digitalmars.com"
+    >DigitalMars C++</A>の全面採用を検討中。
+    これによって、開発環境に下記のメリット・デメリットが生じる。
+</P>
+<UL>
+    <LI>NYADOS でも、テンプレート・例外処理・dynamic_cast などの機能が使用可能。
+        だが、使用することで、プログラムサイズがでかくなる。</LI>
+    <LI>OS/2 のバイナリも 95 環境で作成でき、OS/2 版バイナリも毎回配布可能。
+        だが、逆に OS/2 環境では作れなくなる<EM>(だめじゃん)</EM>。</LI>
+</UL>
+<P>ただ、デメリットも結構気になるので、決まったわけではないす。</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>実</BIG>は私、心霊番組が結構好きで<!--
+    --><EM>(と USOジャパンを見ながら書いている)</EM>、<!--
+    -->こっそり見ていたりするのですが、<!--
+    -->こうした現象をとらえる時、どうも、<!--
+    -->霊を信じる/信じないレベルで話が終わってしまうのが非常に残念ですねぇ。<!--
+    -->霊能力者<EM>(?)</EM>の方のおっしゃることも、経験的なことであり、<!--
+    -->決して軽んじるべきではないとは思いますが、どういう根拠から<!--
+    -->そうおっしゃっているか、その方の<!--
+    -->判断の基準が明確化されていないんですよね。<!--
+    -->これでは科学的考察と相容れなくて当たり前かも。
+</P>
+<P>純粋に、人間の目に見えない現象が起きているという観点からの<!--
+    -->研究がないものでしょうかね。<!--
+    -->思うに、写真に人間の目に見えないものが写る、<!--
+    -->機械がうまく動作しない、体調が悪い、<STRIKE>遅刻が多い、</STRIKE
+    >等の現象は、<!--
+    -->電磁波的な作用として説明できそうな気がするんですよね。<!--
+    -->そういう現象の原因として、<!--
+    -->かつて生きていた生物の活動も一つの要素としてあるのでしょう。<!--
+    -->もちろん、人間の錯覚・トリック・嘘<STRIKE>・大げさ・まぎらわしい・<!--
+    -->JAROって何じゃろ、</STRIKE>という要素も常に念頭に入れて、<!--
+    -->疑うことを忘れてはいけません。
+</P>
+<P>この手のことって、どうしても、ムー的なインチクくさい、
+    擬似科学的なものになってしまうものでしょうかねぇ。
+    やはり、実験・検証が難しいからかなぁ。
+    故カール=セーガン博士も納得行くような手法で、
+    いつか、うまく<U>式で</U>説明できるとすばらしいのですが
+    <EM>（式で説明しないと、宗教に成り下がる可能性がありますので）</EM>。
+</P>
+<P>あ、だからと言って、怖いところへつれてゆかないように＞職場の皆様。
+    しかし、こういうことは、一度、<A HREF="himage.html">超ひま理論</A>にて、
+    モーレツ科学してみる必要があるかも。
+    最近、<STRIKE>暇</STRIKE>ネタ不足だしなー
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>e</BIG>ff に<A
+    HREF="http://homepage2.nifty.com/hayamatta/warp/effmacro.html"
+    >マクロ集のページ</A>を作成しました。
+    eff には REXX言語が組み込まれており、おそらく OS/2 中のファイラーで、
+    これほどのカスタマイズ可能なものは---emacs の dired を除けば---
+    存在しないと確信しているのですが、今一、活用されていないようなので、
+    ちょっとアピールも兼ねています。
+    でも、どっちみち、母数が少ないので、あまり変わりないような気はしますが
+    <EM>（思うに10人くらいの方々にしか使われていない可能性大）</EM>。
+</P>
+<P>まぁ、どちらかというと、eff はもう開発終了モードに入っているので、
+    後は利用者各自で勝手にカスタマイズして使ってね！
+    と解釈されてしまうかな？ それもまたヨシ！
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>最</BIG>近の散財：</P>
+<UL>
+    <LI>夢なりし“Ｄ”</LI>
+    <LI>ARIEL〔17〕</LI>
+    <LI>UNiX MAGAZINE 9月号</LI>
+</UL>
+<P>ソノラマ文庫は買える書店が近所に一ヶ所しかないので、なかなか購入できず。
+    本当は、Ｄ−北海魔行 も欲しかったが、上巻だけ存在せず<TT>(;_;)</TT>。
+    聞くところによると amazon が送料無料になったそうなので、
+    通販という手もあるなぁ。
+</P>
+<P>今月の UNiX MAGAZINE は vi 特集。
+    ということで、すっかり vi 派になってしまった私は無論購入。
+    !G という技が分かっただけでも大収穫よ<EM>（そうか？）</EM>。
+</P>
+<P>あと、結構前に買ったけど、書くの忘れてたと思うので…</P>
+<UL>
+    <LI>攻殻機動隊２ <SMALL>MAN MACHINE INTERFACE</SMALL></LI>
+</UL>
+<P>ある意味、ジャンプと対極にある漫画だなぁ。</P>
+   
+
+<BR CLEAR />
+<HR />
+
+<H2><A NAME="20010911">2001年鬱中の旅</A><SPAN>(2001/09/11)</SPAN></H2>
+
+<P><BIG>誰</BIG>も気にしてないけど、2001年9月9日問題、何もなくてよかった。
+    10時ごろには、電話がならないか、実はヒヤヒヤしてました。
+    ま、通しの秒数で 9桁 だけ使うようなヌケ作が
+    Linux屋さんにいなくて幸いです。
+</P>
+<P>だなんて、油断していたら、お客さんところでディスクが飛びました
+    <EM>(9月9日問題とは関係なく)</EM>。
+</P>
+<P ALIGN=CENTER CLASS="SAY1">
+    私の休暇(火・水)も飛びました
+</P>
+<P>ギガ鬱ラッシュ <TT>(;_;)</TT>。
+    今なら漏れなく無想転生が使えそうです。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>D</BIG>elphiは打たれるという
+    <A HREF="http://hp.vector.co.jp/authors/VA016875/try12.html#09-09"
+    >タイトル</A>ですが、
+    実は私が使った直後に某Ｃマガジンで
+    そのフレーズが使われているのを発見して、
+    ガビーソときていたりなんかして
+    <EM>(発売日の方が遥かに前なので、
+    こっちがパクったような感じに見えちゃったりするのがねー)。</EM>
+    実は使い古されているネタだったのかもー。
+</P>
+<P>それはともかく、TStringList の件ありがとうございます。
+    てっとりばやくて Good ですね。さすがオブジェクト指向。
+    一行でファイル全部読みこめるのって、
+    他には Ruby くらいしか知りませんぜ、師匠。
+    やはり、詳しい人が見てるところで困ってみせるのが一番ですね<EM>(ぉぃ)</EM>
+</P>
+<P><EM>（だけど、文字列専用の配列クラスが用意されている時点で、
+    配列の抽象化がマダマダだなと思ってしまうのは、傲慢かしらん？
+    → 静的コンパイラ言語を、動的インタプリタ言語と比較するのは
+    酷というもんです）</EM>
+</P>
+<P>Ctrl-C の件は…、多分、signal(SIGINT,SIG_IGN); の入れ忘れかも。
+    あはははは<EM>(こら)</EM>。次のバージョンまでお待ちくださいまし。
+</P>
+
+<HR />
+
+<H2><A NAME="20010908">ふりかえればバグがいる</A>
+    <SPAN>(2001/09/08)</SPAN></H2>
+
+<P><BIG>e</BIG>ffの続報です。</P>
+
+<OL>
+    <LI>cannaserver を殺して</LI>
+    <LI>cannamt.dll を追放して</LI>
+    <LI>_eff に canna 0; を追加したところ</LI>
+</OL>
+<P ALIGN=CENTER CLASS="SAY2">
+    作者環境でも、おもしろいほど<BR />よく落ちるようになりました。
+</P>
+<P>ということで、原因についてもほぼ見当がつきました。<!--
+    -->かんなの状態<EM>(使用可能・使用禁止・未使用:使用する時に初期化する)</EM><!--
+    -->を保持するフラグがあり、かんなが使用できない場合、<!--
+    -->これを使用禁止と設定しなければいけないのですが、<!--
+    -->場合によって、これがきちんとなされない場合があったようです。
+</P>
+<P>それに加え、ページャモードで起動した場合、emx のテキストウインドウ<!--
+    -->ライブラリの初期化もされていませんでした。
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    なんぢゃい、それは！
+</P>
+<P>ごめんなさい。ごめんなさい。ごめんなさい。<!--
+    -->しかし、fix 3 は、何故表面化しなかったんだろう。謎だ。鬱だ。<!--
+    -->ということで、さっそく<A
+    HREF="http://homepage2.nifty.com/hayamatta/warp/eff.html#136"
+    >修正版</A>をリリースです。<!--
+    -->しかし、あれが最後のバグとは思えない<EM>(お前が言うな!)</EM>。<!--
+    -->第二、第三のバグが出たとき、我々はどうすればよいのだ！
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+    とりあえず作者に石を投げてください
+</P>
+<P>なお、今回のバグ対応に際して、<!--
+    -->下記の方々に、かなり多大なるご協力をいただきました。
+</P>
+<DL>
+    <DD><NOBR>
+        我澤賢之さん、<WBR />
+        Average さん、<WBR />
+        中山　康さん、<WBR />
+        しなのりゅうたさん、<WBR />
+        FRIESさん
+    </NOBR></DD>
+</DL>
+<P>どうも、ありがとうございました。<TT>m(_ _)m</TT><EM
+    >(←って、もう終わったような気でいるよ、大丈夫かいな)</EM>
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>N</BIG>YADOS のビルトがメモリ不足でだんだん困難になってきたなーと<!--
+    -->思っていたら、実はヒストリがメモリを圧迫していただけでした。
+       ヒストリ保存量の上限をちゃんと設定するようにしなくちゃね。
+</P>
+<P>実のところ、Turbo-C++ を捨てて、DigitalMars C++ を使えば、
+    ビルト時のメモリ不足など気にする必要はなくなります
+    <EM>(コンパイラ自身は Win32 アプリだから)</EM>。
+    コンパイルも速いし、最新の C++ の機能 : template , 
+    例外処理 , STL などもサポートしていますし。
+</P>
+<P>Turbo-C++ でビルトし続けるのは、結局、できあがった実行ファイルの<!--
+    -->ディスク上・メモリ上のサイズが、他のコンパイラよりも若干少なくて<!--
+    -->すむからです。しかし、今日の一般人の環境を見るに、<!--
+    -->コンベンショナルメモリを消費するプログラムは皆無に近いので、<!--
+    -->常駐<EM>(に近い)</EM>プログラムが少々多めにメモリを消費したところで、<!--
+    -->痛くも痒くもないのでしょうな。<!--
+    -->ということで、近々、DigitalMars C++ に乗りかえるかもしれません
+    <EM>(ソースレベルでは既に対応済みだし)</EM>
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>古</BIG>いＣマガ片手で、Delphi を触ってますが、
+    テキストファイルの読み込みさえ、わかりましぇーん。
+    Ruby なら、
+</P>
+<PRE>
+    IO.foreach(&quot;C:/windows/hosts&quot;) do |line| … end
+</PRE>
+<P>だけでいいのに…。ということで、軟弱な私は、
+    Ruby + Delphi = Apollo にトライ。
+    最初、インストールした Delphi を元にやろうとしたら、
+    Delphi 6 には未対応と聞いてガビーソとなりましたが、
+    Apollo のページをよく見ると、Delphi 5 の必要なモジュールが
+    ダウンロードできることを発見。
+    とりあえず、一枚、ウインドウが開けて、喜んでいたりして。
+    でも、そこから一歩も進まず。
+</P>
+<P>ちなみにやりたいのは、C:\Windows\hosts を扱う、GUI です。
+    hosts を頻繁に変える業務をしとるもんで、はい。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><BIG>“２</BIG><P>ちゃんねる”をうろついていたら、
+    <A HREF="http://mentai.2ch.net/test/read.cgi?bbs=bake&amp;key=982055827"
+    >母校の教室のスレッド</A>が立ちあがってました。
+    父ちゃん、懐かしくて涙でてくらぁ<EM>(ちょっと違う、それ)</EM>。
+    見てたら、なんか回想シーンに入ってしまいました
+    <EM>(どんな回想シーンだったかは秘密)</EM>。
+    しかし、化学工学で学んだこと、仕事で全然使ってないなぁ。
+    人のこと言えないけど、化学工学なのに、なんで、
+    うちの会社に来る人多いんでしょうね、ほんと。全然、業種違うのに。
+</P>
+<P>ついでに<A HREF="http://mentai.2ch.net/test/read.cgi?bbs=bake&amp;key=990943041"
+    >☆化学工学全般スレ☆</A>を見てたら、
+    化学工学の分かりやすい説明とか出てました。
+    なるほどね。人にはそう説明するか。φ（。。）
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+    しまった、メモっても説明する機会ないや
+</P>
+<P>あぁ、百万遍は遠くなってしまった。</P>
+
+<BR CLEAR />
+<HR />
+
+<H2><A NAME="20010907">暇なりし“Ｄ”</A>
+    <SPAN>(2001/09/07)</SPAN></H2>
+
+<P><BIG>や</BIG>った、夏休みだ！誰が何と言おうと、夏休みだ。<!--
+    -->お墓参りに行っても、ご先祖様は帰って来ないし、<!--
+    -->海にはもはや誰もいないけど、そんなことは関係ないっす。
+</P>
+<P ALIGN=CENTER CLASS="SAY1">
+    どっちにしても両方いかないから。
+</P>
+
+<BR CLEAR />
+<TABLE ALIGN="CENTER">
+<TR> <TD COLSPAN="7"><STRONG>2001/9</STRONG></TD> </TR>
+<TR>
+    <TD><FONT COLOR="RED">日</FONT></TD>
+    <TD>月</TD> <TD>火</TD> <TD>水</TD> <TD>木</TD> <TD>金</TD>
+    <TD><FONT COLOR="BLUE">土</FONT></TD>
+</TR>
+<TR> <TD ALIGN=RIGHT COLSPAN="7"><FONT COLOR="BLUE">1</FONT></TD> </TR>
+<TR>
+    <TD ALIGN=RIGHT><FONT COLOR="RED">2</FONT></TD>
+    <TD ALIGN=RIGHT>3</TD> <TD ALIGN=RIGHT>4</TD> <TD ALIGN=RIGHT>5</TD>
+    <TD ALIGN=RIGHT>6</TD>
+    <TD ALIGN=RIGHT><FONT COLOR="RED"><BLINK>7</BLINK></FONT></TD>
+    <TD ALIGN=RIGHT><FONT COLOR="BLUE">8</FONT></TD>
+</TR>
+<TR>
+    <TD ALIGN="RIGHT"><FONT COLOR="RED">9</FONT></TD>
+    <TD>10</TD>
+    <TD><FONT COLOR="RED"><BLINK>11</BLINK></FONT></TD>
+    <TD><FONT COLOR="RED"><BLINK>12</BLINK></FONT></TD>
+    <TD>13</TD> <TD>14</TD>
+    <TD><FONT COLOR="RED">15</FONT></TD>
+</TR>
+<TR>
+    <TD><FONT COLOR="RED">16</FONT></TD>
+    <TD>17</TD> <TD>18</TD> <TD>19</TD> <TD>20</TD> <TD>21</TD>
+    <TD><FONT COLOR="BLUE">22</FONT></TD>
+</TR>
+<TR>
+    <TD><FONT COLOR="RED">23</FONT></TD>
+    <TD><FONT COLOR="RED">24</FONT></TD>
+    <TD>25</TD> <TD>26</TD> <TD>27</TD> <TD>28</TD>
+    <TD><FONT COLOR="BLUE">29</FONT></TD>
+</TR>
+<TR> <TD><FONT COLOR="RED">30</FONT></TD> </TR>
+</TABLE>
+<P ALIGN="CENTER" CLASS="SAY2">
+    う〜ん、邪魔な 10 日め！
+</P>
+<P>ま、ものは考えよう。通常５連休でとってしまうと、<!--
+    -->３日目には「あぁ、もう半分終わってしまった」という<!--
+    -->気分になり、残り３日が鬱になってしまうが、<!--
+    -->あえて、中間地点で出勤することにより、<!--
+    -->休み後半でありながら、新たに休暇が始まる気分が<!--
+    -->味わえるという特典がもれなくついてくる…<!--
+    -->ような気がする。
+</P>
+
+<BR />
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>e</BIG>Ruby を C++ のプリプロセッサにできんかなーと<!--
+    -->思ったりなんかして。やりすぎだってばさー。
+</P>
+<P>
+    NYADOS のクラス体系を改めて、Java の interface 的なクラスを作成して、<!--
+    -->多重継承させたら、メモリ不足で Turbo-C++ でコンパイル不能になった。<!--
+    -->多重継承させると、ポインタ変換のキャストが<!--
+    -->演算を伴うものになるからかのー。<!--
+    -->うぅむ。
+</P>
+<P>しかし、実のところ、NYADOS を使いながら、NYADOS を開発するのは<!--
+    -->結構メモリが苦しい。VAIO はただでさえコンベンショナルメモリ<!--
+    --><EM>(懐かしい響きだ)</EM>が少ないところへ、NYADOS 自体が 120KB も<!--
+    -->食らっていて、さらに make と tcc が動くもんだから、<!--
+    -->ソースや関数がでかくなると、すぐ Out of memory になっちまう。<!--
+    --><EM>(最近は make を Borland C++ 付属 make に変えて、<!--
+        -->ちょっと状況は緩和した)</EM>
+</P>
+<P>ちなみに一番いいのは、NYAGOS 上で NYADOS をビルトすればいいんですけどね。<!--
+    -->どうせ、make の時は日本語入力ないし。<!--
+    -->とはいえ、ソースやら関数とかを適当に分割する癖が<!--
+    -->できてちょうどいいかなと思って、結局我慢していたりする。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>e</BIG>ff の落ちるバグの件ですが、<!--
+    --><A HREF="http://homepage2.nifty.com/hayamatta/warp/eff.html">eff</A><!--
+    -->のページにも書いたとおり、cannamt.dll のロードに失敗した場合に<!--
+    -->落ちる可能性が上がっています。<!--
+    -->ただ、cannamt.dll をちゃんと LIBPATH に置いて症状がでなくなった<!--
+    -->というご報告がある一方、何も変わらないというご報告もいただいており、<!--
+    -->まだまだ予断を許せません。でも、余談は許してるなー<!--
+    --><EM>(そんなこと書いている間にとっとと直せよ＞俺)</EM>。
+</P>
+<P>しかし、困ったことに、もはや、eff のソース読んでも、<!--
+    -->何をやってるのか、かなり分からなくなってきている<!--
+    -->のですよ、はい。
+</P>
+
+<BR />
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>最</BIG>近の買い物:</BIG>
+<DL>
+    <DT>Ruby を256倍使うための本 <STRIKE>太陽編</STRIKE>黄道編</DT>
+    <DD>Ruby + Delphi = Apollo の本。儂にぴったり…か？</DD>
+
+    <DT>Ｄ−妖殺行</DT>
+    <DT>Ｄ−死街譚</DT>
+    <DD>今ごろって言うなぁぁぁ。<!--
+        -->まぁ、続編がまだまだあるから、長く楽しめそうだ。<!--
+        -->問題はソノラマ文庫が絶滅寸前だということだな(爆)。<!--
+        -->ちなみに、「風立ちて“Ｄ”」を呼んだのは中学生のころだ。<!--
+        -->いったいいつだよ、それ。
+    </DD>
+</DL>
+
+<BR CLEAR />
+<HR />
+
+<H2><A NAME="20010902b">コアファイラー沈没</A><SPAN>(2001/09/02)</SPAN></H2>
+
+<P><BIG>続</BIG>々というわけではございませんが、eff のコアダンプについて、
+    約４名の方からリポートを頂戴。ありがとうございます＞皆様。
+</P>
+<H3>落ちるケース</H3>
+<UL>
+    <LI>ディレクトリの作成「k」でディレクトリ名を入力した時</LI>
+    <LI>アーカイブから直接コピーするためにパスを入力した時</LI>
+    <LI>一行編集になって何かキー入力をすると、ほぼ必ず落ちて core を吐く</LI>
+    <LI><STRIKE>Aドライブへのコピーを試みると落ちる</STRIKE></LI>
+</UL>
+
+<H3>落ちる環境</H3>
+<UL>
+    <LI>1.34 + fx00002</LI>
+    <LI>1.34 + fx05005</LI>
+    <LI>1.33 + xrjm015(コンビニパック)</LI>
+    <LI>1.34 + xrjm015(コンビニパック)</LI>
+</UL>
+<H3>共通すること</H3>
+<UL>
+    <LI>かんなは誰も使っていない(葉山以外)</LI>
+</UL>
+<P>ふむ、かんなかな？ と思って、かんなを殺してみましたが、余り変化ありません。
+    ということで、素直に fix4 環境で再コンパイルしてみました
+    (<A HREF="http://homepage2.nifty.com/hayamatta/warp/eff.html"
+    >バージョン1.35</A>)。
+    fix4 環境で落ちる方はお試しください。
+    でも、根本的には何もしていないんですよねー。
+    こんなので、いいのかな。
+    <A HREF="http://homepage2.nifty.com/hayamatta/warp/effquestion.html"
+    >アンケート</A>は引き続き、よろしくお願い致します。
+</P>
+<UL>
+    <LH><SPAN STYLE="text-indent:-2em">(2001.09.03) 追加情報</SPAN></LH>
+    <LI>箇所としては、ほぼ、最初に起動した時の一行入力の<!--
+        -->タイミングで統一できそうです。</LI>
+    <LI>1.32以前のバージョンでは、FIX 4 環境でも大丈夫だった<!--
+        -->という報告もあります。</LI>
+    <LI>1.35 でも症状は変わらないようです。</LI>
+    <LI>OSのリビジョンは関係なさそう。</LI>
+</UL>
+
+<HR />
+
+<H2><A NAME="20010902">コアファイラー脱出</A> <SPAN>(2001/09/02)</SPAN></H2>
+
+<P><BIG>ピ</BIG>ンチである<TT>....</TT><!--
+    -->といっても、決して某雑誌のちょっと外し気味の漫画のことではない。<!--
+    -->だいぶと前から報告をいただいている eff のコアダンプが<!--
+    -->どうしても再現しないのですよ。
+</P>
+<P ALIGN="CENTER" CLASS="SAY1M">
+    このままでは、対応が面倒だから、<BR />
+    再現しないと言い張っているみたいぢゃないか
+</P>
+<P>いかん、そういう不面目な誤解<EM>(理解?)</EM>を<!--
+    -->受けてしまうことだけは避けねばならぬ。</P>
+<P ALIGN="CENTER" CLASS="SAY2M">
+    でも、落ちてくれないんだよぉぉぉ。なぜか。
+</P>
+<P>やはり、パプティマスさんでないと駄目なのか…。<!--
+    -->などと嘆いていても仕方がないので、<!--
+    -->せめて、落ちる環境だけでも特定しなくてはなりません。<!--
+    -->ということで、OS/2 用コマンドライン用ファイラー eff 使用者向けに<!--
+    --><A HREF="http://homepage2.nifty.com/hayamatta/warp/effquestion.html"
+    >アンケート</A>を実施させていただきます。<!--
+    -->皆様、ご協力の方、何卒、よろしくお願いいたします。
+</P>
+<P>そういえば、自分のページで&lt;FORM&gt;書くの初めてだなー。</P>
+<P ALIGN="CENTER" CLASS="SAY1">
+    野郎共、荒らすんじゃねーぞ
+</P>
+<P>なお、以上のお話は OS/2 ユーザ向けです。Windows しか使っていない方は<!--
+    -->無視してください。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+
+<P><BIG>だ</BIG>めです。鬼武者、魔空空間で<B>も</B>死んじゃいます。まさに</P>
+<TABLE ALIGN=CENTER><TR><TD>
+<DIV ALIGN=CENTER CLASS="SAY1">
+    お前はここで死んでゆけ!
+</DIV>
+<DIV ALIGN=CENTER CLASS="SAY2">
+    逝っていいですか？
+</DIV>
+<DIV ALIGN=CENTER CLASS=SAY1>
+    逝ってよし！
+</DIV>
+</TD></TR></TABLE>
+<P>状態です。
+    やはり、あの人<EM>(←誰？)</EM>のおっしゃるとおり、<!--
+    -->私はちまちましたゲームしか向いていないんでしょうか。とほほ。
+</P>
+
+<P ALIGN=CENTER STYLE="margin-bottom:1em">
+    <FONT COLOR="#FF0000" SIZE=+2>★</FONT
+    ><FONT COLOR="#CC0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#AA0000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#880000" SIZE=+2>≡</FONT
+    ><FONT COLOR="#660000" SIZE=+2>≡</FONT>
+</P>
+<P><BIG>久</BIG>しぶりに月曜日にやらねばならぬ仕事を気にせずに過ごせる
+    平穏な休日。だが、油断はならぬ。
+    暇々していると、すぐ仕事は沸いてくる。
+    闘いはこれからだ、Never end !
+    <EM>(って、最終回なのかよ、おい)</EM>
+</P>
+
+<BR CLEAR />
+<HR />
+
+<DIV CLASS=MENU ALIGN=LEFT>
+    ▼<A HREF="./r15.html">次頁へ</A>
+    ▼<A HREF="./r13.html">前頁へ</A>
+    ▼<A HREF="./index.html">目次へ</A>
+    ▼<A HREF="../index.html">扉ページへ</A>
+</DIV>
+</BODY>
+</HTML>

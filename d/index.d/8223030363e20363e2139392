@@ -1,0 +1,25 @@
+* RSS フィードは全部読まず、少し未読を残しておくと、心に余裕が…
+
+<<実を言うと、恥しながら、未だに sourceforge.jp の CVS が使えんのじゃよ>>
+
+shell.sourceforge.jp への ssh ログインは出来てるんじゃがのー。
+http://sourceforge.jp/projects/sourceforge/document/cvs_howto/ja/7/cvs_howto.html
+の記述に従い：
+
+8<
+$ export CVS_RSH=ssh
+$ cvs -d:ext:iyahaya@cvs.sourceforge.jp:/cvsroot/wifky import wifky vendor start
+>8
+
+とすると、そのまま永遠の沈黙。
+
+8<
+[mahershalal cgi-bin] $ cat ~/.ssh/config
+Host cvs.sourceforge.jp
+Protocol 1
+>8
+
+しても変化なし。普段の行い以外、いったい何が悪いんじゃろ。
+もしかして、w3m の件と同じく、OS がおかしくなってるのかのー
+(いや、w3m の件も、まだそう決まったわけではないのだが)
+

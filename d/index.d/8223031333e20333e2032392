@@ -1,0 +1,208 @@
+<<[NYAOS][Lua] NTFS だとハードリンクが作れるそうだけど、
+  fsutil コマンドは今一使い辛いのでラッパーコマンドを作った>>
+
+>> Lua でな! <<
+
+まさに外道
+
+8<
+--- ln.lua - warpper for 'fsutil hardlink create'
+
+if nyaos.create_object then
+    function nyaos.command.ln(...)
+        local src={...}
+        if src[1] and src[1] == "-s" and nyaos.command.lnk then
+            table.remove(src,1)
+            return nyaos.command.lnk( table.unpack(src) )
+        end
+
+        local fsObj=nyaos.create_object('Scripting.FileSystemObject')
+        local dst=table.remove(src)
+
+        if #src <= 0 then
+            print("Usage: ln TARGET LINK_NAME")
+            print("       ln TARGET... DIRECTORY")
+            print("       ln -s TARGET ... SHORTCUT")
+            return 
+        end
+
+        local err=false
+        for i,src1 in ipairs(src) do
+            if fsObj:FolderExists(src1) then
+                print("ln: `" .. src1 .. 
+                      "': hard link not allowed for directory")
+                err=true
+            end
+        end
+        if err then
+            return 1
+        end
+
+        for i,src1 in ipairs(src) do
+            local dst1=dst
+            if fsObj:FolderExists(dst1) then
+                dst1 = fsObj:BuildPath(dst1,fsObj:getFileName(src1))
+            end
+
+            nyaos.exec(string.format(
+                'fsutil hardlink create "%s" "%s"' ,
+                dst1 , src1 ) )
+        end
+    end
+end
+>8
+
+* ゆっくり「``source ln.lua``」して使っていってね！
+* UNIX の ln と、だいたい同じだお
+* 別途、ショートカット作成コマンド https://bitbucket.org/zetamatta/_nya.d/src/382b1d6f51a87805a00df28b1585af55d26b28ed/lnk.lua?at=default{lnk.lua} を入れてると、「ln -s」でもショートカットを作れるよ！
+* ディレクトリのハードリンクが作れないのは UNIX と同じだからいいよね
+* ドライブをまたがるハードリンクが作れないのも UNIX と同じだからいいよね
+* 次のバージョンの NYAOS の _nya.d/ には標準添付するよ
+
+<<NYAOS 3.3.6_1を公開しました>>
+
+* http://www.nyaos.org/index.cgi?p=NYAOS+3000
+
+最近、週刊NYAOSになってますね。なぜか、やたら不具合が見付かるのです。
+多分、仕事が Windows 開発になって、かつ svn などのコマンドラインツールをよく使うようになったせいで、
+物理的な使用時間が長くなったせいでしょうね。
+
+<<<最初に本体 NYAOS.EXE の修正点から>>>
+
+* リダイレクトすると、ls -l がロングフォーマットにならない不具合を修正
+
+なぜ、そんなことしてたし > 自分
+
+* CON や PRN をコマンド名として実行すると落ちる不具合を修正
+
+CON や PRN を呼び出す時に、実行ファイルのステータスを stat で読み込もうとしていたんですが、
+stat の time値を localtime に変換する際に不適切なtime値で戻ってきた NULL をそのまま使おうとしてたみたいです。
+そもそも実行する時に time値なんて要らないんだから、ずいぶん無駄な処理をしてたもんです。
+
+<<<_nya.d/ln.lua>>>
+
+Windows の標準コマンド：fsutil.exe のUNIX風ラッパーで、NTFS でハードリンクを張るコマンド「``ln``」を拡張します。
+
+* 「``ln 既存ファイル名 新ファイル名``」
+* 「``ln 既存ファイル名1 既存ファイル名2 … 作成ディレクトリ名``」のように使います。
+* ハードリンクが出来るのはファイルだけで、ディレクトリは出来ません。
+* -s オプションを付けると、lnk.lua を使って、ショートカットを作ります。
+
+<<<_nya.d/mount.lua>>>
+
+Windows の標準コマンド：mountvol.exe のUNIX風ラッパーで、
+ボリューム マウント ポイントを作成、一覧を行う「``mount``」と
+削除する「``umount``」を拡張します。
+
+8<
+[C:hayama]
+$ mount -h
+Usage: mount
+       mount VOLUMNESTRING MOUNTPOINT
+       mount -h
+for example:
+    mount \\?\Volume{12345678-9012-3456-7890-123456789012} C:\mnt\sdcard
+    mount d:\ c:\mnt\cdrom
+[C:hayama]
+$ mount
+\\?\Volume{8efe82c1-76ad-11e2-a413-00216a437b82}\ on ***
+\\?\Volume{ed8201bf-48a9-11e1-969f-806d6172696f}\ on D:\
+\\?\Volume{d77de840-4b08-11e1-8189-806d6172696f}\ on G:\
+\\?\Volume{ed8201be-48a9-11e1-969f-806d6172696f}\ on C:\
+[C:hayama]
+$ mount d:\ c:\mnt\sdcard\
+mountvol c:\mnt\sdcard\ \\?\Volume{ed8201bf-48a9-11e1-969f-806d6172696f}\
+[C:hayama]
+$ mount
+\\?\Volume{ed8201bf-48a9-11e1-969f-806d6172696f}\ on D:\
+\\?\Volume{ed8201be-48a9-11e1-969f-806d6172696f}\ on C:\
+\\?\Volume{8efe82c1-76ad-11e2-a413-00216a437b82}\ on ***
+\\?\Volume{d77de840-4b08-11e1-8189-806d6172696f}\ on G:\
+\\?\Volume{ed8201bf-48a9-11e1-969f-806d6172696f}\ on C:\mnt\sdcard\
+[C:hayama]
+$ umount c:\mnt\sdcard\
+mountvol c:\mnt\sdcard\ /D
+[C:hayama]
+$ mount
+\\?\Volume{8efe82c1-76ad-11e2-a413-00216a437b82}\ on ***
+\\?\Volume{ed8201bf-48a9-11e1-969f-806d6172696f}\ on D:\
+\\?\Volume{d77de840-4b08-11e1-8189-806d6172696f}\ on G:\
+\\?\Volume{ed8201be-48a9-11e1-969f-806d6172696f}\ on C:\
+[C:hayama]
+$
+>8
+
+<<<_nya.d/lslua.lua>>>
+
+Lua によって、どんなコマンドが拡張されているかを一覧するコマンド「``lslua``」と、
+定義を削除するコマンド「``rmlua``」を用意しました。
+
+8<
+[C:hayama]
+$ lslua
+killnya
+cd
+lnk
+addenv
+python3or2
+mount
+cat_
+fc
+cmdsource
+rmlua
+umount
+lslua
+exever
+which
+luaprint
+ln
+[C:hayama]
+$ ln
+Usage: ln TARGET LINK_NAME
+       ln TARGET... DIRECTORY
+       ln -s TARGET ... SHORTCUT
+[C:hayama]
+$ rmlua lnk
+[C:hayama]
+$ lslua
+killnya
+cd
+addenv
+python3or2
+mount
+cat_
+fc
+cmdsource
+rmlua
+umount
+lslua
+exever
+which
+luaprint
+ln
+[C:hayama]
+$ ln
+Usage: ln TARGET LINK_NAME
+       ln TARGET... DIRECTORY
+[C:hayama]
+$ lnk
+lnk: No such file or directory
+[C:hayama]
+$
+>8
+
+lnk を削除すると、lnk の機能を利用していた、ln から -s オプションが消えます。
+
+<<<auto_cd.lua と vz.ny をデフォルトロード対象外に>>>
+
+これらは普通の挙動が変わって、やりにくくなる場合があるので、
+ディレクトリ _nya.d/opt/ へ移動させました。
+直下でない場合は自動で読み込まれません。
+''(まぁ、読み込むのは、標準の _nya なんですが)''
+
+----
+
+_nya.d/ のレポジトリは https://bitbucket.org/zetamatta/_nya.d にて公開しています。
+何かよいスクリプトが出来ましたら、pull request ください。
+
+以上、よろしくお願い致します。

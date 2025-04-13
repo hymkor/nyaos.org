@@ -1,0 +1,36 @@
+# coding:cp932
+
+import netrc
+import sys
+import twitter
+import os
+
+def usage():
+    print "Usage: %s [YOUR TWIT]"% sys.argv[0]
+    print ""
+    print "You have to write account infomation on  ~/.netrc like below:"
+    print "    ---------------------------------------------------------"
+    print "    machine twitter.com  login <ACCOUNT>  password <PASSWORD>"
+    print "    ---------------------------------------------------------"
+
+# for Windows
+if "HOME" not in os.environ:
+    os.environ["HOME"] = os.environ["USERPROFILE"]
+
+try:
+    login,account,passwd = netrc.netrc().authenticators("twitter.com")
+except IOError:
+    usage()
+    sys.exit()
+
+tw = twitter.Api(username = login, password = passwd)
+
+if len(sys.argv) > 1:
+    tw.PostUpdates( " ".join(sys.argv[1:]).decode("cp932") )
+else:
+    tl = tw.GetFriendsTimeline()
+
+    for s in tl:
+        print "[%-10s] %s" % (
+                s.user.screen_name.encode("cp932","backslashreplace"),
+                s.text.encode("cp932","backslashreplace") )

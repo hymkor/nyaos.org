@@ -1,0 +1,112 @@
+* はて、はてなアンテナ、いつの間に
+  http://a.hatena.ne.jp/zetamatta/image{画面画像表示}に対応していたのだろう。
+** とすると、ロボットステルスプラグインで画像取得ロボットに、
+   「エラー画面」を返しているのは、やっぱ、よろしくないな。
+   素直に .htaccess で弾こう。
+
+* http://pc7.2ch.net/test/read.cgi/pc2nanmin/1163370705/297-{
+  バルケンは生きていた}！
+
+* 某たべすぎの方の「めも」は、なんでも RSS が効かない！ さすがだ。
+
+* http://pc8.2ch.net/test/read.cgi/linux/1154578200/312-317{【sed】シェルスクリプト総合@LINUX Part2【awk】}より
+
+8<
+(d=`date -d -5min +%Y%m%d%H%M%S`; while read l r; do if [ "$l" -gt "$d" ]; then echo "$l $r"; fi; done) < list > other
+>8
+
+* 「``date -d ±数値単位``」か、なるほど。覚えた！
+
+* Python をやり続けると「``end``」が非常に見苦しく見える。
+  でも「``self``」だって、同じくらい見苦しく思う。
+
+* ゲオに行ってみた。もし、Wii が、まだ残ってたら買おうと思ってたが、
+  やはり売り切れだった。
+  手に入らないと、なんだか妙に欲しくなってくるじゃないか！
+  正直、コントローラーがワイヤレスってだけで、ちょっと魅かれた。
+  あれって、実は本当は Sony が目指していたはずの「ゲーム専用機に終わらない
+  ホームコンピュータ」を体現してるんじゃねーの。
+
+<<[python] Python で YAML ファイルを読んで、表示してみる>>
+
+原本は一つなんだが、提出先によって、
+それぞれに応じたフォーマットに整形しなくてはならない「某メモ」がある。
+このメモ自体を書くのは自分だけなので、最初に YAML で記載しておけば、
+後はお手軽に変換できるのではないだろうか。
+
+ということで、勉強がてら Python でやってみた。
+ググってみたところ、Pure Python であるところの
+http://memo.jj-net.jp/31{PyYAML} が良さそうだ。
+
+使い方は：
+
+8<
+y = yaml.load(text)
+>8
+
+とすりゃ、y に辞書(ハッシュ)やリスト(配列)という形で格納される。
+が、text は unicode でないと、エラーになってしまう。
+ということで：
+
+8<
+fp = open("""foo.yaml""","r")
+text = unicode( "".join( fp.readlines() ) , "shift-jis" )
+y = yaml.load(text)
+>8
+
+と、真面目に変換してみたところ、エラーはなくなった。
+でも、
+
+8<
+print y
+>8
+
+とすると、文字が全て16進数表記されてしまう。なんでじゃーーー。
+
+仕方ないので、コレクションを全てたどっていって、
+ちまちま SJIS に変換するコードを書いてみた。
+
+8<
+#!/usr/bin/python
+# coding: shift-jis
+
+import yaml
+
+def print_all(nest,y):
+    if isinstance(y,dict) :
+        print
+        for i in y :
+            print "  "*nest, i.encode("shift-jis"), ":",
+            print_all(nest+1,y[i])
+    elif isinstance(y,list) :
+        print
+        for i in xrange(len(y)):
+            print "  "*nest, "[%d] "%i ,
+            print_all(nest+1,y[i])
+    else:
+        print y.encode("shift-jis")
+
+fp = open("foo.yaml","r")
+text = unicode( "".join( fp.readlines() ) , "shift-jis" )
+y = yaml.load(text)
+
+print_all(0,y)
+>8
+
+理解したこと：
+
+* 型の判定は「``isinstance(インスタンス,型名)``」
+* SJIS → UTF8は関数（``unicode(◎,"shiftjis")``）なのに、
+  逆はメソッド（``◎.encode("shiftjis")``）なのはなんでじゃろ。
+
+本当は読み込んだテキストと、出力結果を晒すべきなんだけど、
+べたべたの個人情報なので勘弁。
+でも、こういう
+「エンコード付きでデータ構造をストリームに出力してくれるクラス」
+って、普通にありそうな気がするんだけどなぁ。
+この辺、SJIS・EUC-JP をそのまま扱える Ruby はいいなぁ。
+
+あと、SGML/XML で言うところの DTD みたいなもんは YAML は無いのかな。
+DTD みたいなものがあれば、構造チェックとか、ちゃんとやれそうな気がするんだが。
+
+が、まぁ、いいか。めんどくなってきた。

@@ -1,0 +1,97 @@
+<<VC++ の実行ファイルは g++ よりコンパクトだなぁ>>
+
+8<
+#include <string>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main(int argc,char **argv)
+{
+    vector<string> list;
+    for(int i=0;i<argc;i++){
+        list.push_back( argv[i] );
+    }
+    for(vector<string>::iterator p=list.begin() ; p != list.end() ; ++p ){
+        cout << *p << ' ';
+    }
+    cout << endl;
+    return 0;
+}
+>8
+
+||| | upxなし | upxあり
+|| ``g++ -Os -Wl,-s add.cpp -static`` | 564224 | 156672
+|| ``cl /EHsc add.cpp`` | 107008 |  49152
+
+3倍～5倍違うね！
+
+<<<追記>>>
+
+NYAOS から cl.exe を呼ぶ場合は、_nya に
+
+8<
+cmdsource "C:\Program Files\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86
+>8
+
+とか書けばよい。cmdsource は標準の _nya に書かれている Lua 関数で、
+バッチファイルを CMD.EXE に実行させた後、環境変数をファイルに書き出させて、
+それを NYAOS へ反映させるということをする。
+
+<<LinkedIn しつこい>>
+
+6<
+リンクトイン ニュース	
+
+起業シミュレーターを試してみよう!
+ 
+起業シミュレーターは、あなたがもし起業をしたらどんな企業になるのかを教えてくれるミニアプリ。創業メンバーを選択することで、５年後にどのような結果になるのかをインフォグラフィックスで表示します。
+LinkedInをはじめとして各種ソーシャルメディアのアカウントを利用できます。
+>9
+
+退会したんだから、送ってくるなよ。
+
+で、標題が何故かアラビアっぽい文字になってるし、
+「LinkedIn ではサイト活用に役立つ情報を定期的にご案内しています。本メールの配信停止は、こちらから行ってください」の先のリンクも、謎の言語だし。
+
+<<今日のデモンズソウル>>
+
+「腐れ谷2」と「ボーレタリア王城3」の原生デーモンを狩った。
+
+<<{m2012100220490000.JPG}
+<<{m2012100300510000.JPG}
+
+これで「色のないデモンズソウル」は
+
+* 1周目の5匹、2周目の5匹の原生デーモンによる10個
+* 2周目の
+http://wiki.livedoor.jp/demons_souls/d/%a5%d4%a5%ab%a5%d4%a5%ab%a1%a2%a5%ad%a5%e9%a5%ad%a5%e9%a4%f2%b5%e1%a4%e1%a4%eb%c0%bc{ピカピカ、キラキラ}交換で、
+「神のタリスマン」「金仮面」と交換した2個
+* 2周目のミラルダの部屋に落ちている1個
+
+で13個になった。これらは
+
+* http://wiki.livedoor.jp/demons_souls/d/%a5%eb%a1%bc%a5%f3%a5%b7%a1%bc%a5%eb%a5%c9{ルーンシールド}の強化 (0→+5)
+* http://wiki.livedoor.jp/demons_souls/d/%b0%c5%b6%e4%a4%ce%bd%e2{暗銀の盾}の強化(0→+5)
+* 奇跡「http://wiki.livedoor.jp/demons_souls/d/%c2%e7%b2%f3%c9%fc{大回復}」のゲット
+
+に全て使いましたとさ。
+
+これで、2周目で出来ることはだいたい終了。強いていえば、純粋な刀石マラソンくらいか。
+しかし、真面目の純粋な刀石を狙うなら、ソウル傾向を真っ黒にしなくちゃいけないので、
+また儚い瞳の石が5つほど必要になる。まざ、40個はあるけど、もったいないな…
+
+あと、実は1回だけオーラント王に「http://wiki.livedoor.jp/demons_souls/d/%b1%ea%a4%ce%cd%f2{炎の嵐}」をしかけたけど、1/5くらいしか hp を削れなかった挙句、瞬殺されてしまった。ソウルレベルを吸われなかっただけ、よしとするか。
+また、「http://wiki.livedoor.jp/demons_souls/d/%c6%c7%a4%ce%b1%c0{毒の雲}」で逃げる？
+
+<<うちの「はてブ」のヘッダが化けてるのは、何かの嫌がらせ？>>
+
+一瞬だけ、正しいアイコンが表示されることもあるけど、
+すぐ壊れたアイコンになってしまう。
+
+[<<{20121004_hatebu.PNG}|http://b.hatena.ne.jp/zetamatta/]
+
+これは古い設定のまま使い続けているからかい？
+
+(ちなみに、もう年単位で、こんな表示ですよ)

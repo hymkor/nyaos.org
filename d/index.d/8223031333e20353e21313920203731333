@@ -1,0 +1,50 @@
+!!! ((title [Lua] インタプリタ無改造！ Lua on Windows で shebang 決定版))
+
+2年前にも似たようなhttp://nyaos.org/d/index.cgi?p=%282011.07.31%29#p1{記事}を書いたんだけど、起動時に
+
+8<
+c:\Documents and Settings\hayama>rem = 0 --[[
+>8
+
+と画面に表示されてしまう問題があった。そこで、これである！
+
+8<
+::rem:: --[[
+@lua "%0" & exit
+]]--
+print "* Lua Executed *"
+-- vim:set ft=lua:
+>8
+
+8<
+[C:hayama]
+$ hoge
+* Lua Executed *
+[C:hayama]
+$ hoge.cmd
+* Lua Executed *
+[C:hayama]
+$ cmd /c hoge.cmd
+* Lua Executed *
+[C:hayama]
+$
+>8
+
+>> CMD.EXE は 「:ラベル」名を echo しないのか！<<
+
+Lua ではラベルは「::ラベル::」なんだよな。だいたい同じなのが都合がいい！
+また、エラーになった時でも、ちゃんとファイル名、行番号が正しく表示されるのもよい。
+今後、これを使おう！
+
+----
+
+どこの記事を見て、これに気付いたのか分からんようになってしまったが、これかな？
+
+* http://d.hatena.ne.jp/m-hiyama/20110729/1311910095{Windowsのcmd.exeとbashのどちらでも実行できるバッチファイルの書き方 - 檜山正幸のキマイラ飼育記}
+
+以上、よろしくお願い致します。
+
+!! 追記(2013.05.16)
+
+NYAOS ではなく、CMD.EXE から実行する時は「exit」を「exit /b」と書かなくちゃいかんようですね。
+でないと、呼び出し元の CMD.EXE まで終了してしまうようです。

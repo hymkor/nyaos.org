@@ -1,0 +1,135 @@
+<<[Lua][Oracle] Lua for Oracle(oluacle)を作ってみようプロジェクト 続き>>
+
+最近、にっきを更新してないのは、全てこれのせいです。
+
+Oracle Call Interface がいい感じに落し穴を用意してくれるので、
+いろいろとたまらんのではありますが、幸いなんとか1日くらいで這い出せてます。
+が、それがかえってよくないのかもwww
+
+<<<進捗>>>
+
+* INSERT , UPDATE , COMMIT , ROLLBACK も出来るようになった
+* SELECT して得たレコードセットのカラムは、
+   rs[1]、rs["COLUMNNAME"]、rs.COLUMNNAME、
+  どの方法でもアクセスできるようにした。
+** そのくせ、バインド変数はまだ名前=値で指定できない
+  (変数の登場順に並べる)
+* 日時型(DATE)を SELECT できるようになった。
+** でも、INSERT/UPDATE では、まだ使えないという。
+** もちろん、TO_DATE とか使って、文字列経由にすれば問題はない。
+* Ruby/OCI8 をリスペクトして、名前を変更
+** connect → new
+** query → exec
+
+<<<今週の落し穴>>>
+
+* 何故か、文字列は bind できるのに、数値を bind できないという不具合に
+  4時間くらい悩む
+** bind されたオブジェクトは、少なくとも execute が完了するまでは、
+   生きていなくてはいけないのに、普通に auto 変数のアドレスを渡していた罠
+   相手は int なんだから、その場でコピーしてくれよ！
+* Oracle は日時型がたくさんあって、ややこしいぜよ
+** 3時間くらい悩んだ
+** Oracle 本体の型と、それの C言語バインドの型ってあるよね。
+** あと、それらを区別するための定数があるんだけれども、
+   未だに、SQLT_DAT と SQLT_DATE と SQLT_ODT の区別が付かないんだ。
+
+<<<夢がひろがりんぐ>>>
+
+* OCI の環境オブジェクトは、Luaのレジストリテーブルに
+  登録した方がいいのかなぁ
+  (そうしとくと、マルチスレッドとか出来るのかもしれんが)
+* バインド変数の名前指定
+* もう少し DATE 型のサポートを手厚く。INSERT する時に、
+  TO_DATE を使わないでいいように。
+** 「TIMESTAMP型は？」― はいはい
+* デバッグモードのメッセージを整理(多過ぎて読めない)
+* 発行した SQL のロギング機能とかいいかもしれない。
+
+<<<今はこれくらい動くというサンプル>>>
+
+長いので、Livedoor Reader お使いの方は「j」とか「s」
+で飛ばしちゃっていいです。
+
+8<
+local conn=olua.new("HR","HR","XE");
+
+function select(conn)
+    for rows in conn:exec("select * from foo") do
+        print( ("%d: %s %04d/%02d/%02d %02d:%02d:%02d")
+                :format(rows.SERIAL , rows.USAGE , 
+                        rows.STAMP.year , rows.STAMP.month , rows.STAMP.day ,
+                        rows.STAMP.hour , rows.STAMP.min   , rows.STAMP.sec ) )
+    end
+end
+
+function insert(conn)
+    local list = {
+        "dog" , "cat" , "lion" , "tiger" , "apple" , "wood"
+    }
+    local count=0
+    for row in conn:exec("select count(*) from foo") do
+        count = row[1]
+    end
+    for i,animal in ipairs(list) do
+        conn:exec("insert into foo values(:1,:2,sysdate)" , i+count , animal )
+    end
+end
+
+insert(conn)
+print("--- before rollback ---")
+select(conn)
+conn:rollback()
+print("--- after rollback ---")
+select(conn)
+
+print("\n=== retry insert ===")
+insert(conn)
+insert(conn)
+select(conn)
+print("--- before commit ---")
+conn:commit()
+print("--- after commit ---")
+select(conn)
+>8
+
+
+
+8<
+$ ./olua.exe test2.lua
+--- before rollback ---
+1: dog 2009/05/23 11:20:37
+2: cat 2009/05/23 11:20:38
+3: lion 2009/05/23 11:20:38
+4: tiger 2009/05/23 11:20:38
+5: apple 2009/05/23 11:20:38
+6: wood 2009/05/23 11:20:38
+--- after rollback ---
+
+=== retry insert ===
+1: dog 2009/05/23 11:20:39
+2: cat 2009/05/23 11:20:39
+3: lion 2009/05/23 11:20:39
+4: tiger 2009/05/23 11:20:39
+5: apple 2009/05/23 11:20:39
+6: wood 2009/05/23 11:20:39
+7: dog 2009/05/23 11:20:39
+8: cat 2009/05/23 11:20:39
+9: lion 2009/05/23 11:20:39
+10: tiger 2009/05/23 11:20:39
+11: apple 2009/05/23 11:20:39
+12: wood 2009/05/23 11:20:39
+--- before commit ---
+--- after commit ---
+1: dog 2009/05/23 11:20:39
+2: cat 2009/05/23 11:20:39
+3: lion 2009/05/23 11:20:39
+4: tiger 2009/05/23 11:20:39
+5: apple 2009/05/23 11:20:39
+6: wood 2009/05/23 11:20:39
+7: dog 2009/05/23 11:20:39
+8: cat 2009/05/23 11:20:39
+9: lion 2009/05/23 11:20:39
+10: tiger 2009/05/23 11:20:39
+11: apple 2009/05/23 11:20:39
+>8

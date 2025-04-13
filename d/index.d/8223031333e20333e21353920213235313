@@ -1,0 +1,55 @@
+!!! ((title [NYAOS][Lua] NYAOSのオブジェクトブラウザを作った))
+
+標準出力にただ表示するだけですけどね。
+
+8<
+[c:bin]
+$ source _nya.d\opt\browse.lua
+[c:bin]
+$ nyaos.browse
+nyaos
+├─version = "3.3.6_1"
+├─default_complete = function
+├─dirstack = userdata
+├─putenv = function
+├─suffix = userdata
+│　├─awk = "awk -f"
+│　├─jar = "java -jar"
+│　├─lua = "lua"
+│　├─vbs = "cscript //nologo"
+│　├─rb = "ruby"
+│　├─pl = "perl"
+│　├─py = "python"
+│　├─ny = "nyaos -f"
+│　└─js = "cscript //nologo"
+├─const_load = function
+├─getkey = function
+├─folder = userdata
+│　├─program_files = "C:\Program Files (x86)"
+│　├─allusersstartup = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
+│　├─startmenu = "C:\Users\Hayama\AppData\Roaming\Microsoft\Windows\Start Menu"
+│　├─allusersstartmenu = "C:\ProgramData\Microsoft\Windows\Start Menu"
+│　├─allusersdesktop = "C:\Users\Public\Desktop"
+│　├─mydocuments = "C:\Users\Hayama\Documents"
+│　├─sendto = "C:\Users\Hayama\AppData\Roaming\Microsoft\Windows\SendTo"
+│　├─appdata = "C:\Users\Hayama\AppData\Roaming"
+│　├─startup = "C:\Users\Hayama\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
+│　├─programs = "C:\Users\Hayama\AppData\Roaming\Microsoft\Windows\Start Menu\Programs"
+│　├─allusersprograms = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+│　├─desktop = "C:\Users\Hayama\Desktop"
+│　└─favorites = "C:\Users\Hayama\Favorites"
+├─filter3 = table
+（以下略）
+>8
+
+nyaos. 以下のオブジェクトについては、
+nyaos_ja.txt に一応書いてはいるんだけど、
+なにぶんでかすぎるので、
+これで直接変数名と値を見た方が早いかもね。
+
+ソースは以下のとおり。
+
+※ ShiftJISの漢字を使ってるので、以下では罫線の文字が化けてます。
+コピペせず、https://bitbucket.org/zetamatta/_nya.d/raw/2ca7937487b6/opt/browse.lua{raw file} からダウンロードした方がいいでしょう。
+
+((bitbucket _nya.d/src/2ca7937487b683aea17fd648a27e305339e5a380/opt/browse.lua))

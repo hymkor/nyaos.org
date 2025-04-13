@@ -1,0 +1,42 @@
+!!! ((title [Lua] インタプリタ無改造！ Lua on Windows で shebang 決定版（改）))
+
+>>「決定版」じゃなかったじゃねーか！<<
+
+>>{(2013.05.11) 0713}{前回}は NYAOS 上で実行していたので、
+CMD.EXE 上での動作についての配慮が足りませんでした。
+
+* ``exit`` で、呼び出し元の CMD.EXE も終了してしまう
+* 実行時に拡張子が必要だった
+
+というわけで改善版：
+
+8<
+C:\Documents and Settings\hayama\tmp>type bar.cmd
+::rem:: --[[
+@lua "%~f0" %1 %2 %3 %4 %5 %6 %7 %8 %9 & exit /b
+]]--
+
+print(string.format("[%s]",arg[1]))
+-- vim:set ft=lua:
+
+C:\Documents and Settings\hayama\tmp>bar
+[nil]
+
+C:\Documents and Settings\hayama\tmp>bar "c:\Documents and Settings"
+[c:\Documents and Settings]
+
+C:\Documents and Settings\hayama\tmp>bar.cmd "c:\Documents and Settings"
+[c:\Documents and Settings]
+
+>8
+
+* ``exit`` に ``/b`` オプションを付けることで、終了をバッチファイルだけにした。
+* ``%0`` を ``"%~f0"`` にして、ディレクトリとか拡張子を CMD.EXE に補完してもらうようにした。
+
+今回は Windows の CMD.EXE の上でテストやりました。
+残念ながら OS/2 の CMD.EXE は「``exit /b``」も「``%~f0``」もサポートしていないので、
+別の方法を取らないといけなさそうです（無理かも）
+
+まぁ、こんなことしなくても、普通に Windows で拡張子の関連付けをちゃんとしておけばいいんですけどね。
+ただ、バッチファイルの体裁にしておくと、環境のセットアップが要らなくなり、
+「ファイルを置くだけで使える」というメリットもあります。

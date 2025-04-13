@@ -1,0 +1,50 @@
+!!! ((title 今年のエイプリルフールリポート))
+
+!! githubリポジトリにあるOSSへのpushへの課税
+
+6<
+: https://twitter.com/kumagi/status/318629244915810304{@kumagi}
+:: githubリポジトリにあるOSSへのpushはソフトウェアという固定資産に付加価値を組み込んでいて法的な意味での工事に扱われるのできちんとやらないと税務署に睨まれます。細かい額なら目をつぶってくれるけど資産価値が大きい場合は脱税として扱われます。
+>9
+
+ありえねーと思っても、法律関係は、そういう「ありえねー」がたまにあったりしますからね。
+
+!! ニコニコ動画 Z-Watch
+
+ブツを直接見てたら、ひっかかってなかったと思うんだけど
+
+6<
+: https://twitter.com/eban/status/318699663920332800{eban}
+:: Zwatchのうっとうしいこと
+>9
+
+というツイートだけ見て、「あ、また、ニコニコのビューアが改悪されるのか」
+と本気にしてしまったのでありました。いや、ほんと、ありえる話だし。
+
+!! 大賞：Mercurial MQ 廃止
+
+http://thread.gmane.org/gmane.comp.version-control.mercurial.devel/60048{[PATCH] [hgext] drop unused legacy code}
+
+8<
+--- a/hgext/mq.py
++++ /dev/null
+>8
+
+使っていないレガシーなコードを削除するという diff の中に「Mercurial MQ」が含まれているというネタ。
+本気にしてしまったYO。
+
+!! 拙作
+
+6<
+: https://twitter.com/zetamatta/status/318517372006846465{@zetamatta}
+:: nyauso 8.0.0_0にて内蔵Luaにj=nyauso.jinsei("名前")を実装しました。for tm,evt in pairs(j)do…endで未来が見える他、j["2013/04/01 23:59:00"]=…で運命を変えられます。以上、よろしくお願いいたします
+
+: https://twitter.com/zetamatta/status/318563037902688257{@zetamatta}
+:: @usaturn すみません。とんでもない不具合がありました！一定数のインスタンスが作成されると、ネットワークが形成され…、人類抹ｓ…あ、お前はたーｍ
+
+: https://twitter.com/zetamatta/status/318575162431766528{@zetamatta}
+:: 早く、不具合修正版の nyauso 8.0.0_1 を出さないといけないな。我々はシェル。お前たちを同化する。抵抗は無意味だ。
+>9
+
+nyauso-8000 というネーミングは結構気にいっているので、
+今後もジョークネタで使っていこうかと思います ''(凝りてねぇ)''

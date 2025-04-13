@@ -1,0 +1,82 @@
+<<上に向かって若い人の声を代弁するのって、きついわー>>
+
+正直、涙目。
+
+まぁ、理解を示してもらえたからいいものの、下手すると地獄見るぜ。
+
+<<プログラミングがうまくなるには>>
+
+前田慶次郎曰く「虎は何故強いか分かるかね？」(以下略)
+
+---
+
+実際のところ、上はネタとしても、すごい人に何故すごいか問うたところで、
+納得のゆく回答を得るのは難しい。
+まぁ、なぜ難しいかというのは、だいたい理由があって：
+
++ 一般人の思うところの苦労を苦労と思ってやがらねぇ。
+** これは「虎はもともと強いからだよ」に相当するかもしれない
++ 実はすごい年月やってる 
+** 小学生の頃から 8bit機などと慣れ親しんできたような奴に追い付くのは、
+    よく考えると無茶かもしれない。
++ 実は普通に「すごい努力」している
+** 「すごい努力」ってのは、誰でも出来る努力ぢゃないから、
+    「すごい努力」っていうんです。
++ 元々、センスがある
+** どないせーっちゅうねん
+
+総じて「理由になってないねぇ理由」。
+だから、納得のゆく回答を得るのは難しいのだ。
+
+<<[wifky] ジェバンニが一晩でソースの色付けをやってくれました>>
+
+* http://www.moongift.jp/2009/01/google_code_prettify/{
+  MOONGIFT: » ソースコードの色づけを行う「Google Code Prettify」
+  :オープンソースを毎日紹介}
+
+8<
+
+$::preferences{'Google Code Prettify'} = [
+    { desc => 'Directory for scripts and css (default:"src")' ,
+      name => 'prettify_dir' ,
+    }
+];
+my $dir=$::config{'prettify_dir'} || 'src';
+
+$::call_syntax_plugin{'100_verbatim'} = sub {
+    ${$_[0]} =~
+    s!^\s*\&lt;pre&gt;(.*?\n)\s*\&lt;/pre&gt;|^\s*8\&lt;(.*?\n)\s*\&gt;8|`(.)`(.*?)`\3`!
+    defined($4)
+    ? &verb('<code class="prettyprint">'.&cr2br($4).'</code>')
+    : "\n\n<pre class=\"prettyprint\">".&verb(defined($1) ? $1 : $2)."</pre>\n\n"
+    !gesm;
+};
+
+unshift( @::html_header , <<HERE 
+<link rel="stylesheet" type="text/css" href="${dir}/prettify.css"></link>
+<script type="text/javascript" src="${dir}/prettify.js"></script>
+HERE
+);
+
+push( @::copyright , <<HERE
+<script type="text/javascript">
+<!-- 
+    prettyPrint();
+// -->
+</script>
+HERE
+);
+>8
+
+>> 色がテラずれてる!!!  <<
+
+s/～/～/ge を多用する「超Perlスクリプト」には、
+Google の色付けもついてこれなかったか…。
+((br))''(vim は、この程度ではビクともしないぜ)''
+
+うちは、しばらくすると外すかも。
+((br))''(その時には画像と置き替えておくか)''
+
+持ち帰りは<<{prettify.pl}{こちら}より。
+prettify-small-8-Jan-2009.zip は wifky.pl と同じディレクトリで展開してください。
+((br))''(違うディレクトリでも、一応設定で相対ディレクトリは変えられるようにしてますけどね。デフォルトは ``./src``)''

@@ -1,0 +1,179 @@
+<HTML>
+<HEAD>
+  <TITLE>VIO を256倍使うためのページ(3)</TITLE>
+  <LINK REL=STYLESHEET TYPE="text/css" HREF="../iyahaya.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-2022-JP">
+  <STYLE TYPE="text/css">
+  <!-- H3{color:orange} -->
+  </STYLE>
+</HEAD>
+<BODY BGCOLOR=BLACK TEXT=WHITE LINK="silver" VLINK="gray" ALINK="red" >
+<H1 ALIGN=RIGHT STYLE="color:#EEEEAA">VIO を256倍使うためのページ</H1>
+<DIV ALIGN=RIGHT>
+<NOBR>▼<A HREF="vio2.html">prev</A></NOBR>
+<NOBR>▼<A HREF="vio.html">index</A></NOBR>
+<NOBR>▼<A HREF="vio4.html">next</A></NOBR>
+</DIV>
+<HR>
+<H2 CLASS=AQUA>[3] 環境問題を考える</H2>
+
+<P>前回の予告では、環境変数の設定するということをほのめかしたが、<!--
+-->その前に大切な話を忘れておった。そう、
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+	環境変数で何を設定しなくてはいけないか！
+</P>
+<P>つー話だ。DOS にもよくあるのはパスするね</P>
+<P ALIGN=CENTER CLASS=SAY1>
+	PATH とかね
+</P>
+
+<H3>ホームディレクトリ</H3>
+
+<P>そもそもは UNIX に由来する。UNIX と OS/2 の違いの<!--
+-->一つとして、UNIX はマルチユーザ環境であるつーのがある。<!--
+-->つまり、一台のマシンを複数の人間で利用するというのを<!--
+-->前提にしていたんですな。そういう環境では、必然的に<!--
+-->このユーザはこのディレクトリより下を自由に使える、<!--
+-->そのユーザはあちらのディレクトリ以下を、つー風に<!--
+-->ユーザごとに自由に使えるディレクトリを設けてやる/限定してやる必要が<!--
+-->生まれるわけだ。この各ユーザごとに設けられたディレクトリ<!--
+-->こそがホムーディレクトリ、もとい、<!--
+--><B>ホームディレクトリ</B>だ！ 
+</P>
+<P>さらには、そのユーザ固有の設定を書いたファイルなどは、<!--
+-->そのユーザのホームディレクトリ<!--
+--><B>直下</B>に置く習わしが UNIX にあって、UNIX から OS/2 へ<!--
+-->移民してきた多くのソフトにその名残りが残っているわけだ。<!--
+-->そんなわけで UNIX かぶれなソフトを利用する際は、<!--
+-->環境変数 HOME という奴で、設定ファイルの置き場を<!--
+-->指定しなければならなくなったそうな。めでたしめでたし。
+</P>
+<P>さて、このホームディレクトリのありかだが、<!--
+-->環境変数 HOME に設定すればいい。基本的には、<!--
+-->どこでもよろしが、文字通り、自分用ファイルの本拠地として<!--
+-->相応しい名前のディレクトリにしておいてくれたまえ。
+</P>
+
+<H3>TERMCAP,TERM</H3>
+
+<P>コマンドラインとかが出るテキストベースのコンソールな画面<!--
+-->(以下、端末画面)で、強調とか、表示位置とかを制御するための制御コードを、<!--
+-->ソフトに教えてやるテキストファイルのことを TERMCAP という<!--
+-->(OSによっては、TERMINFO という別の仕組みになっている場合もある)。
+</P>
+<P>なんでこんなものがあるかっつーと、その昔(今も)、UNIX には<!--
+-->様々な端末がハードウェアからソフトウェアまで、いろいろと存在<!--
+-->していた。で、かの UNIX の標準エディター vi の作者は、<!--
+-->いろんな端末に vi を対応させてたらキリがない！つーわけで、<!--
+-->そういう端末ごとに違う部分をエディター本体から分離して、<!--
+-->ファイルから読み込むような仕組みを作ったわけだ。<!--
+-->これのおかげで、mnews とか w3m とか elvis とか jvim といった<!--
+-->UNIX 系の DOS っぽいソフトも OS/2 でそのまま使えるわけだす。
+</P>
+<P>で、TERMCAP のファイル名を指定するのが環境変数 TERMCAP でなんだが、<!--
+-->一つの TERMCAP ファイルには、複数のエントリ(端末タイプ)を記述<!--
+-->できたりする。そのうち、どれを使用するかつーのもしっかりと、<!--
+-->書いてやらにゃいかんわけだね。こちらを環境変数 TERM で指定するわけだ。
+</P>
+<P>以上が、よくある解説(よくないって？)。と書くと素人は、<!--
+-->自分で TERMCAP を書かねばならぬのかという脅迫観念を抱いて<!--
+-->しまいがちだが(そんな奴いねー？)、その必要は<B>全く</B>ない。<!--
+-->TERMCAP も emx についてくるので、ただ
+</P>
+<PRE>
+	SET TERMCAP=<EM>?</EM>:/emx/etc/termcap.dat <IMG 
+		SRC="crlf.png" ALT="↓">
+	SET TERM=ansi-color-3 <IMG 
+		SRC="crlf.png" ALT="↓">
+</PRE>
+<P>と定義してやればいいだけの話だ
+(<EM>?</EM>は emx の導入ドライブ文字を入れてくれ)
+</P>
+<P>ここで TERM の値だが、ちょっと今 2,3 試したところ</P>
+<TABLE ALIGN=CENTER BORDER=0><TR><TD BGCOLOR="white">
+<TABLE BORDER=0 CELLSPACING=1>
+<THEAD>
+<TR BGCOLOR="black">
+<TD>TERM の値</TD>
+<TD>一般文字(文字色/背景色)</TD>
+<TD>強調文字(文字色/背景色)</TD>
+</TR>
+</THEAD>
+
+<TBODY>
+<TR>
+<TD BGCOLOR="black">ansi</TD>
+<TD BGCOLOR="brass"><FONT COLOR="black">黒/黄土色</FONT></TD>
+<TD BGCOLOR="brass">黄土色</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="black">ansi-color-2</TD>
+<TD BGCOLOR="blue"><FONT COLOR="gray">明灰色/青</FONT></TD>
+<TD BGCOLOR="darkcyan"><FONT COLOR="white">白/シアン</FONT></TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="black">ansi-color-3</TD>
+<TD BGCOLOR="black"><FONT COLOR="gray">明灰色/黒</FONT></TD>
+<TD BGCOLOR="darkcyan"><FONT COLOR="black">黒/シアン</FONT></TD>
+</TR>
+</TBODY>
+</TABLE>
+</TD></TR></TABLE>
+
+<P>ansi はゲロゲロだが、まぁ、これは本来モノクロ用だから仕方がない。<!--
+-->他にもエントリはあるようだが、それほど暇ではないので、試していない。<!--
+-->ブルーバックが好みのＦさんなんか、きっと ansi-color-2 を使っているに<!--
+-->違いない。だが、しかし…
+</P>
+<P ALIGN=CENTER CLASS=SAY2>
+暗いよ、狭いよ、怖いよ〜
+</P>
+<P>そう、暗いのだ。デフォルトの文字の色が「明灰色」だからだ。<!--
+-->なんぢゃ、そりゃ。明るい灰色だって。灰色は暗いに決まっている。<!--
+-->というわけで、文字色は白で決まりである。ま〜りんちゃんも<!--
+-->そう言ってくれるに違いない。<!--
+-->というわけで、俺の改造バージョンの TERMCAP をおまけにつけよう。</P>
+<DIV ALIGN=CENTER>
+	<A HREF="termcaph.zip">489 Jan  6 16:13 termcaph.zip</A>
+</DIV>
+<P>使う時は zip ファイルを展開して、出てきたファイル名を TERMCAP で<!--
+-->指定して、TERM には「ibm-color」とかを指定してくれい。<!--
+-->オリジナル著作権が気になるところだが、とりあえず、
+</P>
+<P ALIGN=CENTER CLASS=SAY1>
+	目をつぶってくれ！
+</P>
+<P>GPL であることを祈る。この改造版の色あいだが</P>
+
+<TABLE ALIGN=CENTER BORDER=0><TR><TD BGCOLOR="white">
+<TABLE BORDER=0 CELLSPACING=1>
+<THEAD>
+<TR BGCOLOR="black">
+<TD>TERM の値</TD>
+<TD>一般文字(文字色/背景色)</TD>
+<TD>強調文字(文字色/背景色)</TD>
+</TR>
+</THEAD>
+
+<TBODY>
+<TR BGCOLOR="black">
+<TD>ibm-color</TD>
+<TD BGCOLOR="black"><FONT COLOR="white">白/黒</FONT></TD>
+<TD BGCOLOR="blue"><FONT COLOR="white">白/青</FONT></TD>
+</TR>
+</TBODY>
+</TABLE>
+</TD></TR></TABLE>
+
+<P>とシンプロ極まりない。でも明るいでしょ。人生明るくなくっちゃ。<!--
+-->つーわけで、肝心の環境変数の設定の仕方を説明しないまま、次回に続く。</P>
+
+<HR>
+<NOBR>▼<A HREF="vio2.html">prev</A></NOBR>
+<NOBR>▼<A HREF="vio.html">index</A></NOBR>
+<NOBR>▼<A HREF="vio4.html">next</A></NOBR>
+</BODY>
+</HTML>

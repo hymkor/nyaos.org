@@ -1,0 +1,103 @@
+# 0.1 # bootstrap.pl
+
+push( @::html_header , <<HTML );
+<link href="bootstrap/css/bootstrap.css" rel="stylesheet" />
+HTML
+
+$::default_contents{&::title2fname('CSS')} = '
+    .sidebar {
+      float: right;
+      width: 220px;
+    }
+    .content {
+      float: left;
+      /* min-width: 440px; */
+      max-width: 1180px;
+      margin-left: 20px;
+    }
+    pre{
+        overflow:auto;
+    }
+';
+
+$::user_template = '
+    <div class="container-fluid">
+        <div class="content">
+            <div class="header">
+                &{header}
+            </div><!-- header -->
+            <div class="autopagerize_page_element">
+                &{main}
+                <div class="terminator">
+                    %{Footer}
+                </div>
+            </div>
+            <div class="autopagerize_insert_before"></div>
+            <div class="footest">
+                %{Footest}
+            </div>
+            <div class="copyright footer">
+                &{copyright}
+            </div><!-- copyright -->
+        </div><!-- main -->
+        <div class="sidebar">
+        %{Sidebar}
+        </div><!-- sidebar -->
+        &{message}
+    </div>';
+
+$::system_template = '
+    <div class="container">
+        <div class="max">
+            <div class="Header">
+                &{menubar}
+                <h1>&{Title}</h1>
+            </div><!-- Header -->
+            &{main}
+            <div class="copyright footer">
+                &{copyright}
+            </div><!-- copyright -->
+        </div><!-- max -->
+        &{message}
+    </div>';
+
+$::edit_template = '
+    <div class="container-fluid">
+        <div class="main content">
+            <div class=".Header">
+                &{menubar}
+                <h1>&{Title}</h1>
+            </div><!-- .Header -->
+            &{main}
+            <div class="copyright footer">
+                &{copyright}
+            </div><!-- copyright -->
+        </div><!-- main -->
+        <div class="sidebar">
+            %{Help}
+        </div>
+        &{message}
+    </div>';
+
+$wifky::nikky::template = '
+    <div class="container-fluid">
+        <div class="content">
+            <div class="header">
+                &{header}
+            </div><!-- header -->
+            <div class="autopagerize_page_element">
+                &{main} <!-- contents and footers -->
+            </div>
+            <div class="autopagerize_insert_before"></div>
+            <div class="footest">
+                %{Footest}
+            </div>
+            <div class="copyright footer">
+                &{copyright}
+            </div><!-- copyright -->
+        </div><!-- main -->
+        <div class="sidebar">
+        %{Sidebar}
+        </div><!-- sidebar -->
+        &{message}
+    </div>';

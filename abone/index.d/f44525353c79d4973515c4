@@ -1,0 +1,6 @@
+<<<
+mysql -p
+otrs
+connect otrs
+show tables
+>>>

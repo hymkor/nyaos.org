@@ -1,0 +1,46 @@
+package wifky::tex;
+
+use strict;
+use warnings;
+
+my %pattern = (
+    '^' => 'sup' ,
+    '_' => 'sub' ,
+);
+my %command = (
+    pi => sub { '&pi;' },
+    sqrt => sub { '&radic;<span style="text-decoration:overline">' . $_[0] . '</span>' },
+);
+
+
+$::inline_plugin{TeX} = sub{
+    '<div style="font-size:200%;text-align:center;vertical-align:middle">'
+    . &tex( $_[0]->{argv} )
+    . '</div>';
+};
+
+$::inline_plugin{tex} = sub{
+    '<span class="tex">' . &tex( $_[0]->{argv} ) . '</span>';
+};
+
+sub tex{
+    my $expr=shift;
+    $expr =~ s/\\\{/\&#7b;/;
+    $expr =~ s/\\\}/\&#7d;/;
+    for(;;){
+        my $prev = $expr;
+        $expr =~ s!([__\^])(?:\{([^\{\}]*)\}|([^\<\>\{\}])| )!
+                '<'.$pattern{ $1 }.'>'.($2||$3).'</'.$pattern{ $1 } . '>' !ge;
+        $expr =~ s/\\frac\{([^\{\}]*)\}\{([^\{\}]*)\}/&frac($1,$2)/ge;
+        $expr =~ s/\\(\w+)(?:([^\<\>\{\} ])|\{([^\{\}]*)\}| )/
+                exists $command{$1} ? $command{$1}->($2 || $3) : $&/ge;
+        return $expr if $expr eq $prev;
+    }
+}
+sub frac{
+    my ($upper,$lower)=@_;
+    '<table style="display:inline;">'.
+    '<tr><td align="center">'.$upper.'</td></tr>' .
+    '<tr><td><hr /></td></tr>' .
+    '<tr><td align="center">'.$lower.'</td></tr></table>';
+}

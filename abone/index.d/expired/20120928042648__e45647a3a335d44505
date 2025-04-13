@@ -1,0 +1,73 @@
+Perl の標準モジュールだが、auth メソッドを使う時、Authen::SASL が必要。
+yum するには >>{epel}のレポジトリが必要
+
+<<<
+[root@dragon server_check]# yum install perl-Authen-SASL
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: ftp.oss.eznetsols.org
+ * epel: ftp.iij.ad.jp
+ * extras: ftp.oss.eznetsols.org
+ * updates: ftp.oss.eznetsols.org
+Setting up Install Process
+Resolving Dependencies
+--> Running transaction check
+---> Package perl-Authen-SASL.noarch 0:2.10-1.el5.1 set to be updated
+--> Processing Dependency: perl(Digest::HMAC_MD5) for package: perl-Authen-SASL
+--> Processing Dependency: perl(GSSAPI) for package: perl-Authen-SASL
+--> Running transaction check
+---> Package perl-Digest-HMAC.noarch 0:1.01-15 set to be updated
+--> Processing Dependency: perl(Digest::SHA1) for package: perl-Digest-HMAC
+---> Package perl-GSSAPI.i386 0:0.24-2.el5 set to be updated
+--> Running transaction check
+---> Package perl-Digest-SHA1.i386 0:2.11-1.2.1 set to be updated
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+==========================================================================================
+ Package                    Arch             Version                 Repository      Size
+==========================================================================================
+Installing:
+ perl-Authen-SASL           noarch           2.10-1.el5.1            epel            40 k
+Installing for dependencies:
+ perl-Digest-HMAC           noarch           1.01-15                 base            12 k
+ perl-Digest-SHA1           i386             2.11-1.2.1              base            48 k
+ perl-GSSAPI                i386             0.24-2.el5              epel            70 k
+
+Transaction Summary
+==========================================================================================
+Install       4 Package(s)
+Upgrade       0 Package(s)
+
+Total download size: 170 k
+Is this ok [y/N]: y
+Downloading Packages:
+ftp://ftp.oss.eznetsols.org/linux/centos/5.6/os/i386/CentOS/perl-Digest-HMAC-1.01-15.noarch.rpm: [Errno 14] HTTP Error 503: Service Unavailable
+Trying other mirror.
+(1/4): perl-Digest-HMAC-1.01-15.noarch.rpm                         |  12 kB     00:00
+(2/4): perl-Authen-SASL-2.10-1.el5.1.noarch.rpm                    |  40 kB     00:00
+(3/4): perl-Digest-SHA1-2.11-1.2.1.i386.rpm                        |  48 kB     00:10
+(4/4): perl-GSSAPI-0.24-2.el5.i386.rpm                             |  70 kB     00:00
+------------------------------------------------------------------------------------------
+Total                                                      14 kB/s | 170 kB     00:12
+Running rpm_check_debug
+Running Transaction Test
+Finished Transaction Test
+Transaction Test Succeeded
+Running Transaction
+  Installing     : perl-GSSAPI                                                        1/4
+  Installing     : perl-Digest-SHA1                                                   2/4
+  Installing     : perl-Digest-HMAC                                                   3/4
+  Installing     : perl-Authen-SASL                                                   4/4
+
+Installed:
+  perl-Authen-SASL.noarch 0:2.10-1.el5.1
+
+Dependency Installed:
+  perl-Digest-HMAC.noarch 0:1.01-15           perl-Digest-SHA1.i386 0:2.11-1.2.1
+  perl-GSSAPI.i386 0:0.24-2.el5
+
+Complete!
+[root@dragon server_check]#
+>>>

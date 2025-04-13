@@ -1,0 +1,98 @@
+<<ブログペットが二重投稿する>>
+
+http://www.blogpet.net/news/view/504{Blogpet からのお知らせ}によると：
+
+8<
+いつもBlogPetをご利用いただき、ありがとうございます。
+
+現在、ペットによる記事投稿が重複して投稿される不具合が発生しています。
+調査・復旧対応を行っておりますので、しばらくお待ちください。
+
+ペットオーナーのみなさまにはご迷惑をおかけしており、大変申し訳ございません。
+>8
+
+同じ日に二回投稿されてしまうとなぁ。
+こっとの記事があっという間に流れてしまうじゃありませんか。
+
+<<最近読んだ小説>>
+
+* ((amazon 4022739010))
+* ((amazon 4022739134))
+
+((amazon 4022738219 text ARIEL(エリアル) ))
+((fn 「エリアル」と読む。某Enterprise の方ではない))
+の完結以来、あれ、どうしてたんだろうと思っていた SF作家 笹本 祐一氏が放つ、
+宇宙を舞台とした海賊シリーズ。
+
+6<
+宇宙ヨット部の部活や、レトロ喫茶店でのアルバイトに忙しい元気印の女子高生・茉莉香は、突然、死んだ父親の部下だと名乗る二人の男女から、宇宙海賊船弁天丸の船長就任の要請を受ける。一世紀前、独立戦争のどさくさの中で発行された私掠船免状によれば、船長の死んだ海賊船の存続は、直系の継嗣による世襲が絶対の条件らしいのだが―。新シリーズの痛快スペースオペラ、華麗に登場。
+>9
+
+ARIELみたいな馬鹿馬鹿しさは不足気味だが、
+宇宙科学に造詣の深い笹本氏の作品らしく、
+リアリティーは完璧に近いんじゃないだろうか。
+
+スペースオペラとはあるけれども、派手なドンパチはあんまりなく、
+戦闘は、電子戦やら潜水艦戦闘みたいな相手の捕捉合戦が中心となっている。
+もの足りないわけじゃないけれども、読解するのに脳力がいるので、
+ちょっと読むのはしんどかったぜ。
+
+続く3巻、4巻もこれから読む予定なり
+
+<<[NYAOS] typeコマンド/catコマンド>>
+
+今まで「``alias type $COMSPEC /c type``」でお茶を濁していた、
+type コマンドを Lua で書いてみた。
+
+8<
+nyaos.command['type'] = function(path)
+    local status,msg=pcall( function() 
+        for line in io.lines(path) do
+            print(line)
+        end
+    end)
+    if not status then
+        print( path..': not found.' )
+    end
+end
+>8
+
+さらにがんばって、cat を書いてみる。
+cat は type と違って、複数のファイルを連結する機能とか、
+``-n`` を付けると行番号を付ける機能がある。
+
+8<
+function nyaos.command.cat(...)
+    local argv={...}
+    local option={}
+    if next(argv) then
+        for i,fname in pairs(argv) do
+            if fname:sub(1,1)=='-' then
+                for j=2,fname:len() do
+                    option[ fname:sub(j,j) ] = 1
+                end
+            else
+                local rc,msg=pcall( function()
+                    for line in io.lines(fname) do
+                        if option.n then
+                            print(('%%6d  %%s'):format(option.n,line))
+                            option.n = option.n + 1
+                        else
+                            print(line)
+                        end
+                    end
+                end)
+                if not rc then
+                    print( fname..': No such file or directory' )
+                end
+            end
+        end
+    else
+        for line in io.lines() do
+            print(line)
+        end
+    end
+end
+>8
+
+まぁ、ここに書くということは、すなわち標準の _nya(NYAOSの設定ファイル)に組み込むのを見送ったということで、必要な人は自分の _nya にコピペしてくださいまし。

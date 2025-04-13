@@ -1,0 +1,41 @@
+<<NYAOS 2.97_0 をリリースしました>>
+
+ユーザからのフィードバックを受け、2点だけ仕様を修正しました。
+
+<<<ダウンロード>>>
+
+* http://nyaos.org/index.cgi?p=NYAOS+3000{Nihongo Yet Another OSes Shell / support page - NYAOS 3000}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.97_0-win.zip{nyaos3k-2.97_0-win.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.97_0-os2.zip{nyaos3k-2.97_0-os2.zip}
+** http://nyaos.org/index.cgi?p=NYAOS+3000;f=nyaos3k-2.97_0-src.zip{nyaos3k-2.97_0-src.zip}
+
+<<<変更点>>>
+
+* nyaos.filter/nyaos.filter2 のテーブル対応
+
+nyaos.filter / nyaos.filter2 は従来関数を想定していましたが、一つしか同時に定義できないため、
+複数のフィルターを作る時、小細工が必要になっていました。
+そこで nyaos.filter / nyaos.filter2 自体はデフォルトでテーブル化しまして、
+そこに格納されている関数をフィルタ関数として呼び出すようにしました。
+
+今後は、フィルタ関数を複数定義する際は：
+
+8<
+    function nyaos.filter.foo(cmdline) ～ end
+    function nyaos.filter.bar(cmdline) ～ end
+>8
+
+だけで Ok です(呼び出す順番は保証されませんが…)。なお、互換性のため：
+
+8<
+    function nyaos.filter(cmdline) ～ end
+>8
+
+という従来の使い方も可能となっています。
+
+* VimShell 上で実行時にカーソルONのシーケンスを出力しないようにした(_nya)
+
+vim から実行されるシェル環境 VimShell の中から NYAOS が呼び出すことが可能なのですが、カーソル ON のエスケープシーケンスが邪魔になっていました。
+エスケープシーケンスは、option で変更できるため、空文字にするだけで解決するのですが、_nya 内で未定義だったため追記しました。
+
+以上、よろしくお願い致します。

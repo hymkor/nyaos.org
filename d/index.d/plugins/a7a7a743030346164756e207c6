@@ -1,0 +1,3 @@
+# 0.1 # 400date.pl
+
+$::form{date} and *::action_default = *::action_not_found;

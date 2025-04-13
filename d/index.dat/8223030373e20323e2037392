@@ -1,0 +1,30 @@
+* 「正義の味方きどり」であるところの、野党・マスメディア・米国は、
+  叩くべき悪を無理矢理にでも仕立て上げなくてはならない運命にあるのだ。
+
+* えーと、どっかで流行ってた課題。偉い人が、よってたかって添削してたアレ。
+
+8<
+#!/usr/local/bin/python
+
+import fileinput
+
+allset=set()
+distset={}
+
+for p in fileinput.input():
+    allset.add(p)
+    distset.setdefault(fileinput.filename(),set()).add(p)
+
+dist=sorted( distset.keys() )
+print " | ".join(["%-11.11s" % i for i in [""]+dist])
+for p in allset:
+    print "%-11.11s" % p.strip() ,
+    for d in dist:
+        if p in distset[d]:
+            print "| include    ",
+        else:
+            print "| not-include",
+    print
+>8
+
+* もっと短く書く方法を思いついたが、眠いので、また明日。

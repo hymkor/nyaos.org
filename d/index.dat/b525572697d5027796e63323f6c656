@@ -1,0 +1,82 @@
+!!! Excel ファイルを扱う時の定番コード
+
+8<
+#!/usr/bin/ruby -Ks
+
+require 'win32ole'
+
+class Excel ; end
+
+xl = WIN32OLE.new('Excel.Application')
+WIN32OLE.const_load(xl, Excel)
+begin
+    xl.Visible = true
+    ### メインのコード ###
+ensure
+    xl.Quit
+end
+>8
+
+* ``WIN32OLE.const_load`` によって、オブジェクト``xl``に含まれる定数を、
+  明示的にユーザが作ったクラス「``Excel``」に読み込ませている(らしい)
+
+!!! 既存 .xls ファイル(book)のロード
+
+8<
+        fso = WIN32OLE.new('Scripting.FileSystemObject')
+        path = fso.GetAbsolutePathName(filename)
+
+        book = xl.Workbooks.Open(path)
+>8
+
+* ファイル名は絶対PATH である必要があるため、
+  ``Scripting.FileSystemObject`` を使って変換
+** これを使うと Cygwin 環境でもネイティブパスへ変換できる(らしい)。
+
+!!! 新規 .xls ファイル(book)の作成
+
+8<
+    book  = excel.Workbooks.Add()
+>8
+
+!!! ワークシート操作
+
+: ``book.Worksheets.Count``
+:: 現在のシート数
+: ``sheet = book.worksheets(N)``
+: ``sheet = book.Worksheets.Item(N)``
+:: 番号指定によるシートオブジェクトの取得
+: ``sheet = book.Worksheets("サンプル")``
+:: 名前指定によるシートオブジェクトの取得
+: ``N``
+:: シート番号。1≦N≦``book.Worksheets.Count``
+
+!! シートの複写
+
+8<
+        sheet1.Copy( { "After" => sheet2 }
+>8
+
+* sheet1 , sheet2 はシートオブジェクト
+* sheet1 を複写して、sheet2 の後に置く。
+* "After" を "Before" にすると、sheet2 の前に置くことになる。
+
+
+!!! 各セルへアクセス
+
+``cells = sheet.cells`` (Range型)とした時
+
+:``cells.item(R,C).value``
+:: R行C列目のテキスト。任意のテキストが読み書き可能。
+:``cells.Item(R,C).borders.Item(D).weight``
+:: R行C列目D方向の罫線の太さ。Excel::XlMedium や Excel::XlThin などが代入可能。
+:``cells.Item(R,C).interior.colorIndex``
+:: R行C列目の背景色。
+
+:R
+:: 行位置。1スタート
+:C
+:: 列位置。1スタート
+:D
+:: 方向定数。``Excel::XlEdgeLeft , Excel::XlEdgeRight ,
+   Excel::XlEdgeTop , XlEdgeBottom``等が指定可能

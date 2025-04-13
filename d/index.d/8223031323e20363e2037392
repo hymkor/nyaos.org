@@ -1,0 +1,58 @@
+<<CSV をさくっと、Excel にペーストする Lua スクリプト>>
+
+といっても、NYAOS内蔵Luaでしか動かんけど。
+CSV を縦横をひっくり返して、新規に立ち上げた Excel にペーストします。
+
+8<
+function csvsplit(s)
+    local csv={}
+    for e in string.gmatch(s..",","([^,]*),") do
+        table.insert(csv,e)
+    end
+    return csv
+end
+
+function paste(worksheet,y,fname)
+    for line in io.lines(fname) do
+        local csv=csvsplit(line)
+        for x=1,#csv do
+            -- 縦横を反転させてペースト.
+            if y == 1 then
+                worksheet.Cells:Item(x,1).Value = x
+            end
+            worksheet.Cells:Item(x,y+1).Value = csv[x]
+        end
+        y = y + 1
+    end
+    return y
+end
+
+local excel=nyaos.create_object("Excel.Application")
+excel.Visible = true
+local workbook = excel.Workbooks:add()
+local worksheet = workbook.worksheets:Item(1)
+
+if #arg < 1 then
+    paste(worksheet,1,nil)
+else
+    local y=1
+    for i=1,#arg do
+        print(arg[i])
+        y=paste(worksheet,y,arg[i])
+    end
+end
+>8
+
+使用例
+
+8<
+$ nyaos c:\usr\bin\csv2excel.lua Rod_2012060711104206.dat
+>8
+
+一時ファイルも作らないし、必要ならコピペできるので、
+CSV出力内容をさくっと見たいときに便利…かなぁと。
+まぁ、個人的にはよく使うので、クリップボードがわりに
+
+ファイル名を指定せずに起動すると、標準入力待ちしますが、
+この時、Ctrl-C を押下すると、変なエラーダイアログがでるのはご愛嬌。
+(Excel と NYAOS どっちが出してるんだろう)

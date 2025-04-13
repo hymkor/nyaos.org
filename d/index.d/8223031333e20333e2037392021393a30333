@@ -1,0 +1,11 @@
+<<[NYAOS][Vista][7][Lua] sudo.exe対応>>
+
+>>{(2013.03.07) 11:18}の続き
+
+https://bitbucket.org/wantora/sudo/{sudo.exe}をhttp://twitter.com/nayuri_aohime/status/309596582863597569{教えていただいた}ので、ln.lua で使えるようhttps://bitbucket.org/zetamatta/_nya.d/commits/3375be307ca3a0dfdc70faf17c76fa356b134ca6{対応した}。
+
+8<
+option sudo sudo.exe
+>8
+
+とすれば、sudo.exe が使われるようになる。

@@ -1,0 +1,80 @@
+<<CD-R のイメージを持ち帰りたいのぉ>>
+
+CD-R の無い環境で、CD-ROM のコピーを持ち帰りたいという難儀な要求に遭遇。
+ググってみると、
+http://www.geocities.co.jp/SiliconValley-Cupertino/9630/install_hd.html{
+Cygwin の dd で iso イメージを取る}という方法があるようだ。
+試しにやってみた。
+
+<pre>
+    [hayama@YUKIKAZE home]$ mount -b //./E: /dev/cdrom
+    mount: warning - /dev/cdrom does not exist.
+    [hayama@YUKIKAZE home]$ dd if=/dev/cdrom of=sample.iso
+    読み込んだブロック数は 1408964+0
+    書き込んだブロック数は 1408964+0
+    [hayama@YUKIKAZE home]$ mount
+    C:\PROGRA~1\HOLON\XONWIN~1\bin on /usr/bin type system (binmode)
+    C:\PROGRA~1\HOLON\XONWIN~1\lib on /usr/lib type system (binmode)
+    C:\PROGRA~1\HOLON\XONWIN~1 on / type system (binmode)
+    \\.\E: on /dev/cdrom type system (binmode)
+    c: on /cygdrive/c type user (binmode,exec)
+    d: on /cygdrive/d type user (binmode,exec)
+    e: on /cygdrive/e type user (binmode,exec)
+    [hayama@YUKIKAZE home]$ umount /dev/cdrom
+</pre>
+
+さて、iso イメージらしきものは出来たが、これを焼く方法が手元にねぇ！
+せめて、iso イメージをファイルシステムとして
+mount できる方法があればいいのだが、ググって出てくるのは
+
+<pre>
+    mount -t iso9660 -o ro,loop=/dev/loop0 cdimage.iso /mnt/cdrom
+</pre>
+
+ばかり。だが、これは Cygwin では使えないようだ。
+素直にファイルとして、コピーしてきた方がよいのかのぉ。
+
+<<ところで dd って>>
+
+ぱっと見、オプションが少ない。
+少ないだけでなく、機能が時代遅れなものばかりだ。
+EBCDIC と ASCII の相互変換なんか使うかい？
+
+今となっては、左から右へ、データを流し込むことくらいにしか使わんのかのぅ。
+
+<<GNU readline >>
+
+http://sacral.c.u-tokyo.ac.jp/~nameda/mainte.html{
+とあるページ}の中で、readline の利用例を偶然目にした。
+
+あー、readline ライブラリでは、入力文字列は readline 関数内で、
+勝手にヒストリ登録されないのか…。
+呼び出し元で、明示的に<code>add_history("〜")</code>しないといけなかったのか。
+
+>> 目から鱗 <<
+
+別にそれがすごいというわけではないけど、
+
+* スクリプトの中身はヒストリに記録されない。
+* ヒストリには「!*」などのヒストリマクロを展開した後の文字列が登録される
+
+などといった挙動が、何故そうなったかの理由をようやく理解できたよ。
+
+実を言うと、NYAOS でこれを再現しようとして、
+かなり、不自然なコードになっていた。
+一旦、クラス内で登録された奴を取り出して、また収納するとかね。
+
+もうね、阿呆かと、馬鹿かと。
+
+: http://www.vc-net.ne.jp/~momo/hou2-1.htm{
+    警察官の職質テクニック＆それの回避法}
+    (http://planet-d.hp.infoseek.co.jp/{電脳遊星D}より)
+:: 駄目でもともとぉぉお！
+: http://www.radiumsoftware.com/0412.html#041207{
+    たいせつなメッセージ、伝わらないメッセージ}
+    (http://www.hyuki.com/tf/20041208083117.html{textfile.org}より)
+:: あるある。【重要】っていう標題は使われすぎだし、
+    伝え方を工夫しないと、簡単に埋もれてしまうんですわなー。
+:: それはともかく、人がメールを読み逃すと怒るくせに、
+    こっちには「メールだと流れてしまうから、Word でドキュメントを
+    書いてくれ」というのは工夫という以前にずるいと思いまーす＞主査！

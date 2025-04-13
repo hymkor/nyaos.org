@@ -1,0 +1,1037 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="robots" contents="noindex, nofollow" />
+<title>高速増殖ログ「もんじょ」Part9
+</title>
+    <style type="text/css">
+    <!--
+	.FIRSTLETTER{font-size:xx-large}
+	P.SAY1{color:#FF00FF;font-size:x-large;text-align:center}
+	P.SAY2{color:#FFFF00;font-size:x-large;text-align:center}
+        P.SEP{text-align:center;color:silver;font-weight:bold}
+	DIV.FOOTNOTE{font-size:x-small}
+	DIV.COMMENT{text-indent:12pt}
+	.H{font-weight:bold;font-size:large}
+.H{
+  font-size:large;font-weight:bold
+}
+H1{
+  text-align:right;
+  border-style:solid;border-width:0px 0px 4px 0px;border-color:white;
+  color:snow;
+  font-size:large;
+  clear: both;
+  width: auto;
+}
+H2{
+  border:none;
+  background-color:#444444;
+  font-size:large;
+  width:auto;
+}
+H2 SMALL{
+  font-size:small;
+  line-height:large;
+}
+H3{
+  border-style:solid;border-width:0px 0px 0px 20px;border-color:silver;
+  font-size:medium;
+  text-indent:5pt
+}
+.BOX{
+  border-style:solid;border-color:white;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  text-decoration:underbar;white-space:pre
+}
+.XOB{
+  border-style:solid;border-color:gray;border-width:1px 3px 3px 1px;
+  padding:0px 0px 0px 0px;
+  background-color:white;color:black;white-space:pre
+}
+DT{ color:silver;font-weight:bold; }
+UL LH{ color:silver;font-weight:bold; }
+EM{ color:gray;font-weight:bold;font-style:normal }
+STRONG{ color:red }
+B.PLASMA{
+    color:red;background-color:#440000;font-size:xx-small;font-weight:bold;
+}
+B.DOKEN{
+    color:#FFFF00;background-color:#444400;font-size:xx-small;font-weight:bold;
+}
+DIV.D{
+    text-indent:12pt
+}
+A:hover{
+  background-color:#440000
+}
+    -->
+    </style>
+</head>
+<body text="white" bgcolor="black" link="silver" vlink="gray">
+<!--start-->
+<DIV ALIGN=RIGHT><TABLE><TR><TD><DIV CLASS="BOX"><A HREF="n08.html">前頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="n10.html">次頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="/VA009797/">扉頁</A></DIV></TD><TD><DIV CLASS="BOX"><A HREF="index.html">目次</A></DIV></TD></TR></TABLE></DIV>
+
+
+<!--section-->
+<H2><A NAME="2003.09.17">神聖再帰句探偵団</A>
+<SMALL>　(2003.09.17)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.17.1" href="#2003.09.17.1"
+ style="text-decoration:none">某</a></td></tr></table>
+メーカーのベテランエンジニアの人が、ファイルのバックアップを取るのに、<pre>
+    cp -p foo/bar{,-20030915}
+</pre>
+とタイプしていた。</p>
+<p>ご存知の方はご存知だと思うが、bash はこれを<pre>
+    cp -p foo/bar foo/bar-20030915
+</pre>
+と展開してくれるのだ。これを手入力すると 2 回目と 1 回目で違うファイル名を補完してしまうという罠が待ち受けている<em>(そんなドジ踏むのは、おまいだけ)</em>。</p>
+<p>これ(中括弧)はよいテクニックだと思いきや、NYACUS にはなかった。ということで、さっそく盛り込みました。当然ながら、やっちゃいましたよ。<strong>無限展開</strong>を(笑)
+
+</p>
+<p>「<tt>A{1,2}{3,4}</tt>」は「<tt>A13B A14B A23B A24B</tt>」って展開しなくちゃいけないんだけど、途中経過を見ると「<tt>A1{3,4} A2{3,4}</tt>」→「<tt>A13 A2{3,4} A14 A2{3,4}</tt>」…</p>
+<p align="center" class="SAY1"> 中括弧の数、全然減ってないじゃん!! </p>
+
+
+<p>再帰でよくやる失敗をやってしまいましたわ、はは。展開関数を f とすると、</p>
+<pre>
+      f('A{1,2}{3,4}')
+    = f('A1{3,4} A2{3,4}')
+</pre>
+
+
+<p>とやっちゃいました。こりゃ、確かに永遠に終わりませんわ。そうではなく</p>
+<pre>
+      f('A{1,2}{3,4}')
+    = f('A1{3,4}') + ' ' + f('A2{3,4}')
+</pre>
+
+
+<p>と変換せねばならぬわけですな。いや、はは。</p>
+<p>なお、パッケージやドキュメントまで作る時間がないので、公開はまだ先です。</p>
+<ul>
+<li><a href="http://pc.2ch.net/test/read.cgi/unix/1062728017/" target="_blank">神聖モテモテ UNIX</a>
+    (<a href="http://tabesugi.net/memo/cur/cur.html#121104" target="_blank">たべすぎねっと</a>より)
+    <div class="COMMENT"> モテモテ王国は永遠の原点です<em>(なんじゃそれ)</em></div>
+</li>
+<li><a href="http://quox.org/tips/" target="_blank">Tips Collection</a>
+    (<a href="http://kitaj.no-ip.com/tdiary/20030916.html#p05" target="_blank">今日のなんでやねん</a>より)
+    <div class="COMMENT"> えぐりこむようにして、<em>(今、忙しいから、あとで)</em>読むべし！</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.09.14">腐ったプログラムサイトの方程式</A>
+<SMALL>　(2003.09.14)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.14.1" href="#2003.09.14.1"
+ style="text-decoration:none">私</a></td></tr></table>
+は外出するとか、バックアップの時とかのために、ファイルサーバ上の特定のディレクトリを丸ごと、ノートPC の中にコピーしておくということをよくやってしまう。その為、ディスクの中は、いろんな時期のスナップショットがたくさん存在する。</p>
+<p>古いのを(CD-R に焼いてから)容赦なく削除するというのも手だと思うが、もし、古い方のツリーの中のファイルを修正していたりすると、そんなファイルが埋もれたまま、失ってしまう。。。</p>
+<p>さらに、私は最近、PC を新調した。だいたいのデータはニューマシンに移動済みだが、抜けがあるかもしれない。</p>
+<p>そんな場合のために、ディレクトリツリーの<a href="./n09.files/mergetre.rb">マージツール</a>を Ruby で作ってみた「<tt>mergetre.rb dir1 dir2 &gt; f.sh</tt>」とやると dir1 の中を dir2 の中に移動させるスクリプト(f.sh)を作成する。<strong>(公開はするけど、ファイルが失われた時の責任はとれないので、こいつで作ったシェルスクリプトは決して実行させないように!)</strong>。この f.sh は</p>
+<ul>
+<li>同名のファイルが存在していて、サイズ・タイムスタンプが同一の場合はdir1 の中のファイルを削除するのみ</li>
+<li>同名のファイルが存在していて、サイズ・タイムスタンプのいずれかが違う場合はdir1 の中のファイルに @YYYYMMDDhhmmss と日付をつけて、dir2 の中へ移動させる。</li>
+<li>dir1 にしか存在しないファイルは、名前をかえずに、そのまま dir2 に移動させる。</li>
+<li>ディレクトリまでは削除してくれない不親切設計。</li>
+</ul>
+
+<p>というようなことを行う。</p>
+<p>mergetre.rb がファイルの移動・削除を直接実行しないのは、実行しないで結果を見たいためである。重大な結果を伴うようなスクリプトの場合、こういう中間物を一度作るようにしておけば、お客さんが同業者の場合には確認してもらって、責任を分散させることができるというメリットがある。</p>
+<p>で、ある程度やってみて、特に問題なく動くようなので、実際に使ってみた。ふむ、それなりに使えるが…うーむ、どーも、Windows でやってみると、ファイル名に逆クォートとかシングルクォートが含まれていて、bash だと誤削除こそありませんが、移動ができないようだ。つーことで、そういうファイルに限っては手作業で移動させた。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.14.2" href="#2003.09.14.2"
+ style="text-decoration:none">巷</a></td></tr></table>
+に Ctrlキーと CapsLock キーを入れ替えるツールは結構ある。</p>
+<p>一方、たくさんではないが、窓使いの憂鬱のように、UNIX 的なキー操作を Windows のそれに変換してくれるツールがある。しかしながら、これだと Windows の機能であるところのCtrl-X (カット) と、Emacs 的な２ストロークキーであるところの Ctrl-X が重複してしまい、何かと不都合がありそうだ。</p>
+<p>ここは、やはり CapsLock を機械的に Ctrlキーにしてしまうのではなく、CapsLock + 他のキーを、これこれに変換するといったように個別に置換できた方がよろしい。そうすれば、Ctrl-X と CapsLock-X という形で二つの機能が混在できる。いうなれば、CapsLock が「真Ctrlキー」となるわけだ。</p>
+<p>そんなことを実現するツールはないものか…。つーか、Windows を使わなければ皆幸せになれるわけだが。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.14.3" href="#2003.09.14.3"
+ style="text-decoration:none">モ</a></td></tr></table>
+バイル DB サーバでけたー！</p>
+<p>VAIO TR の導入により、これまでお世話になってきた VAIO-C1R が暇しているので、Turbo Linux 4.5 + Oracle 8.0.5 を入れて、DB サーバにしちまいました。見よ、この七転八倒ぶり。通常の SE なら、これの３倍の速度で導入できるだろうに。</p>
+<ol>
+    <li>最初は Redhat Linux 6.1J を入れようとする</li>
+    <li>CD-ROMブートで導入はできたが、PCMCIA スロットが１ポートしかなくて、インストール時に LAN カードが認識できず</li>
+    <li>なんとか LAN カードを認識できるようにできたが、今度は何故か CD-ROM が認識できないようになる。</li>
+    <li>対処方法結局分からず。Oracle インストールに支障をきたすので、最初からやり直し</li>
+    <li>OS 導入/LANカードの導入/X11の設定/Oracle の RDBMS の導入まで終わったが、svrmgrl が起動できない</li>
+    <li>RHL 6.1J で Oracle 8.0.5 を使う時には、パッチがいることを思い出すが、そのパッチは会社のハードディスクの中のみ。だめじゃん。</li>
+    <li>仕方ないので、Turbo Linux 4.5 で最初からやり直す。</li>
+    <li>RDBMS 導入中になーんでか、RHL では発生しなかったエラーが発生する。シェルスクリプトで一時的に使っている環境変数名(GROUPS)が問題のようなので、強引に書き換えて回避する</li>
+    <li>でけたー</li>
+</ol>
+
+
+<p>これでいつでもどこでも自宅でも<em>(しくしく)</em>、いろんな技術の検証ができるというものですよ、えぇ。</p>
+<p>まぁ、もっと新しい組み合わせもあるでしょうが、MMX Pentium 266MHz 程度ではこれが精一杯。最新技術こそ試せませんが、PL/SQL とか Ruby/OCI8 とかスクリプト系には十分ですよ。これで憎いあんちくしょうに差をつけられます<em>(誰だ？それ)</em>。</p>
+<p>一応、今後の導入のために<a href="./n09.files/linux2vaioc1.txt">メモ</a>
+を残す。ほとんどは他のサイトからの<strike>パクリ</strike>コピーだ。ちなみに Oracle のことはほとんど書いていない<em>(ぉぃ)</em>。</p>
+<ul>
+<li><a href="http://www.alles.or.jp/~spiegel/200309.html#d14_t2" target="_blank">最悪新幹線</a>
+    <div class="COMMENT">「大阪の人ってマナー悪いよなぁ」と書かれる屈辱。って、大阪府民のワタシも実際辟易することがありますが。</div>
+</li>
+<li><a href="http://www.sandiegozoo.org/pandas/pandacam/index.html" target="_blank">パンダカメラ</a>
+    (<a href="http://news.2log.net/hanazuc/archives/blog20030913.html" target="_blank">NOT WILD STYLE</a>より)
+    <div class="COMMENT"> すごいすごい。パンダが動いているの見える、見えるぞ、ララァ。このワタシにもサンディエゴ動物園のパンダが見える。でも…ゴロゴロしているだけだな、こいつ(笑)
+    <sup style="font-size:x-small"><a href="#2003.09.14.3.1" title="「客よせパンダ」という専門用語もあるし" name="2003.09.14.3.1.">*1</a></sup>
+
+</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.09.14.3.1" href="#2003.09.14.3.1.">*1</a></sup>「客よせパンダ」という専門用語もあるし</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.09.11">プラズマX11</A>
+<SMALL>　(2003.09.11)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.11.1" href="#2003.09.11.1"
+ style="text-decoration:none">X</a></td></tr></table>
+onWindows2 で他の Linux マシンから X Server を起動させる方法が分かりました。単体で立ち上げた kterm から、Cygwin の telnet or ssh を使って、X Client のあるマシンへ入ればよろしかったわけですね。今までは、X Server だけを立ち上げて、別途 TeraTerm で telnet しておりました。確実にうまくゆく例が一つ見つかれば、あとは何とでもなりそうです。要は /boot/xow-xwinsys.sh をしっかり読めと。</p>
+<p>ふむ、やっぱり X11 はいいなぁ。心地よさに鳥肌がたちましたよ。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.11.2" href="#2003.09.11.2"
+ style="text-decoration:none">先</a></td></tr></table>
+日のマイドキュメントと HOME の件は、結局は現状どおり：マイドキュメント = HOME でゆくこととした。よくよく考えるに、マイドキュメントフォルダー直下はドットファイルとフォルダー(ディレクトリ)だけという形があるべき姿で、一般のファイルがわさわさとあること自体がよろしくないと結論付けたのであった。。</p>
+<ul>
+<li><a href="http://www.hyuki.com/tf/?20030904233037" target="_blank">Weird-X 作ってる会社</a>って、日本の会社だったのか！(<a href="http://www.hyuki.com/tf/?20030904233037" target="_blank">textfile.org</a>より)
+    <div class="COMMENT"> 英語しか書いてないから、英語圏の会社かと思ってたよー。</div>
+</li>
+<li><a href="http://www.atmarkit.co.jp/fwin2k/win2ktips/333eventquery/eventquery.html" target="_blank">コマンド・プロンプトでイベント・ログを表示する</a>
+    (<a href="http://www.otsune.com/diary/2003/09/07.html#200309073" target="_blank">void GraphicWizardsLair( void ); //</a>より)
+    <div class="COMMENT"> ちょうどイベントログを取得したかったところなんですよ…って、XP Professional や 2003 Server だけですか!!</div>
+</li>
+<li><a href="http://www.atmarkit.co.jp/fwin2k/win2ktips/332offlnhotf/offlnhotf.html" target="_blank">オフラインで修正プログラムを入手・適用する</a>
+    (<a href="http://www.otsune.com/diary/2003/09/07.html#200309073" target="_blank">void GraphicWizardsLair( void ); //</a>より)</li>
+<li><a href="http://www.microsoft.com/japan/technet/treeview/default.asp?url=/japan/technet/security/fixedhome.asp" target="_blank">製品別修正プログラム一覧 / Microsof TechNet</a>
+    (<a href="http://www.otsune.com/diary/2003/09/09.html#200309093" target="_blank">void GraphicWizardsLair( void ); //</a>より)
+    <div class="COMMENT"> φ（。。）</div>
+</li>
+<li><a href="http://www.zdnet.co.jp/products/0309/05/rj01_sdrive.html" target="_blank">ハードディスクに「秘密のドライブ」を作るUSBキー</a>
+    (<a href="http://papalagi.org/diary/200309.html#20030910" target="_blank">hard で loxse な日々</a>よりの)
+    <div class="COMMENT"> ずばり、恥ずかしい画像を隠すためのものですね！</div>
+</li>
+<li><b class="doken">slashdot.jp</b>
+    <a href="http://slashdot.jp/article.pl?sid=03/09/11/011212&amp;topic=110&amp;mode=thread" target="_blank">Windows NT系のRPCSSにまたバッファ・オーバーフロー脆弱性</a>
+    <div class="COMMENT"> char 配列やめて string を使えと何回言えば…<em>(一度も言ってません!)</em>
+
+</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.09.07">ヤフーとメルコ</A>
+<SMALL>　(2003.09.07)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.07.1" href="#2003.09.07.1"
+ style="text-decoration:none">ず</a></td></tr></table>
+っと前に買ったのはいいが、うまく動作しなくなったため埃をかぶっていた無線ルータを復活させる。</p>
+<p>ひさしぶりにつなげてみると、おぉ、一応きちんと動くではないですか。ということで、上機嫌で設定作業に入る。が、パケットフィルタの設定を触っているうちに、内部同士は有線・無線共につながるのに、外部(イソターネット)とはつながらなくなってしまった。全てを元通りに戻しても特に変化なし。</p>
+<p>こういう場合は、どこが悪いか切り分けするために、対照実験です。</p>
+<table align="center" cellspacing="0" border="0">
+<tr><td bgcolor="white">
+<table cellspacing="1" border="0"><tr><td bgcolor="black">○</td>
+<td bgcolor="black">PC … ルータ -- 別のPC</td>
+</tr>
+<tr><td bgcolor="black">×</td>
+<td bgcolor="black">PC … ルータ -- ADSLモデム -- インターネット</td>
+</tr>
+<tr><td bgcolor="black">○</td>
+<td bgcolor="black">PC -- ADSLモデム -- インターネット</td>
+</tr>
+<tr><td bgcolor="black">○</td>
+<td bgcolor="black">PC -- AirH&quot;… インターネット</td>
+</tr>
+</table></td></tr></table>
+
+<div align="center">
+「…」は無線、「--」は有線</div>
+
+
+<p align="center" class="SAY1"> どこが悪いねん！ </p>
+
+
+<p>メルコのページを参照してみると…おぉ、<a href="http://buffalo.melcoinc.co.jp/qa/wireless/b2ag0140.html" target="_blank">FAQ</a>
+にあったではないですか。</p>
+<dl>
+<dt></dt>
+<dt>Q.
+</dt>
+<dd> Yahoo！BBでインターネットにつながりません。</dd>
+<dt>A.
+</dt>
+<dd> Yahoo！BB回線の場合、出荷時設定でインターネットにつながります。<br />　⇒ と以下初期化の方法がつらつらと…</dd>
+</dl>
+
+<p>やってみましたら、<strong>確かに直りました</strong><em>(ほんまかい)</em>。でも、できれば、何が悪かったか、明らかにしてほしいなぁと。なんとなく、内部のフラグが線の差し替えの時に狂ったんだろなぁとは思うんですがね…。</p>
+<p>巷の評判を聞くに、なんとなく、ヤフーとメルコって、ある意味、ゴールデンコンビのような気がしないでもない。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.07.2" href="#2003.09.07.2"
+ style="text-decoration:none">っ</a></td></tr></table>
+て、何のために、こんなことをしているかというと、自宅に勉強用に DB サーバを用意したかったからなんですね。</p>
+<p>「サーバを用意するなら、まずネットワークから」と別に誰も言ってませんが<sup style="font-size:x-small"><a href="#2003.09.07.2.1" title="誰か言ってたらすみません" name="2003.09.07.2.1.">*2</a></sup>、ウェブからファイルをとってきたりというのは結構ありますから、外部環境を整えるのは大切でしょう。それに、寝ながら DBサーバにログインするには無線LAN は必要不可欠なのです。別に気がついたら<strong>手段と目的が入れ替わってた</strong>わけじゃないですよ、ええ。肝心の DB サーバが構築できていないのは単に時間が足りなくなっただけです。</p>
+<p>しかし、インストールマニアな人ってよく聞くけど、実際インストールする時間だけでなく、周辺機器の対応状況調べたり、ドライバーをダウンロードしたり、結構時間かかるだろうに、よくやるなぁ。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.09.07.2.1" href="#2003.09.07.2.1.">*2</a></sup>誰か言ってたらすみません</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.07.3" href="#2003.09.07.3"
+ style="text-decoration:none">W</a></td></tr></table>
+indows 環境に擬似 UNIX 環境を構築している人は本ページ読者には少なからずいると思いますが、ディレクトリ構成とか、どうされているんでしょう？</p>
+<p>私は D:\home を環境変数 HOME に設定し、かつ、マイドキュメントにも設定していて、しばらく幸せだったんですが、エクスプローラで開いたときに、.bashrc とか _nya などのドットファイルの類が丸見えになり、かつ邪魔なので気になってきました。思うに</p>
+<ol>
+    <li>$HOME/ をマイドキュメントにする。</li>
+    <li>$HOME/My Documents をマイドキュメントにする。</li>
+    <li>マイドキュメントのサブフォルダに HOME を設定する。</li>
+    <li>マイドキュメントと全く関係ないところに HOME を設定する。</li>
+</ol>
+
+
+<p>などいろいろあると思いますが、どれも一長一短あるような気がする。うーん。</p>
+<ul>
+<li><b class="doken">2ch</b> <a href="http://pc.2ch.net/test/read.cgi/os/1062770929/" target="_blank">OS/2って？ 【WARP4】</a>
+    <div class="COMMENT"> OS/2 スレッドの Part.4 が始まりました。OS/2 七資産さん、お疲れ様です。</div>
+</li>
+<li><a href="http://www.famitsu.com/game/coming/2003/08/30/104,1062246523,15705,0,0.html" target="_blank">PCで発売された懐かしのアクションアドベンチャーが復活！ 『レリクス』</a>
+    (<a href="http://kitaj.no-ip.com/tdiary/20030905.html#p03" target="_blank">今日のなんでやねん</a>より)
+    <div class="COMMENT"> どうして XBox だけなんだよ！--- おれにだってわからないことぐらい…ある！</div>
+</li>
+<li><a href="http://tryasp.winscom.co.jp/document/vbscript/vbstoc.htm" target="_blank">VBScript ランゲージリファレンス</a></li>
+<li><a href="http://members.at.infoseek.co.jp/m6809/index-j.html" target="_blank">Rubyで超お手軽SNMP!</a>
+    (<a href="http://www.otsune.com/diary/2003/09/04.html#200309045" target="_blank">void GraphicWizardsLair( void ); //</a>より)
+    <div class="COMMENT"> おまいはどの言語をやりたいのか、はっきりせいと問い詰められそうです。実のところ、その言語において、作るために必要なコマンドを「その時に覚えているかどうか」が一番のファクターでございます。</div>
+<div class="COMMENT"> ところで… C言語・Perl・Ruby から system 関数呼ぶのになんとなく抵抗があるのは私だけでしょうか？そのせいで、何かと bash で書いてしまいがちになってしまいます。</div>
+</li>
+<li><a href="http://allabout.co.jp/computer/hpcreate/closeup/CU20030902A/index.htm" target="_blank">スタイルシート活用講座[8] 文字間隔を空白で調節してはダメ</a></li>
+<li><a href="http://papalagi.org/diary/200309.html#20030904" target="_blank">続・knoppix でバックアップ</a>
+    <div class="COMMENT"> 初回の <a href="http://papalagi.org/diary/200309.html#20030901" target="_blank">knoppix でバックアップ</a>と合わせてドゾー。</div>
+</li>
+<li><a href="http://www.vector.co.jp/soft/win95/net/se240895.html" target="_blank">メールサーバ直送暗号化通信対応軽量 SMTP サーバ / POP3 Proxy サーバ</a>
+    <div class="COMMENT"> プロバイダーの SMTP サーバは From: 行を変えられないから、AirH" でお客さんへのメール出す時、個人アドレスが晒されてしまう、どうしよう…という時はコレ<em>(まわりくどい)</em>。自前で簡易 SMTP サーバを立てるので、そういう制限はありませんし、相手先に直送するので、配送失敗がすぐ分かります。</div>
+<div class="COMMENT"> でも、サーバサイドの有料ウィルスチェッカサービスを捨てるのはもったいない。もちろん、PC の対ウィルスソフトでチェックするのも手なんですが、劣悪な電波状態での AirH" 送信失敗率がさらに上がるんですよね。</div>
+</li>
+<li><a href="http://scan.sygatetech.com/" target="_blank">Sygaet Online Serviceによるポートスキャンサービスによるポートのセキュリティ・チェック</a>
+    (<a href="http://www.be.wakwak.com/~yokohama/bb/airstation/as1.htm" target="_blank">AirStation WLAR-L11-L Setup</a>より)
+    <div class="COMMENT"> これで一応チェックしてみました。合格っぽかったです。</div>
+</li>
+</ul>
+
+<p>お悔やみ</p>
+<ul>
+<li><a href="http://www.asahi.com/obituaries/update/0905/002.html" target="_blank">漫画「ナニワ金融道」の作者・青木雄二さん死去</a>
+    (<a href="http://capsctrl.que.jp/kdmsnr/diary/?date=20030905#p04" target="_blank">capsctrldays</a>より)</li>
+<li><a href="http://news.goo.ne.jp/news/sanspo/geino/20030902/20030902-s-11.html" target="_blank">さらば男よ…チャールズ・ブロンソンさん死去</a>
+
+</li>
+</ul>
+
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.07.4" href="#2003.09.07.4"
+ style="text-decoration:none">ソ</a></td></tr></table>
+フマップ天王寺店に行ったが、Virtual PC は影も形も見当たらず。サポートのないソフトはさすがに売るわけには参りませんか。とほほ。</p>
+<p>このままでは、せっかく作った仮想OS/2環境が、半月くらいであぼ〜んしてしまいますよ。しょぼーん。</p>
+<!--section-->
+<H2><A NAME="2003.09.01">Beatiful Programmer</A>
+<SMALL>　(2003.09.01)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.01.1" href="#2003.09.01.1"
+ style="text-decoration:none">9</a></td></tr></table>
+月ですか…。8月1日に戻ってなくてよかった。</p>
+<p>んなアホウな。それじゃあ、まるで<a href="http://user.ecc.u-tokyo.ac.jp/~c00231/translation/urusei/sbd.html" target="_blank">Beautiful Dreamer</a>ですよ。</p>
+<p>起きているのに、何か寝ぼけているような気がする。マトリックスの見すぎです。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.09.01.2" href="#2003.09.01.2"
+ style="text-decoration:none">は</a></td></tr></table>
+てなアンテナって、URL 指定が「<tt>http://a.hatena.ne.jp/go?飛び先ＵＲＬ</tt>」みたいになっている。まぁ、そうやっている理由は分かるんだけど<sup style="font-size:x-small"><a href="#2003.09.01.2.1" title="単純に末尾に ?YYYYMMDDhhmmss などの文字列をつけると、動的なページでは動かなくなる可能性が高い" name="2003.09.01.2.1.">*3</a></sup>
+これじゃあ、アンテナサーバが重いと、リンク先にも飛べない。</p>
+<p>JavaScript とか何とかでうまいことやって、アンテナサーバなしでリンクくらいたどれるようにならないかな…<em>(言ってること分かるかな〜？)</em>。</p>
+<ul>
+<li><a href="http://papalagi.org/diary/200309.html#20030901" target="_blank">knoppix でバックアップ</a>
+    <div class="COMMENT"> なるほど、うまい方法を考えられたもんです。TO BE CONTINUED みたいですが、今後に期待age。</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.09.01.2.1" href="#2003.09.01.2.1.">*3</a></sup>単純に末尾に ?YYYYMMDDhhmmss などの文字列をつけると、
+動的なページでは動かなくなる可能性が高い</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.08.31">かえってきた仮想OS/2</A>
+<SMALL>　(2003.08.31)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.31.1" href="#2003.08.31.1"
+ style="text-decoration:none">や</a></td></tr></table>
+たー、OS/2 を Virtual PC にインストールできたヨ!
+
+</p>
+<div align="center">
+<a href="./n09.files/VOS2-full.png"
+><img src="./n09.files/VOS2-mini.jpg" width="384" height="231" /></a>
+<br />(フルサイズ140KB)
+</div>
+
+
+<p>といっても、前回トライした Warp 4.5 ではなく、Warp 4.0 ではありますが。<a href="http://www.geocities.co.jp/SiliconValley/2994/" target="_blank">euee のおうち</a>というサイトを見ると、4.0 だと別段問題なく導入できているように見えましたので…とりあえず、4.5 はあきらめました。<em>(根性なし)</em>
+
+</p>
+<p>第二の難関はネットワーク設定で、ルータが今使えず、DHCP で得られるIPが一つしかないので、どないしょーと思いましたが、最終的には、ホスト側(XP)に<a href="http://www.microsoft.com/japan/msdn/library/default.asp?url=/japan/msdn/library/ja/wcepb40/htm/pbtskInstallingMicrosoftLoopbackAdapter.asp" target="_blank">ループバックのネットワークアダプタを追加</a>して、VirtualPC の使用アダプタをそちらに変更することで、ゲスト⇔ホストと、ホスト⇔外部の通信を別個に確立することにしました。(参考：<a href="http://6908.teacup.com/thinkinmachinemacb/bbs" target="_blank">Virtual PC一問一答</a>)
+
+</p>
+<p>NetBEUI は、実在のPCでもうまくいっていなかったからおいといて<em>(笑)</em>、emx その他を ftp で転送して、さて、展開と思ったところで、ぎゃ〜ん、キーボードが効かなくなった。う〜ん、なんか不安定だなぁ。あと、ブートも「とてつもなく」遅いし。<em>(なんか、体感20分くらいかかってるような気がしますよ)</em>
+
+</p>
+<p>ところで、<a href="http://www.microsoft.com/japan/windowsxp/virtualpc/" target="_blank">Microsoft Virtual PC公式ページ</a>によりますと、2004年初旬まで製品が購入できないとあります。通販できないってことか…では、店頭で買うか…は、長期出張！か、買えるのか！？</p>
+<p>まぁ、気をとりなおして、NYAOS-II をコンパイルしよう。げっ、ファイルシステムを FAT でインストールしてたよ。ファイル名が長すぎて、コンパイルでことごとく弾かれる #include 文…</p>
+<p align="center" class="SAY1"> もう、寝る！ </p>
+
+
+<ul>
+<li><b class="doken">2ch</b> <a href="http://comic.2ch.net/test/read.cgi/csaloon/1031128525" target="_blank">最近、80年代ぽい絵が新鮮に感じる</a>
+    (<a href="http://artifact-jp.com/" target="_blank">ARTIFACT</a>より)
+    <div class="COMMENT"> 妙に記号化が進んで、不自然に感じられる最近の漫画/アニメーションの画風に違和感を感じる方はこのスレを読むべし？ただし、分かる人にしか分からない話が多すぎるかも。</div>
+</li>
+<li><b class="doken">2ch</b> <a href="http://comic3.2ch.net/test/read.cgi/x3/1061995883/-100" target="_blank">もうやらないからな、誰が二度と宿題なんか！</a>
+    <div class="COMMENT"> あー、そういえば夏休み最後の日だったんですね。わたしより苦しい人が今日だけは沢山<em>(ぉぃ)</em>
+
+</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.08.30">ヒマイノリティーリポート</A>
+<SMALL>　(2003.08.30)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.30.1" href="#2003.08.30.1"
+ style="text-decoration:none">家</a></td></tr></table>
+に引きこもっていてはイカン！と思って、近所に買い物に出るが、だんだん息苦しくなってくる。必要最小限の購入<em>(何買ったんだ？)</em>を済ませ、退散。</p>
+<p>うーん、いろいろ、やばい予感。</p>
+<ul>
+<li><a href="http://www.misuzilla.org/dist/net/mdumpfs/" target="_blank">mdumpfs</a>
+    (<a href="http://nmnl.jp/diary/20030830.html#p05" target="_blank">A DAY IN THE LIFE</a>より)
+    <div class="COMMENT"> ハードリンクを駆使して、必要最小限のディスク消費量で、日々のディスクのスナップショットを作成してゆくソフトウェア<ul>
+	<li><a href="http://plan9.aichi-u.ac.jp/dumpfs/" target="_blank">dumpfs</a>(Plan9)</li>
+	<li><a href="http://namazu.org/~satoru/pdumpfs/index.html.ja" target="_blank">pdumpfs</a>(UNIX)</li>
+	</ul>
+	の Windows 版ともいえるものです。WindowsNT系列ならハードリンクがあるから、実現できるはずと誰もが思っていたと思いますが…やってくれました。ただし、2000,XP,2003 Server のみですが。</div>
+</li>
+<li><a href="http://www.lbm.go.jp/toda/comp/struct.html" target="_blank">Ｃ言語の構造体をめぐって</a>
+    (<a href="http://www.t3.rim.or.jp/~raeva/diary/?200308c&amp;to=200308302S3#200308302S3" target="_blank">The diary formerly known as Go ahead make my day.</a>より)
+    <div class="COMMENT"> Ｃ言語の構造体はなぜパディングは許すのに、順番は保障することになったのか。その長年の「Ｃ言語のひみつ」に fj.comp.lang.c の有志達がいどんだ！</div>
+</li>
+<li><a href="http://member.nifty.ne.jp/hippo2000/perltips/index.htm" target="_blank">Perlの小技</a>
+    <div class="COMMENT"> より、まずは <a href="http://member.nifty.ne.jp/hippo2000/perltips/dbimemo.htm" target="_blank">DBI モジュール</a>をマスターして、Oracle のコントロールだ！<em>(って、Ruby/OCI はどうしたんですか？)</em></div>
+</li>
+<li><b class="doken">DVD</b> <a href="http://www.amazon.co.jp/exec/obidos/ASIN/B00006CTJN/qid=1062251249/sr=1-1/ref=sr_1_2_1/250-0504390-9518627" target="_blank">マイノリティ・リポート</a>
+    <div class="COMMENT"> レンタルして、VAIO で見ました。すばらしい。痛そうなシーンはウインドウを小さくして<em>(←小心者)</em>、重要な場面は無論、最大化で閲覧ですよ。</div>
+<div class="COMMENT"> さて、何が痛いかっていうと、人間の虹彩パターンが RFID みたいに機能しているもんだから<em>(以下自粛)</em>
+
+</div>
+</li>
+</ul>
+
+<p>某女史からリニューアルしないのという質問をいただく。リニューアルなんて、そんな頻繁にするもんじゃありません。見かけでなく、コンテンツで勝負です。</p>
+<p>って、日記しか更新していないのによく言う＞ワシ。</p>
+<!--section-->
+<H2><A NAME="2003.08.29">謀ったなchar！</A>
+<SMALL>　(2003.08.29)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.29.1" href="#2003.08.29.1"
+ style="text-decoration:none">え</a></td></tr></table>
+ーと、タイトルから「THE」を取りました。ちょっと軽くなった気分です。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.29.2" href="#2003.08.29.2"
+ style="text-decoration:none">え</a></td></tr></table>
+ーと、</p>
+<ul>
+<li><a href="http://www.asahi-net.or.jp/~SU2N-NI/nikkj/0308.htm#d28" target="_blank">日日に森の下つゆ(2003.09.28)</a></li>
+<li><a href="http://dempa.2ch.net/dat/2003/08/prog-1055426368.html?dempa2ch" target="_blank">でさ、これ何て読むのよ</a>(電波２ちゃんねるより)
+
+</li>
+</ul>
+
+<p>とかで話題になっている専門用語の読み方。ワタシの場合：</p>
+<dl>
+<dt></dt>
+<dt>char
+</dt>
+<dd>「charactor(キャラクター)」の略だから「キャラ」と私は読んでしまうわけですが、そんな人は他にいないようで…。ましてや「シャア」と読むようなガノタは…<em>(以下省略)</em>
+</dd>
+<dt>MySQL
+</dt>
+<dd> マイスキュールと呼びたいが、(使わないから)そもそもそんな機会がない。</dd>
+</dl>
+
+<p>えーと、とりあえず、<a href="http://kwatch.tripod.co.jp/diary/diary.html" target="_blank">プログラマー天国</a>に栄光あれ! 
+<sup style="font-size:x-small"><a href="#2003.08.29.2.1" title="って、本当に閉鎖しちゃうんでしょうか？「あとn日」ってありますが" name="2003.08.29.2.1.">*4</a></sup>
+
+</p>
+<p>参考：</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.08.29.2.1" href="#2003.08.29.2.1.">*4</a></sup>って、本当に閉鎖しちゃうんでしょうか？「あとn日」ってありますが</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.29.3" href="#2003.08.29.3"
+ style="text-decoration:none">W</a></td></tr></table>
+indows上でプログラムで、ディスク容量とか、プロセスの有無をチェックする必要がでてきたので、例によって、VBScript でやろうかなぁと調査してみた。</p>
+<ul>
+<li><a href="http://www.interq.or.jp/student/exeal/dss/" target="_blank">Dynamic Scripting</a></li>
+<li><a href="http://www.microsoft.com/japan/technet/treeview/default.asp?url=/japan/technet/scriptcenter/default.asp" target="_blank">Microsoft TechNet</a>
+
+</li>
+</ul>
+
+<p>プロセスチェックはWindowsNT ではスクリプトレベルではできないようだ。MS のページでも、対応は 2000 以上と但し書きがついてあったし。実際の環境も 2000 Server だから、まぁ、よし！</p>
+<ul>
+<li><a href="http://nais.to/~yto/tools/css_tabs/" target="_blank">CSS と JavaScript でタブ切り替え</a>
+    (<a href="http://kitaj.no-ip.com/tdiary/20030828.html#p04" target="_blank">今日のなんでやねん</a>より)
+    <div class="COMMENT"> やるな！ブライト</div>
+</li>
+<li><a href="http://news.fs.biglobe.ne.jp/news/photo/jj030822-1431417.html" target="_blank">「ロボット」の父に花束</a>
+    (<a href="http://sho.tdiary.net/20030829.html#p02" target="_blank">ただのにっき</a>より)
+    <div class="COMMENT"> 絵になるなぁ。</div>
+</li>
+<li><a href="http://www.yomiuri.co.jp/national/news/20030828i512.htm" target="_blank">「超大盛り２０分以内に食べるとタダ」サービス中止へ</a>
+    (<a href="http://papalagi.org/diary/200308.html#20030829" target="_blank">hard で loxses な日々</a>より)
+    <div class="COMMENT"> 残念だけど、食べ残しはもったいないからなぁ。</div>
+</li>
+<li><a href="http://forums.mozillazine.org/viewtopic.php?t=18401" target="_blank">Bookmark Links Checker for Mozilla/Firebird</a>
+    (<a href="http://kengo.preston-net.com/archives/000845.shtml" target="_blank">GOING MY WAY</a>より)
+    <div class="COMMENT"> Mozilla Firebird で使える更新チェッカ</div>
+</li>
+<li><a href="http://www.tv-asahi.co.jp/n-station/news/hiraishi/frmain.html" target="_blank">平石直之のとにかく行って見た：Vol.1 夢の技術、ついに実現か!?
+「エネルギー大国・日本」への道</a>
+    (<a href="http://www.tees.ne.jp/~sin-x/200308c.html#2601" target="_blank">アキレスの亀を追いかける日々</a>より)
+    <div class="COMMENT"> すばらしい。でも、<ol>
+	    <li>プラント規模をそのまま大きくできるのか？</li>
+	    <li>環境への悪影響は十分小さいか？</li>
+	</ol>
+	が、化学工学の割れてしまった卵としては気になるところでございます。そういえば、メタンハイドレートはどうなったんだろう。あれも注目株なんだよなー。がんばってくだされ、研究者/技術者の皆様。</div>
+</li>
+<li><a href="http://www.ceres.dti.ne.jp/~mayo/computing/computing003.html" target="_blank">第３話　マクガイバーとUNIX文化</a>
+    (<a href="http://www.tees.ne.jp/~sin-x/200308c.html#25" target="_blank">アキレスの亀を追いかける日々</a>より)
+	<div class="COMMENT"> 同意。でも、一つのツール/ファイルで何もかもできるのも、それなりにイイです。ツールを組み合わせると、時々ファイルが増えすぎて収集が…<em>(そんな奴はおまいだけです)</em></div>
+</li>
+<li><a href="http://eg.nttpub.co.jp/news/20030829_05.html" target="_blank">名作『ガンダムDX』の続編はもちろん『Z』！　AC『機動戦士Zガンダム エゥーゴvs.ティターンズ』</a>
+    (<a href="http://char-custom.net/data/2003/08/29.html" target="_blank">シャア専用ポータル</a>より)
+    <div class="COMMENT"> なるほど、本編「機動戦士ガンダム」の続編が「めぐりあい宇宙」なら、DX の続編は Z ですか！しかも「変形」までできるとは！</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.08.28">塹壕</A>
+<SMALL>　(2003.08.28)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.28.1" href="#2003.08.28.1"
+ style="text-decoration:none">銃</a></td></tr></table>
+弾が飛び交う危険地帯を何とか越え、あぁ、ここは安全地帯だ、ここはさすがに大丈夫だろうと思った矢先に、背後から鋭いナイフで刺されて死んでゆく<sup style="font-size:x-small"><a href="#2003.08.28.1.1" title="地雷踏んだ or 自爆した、の方が適切かも" name="2003.08.28.1.1.">*5</a></sup>。</p>
+<p>そんな儚い脇役の今日このごろ。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.08.28.1.1" href="#2003.08.28.1.1.">*5</a></sup>地雷踏んだ or 自爆した、の方が適切かも</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.28.2" href="#2003.08.28.2"
+ style="text-decoration:none">は</a></td></tr></table>
+てなの中の人曰く「<a href="http://www.hatena.ne.jp/1061908552" target="_blank">文章中に読点（、）を多くうつ人は精神的におかしな人が多いと思います</a>」(<a href="http://210.143.110.44/diaryweb/?200308c&amp;to=200308271#200308271" target="_blank">inside out</a>より)
+
+</p>
+<p>んなあほな。でも読みにくいのは確か。単に推敲不足な気もしますね。</p>
+<ul>
+<li>読点が多い場合、<ol>
+	<li>そもそも読点自体を削減できないか?
+	    <br />⇒ 単純に構造を分割しすぎではないのか?
+	    近い節は分割しない方がいい。</li>
+	<li>長すぎる文を、そもそも複数の文に分割できないか?</li>
+    </ol></li>
+<li>括弧や脚注に書いてしまいたくなるとき<ol>
+	<li>文章そのものに組み込んで表現はできないか？</li>
+    </ol>
+
+</li>
+</ul>
+
+<p>一応それなりに気にはしているんですが、それにもかかわらず、最近、明らかに頭がおかしいです。あひゃひゃひゃひゃ。</p>
+<p>それはともかく、解答内容は興味深いものが多いですね。</p>
+<!--section-->
+<H2><A NAME="2003.08.26">千度滅入る</A>
+<SMALL>　(2003.08.26)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.26.1" href="#2003.08.26.1"
+ style="text-decoration:none">プ</a></td></tr></table>
+ログラムから自動でメールを送信する必要があって、以前作った、Mail/SendMail.pm (Perlのメール送信モジュール)
+の日本語フロントエンドを掘り出そうとしたが…、見つからん！きぃぃぃ。</p>
+<p>というわけで、仕方なしに一生懸命思い出して作り直したが、Subject の日本語のエンコード方法を忘れていて、かなり苦労。Base64 エンコードする時に漢字ON/OFFに相当する ESC $B , ESC (B なども含めなくてはならないとはね。わざわざ除いてしまったよ。</p>
+<p>で、完成後に、<a href="http://internet.watch.impress.co.jp/www/article/1999/1122/special.htm" target="_blank">そのあたりを詳しく解説したページを発見してしまう罠</a>。アーカイブ名の「Mail-Sendmail-0.79.tar.gz」ではなくずばり「SendMail.pm」でググればよかったなぁ。とほほ。何やってんだ、わし。</p>
+<ul>
+<li><a href="http://tabesugi.net/memo/cur/cur.html#241210" target="_blank">座敷わらしウイルス</a>
+    (<a href="http://210.143.110.44/diaryweb/?200308c&amp;to=200308253#200308253" target="_blank">inside out</a>より)
+    <div class="COMMENT"> なんか、そんなのいたらいいなぁ<em>(ほのぼの)</em>。同ページの<a href="http://tabesugi.net/memo/cur/cur.html#242155" target="_blank">出張・自己嫌悪サービス</a>
+    もイイ！</div>
+</li>
+<li><b class="doken">2ch</b> <a href="http://pc.2ch.net/test/read.cgi/prog/1051957375/1-100" target="_blank">携帯電話開発　もういや</a>
+    <div class="COMMENT"> たいへんそうだなぁ…。それとは別に 33-35 はワラた。</div>
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.08.25">めぐりあい奈良</A>
+<SMALL>　(2003.08.25)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.25.1" href="#2003.08.25.1"
+ style="text-decoration:none">出</a></td></tr></table>
+張先で、ついガンダムエースを買ってしまう今日このごろかな。</p>
+<p align="center">
+トニーたけざき、いい仕事してますねぇ。</p>
+
+
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.25.2" href="#2003.08.25.2"
+ style="text-decoration:none">M</a></td></tr></table>
+izillaFirebird はいろいろとアドオンを使うと極めて格好よく、かつ快適なのではありますが、やはり…ちょっと、他のブラウザとの非互換性がありますなぁ。</p>
+<p>わたくしはよく、@nifty の路線検索を利用するのでありますが、同じ経路だけど日程が異なるというときに[Back]で戻ると、駅を選んでいないというエラーが出てきてしまいます。Opera で散々こういう使い方をしましたが、そのときには問題は特に問題なく使えたんですがねぇ。</p>
+<p>昔、サーブレットの開発をした際、IE で近い症状を見たことがあります。</p>
+<ol>
+    <li>ページA を開く</li>
+    <li>(JavaScriptが起動する)Submitボタンを押す</li>
+    <li>JavaScript がフォームの内容を書き換える</li>
+    <li>JavaScript がページをページB遷移させる</li>
+</ol>
+
+
+<p>とした時、ページ B から A に [Back] で戻ると、フォームの内容は</p>
+<ul>
+<li>Netscape Navigator 4.x だと→ 1. の時点</li>
+<li>Internet Explorer だと → 3. の時点</li>
+</ul>
+
+<p>になるといったことを確認しました。この時は「IEってなんつー仕様だ」と思ったもんですが、一方で、実は IE の方が振る舞い的に正しいというのも耳にしたような気があります。正直、どっちが正しいのか、よー分からんのですが、サーブレット開発者としては NN 4.x の方が都合がいいなぁと思ったもんです。</p>
+<p>さて、今回の症状は、どういったことが原因なんでしょうなぁ。</p>
+<ul>
+<li><b class="doken">slashdot.jp</b>
+    <a href="http://slashdot.jp/articles/03/08/25/0130259.shtml?topic=68" target="_blank">OS/2からのリプレイス需要を狙うMad Hatter Project</a>
+    <div class="COMMENT"> /2er としては、リンクせねばなるまい。</div>
+</li>
+<li><b class="doken">Flash</b>
+    <a href="http://www.geocities.co.jp/SiliconValley-PaloAlto/7325/block.html" target="_blank">ブロック崩され</a>
+    (<a href="http://papalagi.org/diary/200308.html#20030825" target="_blank">hardでloxse な日々</a>)より<div class="COMMENT"> これはなかなか面白い。どちらかというと、ドッヂボールやってるような感覚ですね。</div>
+</li>
+</ul>
+
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.25.3" href="#2003.08.25.3"
+ style="text-decoration:none">当</a></td></tr></table>
+たり前のことを、当たり前のように実現し続けるのは難しい。</p>
+<p align="center">
+苦労は報われず、過失には容赦なく。</p>
+
+
+<p>ただ、縁の下の力持ちが、縁の下から腐乱死体で発見されぬことを祈るばかりなりけり。</p>
+<!--section-->
+<H2><A NAME="2003.08.24">ブラウザ忍法火の鳥！</A>
+<SMALL>　(2003.08.24)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.24.1" href="#2003.08.24.1"
+ style="text-decoration:none">M</a></td></tr></table>
+ozillaFirebird でのマウスジェスチャーの件ですが、<a href="http://nmnl.jp/diary/?year=2003;month=3Q;category=Re%3A" target="_blank">ねういち様</a>より、</p>
+<ul>
+<li><a href="http://sleipnir.pos.to/software/browserassistant/index.html" target="_blank">Browser Assistant</a></li>
+<li><a href="http://texturizer.net/firebird/extensions.html#All-in-One%20Gestures" target="_blank">All-in-One</a>
+
+</li>
+</ul>
+
+<p>というソフトがあると教えていただきました。</p>
+<p>前者は多ブラウザ対応のマウスジェスチャー拡張ソフトです。Opera っぽい２ストロークな操作(２押す→下→右→２離す)はなく、１ストローク(２押す→下→２離す)だけですが、通常の使い方ではこれで充分ですね。</p>
+<p>後者は、MozillaFirebird のアドオンです。インストールした後、一度 Firebird を終了しなくては有効にならないのに気づかず、「あれ？動かないなぁ、なんでだろう」と 10分くらい悩んだのは秘密です。ジェスチャーで書いた線の軌跡を表示できるのは面白いですね。</p>
+<p>まずは後者の方を使ってみたいと思います。ありがとうございました。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.24.2" href="#2003.08.24.2"
+ style="text-decoration:none">プ</a></td></tr></table>
+リインストールされていた、Norton AntiVirus でマシン全体をスキャンしたら、14時間9分42秒もかかってしまーたよ。ファイルの数を見たら、2,291,473個。う〜ん。</p>
+<p>サーバからのバックアップファイルを持ち込みすぎです。ちょっと削除しよう…。</p>
+<p>まぁ「感染は見つかりませんでした」だから、ヨシとすべきかな。</p>
+<ul>
+<li><a href="http://spw.tripod.co.jp/spwtop.htm" target="_blank">ＳＰＷ財団 新ジョジョ研究部署</a>
+    (<a href="http://www.henjinkutsu.net/" target="_blank">変人窟</a>より)</li>
+<li><a href="http://www3.kcn.ne.jp/~vistacar/vistacar/haisen/haisen_main.html" target="_blank">廃線跡の旅</a>
+
+</li>
+</ul>
+
+<!--section-->
+<H2><A NAME="2003.08.23">おぉ、脳</A>
+<SMALL>　(2003.08.23)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.23.1" href="#2003.08.23.1"
+ style="text-decoration:none">写</a></td></tr></table>
+真は最近利用している某地方の鉄道。電化されてません。とっても田舎田舎しているけど、駅から見える夕方の景色がすばらしい。私の腕が悪いので、写りはいまいちですが。</p>
+<div align="center">
+<img src="./n09.files/03-08-22_18-21.jpg"
+ width="128" height="120" />
+<img src="./n09.files/03-08-22_18-22.jpg"
+ width="128" height="120" />
+<img src="./n09.files/03-08-22_18-37.jpg"
+ width="120" height="128" />
+</div>
+
+
+<ul>
+<li><b class="doken">2ch</b> <a href="http://hobby3.2ch.net/test/read.cgi/train/1059271024/" target="_blank">★鉄ちゃんの常識的知識が一般人には驚きらしい★</a>
+    (<a href="http://dempa.gozans.com/" target="_blank">電波２ちゃんねる</a>より)
+    <div class="COMMENT"> ヘェー</div>
+</li>
+</ul>
+
+<p>実は最近<strike>電車</strike>列車が結構好きになってきてまして、鉄道で一人旅もしてみたいなぁーと思う今日このごろでございます。</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.23.2" href="#2003.08.23.2"
+ style="text-decoration:none">そ</a></td></tr></table>
+、<a href="http://hp.vector.co.jp/authors/VA014690/Misc.html#d2003-08-18" target="_blank">そうか！</a> 層化とはそうか!<em>(げしげし)</em>
+
+</p>
+<p>拡張部分は、メンバ変数<sup style="font-size:x-small"><a href="#2003.08.23.2.1" title="C++ならポインタ変数として" name="2003.08.23.2.1.">*6</a></sup>
+に持っちまうってわけね。φ（。。）多重継承を使わずに、２方向への独立した拡張が考えられるクラスを設計するのに有用ですね。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.08.23.2.1" href="#2003.08.23.2.1.">*6</a></sup>C++ならポインタ変数として</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.23.3" href="#2003.08.23.3"
+ style="text-decoration:none">イ</a></td></tr></table>
+イ言葉を二つ知った。</p>
+<ul>
+<li><b class="doken">BOOK</b> <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4062555735/ref=sr_aps_d_1_3/qid=1061597282/249-2085661-2227505" target="_blank">十二国記 華胥の幽夢</a>
+    <div class="COMMENT">「責難は成事にあらず」人を責め、非難することは何かを成すことではない。</div>
+</li>
+<li><a href="http://ishinao.net/wl/id/835" target="_blank">そんなこと俺が知るか！</a>
+    (織華さんの「<a href="http://hp.vector.co.jp/authors/VA014690/Misc.html#d2003-08-20" target="_blank">雑記</a>」より)
+<div class="COMMENT"> 「なぜガスが効かない！」「そんなこと俺が知るか！」島本和彦テーストを感じます。</div>
+</li>
+</ul>
+
+<p>言葉の内容はともかく、組み合わせが問題という指摘もございますが、そんなこと俺が知るか！</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.23.4" href="#2003.08.23.4"
+ style="text-decoration:none">A</a></td></tr></table>
+verage 先生が<a href="http://hp.vector.co.jp/authors/VA016875/try19.html#8-16-3" target="_blank">高く評価されている</a>ようなので、MozillaFirebird を VAIO に導入してみました。実際使ってみると、いい感じですね。</p>
+<ul>
+<li>Opera と違って、広告が入らなくて画面が広い。</li>
+<li>起動が確かに速い。</li>
+<li>user.js の「user_pref("browser.linkTarget", 1);」で新規ウインドウのタブ化もばっちり</li>
+</ul>
+
+<p>あと、マウスジェスチャーがあれば、ばっちりなんだけどなぁ。ありましたっけ？</p>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.23.5" href="#2003.08.23.5"
+ style="text-decoration:none">急</a></td></tr></table>
+遽、直接コンソールを閲覧できない UNIX マシンで GUI 操作をしなくてはならなくなりまして、<a href="http://www.jcraft.com/wiredx/" target="_blank">Weired-X</a> という Java のX サーバソフトを久しぶりに使ってみました。おぉ、ニューマシンではそれなりに使えるではないですか<sup style="font-size:x-small"><a href="#2003.08.23.5.1" title="以前は MMX Pentium 266MHz でしたからねぇ。重くても仕方あるまい" name="2003.08.23.5.1.">*7</a></sup>。少々、何か画面が乱れがちになりますが。バッチファイルと jar ファイルの二つだけで手軽に使えるので、誰にでも薦められますねぇ。</p>
+<p>まぁ、ワタシの場合、そもそも<a href="http://www.holonlinux.com/products/xon/xon2/" target="_blank">XonWindows2</a> を導入済みなので、理論上は既に X 端末が利用できる環境にあるはずなんですが、なーんでか、kterm を起動しようとしても、拒否されてしまう。普段の行いが悪化してるのか？Weired-X で画面乱れてるのもワタシだけ？</p>
+<p>まぁ、その他のコンソールアプリは、コマンドプロンプトとか rxvt 上から利用できるから、まるまる役に立っていないというわけではないんだけど。う〜ん。</p>
+<ul>
+<li><a href="http://www2.gol.com/users/takem/winlin.html" target="_blank">Windows と Linux 両方使う！</a>
+    <div class="COMMENT"> Weired-X , XonWindows2 , デュアルブートによる OS の共存など、上に書いたようなことをする際のノウハウが簡潔にまとめられていて、すばらしきかな。</div>
+</li>
+<li><a href="http://jibun.atmarkit.co.jp/ljibun01/column/horiuchi/horiuchi03.html" target="_blank">「やる気」がわいてこないときの対処法〜特効薬は自分の脳の中にあった！〜</a>
+(<a href="http://www.t3.rim.or.jp/~raeva/diary/?200308b&amp;to=200308190#200308190" target="_blank">The diary formerly known as Go ahead make my day.</a>より)
+    <div class="COMMENT"> おぉ、脳！</div>
+</li>
+<li><a href="http://pcweb.mycom.co.jp/news/2003/08/19/09.html" target="_blank">新しいTurboLinux「Suzuka」発表 - Linuxを工具から文房具に</a>
+    (<a href="http://slashdot.jp/article.pl?sid=03/08/20/0728254&amp;topic=2&amp;mode=thread" target="_blank">slashdot.jp</a>より)
+    <div class="COMMENT"> 先生！ <a href="#2003.08.17.1">前言</a>を撤回せざるをえません。KDE は格好よかったでした。といいますか、よく考えたら、昔<sup style="font-size:x-small"><a href="#2003.08.23.5.2" title="Sunをデスクトップで使っていた頃" name="2003.08.23.5.2.">*8</a></sup>
+	は fvwm-95 で結構幸せだったなぁ。</div>
+</li>
+<li><a href="http://bom-ba-ye.com/d.cgi?tcopuranai=2" target="_blank">あなたの１０年後は・・？</a>
+    (どっかから)
+    <div class="COMMENT"> ワタシの10年後は「特別天然記念物」でした。どうやってなるんだろう(笑)</div>
+</li>
+<li><a href="http://sho.tdiary.net/20030820.html" target="_blank">NaverのBOTさらに悪質化</a>
+    <div class="COMMENT"> 目的のためには手段を選ばずだな。</div>
+</li>
+</ul>
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.08.23.5.1" href="#2003.08.23.5.1.">*7</a></sup>以前は MMX Pentium 266MHz でしたからねぇ。重くても仕方あるまい</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.08.23.5.2" href="#2003.08.23.5.2.">*8</a></sup>Sunをデスクトップで使っていた頃</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.08.17">スーパーオブジェクト指向大戦FX</A>
+<SMALL>　(2003.08.17)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.17.1" href="#2003.08.17.1"
+ style="text-decoration:none">ア</a></td></tr></table>
+マグラマ雑記<a href="http://hp.vector.co.jp/authors/VA016875/try19.html#8-16-1" target="_blank">継承 vs 委譲</a>より「<cite>3階層以上の継承を使うとツライ感じです</cite>」。ごもっとも。Ruby の作者まつもとゆきひろ氏も著書にて「継承は最後の武器だ」とおっしゃられており、その意図が<a href="http://www.rubyist.net/~matz/?date=20030806" target="_blank">Matzにっき</a>で語られていますね。</p>
+<p>委譲とか、層化という単語の意味が分からなかったので、<a href="http://www.netlaputa.ne.jp/~hijk/study/oo/ooglossary.html" target="_blank">オブジェクト指向用語集</a>で調べてみました。委譲は要はプロキシーなオブジェクトを作ることですか<sup style="font-size:x-small"><a href="#2003.08.17.1.1" title="デリケーションとプロキシーって言葉の意味が微妙に違うように記憶してますが、それはおいといて" name="2003.08.17.1.1.">*9</a></sup>。面倒ですが、後の憂いが少なそうな方法ですね。層化は載ってないですね…ググっても出てきません。新語なのかな。語感から、なんとなく、Java の interface を想像しますが、どうなんでしょうかね。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.08.17.1.1" href="#2003.08.17.1.1.">*9</a></sup>デリケーションとプロキシーって言葉の意味が微妙に違うように
+記憶してますが、それはおいといて</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.17.2" href="#2003.08.17.2"
+ style="text-decoration:none">さ</a></td></tr></table>
+らに<a href="http://hp.vector.co.jp/authors/VA016875/try19.html#8-16-2" target="_blank">IDEを使うという事</a>より「<cite>IDEがあるからといって極端に効率は向上しない、が、いい経験にはなる</cite>」φ（。。）.oＯ（暇な時に試してみよう）<sup style="font-size:x-small"><a href="#2003.08.17.2.1" title="暇な時など永遠に来ない罠" name="2003.08.17.2.1.">*10</a></sup>
+
+</p>
+<p>「<cite>Unix系列のアプリのGUIってちょっちダサくない?</cite>」う〜ん、ワタクシも何となくそんな気がしないでもないっす。しかし、MacOSX 上のアプリであれば…。はっ、あれは UNIX ではなく BSD か<em>(そういう問題ではない)</em>!
+
+</p>
+<ul>
+<li><b class="doken">BOOK</b> <a href="http://www.amazon.co.jp/exec/obidos/ASIN/4150307326/ref=sr_aps_d_1_1/qid=1061094669/250-5624041-9673804" target="_blank">グイン・サーガ 91 魔宮の攻防</a>
+    <div class="COMMENT"> 月曜に買ったのに、読めたのは次の週の日曜日。やれやれ。</div>
+</li>
+</ul>
+
+<!-- 39.5 84 -->
+
+
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.08.17.2.1" href="#2003.08.17.2.1.">*10</a></sup>暇な時など永遠に来ない罠</div>
+
+</div>
+<!--section-->
+<H2><A NAME="2003.08.16">赤い思想の仮装OS/2V3</A>
+<SMALL>　(2003.08.16)</SMALL></H2>
+
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.16.1" href="#2003.08.16.1"
+ style="text-decoration:none">V</a></td></tr></table>
+irtualPC 体験版を試してみました。</p>
+<p>最初、<a href="http://www.connectix-japan.com/products/vpc5w.html" target="_blank">Connectix社のページ</a>からダウンロードしようとしたのですが、何故かダウンロードページのリンクが切れていました。いろいろ探してみたところ、<a href="http://www.microsoft.com/windowsxp/virtualpc/" target="_blank">Microsoft社にダウンロードページ</a>
+が設置されていることを発見。そういえば、Microsoft 社に買収か譲渡されたのでしたね。</p>
+<p>元のページではユーザ登録しなくては体験版のダウンロードができなかったようですが、MSのページでは、期間限定(〜9/27まで)のシリアル番号も公開されており、気軽にダウンロードできます。やるな、ブライト。<!-- VPT5-1181-2302-9277-6447.(9/27までの試用シリアル番号) -->
+
+</p>
+<p>さて、ダウンロードすると、Virtual PC 自体は比較的簡単にインストールできました。新規PC環境を作るのも簡単。メモリも現在のマシンは 700MB あるので、その 1/10 もあてがえば充分です。</p>
+<p>次に行うのは、いうまでもなく OS/2 Warp 4.52 の仮想 PC へのインストール。だが、しかし、フロッピー３枚目を入れ替えて、CD-ROM を読み出したところで…</p>
+<div align="center">
+    <img src="./n09.files/OS2-install-red-s.png" />
+</div>
+
+
+<p>くっ、これまでか<sup style="font-size:x-small"><a href="#2003.08.16.1.1" title="あっさりあきらめたように見えますが、4,5回最初からやり直した上での断念。" name="2003.08.16.1.1.">*11</a></sup>。<a href="http://www.hmr.ne.jp/yakata/my_room/jikken/vpc_trial/vpc_trial.html" target="_blank">うまくいったというお話</a>もあるのになぁ…<sup style="font-size:x-small"><a href="#2003.08.16.1.2" title="一応、ハードディスクを FDISK や FORMAT したりもしたんですがねぇ…。とほほ" name="2003.08.16.1.2.">*12</a></sup>。</p>
+<div style="margin-top:5pt">
+<div class="FOOTNOTE"><sup><a name="2003.08.16.1.1" href="#2003.08.16.1.1.">*11</a></sup>あっさりあきらめたように見えますが、4,5回最初からやり直した上での断念。</div>
+
+<div class="FOOTNOTE"><sup><a name="2003.08.16.1.2" href="#2003.08.16.1.2.">*12</a></sup>一応、ハードディスクを FDISK や FORMAT したりもしたんですがねぇ…。
+とほほ</div>
+
+</div>
+<p class="SEP" align="center">⊂⌒~⊃。Д。）⊃</p>
+
+
+<p><table align="left" cellspacing="0" cellpadding="0">
+<tr><td><span class="FIRSTLETTER">
+<a name="2003.08.16.2" href="#2003.08.16.2"
+ style="text-decoration:none">＜</a></td></tr></table>
+ＮＡＯ＞さんのところで<a href="http://hpcgi1.nifty.com/~naotosi/zatubun.pl?s=9&amp;b=90" target="_blank">勝手に仮登録されたというお話</a>がありましたが、ワタシは出張中に仮登録だけでなく、本登録まで勝手にされてました。</p>
+<pre style="color:silver;font-size:x-small;margin-left:2em"
+>☆　総合ビジネス情報誌【世界情報発信倶楽部】より　☆
+****************************************************
+　
+この度は『世界情報発信倶楽部』『世界情報発信倶楽部 BBS掲示板』
+より購読登録頂き、誠に有り難うございます。
+　
+登録されたアドレスはこちらです。
+E-mail　＝　xxxxxxxx@xxxxx.xx.xx
+　
+★この登録に心当たりの無い場合や購読を解除したい場合は、
+お手数ではございますが、http://e5.wingmailer.com/wingmailer/mr.cgi?uid=xxxx&amp;ctl=del&amp;email=xxxxxxxx@xxxxx.xx.xx で解除ができます。
+このメールを返信いただいても解除出来ません。m(_ _)m</pre>
+
+
+<p>で、その１時間後くらいに届いたメール</p>
+<pre style="color:silver;font-size:x-small;margin-left:2em"
+>☆　総合ビジネス情報誌【世界情報発信倶楽部】より　☆
+****************************************************
+　
+この度は『世界情報発信倶楽部』』『世界情報発信倶楽部 BBS掲示板』
+より購読登録頂き、誠に有り難うございました。
+一括投稿サイトからの投稿は代理登録させていただきました。
+　
+登録されたアドレスはこちらです。
+E-mail　＝　xxxxxxxx@xxxxx.xx.xx
+　
+★この登録に心当たりの無い場合や購読を解除したい場合は、
+お手数ではございますが、http://wsbn.jp/で解除ができます。
+このメールを返信いただいても解除出来ません。m(_ _)m</pre>
+
+
+<p>ホントお手数だ。</p>
+<ul>
+<li><a href="http://www.geocities.co.jp/Playtown-Domino/6885/jo4top.html" target="_blank">鋼鉄の街：ジョジョ４コマ</a>
+    (<a href="http://www.otsune.com/diary/2003/08/15.html#2003081518" target="_blank">void GraphicWizardsLair(void);//</a>より)
+    <div class="COMMENT"> すばらしい。<a href="http://www.geocities.co.jp/Playtown-Domino/6885/manga71.htm" target="_blank">キャプテントーマスな DIO</a>がサイコーでございます。</div>
+</li>
+<li><a href="http://www.tohoku.ac.jp/TAINS/news/st-news-12/3238.html" target="_blank">パソコン端末を使った図形表示</a>
+    (<a href="http://pc.2ch.net/test/read.cgi/linux/1012915309/" target="_blank">2ch:Linux板</a>より)
+    <div class="COMMENT"> TeraTerm で GNUPLOT のグラフを描けるなんて、知らなかったよー。set term vttek ですか。大学時代に知ってたらなぁ。<em>(今でも、Windows の GNUPLOT のグラフを MicrosoftWord に貼り付けているのは秘密だ!)</em></div>
+</li>
+<li><a href="http://www.geocities.co.jp/Playtown-Denei/4192/ttwc.html" target="_blank">なんでもタブ化計画 TeraTermWindowChanger</a>
+    <div class="COMMENT"> 前にもリンク張ったけど、テラタームつながりということで。</div>
+</li>
+<li><a href="http://www.memn0ck.com/airh/" target="_blank">AirH"完全マニュアル</a>
+    <div class="COMMENT"> 今月は長期出張で AirH" は大活躍です。</div>
+</li>
+</ul>
+
+
+<!--section-->
+<!--index:2003.09.17:神聖再帰句探偵団-->
+<!--index:2003.09.14:腐ったプログラムサイトの方程式-->
+<!--index:2003.09.11:プラズマX11-->
+<!--index:2003.09.07:ヤフーとメルコ-->
+<!--index:2003.09.01:Beatiful Programmer-->
+<!--index:2003.08.31:かえってきた仮想OS/2-->
+<!--index:2003.08.30:ヒマイノリティーリポート-->
+<!--index:2003.08.29:謀ったなchar！-->
+<!--index:2003.08.28:塹壕-->
+<!--index:2003.08.26:千度滅入る-->
+<!--index:2003.08.25:めぐりあい奈良-->
+<!--index:2003.08.24:ブラウザ忍法火の鳥！-->
+<!--index:2003.08.23:おぉ、脳-->
+<!--index:2003.08.17:スーパーオブジェクト指向大戦FX-->
+<!--index:2003.08.16:赤い思想の仮装OS/2V3-->
+</body>
+</HTML>

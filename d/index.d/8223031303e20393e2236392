@@ -1,0 +1,176 @@
+<<C++0x の lambda 式を使ってみた>>
+
+MinGW をバージョンアップしたら、gcc が 4.5 になったので、
+サポートされているという C++0x の新機能「lambda 式」を試してみた。
+
+8<
+#include <iostream>
+#include <functional>
+
+void fivetime( void (*func)() ){
+    func();
+    func();
+    func();
+    func();
+    func();
+}
+
+int main(){
+    fivetime( [](void)-> void {
+            std::cout << "ahaha" << "\n";
+            }
+            );
+}
+>8
+
+8<
+$ ./foo.exe
+ahaha
+ahaha
+ahaha
+ahaha
+ahaha
+>8
+
+おぉ、すばらしい。クロージャ的な使い方は出来るだろうか？
+
+8<
+#include <iostream>
+#include <functional>
+
+void fivetime( void (*func)() ){
+    func();
+    func();
+    func();
+    func();
+    func();
+}
+
+int main(){
+    int i=0;
+    fivetime( [&i](void)-> void {
+            std::cout << "ahaha " << i << "\n";
+            }
+            );
+}
+>8
+
+呼び出し元から、lambda関数へ変数を引き渡す(「キャプチャする」と呼ぶらしい)には ``[]`` の中に、変数名をリストすればいいらしい
+(``=`` とか ``&`` を書くと、全部変数指定にもなるらしい)。
+さて、どうかな
+
+8<
+gcc -std=c++0x ng.cpp -static -lstdc++ -o ng.exe
+ng.cpp: In function 'int main()':
+ng.cpp:17:13: error: cannot convert 'main()::<lambda()>' to 'void (*)()' for argument '1' to 'void fivetime(void (*)())'
+mingw32-make: *** [ng.exe] Error 1
+>8
+
+コンパイルエラーになってしまった。うぅむ、これは
+『'''キャプチャする変数の組合せというのは呼び出し元ごとでバラバラなので、「普通の関数」では「キャプチャがあるラムダ関数」はパラメータとして受け取れず、テンプレート関数にしなくてはいけない''' 』ということなんだろうか。試してみよう。
+
+8<
+#include <iostream>
+#include <functional>
+
+template <class T> void fivetime( T func ){
+    func();
+    func();
+    func();
+    func();
+    func();
+}
+
+int main(){
+    int i=0;
+    fivetime( [&i](void)-> void {
+            std::cout << "ahaha " << i << "\n";
+            ++i;
+            }
+            );
+}
+>8
+
+8<
+$ bar
+ahaha 0
+ahaha 1
+ahaha 2
+ahaha 3
+ahaha 4
+>8
+
+うまくいった。上の解釈でいいんだろーか。
+
+* 参考
+** http://ja.wikipedia.org/wiki/C%2B%2B0x#.E3.83.A9.E3.83.A0.E3.83.80.E9.96.A2.E6.95.B0.E3.81.A8.E3.83.A9.E3.83.A0.E3.83.80.E5.BC.8F{C++0x - Wikipedia : ラムダ関数とラムダ式}
+
+:(追記)
+:: だいたい合ってたみたいです → http://togetter.com/li/53940{Togetter - 「C++0x で、ラムダ関数をパラメータとして受け取る関数はテンプレート関数でないといけないんだろうーか」}
+
+<<続・C++0x の lambda 式を使ってみた>>
+
+テンプレート以外に、``std::function`` を使うという方法もあるようだ。
+
+8<
+#include <iostream>
+#include <functional>
+
+void fivetime( std::function<void()> func ){
+    func();
+    func();
+    func();
+    func();
+    func();
+}
+
+int main(){
+    int i=0;
+    fivetime( [&i](void)-> void {
+            std::cout << "ahaha " << i << "\n";
+            ++i;
+            }
+            );
+}
+>8
+
+こちらだとコンパイルエラーにならない。
+
+8<
+$ gar
+ahaha 0
+ahaha 1
+ahaha 2
+ahaha 3
+ahaha 4
+>8
+
+いったい、どういう仕組みになってるんだろう！？
+
+<<crontabファイルをうっかり消さないようにする：おいらの場合>>
+
+* http://d.hatena.ne.jp/tyru/20100926/crontab_i_option{crontabファイルをうっかり消さないようにする - Humanity}
+
+自分は ― というか「自分が前にいたチーム」では、
+~/crontab.txt という定義の原本のテキストファイルを別途用意して、変更は
+
+8<
+$ vim ~/crontab.txt
+$ crontab ~/crontab.txt
+>8
+
+という二段階で「常に」やるようにしてました。
+その後、さらに Mercurial で ~/ 直下をバージョン管理するようにしまして
+
+8<
+$ vim ~/crontab.txt
+$ crontab ~/crontab.txt
+$ hg commit
+$ hg push
+$ ssh USER@STANDBYSERVER 'hg update'
+>8
+
+という風にしました。
+(実際は ``hg push`` と ``ssh`` の部分は ``hg commit`` のフックで自動実行するようにしてましたが)
+
+これで履歴管理とスタンバイサーバへの同期処理も、.bashrc 等と合わせてやってたわけです。

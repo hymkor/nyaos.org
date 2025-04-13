@@ -1,0 +1,90 @@
+<<[C++] なに、これ、STL こわい>>
+
+g++ でコンパイルしたら、例外処理がうまく動作するようになりました。
+ありがとうございます > 斎藤さん。
+
+で、なぜ gcc で例外を使うとおかしくなるのか、
+lukewarmさんが調べてくださいました。
+
+http://d.hatena.ne.jp/lukewarm/20120908#p1{mingw32（の gcc）と C++ と例外}:
+6<
+すごく大雑把にいうと、gcc 経由でリンクするとデフォルトで libgcc がスタティックリンクされ、g++ だと DLL 版の libgcc が使われるようです。libstdc++ の DLL は libgcc の DLL をインポートしているので、exe 側で libgcc を静的に埋め込まれているといろいろと辻褄が合わなくなる…ということなんでしょうか？
+
+で、ためしに -shared-libgcc を明示的に指定すると、gcc 経由でリンクしても例外がちゃんと捕まるようになりました。
+>9
+6<
+ついでに -static 指定して全部（libstdc++ も）スタティックリンクしてみましたが、当然ながらうまく動作しました。
+>9
+
+ふむふむ。そういえば、最終的には全部スタティックリンクしなくちゃいけないんだよなぁ…
+ということで、今作成中の cp コマンドの Makefile を修正。
+
+8<
+[c:cpmvrm]
+$ cat Makefile
+cp.exe : backslash.o
+        g++ $^ -o $@ -static
+
+.cpp.o :
+        g++ -c $<
+
+clean :
+        rm *.exe *.o
+# vim:noet
+[c:cpmvrm]
+$ make clean ; make
+rm *.exe *.o
+g++ -c backslash.cpp
+g++ backslash.o -o cp.exe -static
+[c:cpmvrm]
+$ ls -l cp.exe
+-rwx  1191562 2012-09-09 15:12 cp.exe*
+[c:cpmvrm]
+$
+>8
+
+>> ぎゃー、1MB 越えてんじゃん <<
+
+NYAOS.EXE だって、503KB ですぜ。でかすぎじゃん。
+昔の Linux のブートディスクだって、1.6Mにおさまってたじゃん。
+なに、これ、STL こわい。
+
+そ、そうだ、確か strip か何かのオプションあったよな。
+それ使えば、ちっとは縮むんじゃね…
+ググってみよう。
+
+えーと「http://kaworu.jpn.org/kaworu/2008-05-26-1.php{GNU GCC 最適化オプションとstrip前後のファイルサイズの比較 lsコマンド編}」が詳しいな。ふむふむ「-Wl,-s」を指定すればよろしいか。
+やってみよう。
+
+8<
+[c:cpmvrm]
+$ cat Makefile
+cp.exe : backslash.o
+        g++ -Wl,-s $^ -o $@ -static
+
+.cpp.o :
+        g++ -Os -c $<
+
+clean :
+        rm *.exe *.o
+# vim:noet
+[c:cpmvrm]
+$ make clean ; make
+rm *.exe *.o
+g++ -Os -c backslash.cpp
+g++ -Wl,-s backslash.o -o cp.exe -static
+[c:cpmvrm]
+$ ls -l cp.exe
+-rwx   567296 2012-09-09 14:27 cp.exe*
+[c:cpmvrm]
+$
+>8
+
+ほうほう、半減しましたな。それでも 500KB か。大きいなぁ。
+''(ちなみに、-static なしだと、66KBですた)''
+
+いや、まぁ、きょうび、500KB で大きい大きい言うのもどうかとは思いますが…、
+たかだか1コマンドあたりでこれだけ容量食うと、なんか相場が合わないというかですねぇ。
+まぁ、そういうことがあるから、DLL というものが現れたわけですが。
+ただ、Windows の DLL って、単純にファイルを一緒に添付すりゃいいっていうわけでもなさで、
+難しそうなんですよねぇ。''(MinGW のはそうでもないのかな？)''

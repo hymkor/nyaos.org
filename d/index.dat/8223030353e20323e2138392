@@ -1,0 +1,98 @@
+まなめ先生にリンクされると、妙に読者が増えたような気がして、ドキドキ。
+
+だが、この俺様のネット弁慶は、止めたくても、止まらない。
+その速さは河童海老煎のごとし。
+
+それゆえに人は当ページを妄想最速理論と呼ぶ（←今、思いつきました）
+
+<<((lb))D((rb)) すごいや、やねうらおさん！>>
+
+何がきっかけか忘れたが、ふと std.file.d のソースを読んでみたら、
+やたら、toMBSz という関数が使われている。で実体を見てみた。
+
+<pre>
+/******************************************
+ * Since Win 9x does not support the "W" API's, first convert
+ * to wchar, then convert to multibyte using the current code
+ * page.
+ * (Thanks to yaneurao for this)
+ */
+
+char* toMBSz(char((lb))((rb)) s)
+{
+    ：
+}
+</pre>
+
+すごいや、UTF8 → 環境ネイティブのコードがあるではないですか！
+さっそく、使ってみた。
+
+<pre>
+/* ソース自体は無論 UTF8 でセーブしてあるのは当り前田のクラッカー */
+import std.c.stdio;
+import std.file;
+
+int main(char((lb))((rb))((lb))((rb)) argv)
+{
+    printf("%s\n",std.file.toMBSz("日本語") );
+    return 0;
+}
+</pre>
+
+以下、DOS窓：
+
+<pre>
+[d:d]tostr.exe
+日本語
+[d:d]
+</pre>
+
+うほー！！ でも、逆変換や linux 版は無いのねん。注意せねば。
+
+<<((lb))おさんぽ((rb)) うろうろ>>
+
+* http://www.adgame-wonderland.de/type/hokusai/{
+    ((lb))FLASH((rb)) Hokusai Manga Construction Kit}
+    (http://www.chakuriki.net/diary/archives/2005/02/post_216.html{
+	借力((lb))CHAKURIKI((rb)) 5P日記}より)
+((br))　すげー、これ面白いわ。
+    素人でも、北斎っぽい絵がドラッグ＆ドロップで簡単に描ける！
+    でも、作った北斎漫画を持ち出せないのが残念だなぁ。
+    （画面をキャプチャーするか、印刷するかしかない）
+* http://www.asahi.com/kansai/news/OSK200502170008.html{
+    asahi.com : 大阪市労連、計３５億円分削減に同意　職員厚遇問題}
+((br))　まったく、空気読んで、さっさと応じろよと。
+    「あつかましい」((fn 「ずうずうしい」の意))のが
+    大阪の文化みたいに思われて、嫌になってきますね
+    （←大阪「市」民でないのに何を偉そうに／府民ではあるんですけどね）
+* http://naoya.dyndns.org/~naoya/mt/archives/001592.html{
+    WEB+DB PRESS vol.25 に CPAN 特集 : NDO::Weblog}
+    (http://www.hyuki.com/tf/200502#i20050217231144{textfile.org}より)
+((br))　おぉ、これは買わねば。Perl のライブラリについてのドキュメントって、
+    少ないんですよねー、特に安いのが。
+* http://www.mainichi-msn.co.jp/shakai/wadai/news/20050218k0000m040074000c.html{
+    ちばてつやさんが「わいせつ表現におおらかさを」}
+    (http://www.zianplus.net/cgi-bin/zianews/index.cgi{自動ニュース作成}より)
+((br))　こちらの御大はごもっともなことをおっしゃる。それに比べ、松本Ｒの御大は…
+* http://www.geocities.co.jp/MotorCity-Race/4196/nida.html{安崎神宮寺艦長奮戦記}
+((br))　おもしろく読ませていただきましたが…
+    しかし、いくらなんでも、ここまで厨な韓国人って本当にいるのかな。
+    思うに「厨の存在分布に国による偏りは基本的に無い」が、
+    「戦敗国において先勝国の厨の暴走に歯止めが効かない」
+    というのはありそうな話だ
+    （対 韓国に戦争で負けたわけではないけどね）。
+    フランスとドイツの間でも、こういうことはあるのだろうか。
+* http://www.forest.impress.co.jp/article/2005/02/16/becky220.html{
+    窓の杜 - 【NEWS】自宅と外出先でメールデータや設定を同期できる“Becky!”v2.20が公開  }
+    (http://www.henjinkutsu.net/{Hjk/変人窟}より)
+    ((br))　こういう同期機能は絶対欲しいのだが…EdMax はやる気なさそうですね
+    （そういう台詞はシェアウェア版ユーザのみが）
+* http://svslab.jp/0x0a/20050216.html#p03{
+「いかに論理的な文章を書くか」という教育を小・中・高の国語の授業でやって欲しい}
+(http://www.otsune.com/diary/2005/02/16.html#2005021610{
+    void GraphicWizardsLair( void ); //}より)
+((br))　ほんに、ほんに！（←激しく同意しているようです）
+* http://www.zakzak.co.jp/top/2005_02/t2005021620.html{
+    最強？の暗証方式登場…４６億通り「まず解読されない」}
+(http://www.alles.or.jp/~spiegel/200502.html#d17_t2{辺境から戯れ言}より)
+((br))　ぽかーん

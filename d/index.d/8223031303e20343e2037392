@@ -1,0 +1,76 @@
+<<[Mercurial] 朝っぱらから Mercurial 1.5 を SAKURA Internet に入れてたでござる>>
+
+cygwin 環境のホームディレクトリのドットファイルを、
+SAKURA Internet のホームと同期させようとしたら、
+エラーになったので、
+Mercurial を 0.8 から 1.5 へバージョン合わせようとしたのだが…
+
+>> Makefile が GNU Make ベタベタになってた
+((fn SAKURA Internet は FreeBSD なので、GNU Make ではないのだ。
+他のインストールのやり方を紹介しているサイトとか見ると、
+昔は Makefile を使ってなくて、python setup.py をやってたようだ。
+確かに、前にやってた時もそんなんだったような気がする。どういうことだろ))
+<<
+
+Makefile の小細工で何とか済みそうもなかったので、
+素直に GNU Make のビルドすることにした。
+まさか朝から GNU Make のビルドとは…。
+
+8<
+$ wget http://ftp.gnu.org/pub/gnu/make/make-3.81.tar.gz
+$ tar zxvf make-3.81.tar.gz
+$ cd make-3.81
+$ ./configure --prefix=$HOME/local
+$ make
+$ make install
+>8
+
+8<
+$ cd ~/src/mercurial-1.5
+$ ~/local/bin/make PREFIX=$HOME/local install
+>8
+
+で、そのままやると、
+
+8<
+$ hg
+abort: couldn't find mercurial libraries in [ …略… ]
+(check your install and PYTHONPATH)
+>8
+
+となったので、手動で以下を実行。
+
+8<
+export PYTHONPATH=$HOME/local/lib/python2.6:$HOME/local/lib/python2.6/site-packages
+>8
+
+Okay…Okay!
+
+こうしないと駄目だった理由は SAKURA側が Pythonを 2.4 から 2.6 へバージョンアップさせてたからだった。さらに、ここで環境変数を変えたにも関わらず、しばらくハマってしまった。``$HOME/local/lib/python2.6`` を ``$HOME/local/lib/python`` としていたからだ。おいらの ``$HOME/local/lib/`` の下には ``python/ python2.4/ python2.6/ python3.0/`` と4種類もあるから困る。
+
+さて、これを恒久化させるために、.bashrc に以下のように記述
+
+8<
+case "$HOSTNAME" in
+*.sakura.ne.jp)
+    # … その他諸々の設定とか …
+    export PYTHONPATH=$HOME/local/lib/python2.6:$HOME/local/lib/python2.6/site-packages
+    ;;
+esac
+>8
+
+8<
+$ hg
+Mercurial Distributed SCM
+
+basic commands:
+
+ add        add the specified files on the next commit
+   :(略)
+use "hg help" for the full list of commands or "hg -v" for details
+>8
+
+そして、地球は平和になった！
+
+なお、hgweb.cgi でウェブにレポジトリを公開している場合は、
+そちらの sys.path.insert も変更するのも忘れずに。

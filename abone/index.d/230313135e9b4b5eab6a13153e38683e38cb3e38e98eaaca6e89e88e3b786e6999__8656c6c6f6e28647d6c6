@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8"/>
+    <style type="text/css">
+h1 {
+  color : white;
+  background-color : midnightblue;
+  -webkit-border-radius : 10px;
+  -moz-border-radius : 10px;
+  padding-left : 10px;
+}
+
+h2 {
+  color : white;
+  background-color : darkblue;
+  -webkit-border-radius : 5px;
+  -moz-border-radius : 5px;
+  padding-left : 10px;
+}
+
+td {
+  background-color : lightgray;
+  padding :5px;
+  -webkit-border-radius : 2px;
+  -moz-border-radius : 2px;
+}
+th {
+  padding :5px;
+  color : white;
+  background-color : dodgerblue;
+  -webkit-border-radius : 2px;
+  -moz-border-radius : 2px;
+}
+
+#header {
+  text-shadow : 3px 3px 3px #777;
+  background-color : lightsteelblue;
+  font-size : 300%;
+  text-align : center;
+  padding : 30px 0;
+  width : 100%;
+}
+
+#container {
+  display : -webkit-box;
+  display : -moz-box;
+  width : 100%;
+}
+
+
+#main {
+  -moz-box-flex : 1;
+  -moz-box-ordinal-group : 1;
+  -webkit-box-flex : 1;
+  -webkit-box-ordinal-group : 1;
+  padding : 20px;
+  position : relative;
+}
+
+#menu {
+  -moz-box-ordinal-group : 2;
+  -webkit-box-ordinal-group : 2;
+  widht : 200px;
+  background-color : powderblue;
+  padding : 50px;
+}
+
+#footer {
+  background-color : lightsteelblue;
+}
+
+    </style>
+    <title>my first HTML5</title>
+  </head>
+  <body>
+
+    <div id="header">
+      <header>
+	My first HTML5
+      </header>
+    </div>
+    <div id="container">
+      <div id="main">
+	<article>
+	  <section>
+	    <h1>最初のHTML5</h1>
+	    <p>
+	      最初のHTML5です。以下の要素を試しました。
+	      
+	      <ul>
+		<li>セマンティックなマークアップ</li>
+		<ul>
+		  <li>article</li>
+		  <li>section</li>
+		  <li>aside</li>
+		</ul>
+		<li>フォーム</li>
+		<li>CSS3</li>
+		<ul>
+		  <li>テキストの影</li>
+		  <li>角丸</li>
+		  <li>カラムレイアウト</li>
+		</ul>
+	      </ul>
+
+	      MacのFirefoxとChromeで動作確認しました。
+	    </p>
+	    <h2>セマンティックなマークアップ</h2>
+	    <p>
+	      新しいタグができたっていうかんじだけで、HTML単体で書いているときは特にメリットを感じられませんでした。
+	    </p>
+	    <h2>フォーム</h2>
+	    <p>
+	      現状だと、ブラウザによってけっこう見た目や挙動がちがうようです。。<br/>
+	      例えば、Chromeだとsubmit時のバリデーションが効いていますが、Firefoxだとsubmitされてしまいます。
+	    </p>
+	    <form>
+	      <table>
+		<tr>
+		  <th>tel</th>
+		  <td><input type="tel" name="tel"placeholder="電話番号" required /></td>
+		  <td>電話番号(必須項目指定)</td>
+		</tr>
+		<tr>
+		  <th>mail</th>
+		  <td>
+		    <input type="email" name="email" placeholder="メールアドレス"
+			   pattern="([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+"
+			   />
+		  </td>
+		  <td>メールアドレス(正規表現指定)</td>
+		</tr>
+		<tr>
+		  <th>date</th>
+		  <td><input type="date" name="date" value="2010-01-01"/></td>
+		  <td>日付</td>
+		</tr>
+		<tr>
+		  <th>time</th>
+		  <td><input type="time" name="time" value="09:15"/></td>
+		  <td>時間</td>
+		</tr>
+		<tr>
+		  <th>range</th>
+		  <td><input type="range" name="range"/></td>
+		  <td>範囲</td>
+		</tr>
+	      </table>
+	      <input type="submit" value="送信"/>
+	    </form>
+	    <h2>CSS3</h2>
+	    <h3>テキストの影</h3>
+1行書くだけでかんたんにできました。
+	    <pre>
+text-shadow : 3px 3px 3px #777;
+	    </pre>
+	    <h3>角丸</h3>
+	    webkit系とFirefoxと、2種類同じような指定をするのがだるいです。
+	    <pre>
+-webkit-border-radius : 10px;
+-moz-border-radius : 10px;
+	    </pre>
+	    <h3>カラムレイアウト</h3>
+かんたんになりましたが、やっぱりブラウザ間で若干挙動がちがうみたいです。
+	  </section>
+	</article>
+      </div>
+      <div id="menu">
+	<aside>
+	  <h3>Link</h3>
+	  <nav>
+	    <ul>
+	      <li><a href="https://www.youroom.in/r/1499">HTML5使いの集い</a></li>
+	    </ul>
+	  </nav>
+	</aside>
+      </div>
+    </div>
+    <div id="footer">
+      <footer>
+	フッター
+      </footer>
+    </div>
+  </body>
+</html>

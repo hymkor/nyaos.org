@@ -1,0 +1,36 @@
+遠い親戚が亡くなりまして、葬儀のため、木曜晩から大阪へ帰省してました。
+そして、本日日曜、東京の住みかへリターン。
+
+というわけで、世間の皆様が六月病で苦しんでる中、１人３連休してました。
+1日分は行ったりとバタバタしてて、あまり休んでる気はしませんでしたが。
+
+あ、でも、たまの車の運転はおもしろいですね。
+実家の近所に数年前から高速のインターチェンジが出来てまして、
+便利になったもんだと実感してます。
+
+<<[NYAOS] よもやま話>>
+
+最近、lingr.com で、vim/shell系の開発者の人と交流が持てて、'''いっぱしのオープンソース開発者気分'''。
+
+----
+
+「nyaos.filter/filter2 は呼び出される順番が不定というのは、やはり困るかもー」という声があったので、nyaos.filter(2).XXXXXX の XXXXXX の辞書順で呼び出すようにした。
+
+nyaos.filter 自体は、単純な Lua のテーブルなので、やってることはキーを全て抜き出して、NYAOS側でソートして、順に呼び出すだけだす。本当は登録順の方がいいんだろうけれども、Lua のテーブルは登録順なんて記憶してないので、それは無理。
+
+----
+
+lingr.com/shell の人達は git派なのか、みんな git-hub を使ってる。おいらも Mercurial の hgcgi というモジュールを使って SAKURA Intenet レポジトリを公開してるんだけれども、やっぱり有名なサービスを使った方がいいだろうということで、bitbucket に進出してみた。
+
+* http://bitbucket.org/zetamatta/nyaos3000{zetamatta / nyaos3000 / overview - bitbucket.org}
+* http://bitbucket.org/zetamatta/nyaos2000{zetamatta / nyaos2000 / overview - bitbucket.org} (Older NYAOS=NYADOS/NYACUS/NYAOS-II)
+* http://bitbucket.org/zetamatta/oluacle{zetamatta / oluacle / overview - bitbucket.org}
+* http://bitbucket.org/zetamatta/wifky{zetamatta / wifky / overview - bitbucket.org}
+
+問題は会社からアクセスできるかってことだけど…できるよね、きっと…
+(プログラミングサイトだし)
+
+ちなみに、Free コースでも、Private(非公開)のレポジトリを一つ登録できるという話なので、
+~/ の dotファイルらも登録してみた。
+一方で、Public(公開)のレポジトリは特に数に制限が無いようだ。
+この辺、プログラマーが喜ぶツボを押さえてるよね。

@@ -1,0 +1,107 @@
+<<[vim][Lua] jvim 3.0 meets Lua [1]>>
+
+jvim 3.0 に Lua を組み込んでみようというシリーズ
+
+<<<何が不満なんだよ>>>
+
+* vim 6 は高機能。
+* だが、vimscript は正直いけてない
+* Python拡張/Ruby拡張は、gvim でしか動かんっぽい。
+* Cygterm の中でも結構 vim 使うんだけどな…
+
+* jvim 3 は速い。日本語コードの自動判断も結構優秀
+* が、特に組み込み言語はなさげ。拡張性に未来なさげ
+
+そんなところへ Lua を組み込む方法を勉強中のおいらが来ましたよ。
+
+<<<差分>>>
+
+引用できるくらい小さい。
+ベースは vim 3.0 + 日本語パッチ j2.1b
+
+8<
+Only in vim: readme.1st
+Only in vim.lua/src: Makefile
+diff -r vim/src/cmdline.c vim.lua/src/cmdline.c
+23a24,44
+> #include "lua.h"
+> #include "lualib.h"
+> #include "lauxlib.h"
+> 
+> static lua_State *lua = NULL;
+> static void vimlua_close()
+> {
+>     if( lua != NULL ){
+>         lua_close(lua);
+>         lua = NULL;
+>     }
+> }
+> static int lua2vim(lua_State *lua)
+> {
+>     const char *cmdline = lua_tostring(lua,1);
+>     if( cmdline != NULL ){
+>         docmdline( cmdline );
+>     }
+>     return 0;
+> }
+> 
+3692a3714,3725
+>         if( len == 0 && memcmp((char *)IObuff,"--",2)==0 ){
+>             /* source lua-source */
+>             if( lua == NULL ){
+>                 lua = luaL_newstate();
+>                 atexit( vimlua_close );
+>             }
+>             lua_register(lua,"vim",lua2vim);
+>             luaL_openlibs(lua);
+>             luaL_dofile(lua,fileconvsto(NameBuff));
+>             break;
+>         }
+> 
+Only in vim/src: cmdtab.h
+Only in vim/src: vim.ico
+>8
+
+Makefile は makjunix.mak をベースにして、
+Cygwin 向けの行を以下のようにして、
+lua のライブラリをリンクするようにした。
+
+8<
+TARGET=vim.exe
+MACHINE = -DBSD_UNIX
+CC=gcc -O
+LIBS = -ltermcap -llua
+>8
+
+<<<何ができるか？>>>
+
+* .jvimrc などの vim が読むソースファイルが「--」
+  (ハイフン二つ。Lua のコメントマーク)で始まっていたら、
+  読み込みを中断し、かわりに lua インタープリタが読むようにする。
+  (これは OS/2 の CMD.EXE への REXX の組み込み方を真似た)
+* lua の中から vim(ex)コマンドを発行できる vim という関数を作った。
+  こんな感じで使える。
+
+8<
+$ cat ~/.jvimrc
+---
+vim("set ts=10")
+>8
+
+この状態で Lua 組み込み vim を起動し、そして「:set」と入力してみる。
+
+8<
+~
+~
+--- Parameters ---
+  tabstop=10
+Press RETURN or enter command to continue
+>8
+
+<<<これからの課題>>>
+
+* vim から lua の関数を呼べるようにする(「``:lua なんちゃら``」みたいに)
+* lua から vim のオブジェクト(テキスト自身・レジスタ)などを
+  操作できるようにする。
+
+はたして、そんなにうまくゆくのか！？

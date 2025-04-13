@@ -1,0 +1,97 @@
+
+<<あー映画見にいきてー>>
+
+昔はビデオ化されるまで十分待てたのになぁ。
+最近は、http://www.casshern.com/{
+キャシャーン}とか、http://www.a-seed.jp/{アップルシード}
+を見たいってりゃ、ありゃしねぇ。
+原作もんで、かつ出来が良さそうだと、ほんにまぁ。なんつーか。
+
+野郎ども、わたしを劇場へ連れてって。
+
+<<キーカスタマイズ>>
+
+NYACUS のキーカスタマイズを拡張して、
+通常時以外のモードに入った時のキーも、
+カスタマイズできるようにした。
+
+が、そのために作ったキーバインド管理クラスが、今一、よろしくない。
+きちんと機能しているし、うまいこと、マップ部分を外出しするなど、
+うまくできているとは思うんだけど…、その役割がうまく説明しずらい。
+
+* インスタンスは「名前」をもった「機能」を表す。
+* インスタンス化された「機能」は、自分が使われる「モード」を知っている。
+* インスタンス化された「機能」は、自分がキーに割り当てられた時に、
+    何をしたらよいか
+	(どこのバインドマップを書き変えればよいか等)
+    を知っている(⇒仮想関数)
+* クラスメソッドとして、
+    キーの名前と機能の名前から、スキャンコード・インスタンスへの
+    ポインタを取得するものがある。
+
+これらの機能によって、ユーザは、その「機能」が、
+どの「モード」で使われるか意識せずに、キーに割りふることができる。
+また、クラス利用側は、自分な好きなバインドマップを
+関数ポインタ配列でも、列挙型配列でも、どちらで用意することもできる。
+ちなみに、モードは
+
+* 通常編集時
+* 逆スクロール時(xscript)
+* 履歴参照時
+
+の 3 つある。
+が、そもそも、ユーザがモードを意識しないというのは、
+そんなメリットがあるのだろうか。
+逆に混乱するだけではないのかという気も「完成してから」してきた。
+
+以上、どうだ、分かるまい(だったら、説明すな!)。
+思うに、説明しずらいということは、クラスのあり方が「歪(いびつ)」
+である可能性が高いということだ。
+さらに検討を重ねた方がよさそうだ。
+
+でも、こういうクラス設計で悩めるって、
+とても健康的で素敵なことだよね。
+もっとも、きちんとデザインパターンを勉強すりゃ、
+こういう悩みすらないのかもしれない。
+理論に裏づけされたパターンの適用ですむんだろうねぇ。
+今は、直観的な自然さ/不自然さを基準にやってるから、
+非常にムラがある。あー、むらむら。
+
+<<徘徊>>
+
+* http://www.geocities.co.jp/Hollywood-Spotlight/2422/{
+    中川翔子オフィシャルHP: Strawberytime }
+    (http://dayomon.fc2web.com/index.html{それゆけ！！だよもん星}より)
+    :: やばい！ やばいよ、スレッガーさん。この「
+    http://www.geocities.co.jp/Hollywood-Spotlight/2422/illust/illust.html{
+	落差}」は犯罪的だ。だめだ、ファンになってしまふ。
+	 (← なんか、最近、こういうの多いなぁ。歳とったせいか!?)
+* http://msdn.microsoft.com/visualc/vctoolkit2003/{Visual C++ Developer Center:
+	Microsoft Visual C++ Toolkit 2003 }
+    (http://www.t3.rim.or.jp/~raeva/diary/{Good Wrappers For People 
+	Who Love Bad Know-How}より)
+    :: Q&A より<cite>「The Visual C++ Toolkit is a free edition of
+	Microsoft’s professional Visual C++ optimizing compiler 
+	and standard libraries - the same optimizing compiler 
+	and standard libraries that ship in Visual Studio .NET 2003 
+	Professional!」 </cite>
+    :: えーと「Visual C++ Toolkit (2003) は、マイクロソフト 
+	プロフェッショナル Visual C++ 最適化コンパイラと標準ライブラリの
+	フリー版です。これらは、Visual Studio.NET 2003 プロフェッショナルに
+	搭載されているのと同じものです」でいいのかな？ ほんまかいな。
+* http://www.nativecs.com/page.en.php?f=data/en/aclview.desc{
+    Native Computer Systems}
+    (http://dac.lolipop.jp/blog/archives/000063.html{適宜覚書: setACL}より)
+    :: NTFS のアクセス権を GUI で操作するツール ACLView などがダウンロード
+	できる。XP HOME エディションなど、ネイティブでアクセス権を操作する
+	機能がない環境では重宝しそう(こないだ苦労したし)。
+	コマンドラインであれば、XP Home 標準で cacls というツールや
+	Cygwin の chmod/chown も利用できるんだけどね。
+	(詳細は、http://dac.lolipop.jp/blog/archives/000063.html{適宜覚書}
+	    が詳しい)
+* http://www.honet.ne.jp/~tri/program/{プログラムの小ネタ(?)集}
+    (http://d.hatena.ne.jp/matsunaga/20040418#p2{はてなダイアリー - ＠ことのはインフォーマル}より)
+    :: Windows で Unicode プログラムを書く時のノウハウ。
+* http://neko.parfe.jp/{ねこまたぎ}
+    (http://apollo.u-gakugei.ac.jp/~yoshiki/chalow/{Y's Memo}より)
+    :: 雑文がすばらしい。ちょっとしたショートショートです。

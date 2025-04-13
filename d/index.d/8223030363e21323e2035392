@@ -1,0 +1,63 @@
+* 「○○は遅い」とか言われると、
+  すぐ「生産性がいいから、トータルで考えると○○は速い」
+  とか言ってムキになる人がいるな。
+  おもしろいことに、△△でも似たようなこと言う人がいるし、
+  □□でも、やっぱり同じこと言う人がいる。
+  こういう人は、てきとうに「はいはいそうですね」とあしらっておくに限ると思うよ。
+
+* DB の論理設計っておもしれーーー。
+  リプレース前のスキーマが冗長すぎるので、
+  直感が働くにまかせて、これでもか、これでもかと正規化しまくり。
+  さて、どうなることやら。
+
+<<[python] 単語の頻度を調べる>>
+
+* http://d.hatena.ne.jp/rubyco/20061205/freq{
+  rubyco（るびこ）の日記 - 単語の頻度を調べる}
+
+Python の勉強のため挑戦。
+
+8<
+$ cat freq.py
+#!/usr/bin/python
+
+import re
+
+def words(s,pattern=r"\w+"):
+    hash = {}
+    for m in re.finditer(pattern,s):
+        w = m.group(0)
+        hash[w] = hash.get(w,0) + 1
+    return hash
+
+s = """We wish you a Merry Christmas,
+We wish you a Merry Christmas,
+We wish you a Merry Christmas,
+and A Happy New Year!
+"""
+
+for key,value in words(s).iteritems():
+    print "%s => %s" % (key,value)
+$ python freq.py
+a => 3
+and => 1
+We => 3
+wish => 3
+A => 1
+Merry => 3
+Year => 1
+New => 1
+you => 3
+Christmas => 3
+Happy => 1
+>8
+
+* 正直、ヒネリも何もない。Rubyco さんのコードをそのまま書き写したという感じか。
+** いや、「words」を String 型のメソッドに組み込んでなかったりする点が、
+ちょっと後退といえよう。
+* 正規表現関係は、マッチ結果が直接文字列ではなく、一度「Match」オブジェクトになるため、どうしても、ちょっと冗長っぽくなってしまう。
+* Python だと、辞書(ハッシュ)のコンストラクタにデフォルト値を与えるのではなく、
+  取り出すメソッド(get)にデフォルト値を与えるのが普通。
+
+全部、断定しちゃってるけど、Python 勉強しだして1ヶ月前後なので、
+多分ボケたことも書いているだろう。だが、それがいい！(いいのか?)

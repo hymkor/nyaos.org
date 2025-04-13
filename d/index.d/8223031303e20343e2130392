@@ -1,0 +1,103 @@
+<<せっかく、Cygwin が 1.7 で UTF8 対応したのに w3m が>>
+
+utf8 運用で、罫線や項目記号で化けたり、ズレるというのは悲しすぎるので、
+http://www.j10n.org/files/w3m-cvs-1.914-ambwidth.patch{
+ambwidth patch for w3m} (<<{w3m-cvs-1.914-ambwidth.patch}{俺々バックアップ})
+という、定番パッチを当てることにした。
+
+今までどおり ShiftJIS 運用しててもいいんだけど、
+せっかく 素の ls が日本語ファイル名を utf8 で表示してくれるのに
+'''もったいない'''。
+ということで、http://sourceforge.net/projects/w3m/ から落とした、
+w3m 0.5.2 に対して patch を次のように適用。
+特にコンフリクトなし。よしよし。
+
+8<
+$ cd
+$ patch -p1 < ../w3m-cvs-1.914-ambwidth.patch
+>8
+
+コンパイルには ``gcc``、そして ``libncurses-devel`` が必要
+(libncurses-devel 無しでビルド始めちゃったら、リンクエラーになるので、
+ ```make clean ; ./configure``` からやり直し)
+
+これでビルドは成功。あと、実際に「``./w3m -v``」で w3m を起動させてから、
+「o」→「Charset Settings」の項目を全て ON に変更すると、
+とりあえず、桁ズレの類は解消した。
+
+ただ、<ul>の<li>タグで使われる「・」が「??」のままだ。
+
+<<{w3m-before.png}
+
+これは、どうも、これは
+http://d.hatena.ne.jp/niha/20090121#1232573596{
+unicode で文字幅の取り扱いに問題があるためらしい}。
+
+されにググってみると、どうやら上記のパッチで追加されたオプション
+「Use double width for some Unicode characters」
+が「Yes」になっていたのが原因の模様。
+(http://bts.vinelinux.org/guest.cgi?project=wishes&action=view_report&id=218{
+参考})
+
+これで改めて、w3m nyaos.org/d してみたが、
+どうもオプションを設定した直後は上設定は反映されるが、
+起動しなおすと無効になってしまう。うーん分からん。
+
+というわけで、ダーティーハックで解決！
+UTF8 の時の記号を、ASCIIの時のものと同じものに変えちゃえ！
+
+<<{w3m-0.5.2-disable-utf8-symbol.diff}:
+((ref_text w3m-0.5.2-disable-utf8-symbol.diff))
+
+8<
+$ cd w3m-0.5.2
+$ patch -p1 < ../w3m-0.5.2-disable-utf8-symbol.diff
+>8
+
+そして、世界は平和になった…
+
+<<{w3m-after.png}
+
+''(今更だけど、シンボルまるごと変えちゃうんなら、別に
+w3m-cvs-1.914-ambwidth.patch は要らんちゃうかったんかと思わないでもない…)''
+
+---
+
+ところで、別途 CVS 版では対応してるという話もあって、
+そちらを落とそうともしたんだけれども…
+
+* CygTerm の下で cvs login をするとハングアップする。
+* 標準コンソールの下だとハングしないものの、cvs co すると、何故か、改行コードが全て CRLF になってしまう。
+
+という問題もあったりして、結局 coLinux 上の cvs で login/co したら、うまく取れたりしたんだけれども、こっちでも結局同じ症状が出たりして、いったい俺って何やってんだろなぁと空を仰ぎ見る今日このごろ。
+
+<<UTFモードでの w3m の使いごこちを試してみるべし>>
+
+vim で編集すると、さっそく文字化けした。これは当然の話で、
+.vimrc で set enc=cp932 なんてしてるからだ。
+ここは、それぞれの vim のデフォルト設定を尊重させるようにした。
+
+8<
+-set sw=4 ts=8 ai nobk et enc=cp932 autochdir
++set sw=4 ts=8 ai nobk et autochdir
+>8
+
+また、.bashrc でもコードを cp932 としていたが、utf8 にした。
+
+8<
+-alias w3m='w3m -s'
+
+-export HGENCODING=cp932
++export HGENCODING=utf8
+ export HGEDITOR=vim
+>8
+
+Mercurial のコミットログが化けるのではないかが心配だったが、
+そこは大丈夫だった。よかったよかった。
+
+でも、skk.vim の日本語変換が一瞬おかしくなるのが、ちょっと気持ち悪いかな。
+まぁ、確定したら消えるからいいけど。一応、あとで、最新バージョンにしてみよう。
+
+<<{20100410_skkvim化ける.PNG}
+
+あ、日本語ファイル名の画像を、ちゃんと w3m から Up できた。これはすごい。
